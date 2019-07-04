@@ -1,0 +1,21 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+
+
+{% for child in content %}
+
+    {% if child.block_type == 'content' %}
+
+        {% include "streamfields/blocks/content.html" with block=child.value %}
+
+    {% elif child.block_type == 'image_block' %}
+
+        {% include "streamfields/blocks/image_block.html" with block=child.value %}
+
+    {% else %}
+
+        <div class="container">{{ child.value|richtext }}</div>
+
+    {% endif %}
+
+{% endfor %}
