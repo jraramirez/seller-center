@@ -1,0 +1,1 @@
+web: gunicorn fht_website.wsgi --log-file -
