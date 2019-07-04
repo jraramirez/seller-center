@@ -1,1 +1,1 @@
-web: gunicorn fht_website.wsgi --log-file -
+web: gunicorn seller_center.wsgi --log-file -
