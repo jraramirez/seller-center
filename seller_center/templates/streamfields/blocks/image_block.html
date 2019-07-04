@@ -1,0 +1,9 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+
+<section class="sf sf-image-block">
+    <div class="container justify-content-center">
+        {% image block width-1200 as thumbnail %}
+        <img src="{{ thumbnail.url }}" class="img-responsive" alt="{{ thumbnail.alt }}"/>
+    </div>
+</section>

@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='HomePage',
+            name='ProductPage',
             fields=[
                 ('basepage_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='base.BasePage')),
                 ('body', wagtail.core.fields.StreamField([('content', wagtail.core.blocks.RichTextBlock(icon='pilcrow')), ('image_block', wagtail.images.blocks.ImageChooserBlock(icon='image', label='Image Block'))], blank=True)),
