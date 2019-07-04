@@ -12,6 +12,6 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "seller_center.settings.dev")
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "fht_website.settings.production")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "seller_center.settings.production")
 
 application = get_wsgi_application()
