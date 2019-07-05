@@ -6,7 +6,7 @@ from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
 
 # Register your models here.
 
-ProductPage.content_panels = Page.content_panels + [
+SalesPage.content_panels = Page.content_panels + [
   FieldPanel('page_title'),
   FieldPanel('page_subtitle'),
   StreamFieldPanel('body'),

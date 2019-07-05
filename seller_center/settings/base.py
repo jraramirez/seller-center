@@ -28,6 +28,9 @@ INSTALLED_APPS = [
     'base',
     'home',
     'product',
+    'sales',
+    'users',
+    'sign_up',
     'search',
 
     'wagtail.contrib.forms',
@@ -44,6 +47,7 @@ INSTALLED_APPS = [
 
     'modelcluster',
     'taggit',
+    'widget_tweaks',
 
     'django.contrib.admin',
     'django.contrib.auth',

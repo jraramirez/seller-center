@@ -21,11 +21,29 @@
     </div>
     {% endif %}
 
-    
+    <ul>
     {% for page in subPages %}
+        {% if page.url != '/sign-up/' %}
         <li class="nav-item">
             <a class="nav-link" href="{{ page.url }}">{{ page.title }}</a>
         </li>
+        {% endif %}
     {% endfor %}
+        {% if not user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/login/?next=/">Log In</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/sign-up/">Sign Up</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/">Admin</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/logout/?next=/">Log Out</a>
+        </li>
+        {% endif%}
+    </ul>
 
 {% endblock %}
