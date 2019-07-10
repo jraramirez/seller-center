@@ -45,3 +45,13 @@ class Product(models.Model):
 
 class ProductPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)
+  
+  def get_context(self, request):
+      context = super().get_context(request)
+      subPages = self.get_children().live()
+      context['subPages'] = subPages
+      return context
+
+
+class ProductImportPage(BasePage):
+  body = StreamField(GeneralStreamBlock, blank=True)

@@ -8,6 +8,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 from search import views as search_views
 from sign_up import views as sign_up_views
+from product import views as product_views
 
 urlpatterns = [
     url(r'^django-admin/', admin.site.urls),
@@ -18,6 +19,7 @@ urlpatterns = [
     url(r'^search/$', search_views.search, name='search'),
 
     url(r'^sign-up/$', sign_up_views.sign_up, name='sign_up'),
+    url(r'^products/import/', product_views.products_import, name='products_import'),
 
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in

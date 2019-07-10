@@ -5,29 +5,29 @@
 {% block content %}
 
     <h2>
-        {% if self.page_title %}
-            {{ self.page_title }}
-        {% else %}
-            {{ self.title}}
-        {% endif %}
+      {% if self.page_title %}
+        {{ self.page_title }}
+      {% else %}
+        {{ self.title}}
+      {% endif %}
     </h2>
     <h2>
-        {{ self.page_subtitle }}
+      {{ self.page_subtitle }}
     </h2>
 
     {% if self.body %}
     <div class="body-content">
-        {% include "streamfields/general.html" with content=self.body %}
+      {% include "streamfields/general.html" with content=self.body %}
     </div>
     {% endif %}
 
     <ul>
     {% for page in subPages %}
-        {% if page.url != '/sign-up/' %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ page.url }}">{{ page.title }}</a>
-        </li>
-        {% endif %}
+      {% if page.url != '/sign-up/' %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ page.url }}">{{ page.title }}</a>
+      </li>
+      {% endif %}
     {% endfor %}
     </ul>
 
