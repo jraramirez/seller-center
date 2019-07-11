@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailcore_tags wagtailimages_tags widget_tweaks %}
+
+{% block content %}
+
+  <div class="form-wrap">
+    <form action=" {{ page.url }}" method="POST">
+      {% csrf_token %}
+      <div class="row">
+        {% for field in form.visible_fields %}
+          <div class="col-md-6" style="padding-bottom: 5px; padding-right: 7px;">
+            {% render_field field class+="form-control" placeholder=field.label %}
+          </div>
+        {% endfor %}
+        <div class="col-md-6" style="padding-bottom: 5px; padding-right: 7px;">
+          <input type="password" name="password" maxlength="255" class="form-control" placeholder="Password" rows="5" required="" id="id_password">
+        </div>
+        <div class="col-md-12">
+          <button type="submit" class="block-button submit-button float-right">submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}

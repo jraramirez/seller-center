@@ -5,8 +5,26 @@ from base.models import BasePage, GeneralStreamBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from modelcluster.models import ClusterableModel
 
-from sales.models import Order
+
+@register_snippet
+class Order(ClusterableModel):
+  total = models.CharField(null=True, blank=True, max_length=500)
+  status = models.CharField(null=True, blank=True, max_length=500)
+  countdown = models.CharField(null=True, blank=True, max_length=500)
+  shipping_channel = models.CharField(null=True, blank=True, max_length=500)
+  creation_date = models.CharField(null=True, blank=True, max_length=500)
+  paid_date = models.CharField(null=True, blank=True, max_length=500)
+
+  panels = [
+    FieldPanel('status'),
+    FieldPanel('countdown'),
+    FieldPanel('shipping_channel'),
+    FieldPanel('creation_date'),
+    InlinePanel('products', label='Order Products')
+  ]
 
 
 @register_snippet
@@ -37,7 +55,7 @@ class Product(models.Model):
   image7 = models.CharField(null=True, blank=True, max_length=500)
   other_logistics_provider_setting = models.CharField(null=True, blank=True, max_length=500)
   other_logistics_provider_fee = models.CharField(null=True, blank=True, max_length=500)
-  order = models.ForeignKey(Order, models.DO_NOTHING, blank=True, null=True)
+  order = ParentalKey('Order', related_name='products', null=True, blank=True)
 
   def save(self, *args, **kwargs):
     super(Product, self).save(*args, **kwargs)
