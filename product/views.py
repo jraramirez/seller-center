@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.db import transaction
 import pandas as pd
 
-from product.models import ProductImportPage
+from product.models import ProductsImportPage
 from product.models import Product
 
 class UploadFileForm(forms.Form):
@@ -53,9 +53,9 @@ def products_import(request):
   else:
     form = UploadFileForm()
     
-  self = ProductImportPage.objects.get(slug='import')
+  self = ProductsImportPage.objects.get(slug='import')
   
-  return render(request, 'product/product_import_page.html', {
+  return render(request, 'product/products_import_page.html', {
     'self': self,
     'form': form,
   })

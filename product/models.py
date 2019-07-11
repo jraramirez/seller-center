@@ -6,6 +6,8 @@ from wagtail.snippets.models import register_snippet
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel
 
+from sales.models import Order
+
 
 @register_snippet
 class Product(models.Model):
@@ -35,6 +37,7 @@ class Product(models.Model):
   image7 = models.CharField(null=True, blank=True, max_length=500)
   other_logistics_provider_setting = models.CharField(null=True, blank=True, max_length=500)
   other_logistics_provider_fee = models.CharField(null=True, blank=True, max_length=500)
+  order = models.ForeignKey(Order, models.DO_NOTHING, blank=True, null=True)
 
   def save(self, *args, **kwargs):
     super(Product, self).save(*args, **kwargs)
@@ -45,13 +48,23 @@ class Product(models.Model):
 
 class ProductPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)
+
+  def get_context(self, request):
+    context = super().get_context(request)
+    return context
+
+
+class ProductsPage(BasePage):
+  body = StreamField(GeneralStreamBlock, blank=True)
   
   def get_context(self, request):
-      context = super().get_context(request)
-      subPages = self.get_children().live()
-      context['subPages'] = subPages
-      return context
+    context = super().get_context(request)
+    products = Product.objects.all()
+    subPages = self.get_children().live()
+    context['products'] = products
+    context['subPages'] = subPages
+    return context
 
 
-class ProductImportPage(BasePage):
+class ProductsImportPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)
