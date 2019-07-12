@@ -1,16 +1,24 @@
+{% extends "base.html" %}
 
-<ul>
-  {% for product in products %}
-    <li class="nav-item">
-      <a class="nav-link" href="{{ product.url }}">{{ product.product_name }}</a>
-    </li>
-  {% endfor %}
-</ul>
+{% load wagtailcore_tags wagtailimages_tags %}
 
-<ul>
-  {% for page in subPages %}
-    <li class="nav-item">
-      <a class="nav-link" href="{{ page.url }}">{{ page.title }}</a>
-    </li>
-  {% endfor %}
-</ul>
+{% block body_class %}template-productspage{% endblock %}
+
+{% block content %}
+  <ul>
+    {% for page in subPages %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ page.url }}">{{ page.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  
+  <ul>
+    {% for product in products %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ product.url }}">{{ product.product_name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

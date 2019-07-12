@@ -1,0 +1,83 @@
+body {
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+  margin-top: 150px;
+}
+body h1, body h2, body h3, body h4, body h5 {
+  font-family: "Montserrat", sans-serif;
+}
+body p {
+  font-size: 16px;
+}
+body h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 0px;
+}
+body h2 {
+  font-size: 24px;
+  font-weight: 700;
+}
+body h2 a {
+  color: #ee4d2d;
+}
+body h2 a:hover {
+  color: #29d6a1;
+  text-decoration: none;
+}
+body h3 {
+  font-size: 18px;
+  font-weight: 700;
+}
+body ul {
+  font-size: 14px;
+}
+body a {
+  color: #ee4d2d;
+}
+body a:hover {
+  color: #29d6a1;
+  text-decoration: none;
+}
+
+.menu-box .nav-body {
+  background-color: #fff;
+  padding-top: 0;
+}
+.menu-box .nav-body .clip-top-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.menu-box .nav-body .logo-wrap {
+  padding-right: 100px;
+}
+.menu-box .nav-body .nav-cont {
+  background-color: #fff;
+  padding-bottom: 20px;
+  padding-top: 25px;
+}
+.menu-box .nav-body .nav-cont .nav-wrap .nav-menulink {
+  font-size: 14px;
+  padding-bottom: 5px;
+  width: 100%;
+  border-bottom: 4px solid #ee4d2d;
+}
+.menu-box .nav-body .nav-cont .nav-wrap .nav-menulink a {
+  color: #000;
+  font-weight: 700;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+}
+.menu-box .nav-body .nav-cont .nav-wrap .nav-menulink a:hover {
+  color: #ee4d2d;
+  text-decoration: none;
+}
+.menu-box .nav-body .nav-cont .nav-wrap .nav-menulink .active a {
+  color: #ee4d2d;
+}
+.menu-box .nav-body .nav-cont .nav-wrap .nav-menulink .nav-item {
+  padding-right: 15px;
+}
+
+/*# sourceMappingURL=seller_center.css.map */
