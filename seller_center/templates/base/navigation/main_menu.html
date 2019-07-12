@@ -17,6 +17,15 @@
 				</div>
 
 				<ul class="navbar-nav nav-menulink">
+					<li class="nav-item">
+							<a class="nav-link" href="/">Home</a>
+					</li>
+					<li class="nav-item">
+							<a class="nav-link" href="/products">Products</a>
+					</li>
+					<li class="nav-item">
+							<a class="nav-link" href="/sales">Sales</a>
+					</li>
 					{% for item in menu_items %}
 					<li class="nav-item {{ item.active_class }}">
 							<a class="nav-link" href="{{ item.href }}">{{ item.text }}</a>
