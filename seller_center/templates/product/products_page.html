@@ -1,24 +1,39 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}template-productspage{% endblock %}
 
 {% block content %}
-  <ul>
+
+  <h2>Actions</h2>
+  <div class="row buttons-container">
     {% for page in subPages %}
-      <li class="nav-item">
-        <a class="nav-link" href="{{ page.url }}">{{ page.title }}</a>
-      </li>
+      <a class="btn btn-success" href="{{ page.url }}" role="button">+ {{ page.title }}</a>
     {% endfor %}
-  </ul>
-  
-  <ul>
-    {% for product in products %}
-      <li class="nav-item">
-        <a class="nav-link" href="{{ product.url }}">{{ product.product_name }}</a>
-      </li>
-    {% endfor %}
-  </ul>
+  </div>
+
+  <h2>All Products</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">{Product Name}</th>
+        <th scope="col">Price</th>
+        <th scope="col">Stock</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <th scope="row">{{forloop.counter}}</th>
+        <td>{{product.product_name}}</td>
+        <td>{{product.price}}</td>
+        <td>{{product.stock}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}

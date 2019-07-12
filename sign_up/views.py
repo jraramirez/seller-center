@@ -8,7 +8,6 @@ from sign_up.models import SignUpPage
 
 def sign_up(request):
   if(request.method == 'POST'):
-    print("!")
     user = User.objects.create_user(
       username=request.POST['email-address'],
       email=request.POST['email-address'],
@@ -25,7 +24,6 @@ def sign_up(request):
 
   else:
     if(not request.user.is_authenticated):
-      print("!!")
       self = SignUpPage.objects.get(slug='sign')
       form = SignUpPage.objects.get(slug='sign').get_form()
       return render(request, 'sign_up/sign_up_page.html', {
@@ -33,5 +31,4 @@ def sign_up(request):
         'form': form,
       })
     else:
-      print("!!!")
       return redirect('/')

@@ -1,34 +1,41 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
 
-    <h2>
-      {% if self.page_title %}
-        {{ self.page_title }}
-      {% else %}
-        {{ self.title}}
-      {% endif %}
-    </h2>
-    <h2>
-      {{ self.page_subtitle }}
-    </h2>
-
-    {% if self.body %}
-    <div class="body-content">
-      {% include "streamfields/general.html" with content=self.body %}
-    </div>
+  <h2>
+    {% if self.page_title %}
+      {{ self.page_title }}
+    {% else %}
+      {{ self.title}}
     {% endif %}
+  </h2>
 
-    <ul>
-    {% for page in subPages %}
-      {% if page.url != '/sign/' %}
-      <li class="nav-item">
-        <a class="nav-link" href="{{ page.url }}">{{ page.title }}</a>
-      </li>
-      {% endif %}
-    {% endfor %}
-    </ul>
+  <h2>{{ self.page_subtitle }}</h2>
+
+  {% if self.body %}
+  <div class="body-content">
+    {% include "streamfields/general.html" with content=self.body %}
+  </div>
+  {% endif %}
+
+  <div class="row cards-container">
+  {% for page in subPages %}
+    {% if page.url != '/sign/' %}
+    <a href="{{ page.url }}">
+      <div class="col-md-4">
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">{{ page.title }}</p>
+          </div>
+        </div>
+      </div>
+    </a>
+    {% endif %}
+  {% endfor %}
+  </div>
 
 {% endblock %}
