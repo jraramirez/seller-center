@@ -18,7 +18,7 @@ urlpatterns = [
 
     url(r'^search/$', search_views.search, name='search'),
 
-    url(r'^sign-up/$', sign_up_views.sign_up, name='sign_up'),
+    url(r'^sign/$', sign_up_views.sign_up, name='sign_up'),
     url(r'^products/import/', product_views.products_import, name='products_import'),
 
     # For anything not caught by a more specific rule above, hand over to
