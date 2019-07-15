@@ -8,7 +8,7 @@ from product.models import ProductsImportPage
 from product.models import Product
 
 class UploadFileForm(forms.Form):
-  file = forms.FileField()
+  file = forms.FileField(label="Choose a file")
 
 
 def products_import(request):

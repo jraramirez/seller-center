@@ -26,10 +26,10 @@
     {% if page.url != '/sign/' %}
     <a href="{{ page.url }}">
       <div class="col-md-4">
-        <div class="card" style="width: 18rem;">
+        <div class="card">
           <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
           <div class="card-body">
-            <p class="card-text">{{ page.title }}</p>
+            <h2 class="card-title">{{ page.title }}</h2>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 body {
+	font-size: 14px;
 	h1, h2, h3, h4, h5{
 		font-family: 'Montserrat', sans-serif;
 	}
@@ -8,18 +9,18 @@ body {
 	margin-top: 150px;
 
 	p {
-		font-size: 16px;
+		font-size: 14px;
 	}
 
 	h1 {
-		font-size: 24px;
+		font-size: 22px;
 		font-weight: 600;
 		margin-bottom: 1.5rem;
 	}
 
 	h2 {
-		font-size: 18px;
-		font-weight: 500;
+		font-size: 20px;
+		font-weight: 600;
     margin-bottom: 1.5rem;
 		a {
 			color: #ee4d2d;
@@ -49,6 +50,10 @@ body {
 		text-decoration: none;
 	}
 
+	.card{
+		width: 18rem;
+	}
+
 	.buttons-container{
 		margin-top: 30px;
 		margin-bottom: 30px;
@@ -60,5 +65,15 @@ body {
 	}
 	.form-control{
 		margin-bottom: 15px;
+	}
+	.btn-success{
+		color: #fff;
+		background-color: #29d6a1;
+		border-color: #29d6a1;
+	}
+	.btn-success:hover {
+		color: #fff;
+		background-color: #ee4d2d;
+		border-color: #ee4d2d;
 	}
 }

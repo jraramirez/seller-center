@@ -1,0 +1,65 @@
+.template-productsimportpage {
+  .form-import{
+    label{
+      display: inline-block;
+      font-weight: 400;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      border: 1px solid transparent;
+      padding: .375rem .75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      border-radius: .25rem;
+      transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+      color: #6c757d;
+      background-color: transparent;
+      background-image: none;
+      border-color: #6c757d;
+      cursor: pointer;
+    }
+    input[type="file"]{
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+    input[type="submit"]{
+      display: inline-block;
+      font-weight: 400;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      border: 1px solid transparent;
+      padding: .375rem .75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      border-radius: .25rem;
+      transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+      color: #fff;
+      background-color: #29d6a1;
+      border-color: #29d6a1;
+      cursor: pointer;
+    }
+    label:hover {
+      color: #fff;
+      background-color: #ee4d2d;
+      border-color: #ee4d2d;
+    }
+    input[type="submit"]:hover {
+      color: #fff;
+      background-color: #ee4d2d;
+      border-color: #ee4d2d;
+    }
+  }
+}
