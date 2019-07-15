@@ -16,10 +16,8 @@
           <div class="form-import">
             <form action="" enctype="multipart/form-data"  method="post">
               {% csrf_token %}
-                <table class="form-text">
-                  {{ form.as_table }}
-                </table>
-                <input class="button-submit" type="submit" value="Upload" name="upload">
+              {{ form }}
+              <input class="button-submit" type="submit" value="Upload" name="upload">
             </form>
           </div>
         </div>
