@@ -1,0 +1,79 @@
+body {
+	font-size: 14px;
+	h1, h2, h3, h4, h5{
+		font-family: 'Montserrat', sans-serif;
+	}
+
+	font-family: 'Montserrat', sans-serif;
+	margin: 0;
+	margin-top: 150px;
+
+	p {
+		font-size: 14px;
+	}
+
+	h1 {
+		font-size: 22px;
+		font-weight: 600;
+		margin-bottom: 1.5rem;
+	}
+
+	h2 {
+		font-size: 20px;
+		font-weight: 600;
+    margin-bottom: 1.5rem;
+		a {
+			color: #ee4d2d;
+		}
+
+		a:hover {
+			color: #29d6a1;
+			text-decoration: none;
+		}
+	}
+
+	h3 {
+		font-size: 18px;
+		font-weight: 700;
+	}
+
+	ul {
+		font-size: 14px;
+	}
+	
+	a {
+		color: #ee4d2d;
+	}
+
+	a:hover {
+		color: #29d6a1;
+		text-decoration: none;
+	}
+
+	.card{
+		width: 18rem;
+	}
+
+	.buttons-container{
+		margin-top: 30px;
+		margin-bottom: 30px;
+		margin-left: 0px;
+	}
+	.cards-container{
+		margin-top: 30px;
+		margin-bottom: 30px;
+	}
+	.form-control{
+		margin-bottom: 15px;
+	}
+	.btn-success{
+		color: #fff;
+		background-color: #29d6a1;
+		border-color: #29d6a1;
+	}
+	.btn-success:hover {
+		color: #fff;
+		background-color: #ee4d2d;
+		border-color: #ee4d2d;
+	}
+}

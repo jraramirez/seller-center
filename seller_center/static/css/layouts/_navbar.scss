@@ -1,0 +1,50 @@
+.menu-box {
+	.nav-body {
+		background-color: #fff;
+		padding-top: 0;
+		.clip-top-left {
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+
+		.logo-wrap {
+			
+		}
+
+		.nav-cont {
+			background-color: #fff;
+			padding-bottom: 20px;
+			padding-top: 25px;
+
+			.nav-wrap {
+				.nav-menulink {
+					font-size: 14px;
+					padding-bottom: 5px;
+					width: 100%;
+
+					border-bottom: 4px solid #ee4d2d;
+					a {
+						color: #000;
+						font-weight: 700;
+						font-size: 16px;
+						font-family: 'Montserrat', sans-serif;
+					}
+
+					a:hover {
+						color: #ee4d2d;
+						text-decoration: none;
+					}
+
+					.active a {
+						color: #ee4d2d;
+					}
+
+					.nav-item {
+						padding-right: 15px;
+					}
+				}
+			}
+		}
+	}
+}

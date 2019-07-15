@@ -1,14 +1,15 @@
 from django.shortcuts import render
 from django import forms
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db import transaction
 import pandas as pd
+import os
 
 from product.models import ProductsImportPage
 from product.models import Product
 
 class UploadFileForm(forms.Form):
-  file = forms.FileField()
+  file = forms.FileField(label="Choose a file")
 
 
 def products_import(request):
@@ -59,3 +60,19 @@ def products_import(request):
     'self': self,
     'form': form,
   })
+
+
+# function for downloading CPC extractor sample file as Excel file
+def download_template(request):
+  print(os.getcwd())
+  outFileName = 'Import Products Template'
+  outFolderName = 'seller_center/static/documents/'
+  fileType = '.csv'
+  path = outFolderName + outFileName + fileType
+  print(os.path.exists(path))
+  if os.path.exists(path):
+    with open(path, "rb") as excel:
+      data = excel.read()
+    response = HttpResponse(data,content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=' + outFileName + fileType
+    return response

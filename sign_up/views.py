@@ -24,8 +24,8 @@ def sign_up(request):
 
   else:
     if(not request.user.is_authenticated):
-      self = SignUpPage.objects.get(slug='sign-up')
-      form = SignUpPage.objects.get(slug='sign-up').get_form()
+      self = SignUpPage.objects.get(slug='sign')
+      form = SignUpPage.objects.get(slug='sign').get_form()
       return render(request, 'sign_up/sign_up_page.html', {
         'self': self,
         'form': form,

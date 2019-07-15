@@ -1,8 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
 
-<form action="" enctype="multipart/form-data"  method="post">
-  {% csrf_token %}
-    <table class="form-text">
-      {{ form.as_table }}
-    </table>
-    <input class="button-submit" type="submit" value="Upload" name="upload">
-</form>
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-productsimportpage{% endblock %}
+
+{% block content %}
+
+  <div class="row cards-container">
+    <div class="col-md-4">
+      <div class="card">
+        <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
+        <div class="card-body">
+          <h2 class="card-title">Add Multiple Products</h2>
+          <div class="form-import">
+            <form action="" enctype="multipart/form-data"  method="post">
+              {% csrf_token %}
+              {{ form }}
+              <input class="button-submit" type="submit" value="Upload" name="upload">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
+        <div class="card-body">
+          <h2 class="card-title">Sample Template</h2>
+          <a class="btn btn-success" href="/products/import/download_template" role="button">Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
