@@ -1,0 +1,30 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<div class="tab-pane fade" id="live" role="tabpanel" aria-labelledby="live-tab">
+
+    {% if liveProducts %}
+        <div class="body-content">
+            <h2>All Products</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Stock</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in liveProducts %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{product.product_name}}</td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.stock}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>

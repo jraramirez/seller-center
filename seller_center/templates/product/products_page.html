@@ -14,26 +14,12 @@
     {% endfor %}
   </div>
 
-  <h2>All Products</h2>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">{Product Name}</th>
-        <th scope="col">Price</th>
-        <th scope="col">Stock</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for product in allProducts %}
-      <tr>
-        <th scope="row">{{forloop.counter}}</th>
-        <td>{{product.product_name}}</td>
-        <td>{{product.price}}</td>
-        <td>{{product.stock}}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  {% include 'product/includes/products_filter.html' %}
+
+  {# Tab Content #}
+  <div class="tab-content products-tabs" id="scienceTabsContent">
+      {% include "product/includes/all_products.html" with allProducts=allProducts %}
+      {% include "product/includes/live_products.html" with liveProducts=liveProducts %}
+  </div>
 
 {% endblock %}
