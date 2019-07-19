@@ -3,6 +3,7 @@ from modelcluster.fields import ParentalKey
 
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel
+from wagtail.core.fields import RichTextField, StreamField
 
 
 class FormField(AbstractFormField):
@@ -10,9 +11,10 @@ class FormField(AbstractFormField):
 
 
 class SignUpPage(AbstractEmailForm):
-
+  agreement_message = RichTextField(null=True, blank=True)
   content_panels = AbstractEmailForm.content_panels + [
     InlinePanel('form_fields', label="Form fields"),
+    FieldPanel('agreement_message'),
     MultiFieldPanel([
       FieldRowPanel([
         FieldPanel('from_address', classname="col6"),

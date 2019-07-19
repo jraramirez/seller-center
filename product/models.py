@@ -8,9 +8,10 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from modelcluster.models import ClusterableModel
 
+from users.models import Profile
 
 @register_snippet
-class Order(ClusterableModel):
+class Order(models.Model):
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500)
   countdown = models.CharField(null=True, blank=True, max_length=500)
@@ -23,15 +24,19 @@ class Order(ClusterableModel):
     FieldPanel('countdown'),
     FieldPanel('shipping_channel'),
     FieldPanel('creation_date'),
-    InlinePanel('products', label='Order Products')
   ]
 
+@register_snippet
+class Category(models.Model):
+  name = models.CharField(null=True, blank=True, max_length=500)
+
+  panels = [
+    FieldPanel('name'),
+  ]
 
 @register_snippet
 class Product(models.Model):
   product_code = models.CharField(null=True, blank=True, max_length=500)
-  merchant_id = models.CharField(null=True, blank=True, max_length=500)
-  category_id = models.CharField(null=True, blank=True, max_length=500)
   product_name = models.CharField(null=True, blank=True, max_length=500)
   product_description = models.CharField(null=True, blank=True, max_length=500)
   price = models.CharField(null=True, blank=True, max_length=500)
@@ -55,10 +60,20 @@ class Product(models.Model):
   image7 = models.CharField(null=True, blank=True, max_length=500)
   other_logistics_provider_setting = models.CharField(null=True, blank=True, max_length=500)
   other_logistics_provider_fee = models.CharField(null=True, blank=True, max_length=500)
-  order = ParentalKey('Order', related_name='products', null=True, blank=True)
+  order = models.ForeignKey(Order, models.DO_NOTHING, blank=True, null=True)
+  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
+  category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
+  live = models.BooleanField(default=False)
+  suspended = models.BooleanField(default=False)
+  unlisted = models.BooleanField(default=False)
 
-  def save(self, *args, **kwargs):
-    super(Product, self).save(*args, **kwargs)
+  def save_model(self, request, obj, form, change):
+    obj.user_id = request.user.id
+    super().save_model(request, obj, form, change)
+
+  # def save(self, *args, **kwargs):
+  #   Product.user_id = request.user.id
+  #   super(Product, self).save(*args, **kwargs)
 
   def __unicode__(self):
     return self.product_name
@@ -77,9 +92,17 @@ class ProductsPage(BasePage):
   
   def get_context(self, request):
     context = super().get_context(request)
-    products = Product.objects.all()
+    allProducts = Product.objects.all()
+    liveProducts = Product.objects.filter(live=True)
+    soldOutProducts = Product.objects.filter(stock='0')
+    suspendedProducts = Product.objects.filter(suspended=True)
+    unlistedProducts = Product.objects.filter(unlisted=True)
     subPages = self.get_children().live()
-    context['products'] = products
+    context['allProducts'] = allProducts
+    context['liveProducts'] = liveProducts
+    context['soldOutProducts'] = soldOutProducts
+    context['suspendedProducts'] = suspendedProducts
+    context['unlistedProducts'] = unlistedProducts
     context['subPages'] = subPages
     return context
 

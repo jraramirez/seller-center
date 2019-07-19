@@ -23,8 +23,9 @@ def products_import(request):
         for index, row, in inputFileDF.iterrows():
           t = Product(
             product_code = row['product_code'],
-            merchant_id = row['merchant_id'],
-            category_id = row['category_id'],
+            profile_id = request.user.id,
+            category_id = None,
+            order_id = None,
             product_name = row['product_name'],
             product_description = row['product_description'],
             price = row['price'],
@@ -47,7 +48,10 @@ def products_import(request):
             image6 = row['image6'],
             image7 = row['image7'],
             other_logistics_provider_setting = row['other_logistics_provider_setting'],
-            other_logistics_provider_fee = row['other_logistics_provider_fee']
+            other_logistics_provider_fee = row['other_logistics_provider_fee'],
+            live = False,
+            suspended = False,
+            unlisted = False
           )
           t.save()
     return HttpResponseRedirect("/products")

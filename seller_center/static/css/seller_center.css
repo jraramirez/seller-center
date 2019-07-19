@@ -172,4 +172,8 @@ body .btn-success:hover {
   font-family: "Montserrat", sans-serif;
 }
 
+.template-signuppage .agreement-checkbox input {
+  height: 50%;
+}
+
 /*# sourceMappingURL=seller_center.css.map */

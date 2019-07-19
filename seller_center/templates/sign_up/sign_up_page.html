@@ -11,15 +11,25 @@
       {% csrf_token %}
       <div class="row">
         {% for field in form.visible_fields %}
+          {% if field|widget_type != 'checkboxinput' %}
           <div class="col-md-12">
             {% render_field field class+="form-control" placeholder=field.label %}
           </div>
+          {% endif %}
         {% endfor %}
         <div class="col-md-12">
           <input type="password" name="password" maxlength="255" class="form-control" placeholder="Password" rows="5" required="" id="id_password">
         </div>
+        {% for field in form.visible_fields %}
+          {% if field|widget_type == 'checkboxinput' %}
+          <div class="agreement-checkbox col-md-1">
+            {% render_field field class+="form-control" %} 
+          </div>
+          <div class="col-md-11">{{self.agreement_message|richtext}}</div>
+          {% endif %}
+        {% endfor %}
         <div class="col-md-12">
-          <button type="submit" class="block-button submit-button float-right">submit</button>
+          <button type="submit" class="btn btn-success submit-button float-right">submit</button>
         </div>
       </div>
     </form>
