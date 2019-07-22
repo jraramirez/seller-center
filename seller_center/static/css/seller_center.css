@@ -66,6 +66,9 @@ body .btn-success:hover {
   background-color: #ee4d2d;
   border-color: #ee4d2d;
 }
+body .dropdown-menu {
+  font-size: 14px;
+}
 
 .menu-box .nav-body {
   background-color: #fff;
@@ -104,6 +107,13 @@ body .btn-success:hover {
   padding-right: 15px;
 }
 
+.template-productspage .products-filters {
+  margin: 0px -15px;
+}
+.template-productspage .products-filters .nav-link {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
 .template-productsimportpage .form-import label {
   margin-bottom: 0px;
   display: inline-block;

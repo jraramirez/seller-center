@@ -7,7 +7,7 @@
 
 {% block content %}
 
-  <h2>Actions</h2>
+  <h2>My Products</h2>
   <div class="row buttons-container">
     {% for page in subPages %}
       <a class="btn btn-success" href="{{ page.url }}" role="button">+ {{ page.title }}</a>
@@ -17,9 +17,12 @@
   {% include 'product/includes/products_filter.html' %}
 
   {# Tab Content #}
-  <div class="tab-content products-tabs" id="scienceTabsContent">
+  <div class="tab-content products-tab" id="productsTabContent">
       {% include "product/includes/all_products.html" with allProducts=allProducts %}
       {% include "product/includes/live_products.html" with liveProducts=liveProducts %}
+      {% include "product/includes/sold_out_products.html" with soldOutProducts=soldOutProducts %}
+      {% include "product/includes/unlisted_products.html" with unlistedProducts=unlistedProducts %}
+      {% include "product/includes/suspended_products.html" with suspendedProducts=suspendedProducts %}
   </div>
 
 {% endblock %}

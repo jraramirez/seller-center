@@ -1,9 +1,9 @@
 {% load static %}
 {% load wagtailcore_tags wagtailimages_tags wagtailimages_tags %}
 
-<div class="tab-pane fade" id="live">
+<div class="tab-pane fade" id="suspended">
 
-    {% if liveProducts %}
+    {% if suspendedProducts %}
         <div class="body-content">
             <table class="table table-striped">
                 <thead>
@@ -19,7 +19,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for product in liveProducts %}
+                {% for product in suspendedProducts %}
                 <tr>
                     <td scope="row">
                         <img src="{% static 'images/download.svg' %}" alt="" width="100"/>
