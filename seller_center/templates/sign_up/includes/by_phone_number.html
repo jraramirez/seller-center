@@ -1,0 +1,58 @@
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags wagtailimages_tags %}
+
+<div class="tab-pane fade" id="phone">
+    <div class="form-wrap">
+        <form action=" {{ page.url }}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <input type="hidden" id="reg-type" name="reg-type" value="phone">
+                <div class="col-md-6">
+                    <input type="text" name="phone-number" class="form-control" placeholder="Phone Number" required="" id="id_phone-number">
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-success float-right">Send Verification Code</button>
+                </div>
+    
+                <div class="col-md-12">
+                    <input type="text" name="otp" class="form-control" placeholder="Verification Code" required="" id="id_otp">
+                </div>  
+                <div class="col-md-12">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required="" id="id_password">
+                </div>
+                <div class="col-md-12">
+                    <input type="password" name="password-reenter" class="form-control" placeholder="Re-Enter Password" required="" id="id_password_reenter">
+                </div>
+                
+                <!-- <div class="col-md-12">
+                    <p>Account Type</p>
+                    <ul id="id_account-type">
+                        <li><label for="id_account-type_0"><input type="radio" name="account-type" value="Individual" placeholder="Account Type" required="" id="id_account-type_0" checked="">
+                            Individual
+                        </label></li>
+                        <li><label for="id_account-type_1"><input type="radio" name="account-type" value="Corporate" placeholder="Account Type" required="" id="id_account-type_1">
+                            Corporate
+                        </label></li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <p>Country</p>
+                    <ul id="id_country">
+                        <li><label for="id_country_0"><input type="radio" name="country" value="Philippines" placeholder="Account Type" required="" id="id_country_0" checked="">
+                            Philippines
+                        </label></li>
+                    </ul>
+                </div> -->
+                <div class="agreement-checkbox col-md-1">
+                    <input type="checkbox" name="agreement" class="form-control" required="" id="id_agreement"> 
+                </div>
+                <div class="col-md-11">
+                    <p> I've read and understood <a href="https://drive.google.com/file/d/16-XqTcR36j4bEwamFal6wWcv5kwp8Ga1/view?spm=a2a1n.12768535.old-navigation.2.25201e13HAoNIP">Seller Center's Marketplace Agreement</a></p>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-success submit-button float-right">submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class Profile(models.Model):
+  verified = models.BooleanField(default=False)
   user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 

@@ -6,33 +6,13 @@
 
 {% block content %}
 
-  <div class="form-wrap">
-    <form action=" {{ page.url }}" method="POST">
-      {% csrf_token %}
-      <div class="row">
-        {% for field in form.visible_fields %}
-          {% if field|widget_type != 'checkboxinput' %}
-          <div class="col-md-12">
-            {% render_field field class+="form-control" placeholder=field.label %}
-          </div>
-          {% endif %}
-        {% endfor %}
-        <div class="col-md-12">
-          <input type="password" name="password" maxlength="255" class="form-control" placeholder="Password" rows="5" required="" id="id_password">
-        </div>
-        {% for field in form.visible_fields %}
-          {% if field|widget_type == 'checkboxinput' %}
-          <div class="agreement-checkbox col-md-1">
-            {% render_field field class+="form-control" %} 
-          </div>
-          <div class="col-md-11">{{self.agreement_message|richtext}}</div>
-          {% endif %}
-        {% endfor %}
-        <div class="col-md-12">
-          <button type="submit" class="btn btn-success submit-button float-right">submit</button>
-        </div>
-      </div>
-    </form>
-  </div>
+{% include 'sign_up/includes/sign_up_filter.html' %}
+
+{# Tab Content #}
+<div class="tab-content signup-tab" id="signUpTabContent">
+    {% include "sign_up/includes/by_email.html" %}
+    {% include "sign_up/includes/by_phone_number.html" %}
+</div>
+
 
 {% endblock %}

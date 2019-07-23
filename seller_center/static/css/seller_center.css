@@ -182,6 +182,10 @@ body .dropdown-menu {
   font-family: "Montserrat", sans-serif;
 }
 
+.template-signuppage .form-wrap ul {
+  list-style: none;
+  padding-left: 0px;
+}
 .template-signuppage .agreement-checkbox input {
   height: 50%;
 }

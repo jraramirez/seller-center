@@ -1,4 +1,13 @@
 .template-signuppage{
+  .sign-up-filters{
+    padding-left: -15px;
+  }
+  .form-wrap{
+    ul{
+      list-style: none;
+      padding-left: 0px;
+    }
+  }
   .agreement-checkbox{
     input{
       height: 50%;
