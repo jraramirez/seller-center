@@ -182,6 +182,10 @@ body .dropdown-menu {
   font-family: "Montserrat", sans-serif;
 }
 
+.template-signuppage .sign-up-filters {
+  margin-left: -15px;
+  margin-bottom: 15px;
+}
 .template-signuppage .form-wrap ul {
   list-style: none;
   padding-left: 0px;
