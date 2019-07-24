@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import transaction
@@ -10,6 +10,16 @@ from product.models import Product
 
 class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
+
+
+def product_import(request):
+  if(request.method == 'POST'):
+    # return render(request, 'product/products_page.html', {
+    # })
+    return redirect('/products')
+  else:
+    return render(request, 'product/product_import_page.html', {
+    })
 
 
 def products_import(request):
@@ -58,7 +68,7 @@ def products_import(request):
   else:
     form = UploadFileForm()
     
-  self = ProductsImportPage.objects.get(slug='import')
+  self = ProductsImportPage.objects.get(slug='add-new-products')
   
   return render(request, 'product/products_import_page.html', {
     'self': self,

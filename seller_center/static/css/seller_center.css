@@ -49,9 +49,17 @@ body .buttons-container {
   margin-bottom: 30px;
   margin-left: 0px;
 }
+body .buttons-container .btn-success {
+  margin-right: 15px;
+}
 body .cards-container {
   margin-top: 30px;
   margin-bottom: 30px;
+}
+body .form-wrap label {
+  color: #6c757d;
+  padding-left: 12px;
+  font-size: 16px;
 }
 body .form-control {
   margin-bottom: 15px;
@@ -114,6 +122,13 @@ body .dropdown-menu {
   font-size: 16px;
   margin-bottom: 15px;
 }
+.template-productsimportpage .form-wrap h2 {
+  margin-top: 1.5rem;
+}
+.template-productsimportpage .form-wrap .list-group {
+  margin-left: 15px;
+}
+
 .template-productsimportpage .form-import label {
   margin-bottom: 0px;
   display: inline-block;

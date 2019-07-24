@@ -58,10 +58,20 @@ body {
 		margin-top: 30px;
 		margin-bottom: 30px;
 		margin-left: 0px;
+		.btn-success{
+			margin-right: 15px;
+		}
 	}
 	.cards-container{
 		margin-top: 30px;
 		margin-bottom: 30px;
+	}
+	.form-wrap{
+		label{
+			color: #6c757d;
+			padding-left: 12px;
+			font-size: 16px;
+		}
 	}
 	.form-control{
 		margin-bottom: 15px;

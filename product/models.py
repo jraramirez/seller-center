@@ -107,5 +107,9 @@ class ProductsPage(BasePage):
     return context
 
 
+class ProductImportPage(BasePage):
+  body = StreamField(GeneralStreamBlock, blank=True)
+
+
 class ProductsImportPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)
