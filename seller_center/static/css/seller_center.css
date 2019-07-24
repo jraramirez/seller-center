@@ -16,7 +16,7 @@ body h1 {
   margin-bottom: 1.5rem;
 }
 body h2 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   margin-bottom: 1.5rem;
 }
@@ -28,7 +28,7 @@ body h2 a:hover {
   text-decoration: none;
 }
 body h3 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
 }
 body ul {
@@ -187,19 +187,19 @@ body .dropdown-menu {
   border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   color: #fff;
-  background-color: #3fbdd3;
-  border-color: #3fbdd3;
+  background-color: #05507b;
+  border-color: #05507b;
   cursor: pointer;
 }
 .template-productsimportpage .form-import label:hover {
   color: #fff;
-  background-color: #05507b;
-  border-color: #05507b;
+  background-color: #3fbdd3;
+  border-color: #3fbdd3;
 }
 .template-productsimportpage .form-import input[type=submit]:hover {
   color: #fff;
-  background-color: #05507b;
-  border-color: #05507b;
+  background-color: #3fbdd3;
+  border-color: #3fbdd3;
 }
 
 .login .wrapper {

@@ -48,19 +48,19 @@
       border-radius: .25rem;
       transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
       color: #fff;
-      background-color: #3fbdd3;
-      border-color: #3fbdd3;
+      background-color: #05507b;
+      border-color: #05507b;
       cursor: pointer;
     }
     label:hover {
       color: #fff;
-      background-color: #05507b;
-      border-color: #05507b;
+      background-color: #3fbdd3;
+      border-color: #3fbdd3;
     }
     input[type="submit"]:hover {
       color: #fff;
-      background-color: #05507b;
-      border-color: #05507b;
+      background-color: #3fbdd3;
+      border-color: #3fbdd3;
     }
   }
 }

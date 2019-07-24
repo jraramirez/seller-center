@@ -12,12 +12,12 @@
       <div class="card">
         <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
         <div class="card-body">
-          <h2 class="card-title">Add Multiple Products</h2>
+          <h3 class="card-title">Add Multiple Products</h3>
           <div class="form-import">
             <form action="" enctype="multipart/form-data"  method="post">
               {% csrf_token %}
               {{ form }}
-              <input class="button-submit" type="submit" value="Upload" name="upload">
+              <input class="btn btn-success button-submit" type="submit" value="Upload" name="upload">
             </form>
           </div>
         </div>
@@ -27,7 +27,7 @@
       <div class="card">
         <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
         <div class="card-body">
-          <h2 class="card-title">Sample Template</h2>
+          <h3 class="card-title">Sample Template</h3>
           <a class="btn btn-success" href="/products/import/download_template" role="button">Download</a>
         </div>
       </div>
