@@ -5,7 +5,7 @@
 		<div class="container nav-cont">
 			<div class="logo-wrap">
 				{% image settings.site_settings.AdminSettings.logo original as logo %}
-				<a class="navbar-brand" href="/"><img class="nav-img-scroll" src="{% static 'images/download.svg' %}" alt="" width="80"/></a>
+				<a class="navbar-brand" href="/"><img class="nav-img-scroll" src="{% static 'images/L.svg' %}" alt="" width="40"/></a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 				</button>
@@ -18,9 +18,6 @@
 
 				<ul class="navbar-nav nav-menulink">
 					<li class="nav-item">
-							<a class="nav-link" href="/">Home</a>
-					</li>
-					<li class="nav-item">
 							<a class="nav-link" href="/products">Products</a>
 					</li>
 					<li class="nav-item">
@@ -31,18 +28,9 @@
 							<a class="nav-link" href="{{ item.href }}">{{ item.text }}</a>
 					</li>
 					{% endfor %}
-					{% if not user.is_authenticated %}
-					<li class="nav-item">
-							<a class="nav-link" href="/admin/login/?next=/">Log In</a>
-					</li>
-					<li class="nav-item">
-							<a class="nav-link" href="/sign/">Sign Up</a>
-					</li>
-					{% else %}
 					<li class="nav-item">
 							<a class="nav-link" href="/admin/logout/?next=/">Log Out</a>
 					</li>
-					{% endif%}
         </ul>
 			</div>
 		</div>

@@ -1,4 +1,9 @@
-.wrapper {
-  margin-top: 150px;
-  font-family: 'Montserrat', sans-serif;
+.login{
+  .wrapper {
+    margin-top: 150px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .messages{
+    display: none;
+  }
 }

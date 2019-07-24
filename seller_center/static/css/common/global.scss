@@ -23,11 +23,11 @@ body {
 		font-weight: 600;
     margin-bottom: 1.5rem;
 		a {
-			color: #ee4d2d;
+			color: #05507b;
 		}
 
 		a:hover {
-			color: #29d6a1;
+			color: #3fbdd3;
 			text-decoration: none;
 		}
 	}
@@ -42,11 +42,11 @@ body {
 	}
 	
 	a {
-		color: #ee4d2d;
+		color: #05507b;
 	}
 
 	a:hover {
-		color: #29d6a1;
+		color: #3fbdd3;
 		text-decoration: none;
 	}
 
@@ -78,13 +78,23 @@ body {
 	}
 	.btn-success{
 		color: #fff;
-		background-color: #29d6a1;
-		border-color: #29d6a1;
+		background-color: #05507b;
+		border-color: #05507b;
 	}
 	.btn-success:hover {
 		color: #fff;
-		background-color: #ee4d2d;
-		border-color: #ee4d2d;
+		background-color: #3fbdd3;
+		border-color: #3fbdd3;
+	}
+	.btn-primary{
+		color: #fff;
+		background-color: #3fbdd3;
+		border-color: #3fbdd3;
+	}
+	.btn-primary:hover {
+		color: #fff;
+		background-color: #05507b;
+		border-color: #05507b;
 	}
 	.dropdown-menu{
 		font-size: 14px;

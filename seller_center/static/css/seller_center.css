@@ -21,10 +21,10 @@ body h2 {
   margin-bottom: 1.5rem;
 }
 body h2 a {
-  color: #ee4d2d;
+  color: #05507b;
 }
 body h2 a:hover {
-  color: #29d6a1;
+  color: #3fbdd3;
   text-decoration: none;
 }
 body h3 {
@@ -35,10 +35,10 @@ body ul {
   font-size: 14px;
 }
 body a {
-  color: #ee4d2d;
+  color: #05507b;
 }
 body a:hover {
-  color: #29d6a1;
+  color: #3fbdd3;
   text-decoration: none;
 }
 body .card {
@@ -66,13 +66,23 @@ body .form-control {
 }
 body .btn-success {
   color: #fff;
-  background-color: #29d6a1;
-  border-color: #29d6a1;
+  background-color: #05507b;
+  border-color: #05507b;
 }
 body .btn-success:hover {
   color: #fff;
-  background-color: #ee4d2d;
-  border-color: #ee4d2d;
+  background-color: #3fbdd3;
+  border-color: #3fbdd3;
+}
+body .btn-primary {
+  color: #fff;
+  background-color: #3fbdd3;
+  border-color: #3fbdd3;
+}
+body .btn-primary:hover {
+  color: #fff;
+  background-color: #05507b;
+  border-color: #05507b;
 }
 body .dropdown-menu {
   font-size: 14px;
@@ -96,7 +106,7 @@ body .dropdown-menu {
   font-size: 14px;
   padding-bottom: 5px;
   width: 100%;
-  border-bottom: 4px solid #ee4d2d;
+  border-bottom: 4px solid #05507b;
 }
 .menu-box .nav-body .nav-cont .nav-wrap .nav-menulink a {
   color: #000;
@@ -105,11 +115,11 @@ body .dropdown-menu {
   font-family: "Montserrat", sans-serif;
 }
 .menu-box .nav-body .nav-cont .nav-wrap .nav-menulink a:hover {
-  color: #ee4d2d;
+  color: #05507b;
   text-decoration: none;
 }
 .menu-box .nav-body .nav-cont .nav-wrap .nav-menulink .active a {
-  color: #ee4d2d;
+  color: #05507b;
 }
 .menu-box .nav-body .nav-cont .nav-wrap .nav-menulink .nav-item {
   padding-right: 15px;
@@ -177,24 +187,27 @@ body .dropdown-menu {
   border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   color: #fff;
-  background-color: #29d6a1;
-  border-color: #29d6a1;
+  background-color: #3fbdd3;
+  border-color: #3fbdd3;
   cursor: pointer;
 }
 .template-productsimportpage .form-import label:hover {
   color: #fff;
-  background-color: #ee4d2d;
-  border-color: #ee4d2d;
+  background-color: #05507b;
+  border-color: #05507b;
 }
 .template-productsimportpage .form-import input[type=submit]:hover {
   color: #fff;
-  background-color: #ee4d2d;
-  border-color: #ee4d2d;
+  background-color: #05507b;
+  border-color: #05507b;
 }
 
-.wrapper {
+.login .wrapper {
   margin-top: 150px;
   font-family: "Montserrat", sans-serif;
+}
+.login .messages {
+  display: none;
 }
 
 .template-signuppage .sign-up-filters {

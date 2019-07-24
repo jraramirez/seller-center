@@ -12,23 +12,33 @@
 
 {% block login_form %}    
   {% block content %}
-  {% main_menu max_levels=1 use_specific=1 template="base/navigation/main_menu.html" %}
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
+        <h1>
+          Welcome Back!
+        </h1>
+        <h2>
+          Manage your shop with ease.
+        </h2>
+        <h2>
+          Designed for you to seamlessly organize products, track orders, manage customers & measure shop performance - all in one go.
+        </h2>
+      </div>
+      <div class="col-md-6">
         <div class="form-wrap">
           <form action=" {{ page.url }}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="next" value="/">
             <div class="row">
               <div class="col-md-12">
-                <input type="text" name="username" maxlength="255" class="form-control" placeholder="email/phone number">
+                <input type="text" name="username" maxlength="255" class="form-control" placeholder="email / phone number">
               </div>
               <div class="col-md-12">
                 <input type="password" name="password" class="form-control" placeholder="Enter password" required="" id="id_password">
               </div>
               <div class="col-md-12">
-                <button type="submit" class="block-button submit-button float-right">Log In</button>
+                <button type="submit" class="btn btn-success block-button submit-button float-right">Log In</button>
               </div>
             </div>
           </form>
