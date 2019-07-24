@@ -31,9 +31,11 @@
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
+
+        {% if user.is_authenticated %}
         {% wagtailuserbar %}
         {% main_menu max_levels=1 use_specific=1 template="base/navigation/main_menu.html" %}
-        
+        {% endif %}
         <div class="container">
             {% block content %}{% endblock %}
         </div>
