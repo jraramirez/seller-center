@@ -9,6 +9,7 @@
 
   <h2>My Products</h2>
   <div class="row buttons-container">
+    <a class="btn btn-success" href="/admin/product/product/create/" role="button">+ Add a Single Product</a>
     {% for page in subPages %}
       <a class="btn btn-success" href="{{ page.url }}" role="button">+ {{ page.title }}</a>
     {% endfor %}
@@ -19,10 +20,10 @@
   {# Tab Content #}
   <div class="tab-content products-tab" id="productsTabContent">
       {% include "product/includes/all_products.html" with allProducts=allProducts %}
-      {% include "product/includes/live_products.html" with liveProducts=liveProducts %}
+      <!-- {% include "product/includes/live_products.html" with liveProducts=liveProducts %}
       {% include "product/includes/sold_out_products.html" with soldOutProducts=soldOutProducts %}
       {% include "product/includes/unlisted_products.html" with unlistedProducts=unlistedProducts %}
-      {% include "product/includes/suspended_products.html" with suspendedProducts=suspendedProducts %}
+      {% include "product/includes/suspended_products.html" with suspendedProducts=suspendedProducts %} -->
   </div>
 
 {% endblock %}

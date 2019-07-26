@@ -6,6 +6,7 @@
         <form action=" {{ page.url }}" method="POST">
             {% csrf_token %}
             <div class="row">
+                <input type="hidden" id="reg-type" name="reg-type" value="email">
                 <div class="col-md-12">
                     <input type="email" name="email-address" class="form-control" placeholder="Email Address" required="" id="id_email-address">
                 </div>

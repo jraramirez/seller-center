@@ -3,6 +3,7 @@ from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import transaction
 import pandas as pd
+import numpy as np
 import os
 
 from product.models import ProductsImportPage
@@ -50,18 +51,20 @@ def products_import(request):
           )
           t.save()
           for i in range(0,7):
-            variationStock = 0
-            if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
-              variationStock = row['variation'+str(i+1)+'_stock']
-            v = Variations(
-              product_id = t.id,
-              image_url = row['image'+str(i+1)],
-              price = row['variation'+str(i+1)+'_price'],
-              sku = row['variation'+str(i+1)+'_id'],
-              stock = variationStock,
-              name = row['variation'+str(i+1)+'_id']
-            )
-            v.save()
+            if(not np.isnan(row['variation'+str(i+1)+'_id'])):
+              print(row['variation'+str(i+1)+'_id'])
+              variationStock = 0
+              if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
+                variationStock = row['variation'+str(i+1)+'_stock']
+              v = Variations(
+                product_id = t.id,
+                image_url = row['image'+str(i+1)],
+                price = row['variation'+str(i+1)+'_price'],
+                sku = row['variation'+str(i+1)+'_id'],
+                stock = variationStock,
+                name = row['variation'+str(i+1)+'_id']
+              )
+              v.save()
 
     return HttpResponseRedirect("/products")
   else:
