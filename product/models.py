@@ -6,6 +6,7 @@ from wagtail.snippets.models import register_snippet
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from wagtail.images.edit_handlers import ImageChooserPanel
 from modelcluster.models import ClusterableModel
 
 from users.models import Profile
@@ -35,48 +36,69 @@ class Category(models.Model):
   ]
 
 @register_snippet
-class Product(models.Model):
+class Product(ClusterableModel):
   product_code = models.CharField(null=True, blank=True, max_length=500)
   product_name = models.CharField(null=True, blank=True, max_length=500)
   product_description = models.CharField(null=True, blank=True, max_length=500)
-  price = models.CharField(null=True, blank=True, max_length=500)
-  stock = models.CharField(null=True, blank=True, max_length=500)
   product_weight = models.CharField(null=True, blank=True, max_length=500)
   ship_out_in = models.CharField(null=True, blank=True, max_length=500)
   parent_sku_reference_no = models.CharField(null=True, blank=True, max_length=500)
-  variation1_id = models.CharField(null=True, blank=True, max_length=500)
-  variation2_id = models.CharField(null=True, blank=True, max_length=500)
-  variation3_id = models.CharField(null=True, blank=True, max_length=500)
-  variation4_id = models.CharField(null=True, blank=True, max_length=500)
-  variation5_id = models.CharField(null=True, blank=True, max_length=500)
-  variation6_id = models.CharField(null=True, blank=True, max_length=500)
-  variation7_id = models.CharField(null=True, blank=True, max_length=500)
-  image1 = models.CharField(null=True, blank=True, max_length=500)
-  image2 = models.CharField(null=True, blank=True, max_length=500)
-  image3 = models.CharField(null=True, blank=True, max_length=500)
-  image4 = models.CharField(null=True, blank=True, max_length=500)
-  image5 = models.CharField(null=True, blank=True, max_length=500)
-  image6 = models.CharField(null=True, blank=True, max_length=500)
-  image7 = models.CharField(null=True, blank=True, max_length=500)
   other_logistics_provider_setting = models.CharField(null=True, blank=True, max_length=500)
   other_logistics_provider_fee = models.CharField(null=True, blank=True, max_length=500)
   order = models.ForeignKey(Order, models.DO_NOTHING, blank=True, null=True)
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
-  category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
+  # category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
+  category = models.IntegerField(blank=True, null=True)
   live = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   unlisted = models.BooleanField(default=False)
+
+  panels = [
+    FieldPanel('product_code'),
+    FieldPanel('product_name'),
+    FieldPanel('product_description'),
+    FieldPanel('product_weight'),
+    FieldPanel('ship_out_in'),
+    FieldPanel('parent_sku_reference_no'),
+    FieldPanel('other_logistics_provider_setting'),
+    FieldPanel('other_logistics_provider_fee'),
+    InlinePanel('variations', label='Variations'),
+    FieldPanel('live'),
+    FieldPanel('suspended'),
+    FieldPanel('unlisted'),
+  ]
 
   def save_model(self, request, obj, form, change):
     obj.user_id = request.user.id
     super().save_model(request, obj, form, change)
 
-  # def save(self, *args, **kwargs):
-  #   Product.user_id = request.user.id
-  #   super(Product, self).save(*args, **kwargs)
-
   def __unicode__(self):
     return self.product_name
+
+
+class Variations(models.Model):  
+  name = models.CharField(null=True, blank=True, max_length=500)
+  sku = models.CharField(null=True, blank=True, max_length=500)
+  price = models.CharField(null=True, blank=True, max_length=500)
+  stock = models.IntegerField(null=True, blank=True)
+  image_url = models.CharField(null=True, blank=True, max_length=2000)
+  image_upload = models.ForeignKey(
+    'wagtailimages.Image',
+    null=True,
+    blank=True,
+    on_delete=models.SET_NULL,
+    related_name='+'
+  )
+  product = ParentalKey('Product', related_name='variations', null=True, blank=True)
+
+  panels = [
+    FieldPanel('name'),
+    FieldPanel('sku'),
+    FieldPanel('price'),
+    FieldPanel('stock'),
+    FieldPanel('image_url'),
+    ImageChooserPanel('image_upload'),
+  ]
 
 
 class ProductPage(BasePage):
