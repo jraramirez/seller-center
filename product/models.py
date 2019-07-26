@@ -117,13 +117,13 @@ class ProductsPage(BasePage):
     context = super().get_context(request)
     allProducts = Product.objects.all()
     liveProducts = Product.objects.filter(live=True)
-    # soldOutProducts = Product.objects.filter(stock='0')
+    soldOutProducts = Product.objects.all()
     suspendedProducts = Product.objects.filter(suspended=True)
     unlistedProducts = Product.objects.filter(unlisted=True)
     subPages = self.get_children().live()
     context['allProducts'] = allProducts
     context['liveProducts'] = liveProducts
-    # context['soldOutProducts'] = soldOutProducts
+    context['soldOutProducts'] = soldOutProducts
     context['suspendedProducts'] = suspendedProducts
     context['unlistedProducts'] = unlistedProducts
     context['subPages'] = subPages

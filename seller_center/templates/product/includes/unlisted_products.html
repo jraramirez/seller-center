@@ -22,20 +22,42 @@
                 {% for product in unlistedProducts %}
                 <tr>
                     <td scope="row">
-                        <img src="{% static 'images/download.svg' %}" alt="" width="100"/>
+                        <a href="/admin/product/product/edit/{{product.id}}/">
+                            <img src="{% static 'images/download.svg' %}" alt="" width="80"/>
+                        </a>
                     </td>
                     <td>{{product.product_name}}</td>
                     <td>{{product.parent_sku_reference_no}}</td>
-                    <td> - </td>
-                    <td>{{product.price}}</td>
-                    <td>{{product.stock}}</td>
-                    <td> 0 </td>
+                    <td>
+                    {% for v in product.variations.all %}
+                        {{v.name}}
+                        <br>
+                    {% endfor %}
+                    </td>
+                    <td>
+                    {% for v in product.variations.all %}
+                        {{v.price}}
+                        <br>
+                    {% endfor %}
+                    </td>
+                    <td>
+                    {% for v in product.variations.all %}
+                        {{v.stock}}
+                        <br>
+                    {% endfor %}
+                    </td>
+                    <td>
+                    {% for v in product.variations.all %}
+                        0
+                        <br>
+                    {% endfor %}
+                    </td>
                     <td>
                         <div class="dropdown show">
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="#">Edit</a>
+                                <a class="dropdown-item" href="/admin/product/product/edit/{{product.id}}/">Edit</a>
                                 <a class="dropdown-item" href="#">Make Live</a>
                                 <a class="dropdown-item" href="#">Unlist</a>
                             </div>
