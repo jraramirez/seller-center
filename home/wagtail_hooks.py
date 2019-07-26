@@ -11,7 +11,7 @@ class ProductAdmin(ModelAdmin):
     menu_order = 290
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('product_name', 'price', 'stock')
+    list_display = ('product_name',)
     search_fields = ('product_name',)
 
 

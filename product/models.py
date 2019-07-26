@@ -81,13 +81,14 @@ class Variations(models.Model):
   sku = models.CharField(null=True, blank=True, max_length=500)
   price = models.CharField(null=True, blank=True, max_length=500)
   stock = models.IntegerField(null=True, blank=True)
-  image_url = models.CharField(null=True, blank=True, max_length=2000)
+  image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Optional: If your image is already hosted')
   image_upload = models.ForeignKey(
     'wagtailimages.Image',
     null=True,
     blank=True,
     on_delete=models.SET_NULL,
-    related_name='+'
+    related_name='+',
+    help_text='Optional: If you want to upload a new image. This will be used if Image URL is also present.'
   )
   product = ParentalKey('Product', related_name='variations', null=True, blank=True)
 
