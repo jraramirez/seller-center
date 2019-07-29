@@ -43,8 +43,6 @@ def sign_up(request):
       })
   else:
     self = SignUpPage.objects.get(slug='sign')
-    if(request.user):
-      print(dir(request.user))
     if(not request.user.is_authenticated):
       return render(request, 'sign_up/sign_up_page.html', {
         'self': self,

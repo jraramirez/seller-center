@@ -5,10 +5,17 @@ from django.db import transaction
 import pandas as pd
 import numpy as np
 import os
+from urllib.request import urlopen
 
 from product.models import ProductsImportPage
 from product.models import Product
 from product.models import Variations
+
+
+AWS_STORAGE_BUCKET_NAME = 'lyka-seller-center'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+media_url = "https://%s/media/images/" % AWS_S3_CUSTOM_DOMAIN
+
 
 class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
@@ -52,8 +59,8 @@ def products_import(request):
           t.save()
           for i in range(0,7):
             if(not np.isnan(row['variation'+str(i+1)+'_id'])):
-              print(row['variation'+str(i+1)+'_id'])
               variationStock = 0
+              image_url_from_sku = media_url + str(row['variation'+str(i+1)+'_id']) + '.original.jpg'
               if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
                 variationStock = row['variation'+str(i+1)+'_stock']
               v = Variations(
@@ -62,7 +69,8 @@ def products_import(request):
                 price = row['variation'+str(i+1)+'_price'],
                 sku = row['variation'+str(i+1)+'_id'],
                 stock = variationStock,
-                name = row['variation'+str(i+1)+'_id']
+                name = row['variation'+str(i+1)+'_id'],
+                image_url_from_sku = image_url_from_sku
               )
               v.save()
 
@@ -80,12 +88,10 @@ def products_import(request):
 
 # function for downloading CPC extractor sample file as Excel file
 def download_template(request):
-  print(os.getcwd())
   outFileName = 'Import Products Template'
   outFolderName = 'seller_center/static/documents/'
   fileType = '.csv'
   path = outFolderName + outFileName + fileType
-  print(os.path.exists(path))
   if os.path.exists(path):
     with open(path, "rb") as excel:
       data = excel.read()
