@@ -8,8 +8,16 @@ from wagtail.core import hooks
 from wagtail.admin.menu import MenuItem
 
 @hooks.register('register_admin_menu_item')
-def register_frank_menu_item():
-  return MenuItem('Home', '/', classnames='icon icon-home', order=280)
+def register_home_menu_item():
+  return MenuItem('Home', '/', classnames='icon icon-home', order=260)
+
+@hooks.register('register_admin_menu_item')
+def register_import_menu_item():
+  return MenuItem('Add Products', '/products/add-new-products/', classnames='icon icon-plus', order=270)
+
+@hooks.register('register_admin_menu_item')
+def register_image_import_menu_item():
+  return MenuItem('Add Images', '/admin/images/multiple/add/', classnames='icon icon-image', order=280)
 
 class ProductAdmin(ModelAdmin):
     model = Product
