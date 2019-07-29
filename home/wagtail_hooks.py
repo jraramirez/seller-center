@@ -2,7 +2,14 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register)
 from product.models import Product
 from product.models import Order
+from django.shortcuts import render, redirect
 
+from wagtail.core import hooks
+from wagtail.admin.menu import MenuItem
+
+@hooks.register('register_admin_menu_item')
+def register_frank_menu_item():
+  return MenuItem('Home', '/', classnames='icon icon-home', order=280)
 
 class ProductAdmin(ModelAdmin):
     model = Product
