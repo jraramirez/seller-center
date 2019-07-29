@@ -88,8 +88,9 @@ class Variations(models.Model):
     blank=True,
     on_delete=models.SET_NULL,
     related_name='+',
-    help_text='Optional: If you want to upload a new image. This will be used if Image URL is also present.'
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
   )
+  image_url_from_sku = models.CharField(null=True, blank=True, max_length=2000)
   product = ParentalKey('Product', related_name='variations', null=True, blank=True)
 
   panels = [
@@ -97,10 +98,9 @@ class Variations(models.Model):
     FieldPanel('sku'),
     FieldPanel('price'),
     FieldPanel('stock'),
-    FieldPanel('image_url'),
+    # FieldPanel('image_url'),
     ImageChooserPanel('image_upload'),
   ]
-
 
 class ProductPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)
