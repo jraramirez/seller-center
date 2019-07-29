@@ -1,9 +1,9 @@
 {% load static %}
 {% load wagtailcore_tags wagtailimages_tags wagtailimages_tags %}
 
-<div class="tab-pane fade" id="sold">
+<div class="tab-pane fade" id="unpublished">
 
-    {% if soldOutProducts %}
+    {% if unpublishedProducts %}
         <div class="body-content">
             <table class="table table-striped">
                 <thead>
@@ -19,11 +19,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for product in soldOutProducts %}
+                {% for product in unpublishedProducts %}
                 <tr>
                     <td scope="row">
                         <a href="/admin/product/product/edit/{{product.id}}/">
-                            <img src="{% static 'images/download.svg' %}" alt="" width="80"/>
+                            {% if product.variations.all.0.image_url != 'nan' %}
+                                <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
+                            {% elif product.variations.all.0.image_upload %}
+                                {% image product.variations.all.0.image_upload original as product_image %}
+                                <img src="{{product_image.url}}" alt="" width="80"/>                        
+                            {% else %}
+                                <img src="{% static 'images/download.svg' %}" alt="" width="80"/>
+                            {% endif %}
                         </a>
                     </td>
                     <td>{{product.product_name}}</td>
@@ -58,8 +65,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <a class="dropdown-item" href="/admin/product/product/edit/{{product.id}}/">Edit</a>
-                                <a class="dropdown-item" href="#">Make Live</a>
-                                <a class="dropdown-item" href="#">Unlist</a>
+                                <a class="dropdown-item" href="#">Delete</a>
                             </div>
                         </div>
                     </td>

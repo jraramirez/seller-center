@@ -49,9 +49,11 @@ class Product(ClusterableModel):
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   # category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
   category = models.IntegerField(blank=True, null=True)
+  stock_sum = models.IntegerField(blank=True, null=True)
   live = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   unlisted = models.BooleanField(default=False)
+  unpublished = models.BooleanField(default=False)
 
   panels = [
     FieldPanel('product_code'),
@@ -115,17 +117,19 @@ class ProductsPage(BasePage):
   
   def get_context(self, request):
     context = super().get_context(request)
-    allProducts = Product.objects.all()
+    allProducts = Product.objects.filter(unpublished=False)
     liveProducts = Product.objects.filter(live=True)
-    soldOutProducts = Product.objects.all()
+    soldOutProducts = Product.objects.filter(stock_sum=0)
     suspendedProducts = Product.objects.filter(suspended=True)
     unlistedProducts = Product.objects.filter(unlisted=True)
+    unpublishedProducts = Product.objects.filter(unpublished=True)
     subPages = self.get_children().live()
     context['allProducts'] = allProducts
     context['liveProducts'] = liveProducts
     context['soldOutProducts'] = soldOutProducts
     context['suspendedProducts'] = suspendedProducts
     context['unlistedProducts'] = unlistedProducts
+    context['unpublishedProducts'] = unpublishedProducts
     context['subPages'] = subPages
     return context
 

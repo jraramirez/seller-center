@@ -14,7 +14,7 @@ from product.models import Variations
 
 AWS_STORAGE_BUCKET_NAME = 'lyka-seller-center'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-media_url = "https://%s/media/images/" % AWS_S3_CUSTOM_DOMAIN
+media_url = "https://%s/media/original_images/" % AWS_S3_CUSTOM_DOMAIN
 
 
 class UploadFileForm(forms.Form):
@@ -38,8 +38,11 @@ def products_import(request):
       inputFile = request.FILES['file']
       inputFileDF = pd.read_csv(inputFile)
       with transaction.atomic():
-        # Product.objects.all().delete()
         for index, row, in inputFileDF.iterrows():
+          unpublished = True
+          print(row['image1'] == row['image1'])
+          if(row['variation1_id'] == row['variation1_id'] and row['image1'] == row['image1']):
+            unpublished = False
           t = Product(
             product_code = row['product_code'],
             profile_id = request.user.id,
@@ -54,15 +57,18 @@ def products_import(request):
             other_logistics_provider_fee = row['other_logistics_provider_fee'],
             live = False,
             suspended = False,
-            unlisted = False
+            unlisted = False,
+            unpublished = unpublished
           )
           t.save()
+          stock_sum = 0
           for i in range(0,7):
             if(not np.isnan(row['variation'+str(i+1)+'_id'])):
               variationStock = 0
-              image_url_from_sku = media_url + str(row['variation'+str(i+1)+'_id']) + '.original.jpg'
+              image_url_from_sku = media_url + str(row['variation'+str(i+1)+'_id']) + '.png'
               if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
                 variationStock = row['variation'+str(i+1)+'_stock']
+              stock_sum = stock_sum + variationStock
               v = Variations(
                 product_id = t.id,
                 image_url = row['image'+str(i+1)],
@@ -73,6 +79,7 @@ def products_import(request):
                 image_url_from_sku = image_url_from_sku
               )
               v.save()
+          Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
 
     return HttpResponseRedirect("/products")
   else:
