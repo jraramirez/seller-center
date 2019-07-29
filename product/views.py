@@ -25,7 +25,7 @@ def product_import(request):
   if(request.method == 'POST'):
     # return render(request, 'product/products_page.html', {
     # })
-    return redirect('/products')
+    return redirect('/products/#all')
   else:
     return render(request, 'product/product_import_page.html', {
     })
@@ -40,7 +40,6 @@ def products_import(request):
       with transaction.atomic():
         for index, row, in inputFileDF.iterrows():
           unpublished = True
-          print(row['image1'] == row['image1'])
           if(row['variation1_id'] == row['variation1_id'] and row['image1'] == row['image1']):
             unpublished = False
           t = Product(
@@ -81,7 +80,7 @@ def products_import(request):
               v.save()
           Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
 
-    return HttpResponseRedirect("/products")
+    return HttpResponseRedirect("/products/#all")
   else:
     form = UploadFileForm()
     
@@ -91,6 +90,26 @@ def products_import(request):
     'self': self,
     'form': form,
   })
+
+
+def product_delete(request, product_id):
+  Product.objects.filter(id=product_id).delete()
+  return HttpResponseRedirect("/products/#unpublished")
+
+
+def product_unlist(request, product_id):
+  Product.objects.filter(id=product_id).update(unlisted=True)
+  return HttpResponseRedirect("/products/#all")
+
+
+def product_suspend(request, product_id):
+  Product.objects.filter(id=product_id).update(suspended=True)
+  return HttpResponseRedirect("/products/#all")
+
+
+def product_live(request, product_id):
+  Product.objects.filter(id=product_id).update(live=True)
+  return HttpResponseRedirect("/products/#all")
 
 
 # function for downloading CPC extractor sample file as Excel file

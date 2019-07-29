@@ -8,6 +8,8 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from modelcluster.models import ClusterableModel
+from wagtail.core.models import Orderable
+from django.http import HttpResponse, HttpResponseRedirect
 
 from users.models import Profile
 
@@ -78,7 +80,7 @@ class Product(ClusterableModel):
     return self.product_name
 
 
-class Variations(models.Model):  
+class Variations(Orderable, models.Model):  
   name = models.CharField(null=True, blank=True, max_length=500)
   sku = models.CharField(null=True, blank=True, max_length=500)
   price = models.CharField(null=True, blank=True, max_length=500)
@@ -103,6 +105,12 @@ class Variations(models.Model):
     # FieldPanel('image_url'),
     ImageChooserPanel('image_upload'),
   ]
+
+  def save(self, *args, **kwargs):
+    if(self.image_upload):
+      Product.objects.filter(id=self.product_id).update(unpublished=False)
+    super(Variations, self).save(*args, **kwargs)
+    return HttpResponseRedirect("/products/#all")
 
 class ProductPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)

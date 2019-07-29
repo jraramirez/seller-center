@@ -1,7 +1,7 @@
 {% load static %}
 {% load wagtailcore_tags wagtailimages_tags wagtailimages_tags %}
 
-<div class="tab-pane fade" id="sold">
+<div class="tab-pane fade" id="sold" role="tabpanel" aria-labelledby="sold-tab">
 
     {% if soldOutProducts %}
         <div class="body-content">
@@ -57,9 +57,10 @@
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="/admin/product/product/edit/{{product.id}}/">Edit</a>
-                                <a class="dropdown-item" href="#">Make Live</a>
-                                <a class="dropdown-item" href="#">Unlist</a>
+                              <a class="dropdown-item" href="/admin/product/product/edit/{{product.id}}/">Edit</a>
+                              <a class="dropdown-item" href="/products/live/{{product.id}}/">Make Live</a>
+                              <a class="dropdown-item" href="/products/unlist/{{product.id}}/">Unlist</a>
+                              <a class="dropdown-item" href="/products/suspend/{{product.id}}/">Suspend</a>
                             </div>
                         </div>
                     </td>

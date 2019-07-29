@@ -22,6 +22,10 @@ urlpatterns = [
     url(r'^products/import/download_template', product_views.download_template, name='download_template'),
     url(r'^products/add-new-products', product_views.products_import, name='products_import'),
     url(r'^products/add-single-product', product_views.product_import, name='product_import'),
+    url(r'^products/delete/(?P<product_id>.*)/$', product_views.product_delete, name='product_delete'),
+    url(r'^products/unlist/(?P<product_id>.*)/$', product_views.product_unlist, name='product_unlist'),
+    url(r'^products/suspend/(?P<product_id>.*)/$', product_views.product_suspend, name='product_suspend'),
+    url(r'^products/live/(?P<product_id>.*)/$', product_views.product_live, name='product_live'),
 
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in

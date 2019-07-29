@@ -73,7 +73,11 @@
       <div class="row cards-container">
       {% for page in subPages %}
         {% if page.url != '/sign/' %}
-        <a href="{{ page.url }}">
+          {% if page.url == '/products/' %}
+            <a href="{{ page.url }}#all">
+          {% else %}
+            <a href="{{ page.url }}">
+          {% endif %}
           <div class="col-md-4">
             <div class="card">
               <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
