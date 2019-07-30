@@ -88,6 +88,18 @@ body .dropdown-menu {
   font-size: 14px;
 }
 
+.merged {
+  background-color: #fff !important;
+}
+.merged h1, .merged h2 {
+  color: #05507b !important;
+}
+
+body {
+  font-size: 14px;
+  margin-top: 0px;
+}
+
 .menu-box .nav-body {
   background-color: #fff;
   padding-top: 0;
