@@ -71,20 +71,34 @@
       {% endif %}
       
       <div class="row cards-container">
-      {% for page in subPages %}
-        {% if page.url != '/sign/' %}
-        <a href="{{ page.url }}">
+        {% for page in subPages %}
+          {% if page.url != '/sign/' %}
+            {% if page.url == '/products/' %}
+              <a href="{{ page.url }}#all">
+            {% else %}
+              <a href="{{ page.url }}">
+            {% endif %}
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-body">
+                  <h1 class="card-title">101</h1>
+                  <p class="card-text">{{ page.title }}</p>
+                </div>
+              </div>
+            </div>
+          </a>
+          {% endif %}
+        {% endfor %}
+        <a href="#">
           <div class="col-md-4">
             <div class="card">
-              <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
               <div class="card-body">
-                <h3 class="card-title">{{ page.title }}</h3>
+                <h1 class="card-title">23</h1>
+                <p class="card-text">Orders</p>
               </div>
             </div>
           </div>
         </a>
-        {% endif %}
-      {% endfor %}
       </div>
     </div>
   {% endif %}
