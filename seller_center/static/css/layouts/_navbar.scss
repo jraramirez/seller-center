@@ -9,7 +9,7 @@
 	height:100%
 	}
 	.nav-wrapper,.nav-wrapper .inner{
-	background:transparent;
+  background:transparent;
 	}
 	.nav-toggle.icon{
 	position:absolute;
@@ -49,9 +49,9 @@
 	}
 	.nav-main a:focus,.nav-main a:hover{
 	outline:none;
-	background-color:hsla(0,0%,39%,.15);
-	color:#fff;
-	text-shadow:-1px -1px 0 rgba(0,0,0,.3)
+	// background-color:hsla(0,0%,39%,.15);
+	color:#3fbdd3;
+	// text-shadow:-1px -1px 0 rgba(0,0,0,.3)
 	}
 	.nav-main .menu-item a{
 	position:relative;
@@ -119,9 +119,9 @@
 	.nav-submenu .menu-item a:before{
 	margin-left:-1.5em
 	}
-	.nav-submenu .menu-item a:hover{
-	background-color:hsla(0,0%,39%,.2)
-	}
+	// .nav-submenu .menu-item a:hover{
+	// background-color:hsla(0,0%,39%,.2)
+	// }
 	.nav-submenu li{
 	border:0
 	}
@@ -163,9 +163,6 @@
 	background-color:#404040;
 	color:#cacaca;
 	padding:.8em 2.5em .8em 1em
-	}
-	.nav-search input:hover{
-	background-color:#4d4d4d
 	}
 	.nav-search input:active,.nav-search input:focus{
 	background-color:#595959;
@@ -226,7 +223,7 @@
 	.nav-wrapper .inner{
 	height:100%;
 	position:fixed;
-	width:180px;
+	width:200px;
 	z-index:26
 	}
 	.nav-toggle{
@@ -273,8 +270,7 @@
 	.nav-main .account:hover{
 	outline:none;
 	background-color:hsla(0,0%,39%,.15);
-	color:#fff;
-	text-shadow:-1px -1px 0 rgba(0,0,0,.3)
+	color:#3fbdd3;
 	}
 	.nav-main .account .avatar{
 	float:left;
@@ -342,9 +338,9 @@
 	li.submenu-active>a{
 	text-shadow:-1px -1px 0 rgba(0,0,0,.3)
 	}
-	li.submenu-active>a:hover{
-	background-color:transparent
-	}
+	// li.submenu-active>a:hover{
+	// background-color:transparent
+	// }
 	li.submenu-active .nav-submenu{
 	box-shadow:2px 0 2px rgba(0,0,0,.35);
 	width:180px;
@@ -407,28 +403,5 @@
 	width:180px
 	}
 	
-	}
-	@media screen and (min-width: 50em){
-		.logo {
-			text-align:center;
-			margin: 1em auto;
-			margin-top: 1em;
-			margin-right: auto;
-			margin-bottom: 1em;
-			margin-left: auto;
-			text-align: center;
-			img{
-				margin-left: 17px;
-				margin-top: 6px;
-			}
-		}
-	}
-	.logo{
-	text-align: center;
-	display:block;
-	text-align:left;
-	text-decoration:none;
-	color:#aaa;
-	margin:0;
-	-webkit-font-smoothing:auto
-	}
+  }
+  .logo{display:block;text-align:left;text-decoration:none;color:#aaa;padding:.9em 1.2em;margin:0;-webkit-font-smoothing:auto}@media screen and (min-width:50em){.logo{margin:1em auto;text-align:center}}

@@ -1,4 +1,14 @@
 .template-productspage {
+  header{
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    padding-left: 50px;
+    padding-right: 50px;
+    .right{
+      text-align: right;
+      float: right;
+    }
+  }
   .products-filters{
     margin: 0px -15px;
     .nav-link{
