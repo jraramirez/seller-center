@@ -6,6 +6,9 @@ from django.http import HttpResponseRedirect
 
 from users.models import Profile
 from sign_up.models import SignUpPage
+from aws_client import AuthClient
+from aws_client import ApiGatewayClient
+from aws_client import RegistrationType
 
 from django.contrib import messages
 import requests
@@ -13,17 +16,22 @@ import requests
 def sign_up(request):
   if(request.method == 'POST'):
     message = ''
+
+    email = request.POST['email-address']
+    password = request.POST['password']
+    phoneNumber = equest.POST['phone-number']
+
     if(request.POST['reg-type'] == 'phone'):
       user = User.objects.create_user(
-        username=request.POST['phone-number'],
-        email=request.POST['phone-number'],
-        password=request.POST['password']
+        username=phoneNumber,
+        email=phoneNumber,
+        password = password
       )
       group = Group.objects.get(name='Seller')
       user.groups.add(group)
       new_user = authenticate(
-        username=request.POST['phone-number'],
-        password=request.POST['password'],
+        username=phoneNumber,
+        password=password,
       )
       #call api here
       login(request, new_user)
@@ -34,6 +42,12 @@ def sign_up(request):
         'type':'email',
         'value': 'jeramos.dev@gmail.com'
       }
+
+      authClient = AuthClient(ApiGatewayClient())
+
+      authClient.register(RegistrationType.EMAIL, email, {
+        print("response")
+      })
 
       r = requests.post('https://vak4dovce5.execute-api.ap-southeast-1.amazonaws.com/dev/api/v1/register', json=data)
 
