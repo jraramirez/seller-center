@@ -8,6 +8,8 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from modelcluster.models import ClusterableModel
+from wagtail.core.models import Orderable
+from django.http import HttpResponse, HttpResponseRedirect
 
 from users.models import Profile
 
@@ -49,9 +51,11 @@ class Product(ClusterableModel):
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   # category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
   category = models.IntegerField(blank=True, null=True)
+  stock_sum = models.IntegerField(blank=True, null=True)
   live = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   unlisted = models.BooleanField(default=False)
+  unpublished = models.BooleanField(default=False)
 
   panels = [
     FieldPanel('product_code'),
@@ -76,7 +80,7 @@ class Product(ClusterableModel):
     return self.product_name
 
 
-class Variations(models.Model):  
+class Variations(Orderable, models.Model):  
   name = models.CharField(null=True, blank=True, max_length=500)
   sku = models.CharField(null=True, blank=True, max_length=500)
   price = models.CharField(null=True, blank=True, max_length=500)
@@ -88,8 +92,9 @@ class Variations(models.Model):
     blank=True,
     on_delete=models.SET_NULL,
     related_name='+',
-    help_text='Optional: If you want to upload a new image. This will be used if Image URL is also present.'
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
   )
+  image_url_from_sku = models.CharField(null=True, blank=True, max_length=2000)
   product = ParentalKey('Product', related_name='variations', null=True, blank=True)
 
   panels = [
@@ -97,10 +102,15 @@ class Variations(models.Model):
     FieldPanel('sku'),
     FieldPanel('price'),
     FieldPanel('stock'),
-    FieldPanel('image_url'),
+    # FieldPanel('image_url'),
     ImageChooserPanel('image_upload'),
   ]
 
+  def save(self, *args, **kwargs):
+    if(self.image_upload):
+      Product.objects.filter(id=self.product_id).update(unpublished=False)
+    super(Variations, self).save(*args, **kwargs)
+    return HttpResponseRedirect("/products/#all")
 
 class ProductPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)
@@ -115,17 +125,19 @@ class ProductsPage(BasePage):
   
   def get_context(self, request):
     context = super().get_context(request)
-    allProducts = Product.objects.all()
+    allProducts = Product.objects.filter(unpublished=False)
     liveProducts = Product.objects.filter(live=True)
-    soldOutProducts = Product.objects.all()
+    soldOutProducts = Product.objects.filter(stock_sum=0)
     suspendedProducts = Product.objects.filter(suspended=True)
     unlistedProducts = Product.objects.filter(unlisted=True)
+    unpublishedProducts = Product.objects.filter(unpublished=True)
     subPages = self.get_children().live()
     context['allProducts'] = allProducts
     context['liveProducts'] = liveProducts
     context['soldOutProducts'] = soldOutProducts
     context['suspendedProducts'] = suspendedProducts
     context['unlistedProducts'] = unlistedProducts
+    context['unpublishedProducts'] = unpublishedProducts
     context['subPages'] = subPages
     return context
 
