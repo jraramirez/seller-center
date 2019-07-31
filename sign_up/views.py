@@ -6,9 +6,8 @@ from django.http import HttpResponseRedirect
 
 from users.models import Profile
 from sign_up.models import SignUpPage
-from aws_client import AuthClient
-from aws_client import ApiGatewayClient
-from aws_client import RegistrationType
+from base.aws_client import AuthClient
+from base.aws_client import ApiGatewayClient
 
 from django.contrib import messages
 import requests
@@ -17,44 +16,38 @@ def sign_up(request):
   if(request.method == 'POST'):
     message = ''
 
-    email = request.POST['email-address']
-    password = request.POST['password']
-    phoneNumber = equest.POST['phone-number']
-
     if(request.POST['reg-type'] == 'phone'):
       user = User.objects.create_user(
-        username=phoneNumber,
-        email=phoneNumber,
-        password = password
+        username=request.POST['phone-number'],
+        email=request.POST['phone-number'],
+        password = request.POST['password']
       )
       group = Group.objects.get(name='Seller')
       user.groups.add(group)
       new_user = authenticate(
-        username=phoneNumber,
-        password=password,
+        username=request.POST['phone-number'],
+        password=request.POST['password'],
       )
       #call api here
       login(request, new_user)
       HttpResponseRedirect('/')
     else:
       #call api here if success create a user else show necessary errors
-      data = {
-        'type':'email',
-        'value': 'jeramos.dev@gmail.com'
-      }
-
       authClient = AuthClient(ApiGatewayClient())
 
-      authClient.register(RegistrationType.EMAIL, email, {
-        print("response")
-      })
+      response = authClient.register("email", request.POST['email-address'])
 
-      r = requests.post('https://vak4dovce5.execute-api.ap-southeast-1.amazonaws.com/dev/api/v1/register', json=data)
+      json = response.json()
+      print(response.json())
+      if (response.status_code == 200):
+        print(response.json())
+        json = response.json()
+        response = authClient.login(json['clientId'], json['clientSecret'])
 
-      response = r.json()
-      print(response)
+        print("Status: %s - %s",response.status_code, response.json())
 
-      if (r.status_code == 200):
+        response = authClient.setupPassword(json['clientId'], json['clientSecret'], request.POST['password'])
+        print(response.json())
         user = User.objects.create_user(
           username=request.POST['email-address'],
           email=request.POST['email-address'],
@@ -68,12 +61,12 @@ def sign_up(request):
         )
         
         #login success
-        login(request, new_user)
+        #ogin(request, new_user)
         return render(request, 'sign_up/sign_up_page_landing.html', {
           'request': request,
         })
       else:
-        messages.error(request, response['details'])
+        messages.error(request, json['details'])
         self = SignUpPage.objects.get(slug='sign')
         return render(request, 'sign_up/sign_up_page.html', {
           'self': self,

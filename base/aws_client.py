@@ -1,10 +1,13 @@
 import requests
+import crypt
 
 # Class that handles all endpoints for AWS
 class ApiGatewayClient: 
     host = "https://vak4dovce5.execute-api.ap-southeast-1.amazonaws.com/dev"
     version = "v1"
     rootUrl = host + "/api/" + version
+    EMAIL = "email",
+    MOBILE = "phone_number"
 
 
 #class that handles user authentication APIs
@@ -16,12 +19,22 @@ class AuthClient:
         """
         self.apiGateway = apiGateway
 
-    def register(self, type, value, result):
+    def login(self, clientId, password):
+        url = self.apiGateway.rootUrl + "/login"
+
+        json = {
+            'username': clientId,
+            'password': password
+        }
+        return requests.post(url, json=json)
+        
+    def register(self, type, value):
         """
             Register a given user using a mobile number or email \n
             Parameters: \n
-            `type`  either RegistrationType.EMAIL or RegistrationType.MOBILE \n
-            `value` 
+            `type`  either email or phone_number \n
+            `value` actual email or phone number \n
+            Returns 
         """
         url = self.apiGateway.rootUrl + "/register"
 
@@ -29,16 +42,18 @@ class AuthClient:
             'type': type,
             'value': value
         }
-        response = requests.post(url, json=json)
+        return requests.post(url, json=json)
 
-        result(response)
+    def setupPassword(self, clientId, clientSecret, newPassword):
+        url = self.apiGateway.rootUrl + "/password-change"
 
+        json = {
+            'clientId': clientId,
+            'clientSecret': clientSecret,
+            'newPassword': newPassword
+        }
 
-
-
-class RegistrationType(Enum):
-    EMAIL = "email",
-    MOBILE = "phone_number"
+        return requests.post(url, json=json)
 
         
 
