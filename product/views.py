@@ -10,6 +10,7 @@ from urllib.request import urlopen
 from product.models import ProductsImportPage
 from product.models import Product
 from product.models import Variations
+from product.models import Errors
 
 
 AWS_STORAGE_BUCKET_NAME = 'lyka-seller-center'
@@ -40,8 +41,9 @@ def products_import(request):
       with transaction.atomic():
         for index, row, in inputFileDF.iterrows():
           unpublished = True
-          if(row['variation1_id'] == row['variation1_id'] and row['image1'] == row['image1']):
-            unpublished = False
+          if(row['variation1_id'] == row['variation1_id']):
+            if(row['image1'] == row['image1']):
+              unpublished = False              
           t = Product(
             product_code = row['product_code'],
             profile_id = request.user.id,
@@ -60,6 +62,14 @@ def products_import(request):
             unpublished = unpublished
           )
           t.save()
+          if(row['product_name'] != row['product_name']):
+            Product.objects.filter(id=t.id).update(product_name=None)
+            e = Errors(
+              product_id = t.id,
+              name = 'Product Name is required'
+            )
+            e.save()
+            unpublished = False              
           stock_sum = 0
           for i in range(0,7):
             if(not np.isnan(row['variation'+str(i+1)+'_id'])):
@@ -112,7 +122,7 @@ def product_live(request, product_id):
   return HttpResponseRedirect("/products/#all")
 
 
-# function for downloading CPC extractor sample file as Excel file
+# function for downloading sample file as Excel file
 def download_template(request):
   outFileName = 'Import Products Template'
   outFolderName = 'seller_center/static/documents/'

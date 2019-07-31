@@ -39,6 +39,7 @@
                   <input type="password" name="password" class="form-control" placeholder="Password" required="" id="id_password">
                 </div>
                 <div class="col-md-12">
+                  <a href="" class="btn btn-link float-left">Forgot Password</a>
                   <button type="submit" class="btn btn-success block-button submit-button float-right">Log In</button>
                 </div>
               </div>
@@ -72,35 +73,27 @@
         {% endif %}
         
         <div class="row cards-container">
-          {% for page in subPages %}
-            {% if page.url != '/sign/' %}
-              {% if page.url == '/products/' %}
-                <a href="{{ page.url }}#all">
-              {% else %}
-                <a href="{{ page.url }}">
-              {% endif %}
-              <div class="col-md-4">
-                <div class="card">
-                  <div class="card-body">
-                    <h1 class="card-title">101</h1>
-                    <p class="card-text">{{ page.title }}</p>
-                  </div>
-                </div>
-              </div>
-            </a>
-            {% endif %}
-          {% endfor %}
-          <a href="#">
+          <a href="/products">
             <div class="col-md-4">
               <div class="card">
                 <div class="card-body">
-                  <h1 class="card-title">23</h1>
-                  <p class="card-text">Orders</p>
+                  <h1 class="card-title">101</h1>
+                  <p class="card-text">Products</p>
                 </div>
               </div>
             </div>
           </a>
-        </div>
+          <a href="#">
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h1 class="card-title">23</h1>
+                    <p class="card-text">Orders</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
       </div>
     </div>
   {% endif %}

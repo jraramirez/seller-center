@@ -629,6 +629,10 @@ body.explorer-open .nav-main {
   font-size: 16px;
   margin-bottom: 15px;
 }
+.template-productspage .products-tab .product-errors {
+  border-top: none;
+}
+
 .template-productsimportpage .form-wrap h2 {
   margin-top: 1.5rem;
 }
@@ -719,6 +723,18 @@ body.explorer-open .nav-main {
 }
 .template-signuppage .agreement-checkbox input {
   height: 50%;
+}
+
+.template-resetpasswordpage .content {
+  padding-top: 3.5em;
+}
+.template-resetpasswordpage .reset-password-filters {
+  margin-left: -15px;
+  margin-bottom: 15px;
+}
+.template-resetpasswordpage .form-wrap ul {
+  list-style: none;
+  padding-left: 0px;
 }
 
 /*# sourceMappingURL=seller_center.css.map */

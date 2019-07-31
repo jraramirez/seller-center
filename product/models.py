@@ -112,6 +112,12 @@ class Variations(Orderable, models.Model):
     super(Variations, self).save(*args, **kwargs)
     return HttpResponseRedirect("/products/#all")
 
+
+class Errors(models.Model):  
+  name = models.CharField(null=True, blank=True, max_length=500)
+  product = ParentalKey('Product', related_name='errors', null=True, blank=True)
+
+
 class ProductPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)
 
@@ -125,12 +131,12 @@ class ProductsPage(BasePage):
   
   def get_context(self, request):
     context = super().get_context(request)
-    allProducts = Product.objects.filter(unpublished=False)
-    liveProducts = Product.objects.filter(live=True)
-    soldOutProducts = Product.objects.filter(stock_sum=0)
-    suspendedProducts = Product.objects.filter(suspended=True)
-    unlistedProducts = Product.objects.filter(unlisted=True)
-    unpublishedProducts = Product.objects.filter(unpublished=True)
+    allProducts = Product.objects.filter(profile_id=request.user.id, unpublished=False)
+    liveProducts = Product.objects.filter(profile_id=request.user.id, live=True)
+    soldOutProducts = Product.objects.filter(profile_id=request.user.id, stock_sum=0)
+    suspendedProducts = Product.objects.filter(profile_id=request.user.id, suspended=True)
+    unlistedProducts = Product.objects.filter(profile_id=request.user.id, unlisted=True)
+    unpublishedProducts = Product.objects.filter(profile_id=request.user.id, unpublished=True)
     subPages = self.get_children().live()
     context['allProducts'] = allProducts
     context['liveProducts'] = liveProducts

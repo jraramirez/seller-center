@@ -33,7 +33,11 @@
                             {% endif %}
                         </a>
                     </td>
-                    <td>{{product.product_name}}</td>
+                    <td>
+                        {% if product.product_name %}
+                        {{product.product_name}}
+                        {% endif %}
+                    </td>
                     <td>{{product.parent_sku_reference_no}}</td>
                     <td>
                     {% for v in product.variations.all %}
@@ -70,6 +74,17 @@
                         </div>
                     </td>
                 </tr>
+                {% if product.errors.all %}
+                    <tr>
+                        <td class="product-errors" colspan="8">
+                            <div class="alert alert-danger" role="alert">
+                            {% for e in product.errors.all %}
+                                {{e.name}}; 
+                            {% endfor %}        
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
                 {% endfor %}
                 </tbody>
             </table>

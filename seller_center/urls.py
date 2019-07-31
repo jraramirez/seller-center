@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^search/$', search_views.search, name='search'),
 
     url(r'^sign/$', sign_up_views.sign_up, name='sign_up'),
+    url(r'^reset_password/$', sign_up_views.reset_password, name='reset_password'),
     url(r'^products/import/download_template', product_views.download_template, name='download_template'),
     url(r'^products/add-new-products', product_views.products_import, name='products_import'),
     url(r'^products/add-single-product', product_views.product_import, name='product_import'),

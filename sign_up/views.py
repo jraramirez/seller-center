@@ -24,7 +24,9 @@ def sign_up(request):
         password=request.POST['password'],
       )
       login(request, new_user)
-      HttpResponseRedirect('/')
+      return render(request, 'sign_up/sign_up_page_landing.html', {
+        'request': request,
+      })
     else:
       user = User.objects.create_user(
         username=request.POST['email-address'],
@@ -49,3 +51,14 @@ def sign_up(request):
       })
     else:
       return redirect('/')
+
+def reset_password(request):
+  if(request.method == 'POST'):
+    if(request.POST['reg-type'] == 'phone'):
+      return render(request, 'signup/reset_password_page.html', {
+        
+      })
+    if(request.POST['reg-type'] == 'email'):
+      return render(request, 'signup/reset_password_page.html', {
+        
+      })
