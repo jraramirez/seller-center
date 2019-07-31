@@ -41,11 +41,6 @@ body a:hover {
   color: #3fbdd3;
   text-decoration: none;
 }
-body .wrapper {
-  margin-top: 1.5em;
-  padding-left: 0px;
-  margin-left: 1.7em;
-}
 body .card {
   width: 18rem;
 }
@@ -93,6 +88,43 @@ body .dropdown-menu {
   font-size: 14px;
 }
 
+.wrapper {
+  transform: translate3d(180px, 0, 0);
+}
+.wrapper .content-wrapper {
+  margin-left: 20px;
+  margin-right: 15px;
+}
+
+body.nav-open .content-wrapper {
+  position: fixed;
+  margin-left: 20px;
+  margin-right: 15px;
+}
+
+body.nav-open footer {
+  bottom: 1px;
+}
+
+body.explorer-open .wrapper {
+  transform: translate3d(320px, 0, 0);
+}
+
+body.explorer-open .nav-wrapper {
+  margin-left: -320px;
+  width: 320px;
+}
+
+body.explorer-open .nav-main {
+  display: none;
+}
+
+@media screen and (min-width: 50em) {
+  .wrapper, body.nav-open .wrapper {
+    transform: none;
+    padding-left: 180px;
+  }
+}
 .nav-wrapper {
   color: #05507b;
   position: relative;
@@ -153,9 +185,7 @@ body.ready .nav-main a {
 
 .nav-main a:focus, .nav-main a:hover {
   outline: none;
-  background-color: rgba(99, 99, 99, 0.15);
-  color: #fff;
-  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+  color: #3fbdd3;
 }
 
 .nav-main .menu-item a {
@@ -237,10 +267,6 @@ body.ready .nav-main a {
   margin-left: -1.5em;
 }
 
-.nav-submenu .menu-item a:hover {
-  background-color: rgba(99, 99, 99, 0.2);
-}
-
 .nav-submenu li {
   border: 0;
 }
@@ -288,10 +314,6 @@ body.ready .nav-main a {
   background-color: #404040;
   color: #cacaca;
   padding: 0.8em 2.5em 0.8em 1em;
-}
-
-.nav-search input:hover {
-  background-color: #4d4d4d;
 }
 
 .nav-search input:active, .nav-search input:focus {
@@ -364,7 +386,7 @@ body.explorer-open .nav-main {
   .nav-wrapper .inner {
     height: 100%;
     position: fixed;
-    width: 180px;
+    width: 200px;
     z-index: 26;
   }
 
@@ -421,8 +443,7 @@ body.explorer-open .nav-main {
   .nav-main .account:hover {
     outline: none;
     background-color: rgba(99, 99, 99, 0.15);
-    color: #fff;
-    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+    color: #3fbdd3;
   }
 
   .nav-main .account .avatar {
@@ -502,10 +523,6 @@ body.explorer-open .nav-main {
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
   }
 
-  li.submenu-active > a:hover {
-    background-color: transparent;
-  }
-
   li.submenu-active .nav-submenu {
     box-shadow: 2px 0 2px rgba(0, 0, 0, 0.35);
     width: 180px;
@@ -579,31 +596,32 @@ body.explorer-open .nav-main {
     width: 180px;
   }
 }
-@media screen and (min-width: 50em) {
-  .logo {
-    text-align: center;
-    margin: 1em auto;
-    margin-top: 1em;
-    margin-right: auto;
-    margin-bottom: 1em;
-    margin-left: auto;
-    text-align: center;
-  }
-  .logo img {
-    margin-left: 17px;
-    margin-top: 6px;
-  }
-}
 .logo {
-  text-align: center;
   display: block;
   text-align: left;
   text-decoration: none;
   color: #aaa;
+  padding: 0.9em 1.2em;
   margin: 0;
   -webkit-font-smoothing: auto;
 }
 
+@media screen and (min-width: 50em) {
+  .logo {
+    margin: 1em auto;
+    text-align: center;
+  }
+}
+.template-productspage header {
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.template-productspage header .right {
+  text-align: right;
+  float: right;
+}
 .template-productspage .products-filters {
   margin: 0px -15px;
 }
@@ -682,11 +700,13 @@ body.explorer-open .nav-main {
 }
 
 .login .wrapper {
-  margin-top: 150px;
   font-family: "Montserrat", sans-serif;
 }
 .login .messages {
   display: none;
+}
+.login .content {
+  padding-top: 3.5em;
 }
 
 .template-signuppage .sign-up-filters {

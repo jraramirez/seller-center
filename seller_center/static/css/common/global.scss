@@ -49,12 +49,6 @@ body {
 		text-decoration: none;
 	}
 
-	.wrapper{ 
-		margin-top: 1.5em;
-    padding-left: 0px;
-    margin-left: 1.7em;
-	}
-
 	.card{
 		width: 18rem;
 	}
@@ -104,4 +98,34 @@ body {
 	.dropdown-menu{
 		font-size: 14px;
 	}
+}
+
+.wrapper{
+  transform:translate3d(180px,0,0);
+  .content-wrapper{
+    margin-left: 20px;
+    margin-right: 15px;
+  }
+}
+body.nav-open .content-wrapper{
+  position:fixed;
+  margin-left: 20px;
+  margin-right: 15px;
+}
+body.nav-open footer{
+  bottom:1px
+}
+body.explorer-open .wrapper{
+  transform:translate3d(320px,0,0)
+}
+body.explorer-open .nav-wrapper{
+  margin-left:-320px;width:320px
+}
+body.explorer-open .nav-main{
+  display:none
+}
+@media screen and (min-width:50em){
+  .wrapper,body.nav-open .wrapper{
+    transform:none;padding-left:180px
+  }
 }

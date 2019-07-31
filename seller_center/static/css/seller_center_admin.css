@@ -5,7 +5,8 @@ body {
 }
 
 header{
-	background-color: #fff;
+  background-color: #fff;
+  padding-top: 3.5em;
 }
 .homepage h1, h2{
 	color: #05507b !important;

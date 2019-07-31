@@ -7,13 +7,17 @@
 
 {% block content %}
 
-  <h2>My Products</h2>
-  <div class="row buttons-container">
-    <a class="btn btn-success" href="/admin/product/product/create/" role="button">+ Add a Single Product</a>
-    {% for page in subPages %}
-      <a class="btn btn-success" href="{{ page.url }}" role="button">+ {{ page.title }}</a>
-    {% endfor %}
-  </div>
+  <header>
+    <div class="right">
+      <div class="row buttons-container">
+        <a class="btn btn-success" href="/admin/product/product/create/" role="button">+ ADD PRODUCT</a>
+        {% for page in subPages %}
+          <a class="btn btn-success" href="{{ page.url }}" role="button">+ {{ page.title }}</a>
+        {% endfor %}
+      </div>
+   </div>
+  </header>
+
 
   {% include 'product/includes/products_filter.html' %}
 
