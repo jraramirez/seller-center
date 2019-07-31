@@ -42,14 +42,12 @@ def verify_email(request):
 
     json = response.json()
     print("Verify email response: status: ",response.status_code, response.json())
-    clientId = json['clientId']
-    clientSecret = json['clientSecret']
-
-    print("json clientId %s", json['clientId'])
-    print("json clientSecret %s", json['clientSecret'])
+    
     if (response.status_code == 200):
 
-      messages.info(request, "An activation link has been sent to <email>")
+      messages.info(request, "An activation link has been sent to email")
+      clientId = json['clientId']
+      clientSecret = json['clientSecret']
 
       self = SignUpPage.objects.get(slug='sign')
       return render(request, 'sign_up/sign_up_page.html', {
@@ -60,6 +58,7 @@ def verify_email(request):
         'visibility': "show active"
       })
     elif (response.status_code == 409 and json['code'] == 'ALREADY_EXISTS'):
+      #resend verification code here
         pass
     else:
       return showErrorMessage(request, json['code'])
