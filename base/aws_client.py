@@ -27,7 +27,7 @@ class AuthClient:
             'password': password
         }
         return requests.post(url, json=json)
-        
+
     def register(self, type, value):
         """
             Register a given user using a mobile number or email \n
@@ -42,7 +42,6 @@ class AuthClient:
             'type': type,
             'value': value
         }
-        
         return requests.post(url, json=json)
 
     def setupPassword(self, clientId, clientSecret, newPassword):

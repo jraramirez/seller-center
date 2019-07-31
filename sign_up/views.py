@@ -19,6 +19,21 @@ def showErrorMessage(request, message):
       'self': self,
     })
 
+def showInfoMessage(request, message):
+    messages.info(request, message)
+    self = SignUpPage.objects.get(slug='sign')
+    return render(request, 'sign_up/sign_up_page.html', {
+      'self': self,
+    })
+
+def showWarningMessage(request, message):
+    messages.info(request, message)
+    self = SignUpPage.objects.get(slug='sign')
+    return render(request, 'sign_up/sign_up_page.html', {
+      'self': self,
+    })
+
+
 def verify_email(request):
     authClient = AuthClient(ApiGatewayClient())
     print("verify_email")
@@ -26,15 +41,26 @@ def verify_email(request):
     response = authClient.register("email", request.POST['email-address'])
 
     json = response.json()
-    print("Verify email response: %s status: %s",response.status_code, response.json())
+    print("Verify email response: status: ",response.status_code, response.json())
+    clientId = json['clientId']
+    clientSecret = json['clientSecret']
+
+    print("json clientId %s", json['clientId'])
+    print("json clientSecret %s", json['clientSecret'])
     if (response.status_code == 200):
+
+      messages.info(request, "An activation link has been sent to <email>")
+
       self = SignUpPage.objects.get(slug='sign')
       return render(request, 'sign_up/sign_up_page.html', {
         'self': self,
         'username': email,
-        'clientId': json['clientId'],
-        'clientSecret': json['clientSecret']
+        'clientId': clientId,
+        'clientSecret': clientSecret,
+        'visibility': "show active"
       })
+    elif (response.status_code == 409 and json['code'] == 'ALREADY_EXISTS'):
+        pass
     else:
       return showErrorMessage(request, json['code'])
 
@@ -59,11 +85,32 @@ def continueSignup(request):
     email = request.POST['email-address']
     password = request.POST['password']
     reenterPassword = request.POST['password-reenter']
+    clientId = request.POST['clientId']
+    clientSecret = request.POST['clientSecret']
 
     if password != reenterPassword:
       return showErrorMessage(request, "password must be the same")
 
+    authClient = AuthClient(ApiGatewayClient())
+     #login account to get token for password setup
+    loginResponse = authClient.login(clientId, clientSecret)
+      
+    jsonLogin = loginResponse.json()
+    print("code %s - jsonLogin %s", loginResponse.status_code, jsonLogin)
 
+    #checker for user is not confirmed
+    if (loginResponse.status_code == 401 and jsonLogin['code'] == 'UNVERIFIED_LOGIN'):
+
+      messages.error(request, "Please activate your email first")
+      self = SignUpPage.objects.get(slug='sign')
+      return render(request, 'sign_up/sign_up_page.html', {
+        'self': self,
+        'username': email,
+        'clientId': clientId,
+        'clientSecret': clientSecret,
+        'visibility': "show active"
+      })
+      
     #TODO: validate inpunt on client side first if validateInput(email, password, reenterPassword)
 
     #call api here if success create a user else show necessary errors
@@ -108,7 +155,9 @@ def continueSignup(request):
       return showErrorMessage(request, json['details'])
 
 
-def sign_up(request, username):
+def sign_up(request, username, clientId, clientSecret, visibility):
+  print("CID: %s", clientId)
+  print("clientSecret: %s", clientSecret)
   if(request.method == 'POST'):
     if ('verify-email' in request.POST):
       return verify_email(request)
