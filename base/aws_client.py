@@ -42,6 +42,7 @@ class AuthClient:
             'type': type,
             'value': value
         }
+        
         return requests.post(url, json=json)
 
     def setupPassword(self, clientId, clientSecret, newPassword):
