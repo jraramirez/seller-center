@@ -1,3 +1,9 @@
 *.db
 .idea
 *.py[co]
+env
+.vscode
+home/__pycache__
+search/__pycache__
+seller_center/__pycache__
+seller_center/settings/__pycache__
