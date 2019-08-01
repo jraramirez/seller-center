@@ -14,15 +14,23 @@ def register_home_menu_item():
 
 @hooks.register('register_admin_menu_item')
 def register_products_menu_item():
-  return MenuItem('Products (Advanced)', '/products/', classnames=' ', order=280)
+  return MenuItem('My Products', '/products/', classnames=' ', order=280)
 
 @hooks.register('register_admin_menu_item')
 def register_images_menu_item():
-  return MenuItem('Image', '/admin/images/', classnames=' ', order=300)
+  return MenuItem('My Images', '/admin/images/', classnames=' ', order=300)
+
+@hooks.register('register_admin_menu_item')
+def register_logout_menu_item():
+  return MenuItem('Log Out', '/admin/logout/', classnames=' ', order=310)
 
 @hooks.register('insert_global_admin_css')
 def global_admin_css():
     return format_html('<link rel="stylesheet" href="{}">', static('css/seller_center_admin.css'))
+
+# @hooks.register('construct_main_menu')
+# def hide_images_menu_item(request, menu_items):
+#   menu_items[:] = [item for item in menu_items if item.name != 'products']
 
 @hooks.register('construct_main_menu')
 def hide_snippets_menu_item(request, menu_items):
@@ -42,7 +50,7 @@ def hide_images_menu_item(request, menu_items):
 
 class ProductAdmin(ModelAdmin):
     model = Product
-    menu_label = 'Products (Basic)'
+    menu_label = 'Products'
     menu_icon = ' '
     menu_order = 270
     add_to_settings_menu = False
@@ -53,7 +61,7 @@ class ProductAdmin(ModelAdmin):
 
 class SalesAdmin(ModelAdmin):
     model = Order
-    menu_label = 'Orders'
+    menu_label = 'My Orders'
     menu_icon = ' '
     menu_order = 290
     add_to_settings_menu = False

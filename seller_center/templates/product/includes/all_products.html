@@ -27,9 +27,11 @@
                                 <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
                             {% elif product.variations.all.0.image_upload %}
                                 {% image product.variations.all.0.image_upload original as product_image %}
-                                <img src="{{product_image.url}}" alt="" width="80"/>                        
-                            {% else %}
+                                <img src="{{product_image.url}}" alt="" width="80"/>
+                            {% elif product.variations.all.0.image_url_from_sku %}
                                 <img src="{{product.variations.all.0.image_url_from_sku}}" alt="" width="80"/>
+                            {% else %}
+                                <img src="{% static 'images/download.svg' %}" alt="" width="80"/>
                             {% endif %}
                         </a>
                     </td>

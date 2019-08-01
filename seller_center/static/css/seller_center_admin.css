@@ -41,6 +41,13 @@ header{
 	display: none;
 }
 
+a[href="/admin/product/product/"] { 
+  display: none;
+}
+
+.footer{
+  display: none;
+}
 .button.bicolor {
 	background-color: #05507b !important;
 }

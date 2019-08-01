@@ -5,13 +5,12 @@ from django.db import transaction
 import pandas as pd
 import numpy as np
 import os
-from urllib.request import urlopen
+import requests
 
 from product.models import ProductsImportPage
 from product.models import Product
 from product.models import Variations
 from product.models import Errors
-
 
 AWS_STORAGE_BUCKET_NAME = 'lyka-seller-center'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
@@ -40,10 +39,7 @@ def products_import(request):
       inputFileDF = pd.read_csv(inputFile)
       with transaction.atomic():
         for index, row, in inputFileDF.iterrows():
-          unpublished = True
-          if(row['variation1_id'] == row['variation1_id']):
-            if(row['image1'] == row['image1']):
-              unpublished = False              
+          unpublished = False
           t = Product(
             product_code = row['product_code'],
             profile_id = request.user.id,
@@ -62,22 +58,104 @@ def products_import(request):
             unpublished = unpublished
           )
           t.save()
+
+          # Product name validation
           if(row['product_name'] != row['product_name']):
             Product.objects.filter(id=t.id).update(product_name=None)
             e = Errors(
               product_id = t.id,
-              name = 'Product Name is required'
+              name = 'Product name is required'
             )
             e.save()
-            unpublished = False              
+            unpublished = True
+          else:
+            if(len(row['product_name'])<16):
+              e = Errors(
+                product_id = t.id,
+                name = 'Product name should have at least 16 characters'
+              )
+              e.save()
+              unpublished = True
+
+          # Product code validation
+          if(row['product_code'] != row['product_code']):
+            Product.objects.filter(id=t.id).update(product_code=None)
+            e = Errors(
+              product_id = t.id,
+              name = 'Product code is required'
+            )
+            e.save()
+            unpublished = True
+          else:
+            if(len(row['product_code'])>100):
+              e = Errors(
+                product_id = t.id,
+                name = 'Product code exceeds maximum lenght of 100'
+              )
+              e.save()
+              unpublished = True
+
+          # Product description validation
+          if(row['product_description'] != row['product_description']):
+            Product.objects.filter(id=t.id).update(product_description=None)
+            e = Errors(
+              product_id = t.id,
+              name = 'Product description is required'
+            )
+            e.save()
+            unpublished = True
+          else:
+            if(len(row['product_description'])<100):
+              e = Errors(
+                product_id = t.id,
+                name = 'Product description should have at least 100 characters'
+              )
+              e.save()
+              unpublished = True
+
+          # Product weight validation
+          if(row['product_weight'] != row['product_weight']):
+            Product.objects.filter(id=t.id).update(product_description=None)
+            e = Errors(
+              product_id = t.id,
+              name = 'Product weight is required'
+            )
+            e.save()
+            unpublished = True
+
+          # Product image validation
+          image_url_from_sku = None
+          imageInS3 = False
+          if(row['variation1_id'] == row['variation1_id']):
+            if(row['image1'] != row['image1']):
+              url = media_url + str(row['variation1_id']) + '.jpg'
+              r = requests.get(url)
+              if r.status_code == 200:
+                image_url_from_sku = url
+                imageInS3 = True
+              else:
+                url = media_url + str(row['variation1_id']) + '.png'
+                r = requests.get(url)
+                if r.status_code == 200:
+                  image_url_from_sku = url
+                  imageInS3 = True
+                else:
+                  unpublished = True
+                  e = Errors(
+                    product_id = t.id,
+                    name = 'Product image is required'
+                  )
+                  e.save()
           stock_sum = 0
           for i in range(0,7):
             if(not np.isnan(row['variation'+str(i+1)+'_id'])):
               variationStock = 0
-              image_url_from_sku = media_url + str(row['variation'+str(i+1)+'_id']) + '.png'
               if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
                 variationStock = row['variation'+str(i+1)+'_stock']
               stock_sum = stock_sum + variationStock
+              image_url_from_sku = media_url + str(row['variation'+str(i+1)+'_id']) + '.png'
+              if(i == 0 and not imageInS3):
+                image_url_from_sku = None
               v = Variations(
                 product_id = t.id,
                 image_url = row['image'+str(i+1)],
@@ -88,7 +166,7 @@ def products_import(request):
                 image_url_from_sku = image_url_from_sku
               )
               v.save()
-          Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
+          Product.objects.filter(id=t.id).update(stock_sum=stock_sum, unpublished=unpublished)
 
     return HttpResponseRedirect("/products/#all")
   else:
