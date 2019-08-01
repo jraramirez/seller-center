@@ -31,7 +31,9 @@ class Order(models.Model):
   ]
 
 class Category(models.Model):
+  unique_id = models.IntegerField(null=True, blank=True)
   parent_id = models.IntegerField(null=True, blank=True)
+  level = models.IntegerField(null=True, blank=True)
   name = models.CharField(null=True, blank=True, max_length=500)
 
 @register_snippet
@@ -39,7 +41,7 @@ class Product(ClusterableModel):
   CONDITION_CHOICES = [
     ('N', 'New'),
     ('U', 'Used'),
-]
+  ]
   product_code = models.CharField(null=True, blank=True, max_length=500)
   product_name = models.CharField(null=True, blank=True, max_length=500)
   product_description = models.CharField(null=True, blank=True, max_length=500)
@@ -51,8 +53,8 @@ class Product(ClusterableModel):
   other_logistics_provider_fee = models.CharField(null=True, blank=True, max_length=500)
   order = models.ForeignKey(Order, models.DO_NOTHING, blank=True, null=True)
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
-  # category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
-  category = models.IntegerField(blank=True, null=True)
+  category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
+  # category = models.IntegerField(blank=True, null=True)
   stock_sum = models.IntegerField(blank=True, null=True)
   live = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)

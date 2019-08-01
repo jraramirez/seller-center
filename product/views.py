@@ -219,3 +219,14 @@ def download_template(request):
 def delete_all_products(request):
   Product.objects.all().delete()
   return HttpResponseRedirect("/products/#all")
+
+def uploadJSONCategoriesToDB():
+  with open('ShopeeTempCategory.json', 'r') as f:
+    categoriesJSON = json.load(f)
+    for i in categoriesJSON['data']['list']:
+      c = Category(
+        unqiue_id = i['id'] + 1891,
+        parent_id = i['parent_id'] + 1891,
+        name = i['name'],
+      )
+      c.save()
