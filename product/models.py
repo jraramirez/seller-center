@@ -30,13 +30,9 @@ class Order(models.Model):
     FieldPanel('creation_date'),
   ]
 
-@register_snippet
 class Category(models.Model):
+  parent_id = models.IntegerField(null=True, blank=True)
   name = models.CharField(null=True, blank=True, max_length=500)
-
-  panels = [
-    FieldPanel('name'),
-  ]
 
 @register_snippet
 class Product(ClusterableModel):

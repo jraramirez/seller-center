@@ -215,3 +215,7 @@ def download_template(request):
     response = HttpResponse(data,content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=' + outFileName + fileType
     return response
+
+def delete_all_products(request):
+  Product.objects.all().delete()
+  return HttpResponseRedirect("/products/#all")
