@@ -8,7 +8,7 @@ class HomePage(BasePage):
     body = StreamField(GeneralStreamBlock, blank=True)
 
     def get_context(self, request):
-        Product.objects.all().delete()
+        # Product.objects.all().delete()
         context = super().get_context(request)
         subPages = self.get_children().live()
         context['subPages'] = subPages
