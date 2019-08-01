@@ -3,13 +3,14 @@ from django.shortcuts import redirect
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
+from django.core.exceptions import ValidationError
+from django.contrib import messages
 
 from users.models import Profile
 from sign_up.models import SignUpPage
 from base.aws_client import AuthClient
 from base.aws_client import ApiGatewayClient
 
-from django.contrib import messages
 import requests
 
 def showErrorMessage(request, message):
@@ -159,15 +160,20 @@ def sign_in(request):
     username = request.POST['username']
     password = request.POST['password']
 
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-      login(request, user)
-      # Redirect to a success page.
-      HttpResponseRedirect('/')
-    else:
-      # Return an 'invalid login' error message.
-      messages.error(request,'username or password not correct')
-      return HttpResponseRedirect('/')
+    try:
+      user = authenticate(request, username=username, password=password)
+      if user is not None:
+        login(request, user)
+        # Redirect to a success page.
+        HttpResponseRedirect('/')
+      else:
+        # Return an 'invalid login' error message.
+        messages.error(request,'username or password not correct')
+        return HttpResponseRedirect('/')
+    except ValidationError as e:
+        messages.error(request, e.message)
+        return HttpResponseRedirect('/')
+
   return HttpResponseRedirect('/')  
 
 def sign_up(request, username, clientId, clientSecret, visibility):

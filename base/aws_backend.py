@@ -1,6 +1,8 @@
 from base.aws_client import AuthClient
 from base.aws_client import ApiGatewayClient
 from django.contrib.auth.models import User, Group
+from django.contrib import messages
+from django.core.exceptions import ValidationError
 
 class AwsBackend:
     def authenticate(self, request, username=None, password=None):
@@ -14,6 +16,10 @@ class AwsBackend:
         statusCode = loginResponse.status_code
         print('Status code: %s', statusCode)
         print('JSON: %s', json)
+
+        if (statusCode == 401 and json['code'] == 'UNVERIFIED_LOGIN'):  
+            raise ValidationError(message="User not yet confirmed.", code=401)
+
 
         if (statusCode == 200):
             try:
