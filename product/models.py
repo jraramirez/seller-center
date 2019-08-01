@@ -10,6 +10,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from modelcluster.models import ClusterableModel
 from wagtail.core.models import Orderable
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect
 
 from users.models import Profile
 
@@ -82,6 +83,27 @@ class Product(ClusterableModel):
     obj.user_id = request.user.id
     super().save_model(request, obj, form, change)
 
+  def save(self, *args, **kwargs):
+    if(self.product_name):
+      Errors.objects.filter(product_id=self.id).filter(name='Product name is required').delete()
+      if(len(self.product_name)>=16):
+        Errors.objects.filter(product_id=self.id).filter(name='Product name should have at least 16 characters').delete()
+    if(self.product_code):
+      Errors.objects.filter(product_id=self.id).filter(name='Product code is required').delete()
+      if(len(self.product_code)<=100):
+        Errors.objects.filter(product_id=self.id).filter(name='Product code exceeds maximum lenght of 100').delete()
+    if(self.product_description):
+      Errors.objects.filter(product_id=self.id).filter(name='Product description is required').delete()
+      if(len(self.product_description)>=100):
+        Errors.objects.filter(product_id=self.id).filter(name='Product description should have at least 100 characters').delete()
+    if(len(Errors.objects.filter(product_id=self.id)) == 0):
+      Product.objects.filter(id=self.id).update(unpublished=False)
+      print(Product.objects.filter(id=self.id))
+    super(Product, self).save(*args, **kwargs)
+    return HttpResponseRedirect("/products/#all")
+
+
+
   def __unicode__(self):
     return self.product_name
 
@@ -114,9 +136,11 @@ class Variations(Orderable, models.Model):
 
   def save(self, *args, **kwargs):
     if(self.image_upload):
+      Errors.objects.filter(product_id=self.product_id).filter(name='Product image is required').delete()
+    if(len(Errors.objects.filter(product_id=self.product_id)) == 0):
       Product.objects.filter(id=self.product_id).update(unpublished=False)
     super(Variations, self).save(*args, **kwargs)
-    return HttpResponseRedirect("/products/#all")
+    return redirect('/products/#all')
 
 
 class Errors(models.Model):  

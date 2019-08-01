@@ -41,12 +41,12 @@ def products_import(request):
         for index, row, in inputFileDF.iterrows():
           unpublished = False
           t = Product(
-            product_code = row['product_code'],
+            product_code = None,
             profile_id = request.user.id,
             category = None,
             order_id = None,
-            product_name = row['product_name'],
-            product_description = row['product_description'],
+            product_name = None,
+            product_description = None,
             product_weight = row['product_weight'],
             ship_out_in = row['ship_out_in'],
             parent_sku_reference_no = row['parent_sku_reference_no'],
@@ -69,6 +69,7 @@ def products_import(request):
             e.save()
             unpublished = True
           else:
+            Product.objects.filter(id=t.id).update(product_name=row['product_name'])
             if(len(row['product_name'])<16):
               e = Errors(
                 product_id = t.id,
@@ -87,6 +88,7 @@ def products_import(request):
             e.save()
             unpublished = True
           else:
+            Product.objects.filter(id=t.id).update(product_code=row['product_code'])
             if(len(row['product_code'])>100):
               e = Errors(
                 product_id = t.id,
@@ -105,6 +107,7 @@ def products_import(request):
             e.save()
             unpublished = True
           else:
+            Product.objects.filter(id=t.id).update(product_description=row['product_description'])
             if(len(row['product_description'])<100):
               e = Errors(
                 product_id = t.id,
