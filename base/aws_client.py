@@ -1,5 +1,4 @@
 import requests
-import crypt
 
 # Class that handles all endpoints for AWS
 class ApiGatewayClient: 

@@ -13,7 +13,6 @@ from product import views as product_views
 urlpatterns = [
     url(r'^django-admin/', admin.site.urls),
 
-    url(r'^admin/login', sign_up_views.sign_in, name='sign_in'),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
 
