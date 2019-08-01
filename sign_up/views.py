@@ -159,39 +159,16 @@ def sign_in(request):
     username = request.POST['username']
     password = request.POST['password']
 
-    authClient = AuthClient(ApiGatewayClient())
-
-    loginResponse = authClient.login(username, password)
-
-    json = loginResponse.json()
-
-    print(json)
-    print(loginResponse.status_code)
-
-    statusCode = loginResponse.status_code
-
-    if (statusCode == 200):
-      user = User.objects.create_user(
-        username= username,
-        password = password
-      )
-      group = Group.objects.get(name='Seller')
-      user.groups.add(group)
-      new_user = authenticate(
-        username=username,
-        password=request.POST['password'],
-      )
-      #call api here
-      login(request, new_user)
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+      login(request, user)
+      # Redirect to a success page.
       HttpResponseRedirect('/')
-    elif (statusCode == 401):
-      print('Status code 401', end=str(json['code']))
-
-      self = BasePage.objects.get(slug='/')
-      return render(request, '/', {
-        'self': self,
-      })
-      return redirect('/')
+    else:
+      # Return an 'invalid login' error message.
+      messages.error(request,'username or password not correct')
+      return HttpResponseRedirect('/')
+  return HttpResponseRedirect('/')  
 
 def sign_up(request, username, clientId, clientSecret, visibility):
   print("CID: %s", clientId)

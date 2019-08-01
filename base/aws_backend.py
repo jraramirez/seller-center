@@ -12,6 +12,8 @@ class AwsBackend:
         json = loginResponse.json()
 
         statusCode = loginResponse.status_code
+        print('Status code: %s', statusCode)
+        print('JSON: %s', json)
 
         if (statusCode == 200):
             try:
