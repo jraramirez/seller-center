@@ -7,7 +7,7 @@ ALLOWED_HOSTS = ['seller-center-staging.vpsbnhp5gf.ap-southeast-1.elasticbeansta
 
 # Database
 print(os.environ)
-if 'ebdb' in os.environ:
+if 'RDS_HOSTNAME' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
