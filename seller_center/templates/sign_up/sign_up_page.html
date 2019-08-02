@@ -2,27 +2,17 @@
 
 {% load wagtailcore_tags wagtailcore_tags wagtailimages_tags widget_tweaks %}
 
-{% block body_class %}template-contactpage{% endblock %}
+{% block body_class %}template-signuppage{% endblock %}
 
 {% block content %}
+<h2>Sign Up</h2>
+{% include 'sign_up/includes/sign_up_filter.html' %}
 
-  <div class="form-wrap">
-    <form action=" {{ page.url }}" method="POST">
-      {% csrf_token %}
-      <div class="row">
-        {% for field in form.visible_fields %}
-          <div class="col-md-6" style="padding-bottom: 5px; padding-right: 7px;">
-            {% render_field field class+="form-control" placeholder=field.label %}
-          </div>
-        {% endfor %}
-        <div class="col-md-6" style="padding-bottom: 5px; padding-right: 7px;">
-          <input type="password" name="password" maxlength="255" class="form-control" placeholder="Password" rows="5" required="" id="id_password">
-        </div>
-        <div class="col-md-12">
-          <button type="submit" class="block-button submit-button float-right">submit</button>
-        </div>
-      </div>
-    </form>
-  </div>
+{# Tab Content #}
+<div class="tab-content signup-tab" id="signUpTabContent">
+    {% include "sign_up/includes/by_email.html" %}
+    {% include "sign_up/includes/by_phone_number.html" %}
+</div>
+
 
 {% endblock %}

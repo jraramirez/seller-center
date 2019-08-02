@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-productspage{% endblock %}
+
+{% block content %}
+
+  <header>
+    <div class="right">
+      <div class="row buttons-container">
+        <a class="btn btn-success" href="/admin/product/product/create/" role="button">+ ADD PRODUCT</a>
+        {% for page in subPages %}
+          <a class="btn btn-success" href="{{ page.url }}" role="button">+ {{ page.title }}</a>
+        {% endfor %}
+      </div>
+   </div>
+  </header>
+
+
+  {% include 'product/includes/products_filter.html' %}
+
+  {# Tab Content #}
+  <div class="tab-content products-tab" id="productsTabContent">
+      {% include "product/includes/all_products.html" with allProducts=allProducts %}
+      {% include "product/includes/live_products.html" with liveProducts=liveProducts %}
+      {% include "product/includes/sold_out_products.html" with soldOutProducts=soldOutProducts %}
+      {% include "product/includes/unlisted_products.html" with unlistedProducts=unlistedProducts %}
+      {% include "product/includes/suspended_products.html" with suspendedProducts=suspendedProducts %}
+      {% include "product/includes/unpublished_products.html" with unpublishedProducts=unpublishedProducts %}
+  </div>
+
+{% endblock %}

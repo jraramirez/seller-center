@@ -1,0 +1,36 @@
+{% load static menu_tags wagtailimages_tags %}
+
+<div class="menu-box">
+	<nav class="navbar navbar-expand-lg navbar-light fixed-top nav-body">
+		<div class="container nav-cont">
+			<div class="logo-wrap">
+				{% image settings.site_settings.AdminSettings.logo original as logo %}
+				<a class="navbar-brand" href="/"><img class="nav-img-scroll" src="{% static 'images/logo.png' %}" alt="" width="40"/></a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+				</button>
+			</div>
+
+			<div class="collapse navbar-collapse nav-wrap" id="navbarSupportedContent">
+				<div class="logo">
+					
+				</div>
+
+				<ul class="navbar-nav nav-menulink">
+					<li class="nav-item">
+							<a class="nav-link" href="/products/#all">Products</a>
+					</li>
+					{% for item in menu_items %}
+					<li class="nav-item {{ item.active_class }}">
+							<a class="nav-link" href="{{ item.href }}">{{ item.text }}</a>
+					</li>
+					{% endfor %}
+					<li class="nav-item">
+							<a class="nav-link" href="/admin/logout/?next=/">Log Out</a>
+					</li>
+        </ul>
+			</div>
+		</div>
+	</nav>
+</div>
+
