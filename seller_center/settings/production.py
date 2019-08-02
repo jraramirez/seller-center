@@ -1,7 +1,7 @@
 from .base import *
 
 DEBUG = True
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = 'tuIPxdVIRqVrLbOgOXnbeZ6MBVXBgngJ'
 ALLOWED_HOSTS = ['seller-center-staging.vpsbnhp5gf.ap-southeast-1.elasticbeanstalk.com'] 
 
 
