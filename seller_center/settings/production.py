@@ -25,8 +25,8 @@ STATICFILES_LOCATION = 'static'
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, "..", "www", "wagtailadmin")
-STATIC_URL = '/wagtailadmin/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
 
 
 # Media files (Local)
