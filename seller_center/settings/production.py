@@ -21,8 +21,8 @@ if 'RDS_HOSTNAME' in os.environ:
 
 
 # Static files (Local)
-STATIC_ROOT = os.path.join(BASE_DIR, "www", "static")
-STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/wagtailadmin")
+STATIC_URL = '/static/wagtailadmin'
 
 # Media files (Local)
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
