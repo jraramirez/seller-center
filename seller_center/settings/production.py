@@ -2,13 +2,25 @@ from .base import *
 
 DEBUG = True
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = ['seller-center-staging.herokuapp.com'] 
+ALLOWED_HOSTS = ['seller-center-staging.vpsbnhp5gf.ap-southeast-1.elasticbeanstalk.com'] 
 
 
 # Database
-DATABASE_URL = os.environ.get('DATABASE_URL')
-DATABASES = {}
-DATABASES['default'] = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+if 'aaf26r8e7r5qfo.c0pp7rliocec.ap-southeast-1.rds.amazonaws.com' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
+    }
+else:
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    DATABASES = {}
+    DATABASES['default'] = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
 
 
 # Static files (Local)
