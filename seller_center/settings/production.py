@@ -1,7 +1,7 @@
 from .base import *
 
 DEBUG = True
-SECRET_KEY = 'tuIPxdVIRqVrLbOgOXnbeZ6MBVXBgngJ'
+SECRET_KEY = 'tuIPxdVIRqVrLbOgOXnbeZ6MBVXBgngJa'
 ALLOWED_HOSTS = ['seller-center-dev.vpsbnhp5gf.ap-southeast-1.elasticbeanstalk.com'] 
 
 
