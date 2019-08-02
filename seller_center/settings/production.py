@@ -6,6 +6,7 @@ ALLOWED_HOSTS = ['seller-center-staging.vpsbnhp5gf.ap-southeast-1.elasticbeansta
 
 
 # Database
+print(os.environ)
 if 'ebdb' in os.environ:
     DATABASES = {
         'default': {
@@ -17,10 +18,6 @@ if 'ebdb' in os.environ:
             'PORT': os.environ['RDS_PORT'],
         }
     }
-else:
-    DATABASE_URL = os.environ.get('DATABASE_URL')
-    DATABASES = {}
-    DATABASES['default'] = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
 
 
 # Static files (Local)
