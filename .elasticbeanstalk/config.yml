@@ -1,6 +1,6 @@
 branch-defaults:
   master:
-    environment: seller-center-staging
+    environment: seller-center-dev
 global:
   application_name: seller-center
   branch: null
