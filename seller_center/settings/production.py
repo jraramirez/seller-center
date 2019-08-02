@@ -6,7 +6,7 @@ ALLOWED_HOSTS = ['seller-center-staging.vpsbnhp5gf.ap-southeast-1.elasticbeansta
 
 
 # Database
-if 'aaf26r8e7r5qfo.c0pp7rliocec.ap-southeast-1.rds.amazonaws.com' in os.environ:
+if 'edb' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
