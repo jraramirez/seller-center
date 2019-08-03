@@ -3,9 +3,15 @@
 {% load static menu_tags %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
+
+{% block branding_favicon %}
+    <link rel="shortcut icon" href="{% static 'images/logo.ico' %}" />
+{% endblock %}
+
 {% block css  %}
-<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,400i,700,700i,900&display=swap" rel="stylesheet"> 
+    
 <link rel="stylesheet" type="text/css" href="{% static 'css/home/home.css' %}">
 {% endblock %}
 
@@ -13,6 +19,7 @@
 {% block login_form %}  
   <div class="">
     <div class="row no-gutters">
+      <!-- left panel-->
         <div class="col-md-6 align-content-center align-items-center bg-light d-none d-md-flex" style="min-height: 100vh; background: url('{% static 'images/bg-login.jpg'%}'); background-size: cover;">
             <div class="container text-white">
                 <div class="row align-items-center justify-content-center">
@@ -24,26 +31,40 @@
                 </div>
             </div>
         </div>
-      <div class="col-md-6">
-        <div class="form-wrap">
-          <form action=" {{ page.url }}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="/">
-            <div class="row">
-              <div class="col-md-12">
-                <input type="text" name="username" maxlength="255" class="form-control" placeholder="email / phone number">
-              </div>
-              <div class="col-md-12">
-                <input type="password" name="password" class="form-control" placeholder="Enter password" required="" id="id_password">
-              </div>
-              <div class="col-md-12">
-                <a href="" class="btn btn-link float-left">Forgot Password</a>
-                <button type="submit" class="btn btn-success block-button submit-button float-right">Log In</button>
-              </div>
+
+      
+      <div class="col-md-6 d-flex align-items-center mb-5">
+          <div class="container mt-5 px-5">
+              <div class="d-flex align-items-center justify-content-center">
+
+                  <img src="{% static 'images/lyka_logo_trans.png' %}" style="height: 100px; width: 100px;"/>
+                  </div>
+                  <h3 class="text-center mb-3 text-uppercase text-primary-2 font-weight-bold">Seller Center</h3>
+                  <p class="text-black-50 text-center">Sign-in via:</p>
+                  
+          <div class="col-md-6">
+            <div class="form-wrap">
+              <form action=" {{ page.url }}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="/">
+                <div class="row">
+                  <div class="col-md-12">
+                    <input type="text" name="username" maxlength="255" class="form-control" placeholder="email / phone number">
+                  </div>
+                  <div class="col-md-12">
+                    <input type="password" name="password" class="form-control" placeholder="Enter password" required="" id="id_password">
+                  </div>
+                  <div class="col-md-12">
+                    <a href="" class="btn btn-link float-left">Forgot Password</a>
+                    <button type="submit" class="btn btn-success block-button submit-button float-right">Log In</button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
 
