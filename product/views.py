@@ -9,6 +9,7 @@ import requests
 
 from product.models import ProductsImportPage
 from product.models import Product
+from product.models import Category
 from product.models import Variations
 from product.models import Errors
 
@@ -20,14 +21,44 @@ media_url = "https://%s/media/original_images/" % AWS_S3_CUSTOM_DOMAIN
 class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
 
+[
+  {
+    'name': 1,
+    'children': [
+      {
+        'name': 2,
+        'children': [
+
+        ]
+      }
+    ]
+  }
+]
 
 def product_import(request):
+  l1Categories = Category.objects.filter(parent_id=1891)
+  categories = [{} for _ in range(len(l1Categories))]
+  for i, c in zip(range(len(l1Categories)), l1Categories):
+    categories[i]['name'] = c.name
+    categories[i]['top'] = str(-86.66*(i))+'px'
+    l2Categories = Category.objects.filter(parent_id=c.unique_id)
+    categories[i]['children'] = [{} for _ in range(len(l2Categories))]
+    for j, c2 in zip(range(len(l2Categories)), l2Categories):
+      categories[i]['children'][j]['name'] = c2.name
+      categories[i]['children'][j]['top'] = str(-86.66*(j))+'px'
+      l3Categories = Category.objects.filter(parent_id=c2.unique_id)
+      categories[i]['children'][j]['children'] = [{} for _ in range(len(l3Categories))]
+      for k, c3 in zip(range(len(l3Categories)), l3Categories):
+        categories[i]['children'][j]['children'][k]['name'] = c3.name
+
+
   if(request.method == 'POST'):
     # return render(request, 'product/products_page.html', {
     # })
     return redirect('/products/#all')
   else:
     return render(request, 'product/product_import_page.html', {
+      'categories': categories
     })
 
 

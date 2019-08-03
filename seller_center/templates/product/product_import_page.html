@@ -23,10 +23,48 @@
       <div class="col-md-12">
         <h2>Category</h2>
       </div>
-      <div class="list-group">
-        <a class="list-group-item list-group-item-action" href="#">Health & Personal Care</a>
-        <a class="list-group-item list-group-item-action" href="#">Makeup & Fragrances</a>
-        <a class="list-group-item list-group-item-action" href="#">Women's Apparel</a>
+      <div class="accordion" id="accordion1">
+        {% for c in categories %}
+        <div class="card">
+          <div class="card-header" id="heading1">
+            <h2 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{c.name}}" aria-expanded="true" aria-controls="{{c.name}}">
+                {{c.name}}
+              </button>
+            </h2>
+          </div>
+          <div id="{{c.name}}" class="collapse l2-categories" aria-labelledby="heading1" data-parent="#accordion1" style="position: absolute; left: 300px; top: {{c.top}};">
+            <div class="accordion" id="accordion2">
+              {% for c2 in c.children %}
+              <div class="card">
+                <div class="card-header" id="heading2">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{c2.name}}" aria-expanded="true" aria-controls="{{c2.name}}">
+                      {{c2.name}}
+                    </button>
+                  </h2>
+                </div>
+                <div id="{{c2.name}}" class="collapse l3-categories" aria-labelledby="heading2" data-parent="#accordion2" style="position: absolute; left: 300px; top: {{c2.top}};">
+                  <div class="accordion" id="accordion3">
+                    {% for c3 in c2.children %}
+                    <div class="card">
+                      <div class="card-header" id="heading3">
+                        <h2 class="mb-0">
+                          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{c3.name}}" aria-expanded="true" aria-controls="{{c3.name}}">
+                            {{c3.name}}
+                          </button>
+                        </h2>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
       </div>
       <div class="col-md-12">
         <h2>Sales</h2>
