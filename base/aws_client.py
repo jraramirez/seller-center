@@ -1,5 +1,4 @@
 import requests
-# import crypt
 
 # Class that handles all endpoints for AWS
 class ApiGatewayClient: 
@@ -27,7 +26,7 @@ class AuthClient:
             'password': password
         }
         return requests.post(url, json=json)
-        
+
     def register(self, type, value):
         """
             Register a given user using a mobile number or email \n

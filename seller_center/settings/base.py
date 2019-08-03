@@ -159,6 +159,10 @@ WAGTAIL_SITE_NAME = "seller_center"
 BASE_URL = 'http://example.com'
 
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'wagtailadmin/login.html'
+AUTHENTICATION_BACKENDS = [
+                            'django.contrib.auth.backends.ModelBackend',
+                            'base.aws_backend.AwsBackend'
+                            ]
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
