@@ -63,4 +63,21 @@
       border-color: #3fbdd3;
     }
   }
+  .categories{
+    .card{
+      border: 0px;
+      min-height: 39px;
+      button[aria-expanded="true"] { 
+        border: 1px solid #3fbdd3;
+      }      
+      .btn-link{
+        color: #000;
+        text-decoration: none;  
+      }
+      .btn-link:hover{
+        color: #000;
+        text-decoration: none;        
+      }
+    }
+  }
 }
