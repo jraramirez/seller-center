@@ -42,34 +42,64 @@
                   <h3 class="text-center mb-3 text-uppercase text-primary-2 font-weight-bold">Seller Center</h3>
                   <p class="text-black-50 text-center">Sign-in via:</p>
                   
-          <div class="col-md-6">
-            <div class="form-wrap">
-              <form action=" {{ page.url }}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="next" value="/">
-                <div class="row">
-                  <div class="col-md-12">
-                    <input type="text" name="username" maxlength="255" class="form-control" placeholder="email / phone number">
-                  </div>
-                  <div class="col-md-12">
-                    <input type="password" name="password" class="form-control" placeholder="Enter password" required="" id="id_password">
-                  </div>
-                  <div class="col-md-12">
-                    <a href="" class="btn btn-link float-left">Forgot Password</a>
-                    <button type="submit" class="btn btn-success block-button submit-button float-right">Log In</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
+
+                  <form action=" {{ page.url }}" method="POST">
+
+                      {% csrf_token %}
+                      <input type="hidden" name="next" value="/">
+                    <div class="rounded bg-white shadow">
+                        <nav class="nav nav-pills-2 nav-justified bg-light" role="tablist" id="tablist">
+                            <a class="nav-item nav-link active rounded-0 nav-border" id="tab-nav-email" data-toggle="tab" href="#tab-email" role="tab" aria-controls="tab-email" aria-selected="true">Email</a>
+                            <a class="nav-item nav-link rounded-0 nav-border-alt" id="tab-nav-phone" data-toggle="tab" href="#tab-phone" role="tab" aria-controls="tab-phone" aria-selected="false">Phone</a>
+                        </nav>
+                        <div class="tab-pane fade show active" id="tab-email" role="tabpanel" aria-labelledby="tab-nav-email"></div>
+                        <div class="p-4">
+                            <div id="email-form">
+                                <div class="form-group">
+                                    <label for="email-login">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            Email address 
+                                            <span class="ml-1 spinner-border spinner-border-sm text-primary-2" role="status" aria-hidden="true" id="email-spinner"></span>
+                                        </div>
+                                    </label>
+                                    <div class="row no-gutters align-content-center border rounded bg-white" id="email-container">
+                                        <input type="email" name="username" class="form-control border-0" id="email-login" aria-describedby="emailHelp" placeholder="Enter email">
+                                    </div>
+                                    <p class="text-danger small mt-2" id="error-email-login"></p>
+                                </div>
+                                <div class="form-group">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <label for="password-login">Password</label>
+                                        <a id="show-pass" class="text-primary-2" href="#">show</a>
+                                    </div>
+                                    <input type="password" class="form-control" name="password" id="password-login"
+                                        placeholder="Password">
+                                    <p class="text-danger small mt-2" id="error-password-login"></p>
+                                </div>
+                                <div class="form-group form-check">
+                                    <input type="checkbox" class="form-check-input" id="remember-me-mail">
+                                    <label class="form-check-label" for="remember-me-mail">Remember me</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary-2 w-100 mt-3">Login</button>
+                              </div>
+                            <p class="small mt-3 text-center">Don't have an account? <a class="ml-1" href="./signup.html">Sign up</a></p>
+                            <p class="text-center mt-3"><a href="./forgotpass.html" class="small">Forgot password?</a></p>
+                        </div>
+                         
+                        </div>
+                    </div>
+                  </form>
         </div>
       </div>
 
     </div>
   </div>
 
-  {# Global javascript #}
-  <script type="text/javascript" src="{% static 'js/seller_center.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+ 
+  <script type="text/javascript" src="{% static 'js/home/home.js' %}"></script>
 
 
 {% endblock %}
