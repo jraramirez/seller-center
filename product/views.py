@@ -40,16 +40,22 @@ def product_import(request):
   categories = [{} for _ in range(len(l1Categories))]
   for i, c in zip(range(len(l1Categories)), l1Categories):
     categories[i]['name'] = c.name
+    categories[i]['unique_id'] = c.unique_id
+    categories[i]['level'] = 1
     categories[i]['top'] = str(-39*(i))+'px'
     l2Categories = Category.objects.filter(parent_id=c.unique_id)
     categories[i]['children'] = [{} for _ in range(len(l2Categories))]
     for j, c2 in zip(range(len(l2Categories)), l2Categories):
       categories[i]['children'][j]['name'] = c2.name
+      categories[i]['children'][j]['unique_id'] = c2.unique_id
+      categories[i]['children'][j]['level'] = c2.level
       categories[i]['children'][j]['top'] = str(-39*(j))+'px'
       l3Categories = Category.objects.filter(parent_id=c2.unique_id)
       categories[i]['children'][j]['children'] = [{} for _ in range(len(l3Categories))]
       for k, c3 in zip(range(len(l3Categories)), l3Categories):
         categories[i]['children'][j]['children'][k]['name'] = c3.name
+        categories[i]['children'][j]['children'][k]['unique_id'] = c3.unique_id
+        categories[i]['children'][j]['children'][k]['level'] = c3.level
 
 
   if(request.method == 'POST'):

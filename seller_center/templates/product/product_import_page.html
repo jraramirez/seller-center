@@ -27,28 +27,28 @@
         {% for c in categories %}
         <div class="card">
           <div id="heading1">
-            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{c.name}}" aria-expanded="false" aria-controls="{{c.name}}">
+            <button class="btn btn-link btn-level-1 btn-{{c.unique_id}}" type="button" data-toggle="collapse" data-target="#{{c.unique_id}}" aria-expanded="false" aria-controls="{{c.unique_id}}">
               {{c.name}}
             </button>
           </div>
-          <div id="{{c.name}}" class="collapse l2-categories" aria-labelledby="heading1" data-parent="#accordion1" style="position: absolute; left: 300px; top: {{c.top}};">
+          <div id="{{c.unique_id}}" class="collapse l2-categories level-2 parent-btn-{{c.unique_id}}" aria-labelledby="heading1" data-parent="#accordion1" style="position: absolute; left: 300px; top: {{c.top}};">
             <div class="accordion" id="accordion2">
               {% for c2 in c.children %}
               <div class="card">
                 <div id="heading2">
-                  <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{c2.name}}" aria-expanded="false" aria-controls="{{c2.name}}">
+                  <button class="btn btn-link btn-level-2 btn-{{c2.unique_id}}" type="button" data-toggle="collapse" data-target="#{{c2.unique_id}}" aria-expanded="false" aria-controls="{{c2.unique_id}}" onclick="toggleL2(event)">
                     {{c2.name}}
                   </button>
                 </div>
-                <div id="{{c2.name}}" class="collapse l3-categories" aria-labelledby="heading2" data-parent="#accordion2" style="position: absolute; left: 300px; top: {{c2.top}};">
+                <div id="{{c2.unique_id}}" class="collapse l3-categories level-3 parent-btn-{{c2.unique_id}}" aria-labelledby="heading2" data-parent="#accordion2" style="position: absolute; left: 300px; top: {{c2.top}};">
                   <div class="accordion" id="accordion3">
                     {% for c3 in c2.children %}
                     <div class="card">
                       <div id="heading3">
-                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{c3.name}}" aria-expanded="false" aria-controls="{{c3.name}}">
+                        <button class="btn btn-link btn-level-3 btn-{{c3.unique_id}}" type="button" data-toggle="collapse" data-target="#{{c3.unique_id}}" aria-expanded="false" aria-controls="{{c3.unique_id}}" onclick="toggleL3(event)">
                           {{c3.name}}
                         </button>
-                        <div id="{{c3.name}}" style="display: none"></div>
+                        <div id="{{c3.unique_id}}" class="level-4" data-parent="#accordion3" style="display: none"></div>
                       </div>
                     </div>
                     {% endfor %}
