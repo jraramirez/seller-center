@@ -171,6 +171,7 @@ class ProductsPage(BasePage):
     context['suspendedProducts'] = suspendedProducts
     context['unlistedProducts'] = unlistedProducts
     context['unpublishedProducts'] = unpublishedProducts
+    context['nUnpublished'] = len(unpublishedProducts)
     context['subPages'] = subPages
     return context
 
