@@ -41,6 +41,9 @@ body a:hover {
   color: #3fbdd3;
   text-decoration: none;
 }
+body .btn {
+  margin-bottom: 30px;
+}
 body .card {
   width: 18rem;
 }
@@ -641,7 +644,7 @@ body.explorer-open .nav-main {
 }
 
 .template-productsimportpage .form-import label {
-  margin-bottom: 0px;
+  margin-bottom: 30px;
   display: inline-block;
   font-weight: 400;
   text-align: center;
@@ -701,6 +704,26 @@ body.explorer-open .nav-main {
   color: #fff;
   background-color: #3fbdd3;
   border-color: #3fbdd3;
+}
+.template-productsimportpage .categories .card {
+  border: 0px;
+  min-height: 39px;
+}
+.template-productsimportpage .categories .card button[aria-expanded=true] {
+  border: 1px solid #3fbdd3;
+}
+.template-productsimportpage .categories .card .btn-link {
+  color: #000;
+  text-decoration: none;
+  margin-bottom: 0px;
+}
+.template-productsimportpage .categories .card .btn-link:hover {
+  color: #000;
+  text-decoration: none;
+}
+.template-productsimportpage .variation {
+  margin-bottom: 30px;
+  margin-left: -15px;
 }
 
 .login .wrapper {
