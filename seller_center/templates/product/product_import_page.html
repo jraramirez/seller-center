@@ -8,6 +8,9 @@
 {% block content %}
 
 <div class="form-wrap">
+
+  <!-- CATEGORIES -->
+  
   {% if selected_category == 'index' %}
   <form action="" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
@@ -36,7 +39,7 @@
                   {% for c3 in c2.children %}
                   <div class="card">
                     <div id="heading3">
-                      <a class="btn btn-link" name="category" href="/products/add-single-product/{{c3.name}}">
+                      <a class="btn btn-link" name="category" href="/products/add-single-product/{{c3.unique_id}}">
                         {{c3.name}}
                       </a>
                     </div>
@@ -60,30 +63,64 @@
         <h2>Basic</h2>
       </div>
       <div class="col-md-12">
-        <input type="text" name="product-name" class="form-control" placeholder="Product Name" required="" id="id_product-name">
+        <input type="text" name="product-name" class="form-control" placeholder="Product Name" id="id_product-name" value="{{productName}}">
       </div>
       <div class="col-md-12">
-        <textarea name="product-description" class="form-control" placeholder="Product Description" required="" id="id_product-description"></textarea>
+        <textarea name="product-description" class="form-control" placeholder="Product Description" id="id_product-description"></textarea>
       </div>
       <div class="col-md-12">
         <h2>Selected Category</h2>
       </div>
       <div class="col-md-10">
-        <input type="text" name="product-category" class="form-control" required="" id="id_product-name" value="{{selected_category}}" disabled>
+        <input type="text" name="product-category" class="form-control" id="id_product-name" value="{{selected_category}}" disabled>
       </div>
       <div class="col-md-2">
           <a class="btn btn-success" href="/products/add-single-product/index">
             Change Category
           </a>
       </div>
+      <!-- VARIATIONS -->
+      <div class="col-md-12">
+        <h2>Variations</h2>
+      </div>
+      {% for v in variations %}
+      {% if v != 0 %}
+      <div class="variation variation-{{forloop.counter0}} col-md-12" style="display: none;">
+      {% else %}
+        <div class="variation variation-{{forloop.counter0}} col-md-12">
+      {% endif %}
+        <div class="col-md-12">
+            <h3>Variation {{forloop.counter}}</h3>
+        </div>
+        <div class="col-md-12">
+            <input type="text" name="product-variation-{{forloop.counter0}}-name" class="form-control" placeholder="Name" id="id_product-variation-name">
+        </div>
+        <div class="col-md-12">
+            <input type="text" name="product-variation-{{forloop.counter0}}-price" class="form-control" placeholder="Price ₱" id="id_product-price">
+        </div>
+        <div class="col-md-12">
+            <input type="number" name="product-variation-{{forloop.counter0}}-stock" class="form-control" placeholder="Stock" id="id_product-variation-stock">
+        </div>
+        <div class="col-md-12">
+            <input type="text" name="product-variation-{{forloop.counter0}}-sku" class="form-control" placeholder="SKU" id="id_product-variation-sku">
+        </div>
+        {% if forloop.counter0 < 6 %}
+        <div class="col-md-12">
+            <button class="btn btn-primary" type="button" onclick="showVariation(event, '{{forloop.counter}}')"> + Add Another Variation</button>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      
       <div class="col-md-12">
         <h2>Sales</h2>
       </div>
       <div class="col-md-12">
-          <input type="text" name="product-price" class="form-control" placeholder="Price ₱" required="" id="id_product-price">
+          <input type="text" name="product-price" class="form-control" placeholder="Price ₱" id="id_product-price">
       </div>
       <div class="col-md-12">
-        <input type="number" name="product-stock" class="form-control" placeholder="Stock" required="" id="id_product-stock">
+        <input type="number" name="product-stock" class="form-control" placeholder="Stock" id="id_product-stock">
       </div>
       <div class="col-md-12">
         <h2>Shipping</h2>
@@ -101,7 +138,7 @@
         <input type="number" name="product-h" class="form-control" placeholder="H" id="id_product-h">
       </div>
       <div class="col-md-12">
-        <input type="number" name="product-weight" class="form-control" placeholder="Weight (kg)" required="" id="id_product-weight">
+        <input type="number" name="product-weight" class="form-control" placeholder="Weight (kg)" id="id_product-weight">
       </div>
       <div class="col-md-12">
         <h2>Others</h2>
@@ -116,7 +153,7 @@
         </div>
       </div>
       <div class="col-md-12">
-        <input type="text" name="product-parent-sku" class="form-control" placeholder="Parent SKU" required="" id="id_product-parent-sku">
+        <input type="text" name="product-parent-sku" class="form-control" placeholder="Parent SKU" id="id_product-parent-sku">
       </div>
       <div class="col-md-12">
       <button type="submit" class="btn btn-success block-button submit-button float-right">submit</button>

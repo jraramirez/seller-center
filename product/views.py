@@ -22,6 +22,7 @@ class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
 
 def product_import(request, selected_category):
+  nVariations = 7
   if(selected_category == 'index'):
     l1Categories = Category.objects.filter(parent_id=1891)
     categories = [{} for _ in range(len(l1Categories))]
@@ -47,10 +48,51 @@ def product_import(request, selected_category):
       'categories': categories,
       'selected_category': selected_category
     })
+  elif(request.method == "POST"):
+    t = Product(
+      product_code = request.POST.get('product-code'),
+      profile_id = request.user.id,
+      category = selected_category,
+      order_id = None,
+      product_name = request.POST.get('product-name'),
+      product_description = request.POST.get('product-description'),
+      product_weight = request.POST.get('product-weight'),
+      ship_out_in = None,
+      parent_sku_reference_no = request.POST.get('product-parent-sku'),
+      other_logistics_provider_setting = None,
+      other_logistics_provider_fee = None,
+      live = False,
+      suspended = False,
+      unlisted = False,
+      unpublished = False
+    )
+    t.save()
+    stock_sum = 0
+    for i in range(0,8):
+      if(request.POST.get('product-variation-'+str(i)+'-sku')):
+        print(request.POST.get('product-variation-'+str(i)+'-sku'))
+        variationStock = 0
+        if(request.POST.get('product-variation-'+str(i)+'-stock')):
+          variationStock = int(request.POST.get('product-variation-'+str(i)+'-stock'))
+        stock_sum = stock_sum + variationStock
+        v = Variations(
+          product_id = t.id,
+          image_url = None,
+          price =request.POST.get('product-variation-'+str(i)+'-price'),
+          sku = request.POST.get('product-variation-'+str(i)+'-sku'),
+          stock = variationStock,
+          name = request.POST.get('product-variation-'+str(i)+'-sku'),
+          image_url_from_sku = None
+        )
+        v.save()
+    return HttpResponseRedirect("/products/#all")
   else:
+    selected_category = Category.objects.filter(unique_id=selected_category)[0].name
     return render(request, 'product/product_import_page.html', {
       'selected_category': selected_category,
+      'variations': range(nVariations)
     })
+    
 
 def products_import(request):
   if(request.method == "POST" and request.POST.get('upload')): 
@@ -239,6 +281,7 @@ def download_template(request):
 
 def delete_all_products(request):
   Product.objects.all().delete()
+  Variations.objects.all().delete()
   return HttpResponseRedirect("/products/#all")
 
 def uploadJSONCategoriesToDB():
