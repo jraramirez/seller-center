@@ -4,6 +4,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 
+
 class AwsBackend:
     def authenticate(self, request, username=None, password=None):
         print('using custom authenticator')
@@ -13,18 +14,19 @@ class AwsBackend:
 
         json = loginResponse.json()
 
-        statusCode = loginResponse.status_code
-        print('Status code: %s', statusCode)
-        print('JSON: %s', json)
+        status_code = loginResponse.status_code
 
-        if (statusCode == 401 and json['code'] == 'UNVERIFIED_LOGIN'):  
+
+        if status_code == 401 and json['code'] == 'UNVERIFIED_LOGIN':
             raise ValidationError(message="User not yet confirmed.", code=401)
 
+        if status_code == 403 and json['code'] == 'UNAUTHORIZED_ORIGIN':
+            raise ValidationError(message="Unauthorized access.", code=401)
 
-        if (statusCode == 200):
+
+        if status_code == 200:
             try:
                 user = User.objects.get(username=username)
-                print('user: %s', user)
                 return user
             except User.DoesNotExist:
                 # Create a new user. There's no need to set a password
@@ -36,7 +38,6 @@ class AwsBackend:
 
         return None
 
-    
     def get_user(self, user_id):
         try:
             return User.objects.get(pk=user_id)
