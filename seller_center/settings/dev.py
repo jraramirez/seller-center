@@ -15,7 +15,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "seller_center",
         "USER": "postgres",
-        "PASSWORD": "admin123",
+        "PASSWORD": "postgres",
         "HOST": "localhost",
         "PORT": "",
     }
@@ -52,13 +52,6 @@ DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 ALLOWED_HOSTS = ['*'] 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_PASSWORD = 'f0rtune$1'
-# EMAIL_HOST_USER = 'mirr@digiters.co'
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 try:
     from .local import *

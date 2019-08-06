@@ -17,6 +17,7 @@
             <form action="" enctype="multipart/form-data"  method="post">
               {% csrf_token %}
               {{ form }}
+              <input type="checkbox" name="auto-pair" class="form-check-input" id="id_autopair"> <span>Auto-pair products with available images</span>
               <input class="btn btn-success button-submit" type="submit" value="Upload" name="upload">
             </form>
           </div>

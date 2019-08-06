@@ -70,7 +70,6 @@ def product_import(request, selected_category):
     stock_sum = 0
     for i in range(0,8):
       if(request.POST.get('product-variation-'+str(i)+'-sku')):
-        print(request.POST.get('product-variation-'+str(i)+'-sku'))
         variationStock = 0
         if(request.POST.get('product-variation-'+str(i)+'-stock')):
           variationStock = int(request.POST.get('product-variation-'+str(i)+'-stock'))
@@ -96,6 +95,8 @@ def product_import(request, selected_category):
 
 def products_import(request):
   if(request.method == "POST" and request.POST.get('upload')): 
+    autoPair = request.POST.get('auto-pair')
+    print(autoPair)
     form = UploadFileForm(request.POST, request.FILES)
     if form.is_valid():
       inputFile = request.FILES['file']
@@ -190,28 +191,37 @@ def products_import(request):
             unpublished = True
 
           # Product image validation
-          image_url_from_sku = None
           imageInS3 = False
-          if(row['variation1_id'] == row['variation1_id']):
-            if(row['image1'] != row['image1']):
-              url = media_url + str(row['variation1_id']) + '.jpg'
-              r = requests.get(url)
-              if r.status_code == 200:
-                image_url_from_sku = url
-                imageInS3 = True
-              else:
-                url = media_url + str(row['variation1_id']) + '.png'
+          if(autoPair):
+            image_url_from_sku = None
+            if(row['variation1_id'] == row['variation1_id']):
+              if(row['image1'] != row['image1']):
+                url = media_url + str(row['variation1_id']) + '.jpg'
                 r = requests.get(url)
                 if r.status_code == 200:
                   image_url_from_sku = url
                   imageInS3 = True
                 else:
-                  unpublished = True
-                  e = Errors(
-                    product_id = t.id,
-                    name = 'Product image is required'
-                  )
-                  e.save()
+                  url = media_url + str(row['variation1_id']) + '.png'
+                  r = requests.get(url)
+                  if r.status_code == 200:
+                    image_url_from_sku = url
+                    imageInS3 = True
+                  else:
+                    unpublished = True
+                    e = Errors(
+                      product_id = t.id,
+                      name = 'Product image is required'
+                    )
+                    e.save()
+          else:
+            if(row['image1'] != row['image1']):
+              unpublished = True
+              e = Errors(
+                product_id = t.id,
+                name = 'Product image is required'
+              )
+              e.save()
           stock_sum = 0
           for i in range(0,7):
             if(not np.isnan(row['variation'+str(i+1)+'_id'])):
@@ -219,7 +229,7 @@ def products_import(request):
               if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
                 variationStock = row['variation'+str(i+1)+'_stock']
               stock_sum = stock_sum + variationStock
-              if(i == 0 and not imageInS3):
+              if(i == 0 and not imageInS3 and not autoPair):
                 image_url_from_sku = None
               v = Variations(
                 product_id = t.id,
