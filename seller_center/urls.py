@@ -13,16 +13,18 @@ from product import views as product_views
 urlpatterns = [
     url(r'^django-admin/', admin.site.urls),
 
+    url(r'^admin/login', sign_up_views.sign_in, name='sign_in'),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
 
     url(r'^search/$', search_views.search, name='search'),
-
-    url(r'^sign/$', sign_up_views.sign_up, name='sign_up'),
-    url(r'^reset_password/$', sign_up_views.reset_password, name='reset_password'),
+    
+    url(r'^sign/(?P<username>.*)(?P<clientId>.*)(?P<clientSecret>.*)(?P<visibility>.*)', sign_up_views.sign_up, name='sign_up'),
+    url(r'^sign/verify_email', sign_up_views.verify_email, name='verify_email'),
+    
     url(r'^products/import/download_template', product_views.download_template, name='download_template'),
     url(r'^products/add-new-products', product_views.products_import, name='products_import'),
-    url(r'^products/add-single-product', product_views.product_import, name='product_import'),
+    url(r'^products/add-single-product/(?P<selected_category>.*)/$', product_views.product_import, name='product_import'),
     url(r'^products/delete-all', product_views.delete_all_products, name='delete_all_products'),
     url(r'^products/delete/(?P<product_id>.*)/$', product_views.product_delete, name='product_delete'),
     url(r'^products/unlist/(?P<product_id>.*)/$', product_views.product_unlist, name='product_unlist'),

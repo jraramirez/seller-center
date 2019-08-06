@@ -21,46 +21,78 @@ media_url = "https://%s/media/original_images/" % AWS_S3_CUSTOM_DOMAIN
 class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
 
-[
-  {
-    'name': 1,
-    'children': [
-      {
-        'name': 2,
-        'children': [
-
-        ]
-      }
-    ]
-  }
-]
-
-def product_import(request):
-  l1Categories = Category.objects.filter(parent_id=1891)
-  categories = [{} for _ in range(len(l1Categories))]
-  for i, c in zip(range(len(l1Categories)), l1Categories):
-    categories[i]['name'] = c.name
-    categories[i]['top'] = str(-86.66*(i))+'px'
-    l2Categories = Category.objects.filter(parent_id=c.unique_id)
-    categories[i]['children'] = [{} for _ in range(len(l2Categories))]
-    for j, c2 in zip(range(len(l2Categories)), l2Categories):
-      categories[i]['children'][j]['name'] = c2.name
-      categories[i]['children'][j]['top'] = str(-86.66*(j))+'px'
-      l3Categories = Category.objects.filter(parent_id=c2.unique_id)
-      categories[i]['children'][j]['children'] = [{} for _ in range(len(l3Categories))]
-      for k, c3 in zip(range(len(l3Categories)), l3Categories):
-        categories[i]['children'][j]['children'][k]['name'] = c3.name
-
-
-  if(request.method == 'POST'):
-    # return render(request, 'product/products_page.html', {
-    # })
-    return redirect('/products/#all')
-  else:
+def product_import(request, selected_category):
+  nVariations = 7
+  if(selected_category == 'index'):
+    l1Categories = Category.objects.filter(parent_id=1891)
+    categories = [{} for _ in range(len(l1Categories))]
+    for i, c in zip(range(len(l1Categories)), l1Categories):
+      categories[i]['name'] = c.name
+      categories[i]['unique_id'] = c.unique_id
+      categories[i]['level'] = 1
+      categories[i]['top'] = str(-39*(i))+'px'
+      l2Categories = Category.objects.filter(parent_id=c.unique_id)
+      categories[i]['children'] = [{} for _ in range(len(l2Categories))]
+      for j, c2 in zip(range(len(l2Categories)), l2Categories):
+        categories[i]['children'][j]['name'] = c2.name
+        categories[i]['children'][j]['unique_id'] = c2.unique_id
+        categories[i]['children'][j]['level'] = c2.level
+        categories[i]['children'][j]['top'] = str(-39*(j))+'px'
+        l3Categories = Category.objects.filter(parent_id=c2.unique_id)
+        categories[i]['children'][j]['children'] = [{} for _ in range(len(l3Categories))]
+        for k, c3 in zip(range(len(l3Categories)), l3Categories):
+          categories[i]['children'][j]['children'][k]['name'] = c3.name
+          categories[i]['children'][j]['children'][k]['unique_id'] = c3.unique_id
+          categories[i]['children'][j]['children'][k]['level'] = c3.level
     return render(request, 'product/product_import_page.html', {
-      'categories': categories
+      'categories': categories,
+      'selected_category': selected_category
     })
-
+  elif(request.method == "POST"):
+    t = Product(
+      product_code = request.POST.get('product-code'),
+      profile_id = request.user.id,
+      category = selected_category,
+      order_id = None,
+      product_name = request.POST.get('product-name'),
+      product_description = request.POST.get('product-description'),
+      product_weight = request.POST.get('product-weight'),
+      ship_out_in = None,
+      parent_sku_reference_no = request.POST.get('product-parent-sku'),
+      other_logistics_provider_setting = None,
+      other_logistics_provider_fee = None,
+      live = False,
+      suspended = False,
+      unlisted = False,
+      unpublished = False
+    )
+    t.save()
+    stock_sum = 0
+    for i in range(0,8):
+      if(request.POST.get('product-variation-'+str(i)+'-sku')):
+        print(request.POST.get('product-variation-'+str(i)+'-sku'))
+        variationStock = 0
+        if(request.POST.get('product-variation-'+str(i)+'-stock')):
+          variationStock = int(request.POST.get('product-variation-'+str(i)+'-stock'))
+        stock_sum = stock_sum + variationStock
+        v = Variations(
+          product_id = t.id,
+          image_url = None,
+          price =request.POST.get('product-variation-'+str(i)+'-price'),
+          sku = request.POST.get('product-variation-'+str(i)+'-sku'),
+          stock = variationStock,
+          name = request.POST.get('product-variation-'+str(i)+'-sku'),
+          image_url_from_sku = None
+        )
+        v.save()
+    return HttpResponseRedirect("/products/#all")
+  else:
+    selected_category = Category.objects.filter(unique_id=selected_category)[0].name
+    return render(request, 'product/product_import_page.html', {
+      'selected_category': selected_category,
+      'variations': range(nVariations)
+    })
+    
 
 def products_import(request):
   if(request.method == "POST" and request.POST.get('upload')): 
@@ -72,7 +104,7 @@ def products_import(request):
         for index, row, in inputFileDF.iterrows():
           unpublished = False
           t = Product(
-            product_code = None,
+            product_code = row['product_code'],
             profile_id = request.user.id,
             category = None,
             order_id = None,
@@ -187,7 +219,6 @@ def products_import(request):
               if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
                 variationStock = row['variation'+str(i+1)+'_stock']
               stock_sum = stock_sum + variationStock
-              image_url_from_sku = media_url + str(row['variation'+str(i+1)+'_id']) + '.png'
               if(i == 0 and not imageInS3):
                 image_url_from_sku = None
               v = Variations(
@@ -249,6 +280,7 @@ def download_template(request):
 
 def delete_all_products(request):
   Product.objects.all().delete()
+  Variations.objects.all().delete()
   return HttpResponseRedirect("/products/#all")
 
 def uploadJSONCategoriesToDB():

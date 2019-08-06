@@ -49,6 +49,10 @@ body {
 		text-decoration: none;
 	}
 
+	.btn{
+		margin-bottom: 30px;
+	}
+
 	.card{
 		width: 18rem;
 	}
@@ -100,6 +104,9 @@ body {
 	}
 }
 
+.hidden{
+    display:none;
+  }
 .wrapper{
   transform:translate3d(180px,0,0);
   .content-wrapper{
