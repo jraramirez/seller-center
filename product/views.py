@@ -219,7 +219,6 @@ def products_import(request):
               if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
                 variationStock = row['variation'+str(i+1)+'_stock']
               stock_sum = stock_sum + variationStock
-              image_url_from_sku = media_url + str(row['variation'+str(i+1)+'_id']) + '.png'
               if(i == 0 and not imageInS3):
                 image_url_from_sku = None
               v = Variations(
