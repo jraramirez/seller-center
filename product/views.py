@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import os
 import requests
+import json
 
 from product.models import ProductsImportPage
 from product.models import Product
@@ -69,6 +70,8 @@ def product_import(request, selected_category):
     t.save()
     stock_sum = 0
     for i in range(0,8):
+      print(request.FILES)
+      print(request.POST.get('product-variation-'+str(i)+'-image'))
       if(request.POST.get('product-variation-'+str(i)+'-sku')):
         variationStock = 0
         if(request.POST.get('product-variation-'+str(i)+'-stock')):
@@ -84,6 +87,10 @@ def product_import(request, selected_category):
           image_url_from_sku = None
         )
         v.save()
+        
+        image = request.FILES['product-variation-'+str(i)+'-image']
+        print(dir(v.image_upload))
+        v.image_upload.save(image, image.name)
     return HttpResponseRedirect("/products/#all")
   else:
     selected_category = Category.objects.filter(unique_id=selected_category)[0].name
