@@ -45,7 +45,7 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 # Media files (AWS)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
-MEDIAFILES_LOCATION = 'media'
+MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
 
