@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import transaction
+from wagtail.images.models import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
 import pandas as pd
 import numpy as np
 import os
@@ -25,26 +27,29 @@ class UploadFileForm(forms.Form):
 def product_import(request, selected_category):
   nVariations = 7
   if(selected_category == 'index'):
-    l1Categories = Category.objects.filter(parent_id=1891)
-    categories = [{} for _ in range(len(l1Categories))]
-    for i, c in zip(range(len(l1Categories)), l1Categories):
-      categories[i]['name'] = c.name
-      categories[i]['unique_id'] = c.unique_id
-      categories[i]['level'] = 1
-      categories[i]['top'] = str(-39*(i))+'px'
-      l2Categories = Category.objects.filter(parent_id=c.unique_id)
-      categories[i]['children'] = [{} for _ in range(len(l2Categories))]
-      for j, c2 in zip(range(len(l2Categories)), l2Categories):
-        categories[i]['children'][j]['name'] = c2.name
-        categories[i]['children'][j]['unique_id'] = c2.unique_id
-        categories[i]['children'][j]['level'] = c2.level
-        categories[i]['children'][j]['top'] = str(-39*(j))+'px'
-        l3Categories = Category.objects.filter(parent_id=c2.unique_id)
-        categories[i]['children'][j]['children'] = [{} for _ in range(len(l3Categories))]
-        for k, c3 in zip(range(len(l3Categories)), l3Categories):
-          categories[i]['children'][j]['children'][k]['name'] = c3.name
-          categories[i]['children'][j]['children'][k]['unique_id'] = c3.unique_id
-          categories[i]['children'][j]['children'][k]['level'] = c3.level
+    categories = {}
+    with open('seller_center/static/documents/categories-full.json', 'r') as f:
+      categories = json.load(f)
+    # l1Categories = Category.objects.filter(parent_id=1891)
+    # categories = [{} for _ in range(len(l1Categories))]
+    # for i, c in zip(range(len(l1Categories)), l1Categories):
+    #   categories[i]['name'] = c.name
+    #   categories[i]['unique_id'] = c.unique_id
+    #   categories[i]['level'] = 1
+    #   categories[i]['top'] = str(-39*(i))+'px'
+    #   l2Categories = Category.objects.filter(parent_id=c.unique_id)
+    #   categories[i]['children'] = [{} for _ in range(len(l2Categories))]
+    #   for j, c2 in zip(range(len(l2Categories)), l2Categories):
+    #     categories[i]['children'][j]['name'] = c2.name
+    #     categories[i]['children'][j]['unique_id'] = c2.unique_id
+    #     categories[i]['children'][j]['level'] = c2.level
+    #     categories[i]['children'][j]['top'] = str(-39*(j))+'px'
+    #     l3Categories = Category.objects.filter(parent_id=c2.unique_id)
+    #     categories[i]['children'][j]['children'] = [{} for _ in range(len(l3Categories))]
+    #     for k, c3 in zip(range(len(l3Categories)), l3Categories):
+    #       categories[i]['children'][j]['children'][k]['name'] = c3.name
+    #       categories[i]['children'][j]['children'][k]['unique_id'] = c3.unique_id
+    #       categories[i]['children'][j]['children'][k]['level'] = c3.level
     return render(request, 'product/product_import_page.html', {
       'categories': categories,
       'selected_category': selected_category
@@ -70,8 +75,6 @@ def product_import(request, selected_category):
     t.save()
     stock_sum = 0
     for i in range(0,8):
-      print(request.FILES)
-      print(request.POST.get('product-variation-'+str(i)+'-image'))
       if(request.POST.get('product-variation-'+str(i)+'-sku')):
         variationStock = 0
         if(request.POST.get('product-variation-'+str(i)+'-stock')):
@@ -87,10 +90,12 @@ def product_import(request, selected_category):
           image_url_from_sku = None
         )
         v.save()
-        
         image = request.FILES['product-variation-'+str(i)+'-image']
-        print(dir(v.image_upload))
-        v.image_upload.save(image, image.name)
+        Image.objects.create(
+          file=image,
+          title=image.name
+        )
+        # v.image_upload.save(image.name, image)
     return HttpResponseRedirect("/products/#all")
   else:
     selected_category = Category.objects.filter(unique_id=selected_category)[0].name

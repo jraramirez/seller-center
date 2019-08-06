@@ -112,7 +112,7 @@ class Variations(Orderable, models.Model):
   stock = models.IntegerField(null=True, blank=True)
   image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Optional: If your image is already hosted')
   image_upload = models.ImageField(
-    upload_to='images',
+    upload_to='original_images',
     null=True,
     blank=True,
     help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
