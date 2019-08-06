@@ -36,6 +36,9 @@ STATIC_URL = '/static/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # MEDIA_URL = '/media/'
 
+AUTHENTICATION_BACKENDS = [
+                            'base.aws_backend.AwsBackend'
+                            ]
 
 # Media files (AWS)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
