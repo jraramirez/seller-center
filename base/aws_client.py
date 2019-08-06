@@ -9,7 +9,7 @@ class ApiGatewayClient:
 
     HOST = "https://vak4dovce5.execute-api.ap-southeast-1.amazonaws.com/dev"
     VERSION = "v1"
-    ORIGIN = "seller-asd"
+    ORIGIN = "seller-center"
     rootUrl = HOST + "/api/" + VERSION
     headers = {'Request-Origin-App': ORIGIN}
 
