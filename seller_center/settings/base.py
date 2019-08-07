@@ -134,8 +134,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -161,6 +159,10 @@ WAGTAIL_SITE_NAME = "seller_center"
 BASE_URL = 'http://example.com'
 
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'wagtailadmin/login.html'
+AUTHENTICATION_BACKENDS = [
+                            'django.contrib.auth.backends.ModelBackend',
+                            'base.aws_backend.AwsBackend'
+                            ]
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
