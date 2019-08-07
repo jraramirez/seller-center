@@ -28,9 +28,15 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_FILE_OVERWRITE = True
 
 
-# Static files (Local)
-STATIC_ROOT = 'static/'
-STATIC_URL = '/static/'
+# Static files (AWS)
+STATICFILES_LOCATION = os.environ.get('STATICFILES_LOCATION')
+STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+STATICFILES_DIRS = [
+    os.path.join(PROJECT_DIR, 'static'),
+]
+
+STATIC_ROOT = '/static/'
+STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 # Media files (Local)
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
