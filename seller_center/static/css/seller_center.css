@@ -91,6 +91,10 @@ body .dropdown-menu {
   font-size: 14px;
 }
 
+.hidden {
+  display: none;
+}
+
 .wrapper {
   transform: translate3d(180px, 0, 0);
 }
@@ -635,6 +639,10 @@ body.explorer-open .nav-main {
 .template-productspage .products-tab .product-errors {
   border-top: none;
 }
+.template-productspage .products-tab .custom-pagination li {
+  padding-left: 5px;
+  padding-right: 5px;
+}
 
 .template-productsimportpage .form-wrap h2 {
   margin-top: 1.5rem;
@@ -764,4 +772,4 @@ body.explorer-open .nav-main {
   padding-left: 0px;
 }
 
-
+/*# sourceMappingURL=seller_center.css.map */
