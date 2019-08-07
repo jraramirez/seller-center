@@ -90,11 +90,11 @@ def product_import(request, selected_category):
           image_url_from_sku = None
         )
         v.save()
-        # image = request.FILES['product-variation-'+str(i)+'-image']
-        # Image.objects.create(
-        #   file=image,
-        #   title=image.name
-        # )
+        image = request.FILES['product-variation-'+str(i)+'-image']
+        Image.objects.create(
+          file=image,
+          title=image.name
+        )
         # v.image_upload.save(image.name, image)
     return HttpResponseRedirect("/products/#all")
   else:
@@ -112,8 +112,11 @@ def products_import(request):
     if form.is_valid():
       inputFile = request.FILES['file']
       inputFileDF = pd.read_csv(inputFile)
+      imageTitles = []
+      for title in Image.objects.values_list('title', flat=True):
+        imageTitles.append(os.path.splitext(title)[0])
       with transaction.atomic():
-        for index, row, in inputFileDF.iterrows():
+        for index, row, in inputFileDF.head(500).iterrows():
           unpublished = False
           t = Product(
             product_code = row['product_code'],
@@ -207,9 +210,6 @@ def products_import(request):
             image_url_from_sku = None
             if(row['variation1_id'] == row['variation1_id']):
               if(row['image1'] != row['image1']):
-                imageTitles = []
-                for title in Image.objects.values_list('title', flat=True):
-                  imageTitles.append(os.path.splitext(title)[0])
                 if(str(row['variation1_id']) in imageTitles):
                   image_url_from_sku = media_url + str(Image.objects.all()[imageTitles.index(str(row['variation1_id']))].file)
                   imageInS3 = True
@@ -219,6 +219,7 @@ def products_import(request):
                     product_id = t.id,
                     name = 'Product image is required'
                   )
+                  e.save()
                 # url = media_url + str(row['variation1_id']) + '.jpg'
                 # r = requests.get(url)
                 # if r.status_code == 200:
@@ -254,9 +255,12 @@ def products_import(request):
               stock_sum = stock_sum + variationStock
               if(i == 0 and not imageInS3 and not autoPair):
                 image_url_from_sku = None
+              image_url = row['image1']
+              if(row['image1'] != row['image1']):
+                image_url = None
               v = Variations(
                 product_id = t.id,
-                image_url = row['image'+str(i+1)],
+                image_url = image_url,
                 price = row['variation'+str(i+1)+'_price'],
                 sku = row['variation'+str(i+1)+'_id'],
                 stock = variationStock,

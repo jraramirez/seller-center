@@ -23,11 +23,10 @@
                 <tr>
                     <td scope="row">
                         <a href="/admin/product/product/edit/{{product.id}}/">
-                            {% if product.variations.all.0.image_url != 'nan' %}
+                            {% if product.variations.all.0.image_url or product.variations.all.0.image_url != 'nan' %}
                                 <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
                             {% elif product.variations.all.0.image_upload %}
-                                {% image product.variations.all.0.image_upload original as product_image %}
-                                <img src="{{product_image.url}}" alt="" width="80"/>
+                                <img src="{{product.variations.all.0.image_upload.url}}" alt="" width="80"/>
                             {% elif product.variations.all.0.image_url_from_sku %}
                                 <img src="{{product.variations.all.0.image_url_from_sku}}" alt="" width="80"/>
                             {% else %}
