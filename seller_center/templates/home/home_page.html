@@ -38,10 +38,12 @@
                 <div class="col-md-12">
                   <input type="password" name="password" class="form-control" placeholder="Password" required="" id="id_password">
                 </div>
-                <div class="col-md-12">
-                  <a href="" class="btn btn-link float-left">Forgot Password</a>
-                  <button type="submit" class="btn btn-success block-button submit-button float-right">Log In</button>
-                </div>
+                {% block submit_buttons %}
+                    {{ block.super }}
+                    <div class="col-md-12">
+                      <a href="{% url 'signup' %}"><button type="button" class="btn btn-success block-button submit-button float-right">Laog In</button></a>
+                    </div>
+                {% endblock %}
               </div>
             </form>
           </div>
@@ -74,6 +76,9 @@
         
         <div class="row cards-container">
           <a href="/products">
+          {% for page in subPages %}
+              {% if page.url == '/products/' %}
+            </a>
             <div class="col-md-4">
               <div class="card">
                 <div class="card-body">
@@ -93,7 +98,9 @@
                 </div>
               </div>
             </a>
-          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   {% endif %}

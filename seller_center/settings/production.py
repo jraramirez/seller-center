@@ -1,14 +1,23 @@
 from .base import *
 
 DEBUG = True
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = ['seller-center-staging.herokuapp.com'] 
+SECRET_KEY = 'tuIPxdVIRqVrLbOgOXnbeZ6MBVXBgngJa'
+ALLOWED_HOSTS = ['seller-center-dev.vpsbnhp5gf.ap-southeast-1.elasticbeanstalk.com'] 
 
 
 # Database
-DATABASE_URL = os.environ.get('DATABASE_URL')
-DATABASES = {}
-DATABASES['default'] = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+print(os.environ)
+if 'RDS_HOSTNAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
+    }
 
 
 # AWS S3 Storage
@@ -19,21 +28,13 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_FILE_OVERWRITE = True
 
 
-# Static files (Local)
-# STATICFILES_LOCATION = 'static'
-# STATICFILES_DIRS = [
-#     os.path.join(PROJECT_DIR, 'static'),
-# ]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATIC_URL = '/static/'
-
-
 # Static files (AWS)
 STATICFILES_LOCATION = os.environ.get('STATICFILES_LOCATION')
-STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, 'static'),
 ]
+
 STATIC_ROOT = '/static/'
 STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
@@ -41,6 +42,10 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # MEDIA_URL = '/media/'
 
+AUTHENTICATION_BACKENDS = [
+                            'base.aws_backend.AwsBackend',
+                            'django.contrib.auth.backends.ModelBackend'
+                          ]
 
 # Media files (AWS)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

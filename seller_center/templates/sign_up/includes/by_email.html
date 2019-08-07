@@ -1,34 +1,46 @@
 {% load static %}
 {% load wagtailcore_tags wagtailimages_tags wagtailimages_tags %}
 
-<div class="tab-pane fade show active" id="email">
+<div class="tab-pane fade show active" id="verify_email">
     <div class="form-wrap">
-        <form action=" {{ page.url }}" method="POST">
+        <form class="hidden" action="/sign/verify_email/" method="POST">
             {% csrf_token %}
             <div class="row">
                 <input type="hidden" id="reg-type" name="reg-type" value="email">
                 <div class="col-md-9">
-                    <input type="email" name="email-address" class="form-control" placeholder="Email Address" required="" id="id_email-address">
+                    <input type="email" name="email-address" class="form-control" placeholder="Email Address" required="" id="id_email-address" value="{{username}}">
                 </div>
                 <div class="col-md-3">
-                    <button type="button" class="btn btn-success float-right">Send Email Verification</button>
-                </div>
-                <div class="col-md-12">
-                    <input type="password" name="password" class="form-control" placeholder="Password" required="" id="id_password">
-                </div>
-                <div class="col-md-12">
-                    <input type="password" name="password-reenter" class="form-control" placeholder="Re-Enter Password" required="" id="id_password_reenter">
-                </div>
-                <div class="agreement-checkbox col-md-1">
-                    <input type="checkbox" name="agreement" class="form-control" required="" id="id_agreement"> 
-                </div>
-                <div class="col-md-11">
-                    <p> I've read and understood <a href="https://drive.google.com/file/d/16-XqTcR36j4bEwamFal6wWcv5kwp8Ga1/view?spm=a2a1n.12768535.old-navigation.2.25201e13HAoNIP">Seller Center's Marketplace Agreement</a></p>
-                </div>
-                <div class="col-md-12">
-                    <button type="submit" class="btn btn-success submit-button float-right">submit</button>
+                    <button type="submit" name="verify-email" class="btn btn-success float-right">Send Email Verification</button>
                 </div>
             </div>
         </form>
+        <form action="/sign/sign_up/" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <input type="hidden" id="reg-type" name="reg-type" value="email">
+                    <input type="text" id="clientId" name="clientId" value="{{clientId}}">
+                    <input type="text" id="clientSecret" name="clientSecret" value="{{clientSecret}}">
+                    <div class="col-md-12">
+                        <input type="hidden" name="email-address" class="form-control" placeholder="Email Address" required="" id="id_email-address" value = "{{username}}">
+                    </div>
+
+                    <div class="col-md-12">
+                        <input type="password" name="password" class="form-control" placeholder="Password" required="" id="id_password">
+                    </div>
+                    <div class="col-md-12">
+                        <input type="password" name="password-reenter" class="form-control" placeholder="Re-Enter Password" required="" id="id_password_reenter">
+                    </div>
+                    <div class="agreement-checkbox col-md-1">
+                        <input type="checkbox" name="agreement" class="form-control" required="" id="id_agreement"> 
+                    </div>
+                    <div class="col-md-11">
+                        <p> I've read and understood <a href="https://drive.google.com/file/d/16-XqTcR36j4bEwamFal6wWcv5kwp8Ga1/view?spm=a2a1n.12768535.old-navigation.2.25201e13HAoNIP">Seller Center's Marketplace Agreement</a></p>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success submit-button float-right">submit</button>
+                    </div>
+                </div>
+            </form>
     </div>
 </div>
