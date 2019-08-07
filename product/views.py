@@ -18,7 +18,7 @@ from product.models import Errors
 
 AWS_STORAGE_BUCKET_NAME = 'lyka-seller-center'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-media_url = "https://%s/media/original_images/" % AWS_S3_CUSTOM_DOMAIN
+media_url = "https://%s/media/" % AWS_S3_CUSTOM_DOMAIN
 
 
 class UploadFileForm(forms.Form):
@@ -90,11 +90,11 @@ def product_import(request, selected_category):
           image_url_from_sku = None
         )
         v.save()
-        image = request.FILES['product-variation-'+str(i)+'-image']
-        Image.objects.create(
-          file=image,
-          title=image.name
-        )
+        # image = request.FILES['product-variation-'+str(i)+'-image']
+        # Image.objects.create(
+        #   file=image,
+        #   title=image.name
+        # )
         # v.image_upload.save(image.name, image)
     return HttpResponseRedirect("/products/#all")
   else:
@@ -108,7 +108,6 @@ def product_import(request, selected_category):
 def products_import(request):
   if(request.method == "POST" and request.POST.get('upload')): 
     autoPair = request.POST.get('auto-pair')
-    print(autoPair)
     form = UploadFileForm(request.POST, request.FILES)
     if form.is_valid():
       inputFile = request.FILES['file']
@@ -208,24 +207,36 @@ def products_import(request):
             image_url_from_sku = None
             if(row['variation1_id'] == row['variation1_id']):
               if(row['image1'] != row['image1']):
-                url = media_url + str(row['variation1_id']) + '.jpg'
-                r = requests.get(url)
-                if r.status_code == 200:
-                  image_url_from_sku = url
+                imageTitles = []
+                for title in Image.objects.values_list('title', flat=True):
+                  imageTitles.append(os.path.splitext(title)[0])
+                if(str(row['variation1_id']) in imageTitles):
+                  image_url_from_sku = media_url + str(Image.objects.all()[imageTitles.index(str(row['variation1_id']))].file)
                   imageInS3 = True
                 else:
-                  url = media_url + str(row['variation1_id']) + '.png'
-                  r = requests.get(url)
-                  if r.status_code == 200:
-                    image_url_from_sku = url
-                    imageInS3 = True
-                  else:
-                    unpublished = True
-                    e = Errors(
-                      product_id = t.id,
-                      name = 'Product image is required'
-                    )
-                    e.save()
+                  unpublished = True
+                  e = Errors(
+                    product_id = t.id,
+                    name = 'Product image is required'
+                  )
+                # url = media_url + str(row['variation1_id']) + '.jpg'
+                # r = requests.get(url)
+                # if r.status_code == 200:
+                #   image_url_from_sku = url
+                #   imageInS3 = True
+                # else:
+                #   url = media_url + str(row['variation1_id']) + '.png'
+                #   r = requests.get(url)
+                #   if r.status_code == 200:
+                #     image_url_from_sku = url
+                #     imageInS3 = True
+                #   else:
+                #     unpublished = True
+                #     e = Errors(
+                #       product_id = t.id,
+                #       name = 'Product image is required'
+                #     )
+                #     e.save()
           else:
             if(row['image1'] != row['image1']):
               unpublished = True
