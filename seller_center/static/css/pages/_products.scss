@@ -20,7 +20,12 @@
     .product-errors{
       border-top: none;
     }
-    
+    .custom-pagination{
+      li{
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+    }    
   }
 }
 

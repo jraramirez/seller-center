@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.db import models
 from modelcluster.fields import ParentalKey
 from wagtail.core.fields import StreamField
@@ -162,6 +163,14 @@ class ProductsPage(BasePage):
     suspendedProducts = Product.objects.filter(profile_id=request.user.id, suspended=True)
     unlistedProducts = Product.objects.filter(profile_id=request.user.id, unlisted=True)
     unpublishedProducts = Product.objects.filter(profile_id=request.user.id, unpublished=True)
+
+    pageNumber = request.GET.get('page')
+    if(not pageNumber):
+      pageNumber = 1
+    paginator = Paginator(unpublishedProducts, 12)
+    unpublished = paginator.page(pageNumber)
+    unpublishedList = paginator.page(pageNumber).object_list
+
     subPages = self.get_children().live()
     context['allProducts'] = allProducts
     context['liveProducts'] = liveProducts
@@ -169,6 +178,8 @@ class ProductsPage(BasePage):
     context['suspendedProducts'] = suspendedProducts
     context['unlistedProducts'] = unlistedProducts
     context['unpublishedProducts'] = unpublishedProducts
+    context['unpublished'] = unpublished
+    context['unpublishedList'] = unpublishedList
     context['nUnpublished'] = len(unpublishedProducts)
     context['subPages'] = subPages
     return context

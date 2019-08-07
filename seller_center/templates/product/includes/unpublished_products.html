@@ -3,7 +3,7 @@
 
 <div class="tab-pane fade" id="unpublished" role="tabpanel" aria-labelledby="unpublished-tab">
 
-    {% if unpublishedProducts %}
+    {% if unpublished %}
         <div class="body-content">
             <table class="table">
                 <thead>
@@ -19,11 +19,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for product in unpublishedProducts %}
+                {% for product in unpublishedList %}
                 <tr>
                     <td scope="row">
                         <a href="/admin/product/product/edit/{{product.id}}/">
-                            {% if product.variations.all.0.image_url != 'nan' %}
+                            {% if product.variations.all.0.image_url %}
                                 <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
                             {% elif product.variations.all.0.image_upload %}
                                 {% image product.variations.all.0.image_upload original as product_image %}
@@ -91,5 +91,28 @@
                 </tbody>
             </table>
         </div>
+        {% if unpublished.has_other_pages %}
+        <div>
+          <ul class="pagination custom-pagination">
+            {% if unpublished.has_previous %}
+              <li><a href="?page={{ unpublished.previous_page_number }}#unpublished">&laquo;</a></li>
+            {% else %}
+              <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in unpublished.paginator.page_range %}
+              {% if unpublished.number == i %}
+                <li class="active"><span>{{ i }}</span></li>
+              {% else %}
+                <li><a href="?page={{ i }}#unpublished">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+            {% if unpublished.has_next %}
+              <li><a href="?page={{ unpublished.next_page_number }}#unpublished">&raquo;</a></li>
+            {% else %}
+              <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+          </ul>
+        </div>
+        {% endif %}
     {% endif %}
 </div>
