@@ -43,8 +43,9 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 # MEDIA_URL = '/media/'
 
 AUTHENTICATION_BACKENDS = [
-                            'base.aws_backend.AwsBackend'
-                            ]
+                            'base.aws_backend.AwsBackend',
+                            'django.contrib.auth.backends.ModelBackend'
+                          ]
 
 # Media files (AWS)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
