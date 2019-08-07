@@ -30,7 +30,7 @@ AWS_S3_FILE_OVERWRITE = True
 
 # Static files (AWS)
 STATICFILES_LOCATION = os.environ.get('STATICFILES_LOCATION')
-STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, 'static'),
 ]
