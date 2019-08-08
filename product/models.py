@@ -164,18 +164,24 @@ class ProductsPage(BasePage):
     unlistedProducts = Product.objects.filter(profile_id=request.user.id, unlisted=True)
     unpublishedProducts = Product.objects.filter(profile_id=request.user.id, unpublished=True)
 
-    print(request.GET)
-
     aPageNumber = request.GET.get('apage')
     lPageNumber = request.GET.get('lpage')
     sPageNumber = request.GET.get('spage')
     dPageNumber = request.GET.get('dpage')
     nPageNumber = request.GET.get('npage')
     uPageNumber = request.GET.get('upage')
-    if(not uPageNumber):
-      uPageNumber = 1
     if(not aPageNumber):
       aPageNumber = 1
+    if(not lPageNumber):
+      lPageNumber = 1
+    if(not sPageNumber):
+      sPageNumber = 1
+    if(not dPageNumber):
+      dPageNumber = 1
+    if(not nPageNumber):
+      nPageNumber = 1
+    if(not uPageNumber):
+      uPageNumber = 1
     
     allP = []
     allPList = []
