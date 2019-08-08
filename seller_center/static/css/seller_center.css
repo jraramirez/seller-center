@@ -643,6 +643,10 @@ body.explorer-open .nav-main {
 .template-productspage .products-tab .product-errors {
   border-top: none;
 }
+.template-productspage .products-tab .product-errors .alert {
+  margin-top: -15px;
+  margin-bottom: 1em;
+}
 .template-productspage .products-tab .custom-pagination .page-link {
   color: #05507b;
 }
