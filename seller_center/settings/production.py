@@ -1,8 +1,8 @@
 from .base import *
 
 DEBUG = True
-SECRET_KEY = 'tuIPxdVIRqVrLbOgOXnbeZ6MBVXBgngJa'
-ALLOWED_HOSTS = ['seller-center-dev.vpsbnhp5gf.ap-southeast-1.elasticbeanstalk.com'] 
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+ALLOWED_HOSTS = ['seller-center.ap-southeast-1.elasticbeanstalk.com']
 
 
 # Database
