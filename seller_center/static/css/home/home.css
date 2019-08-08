@@ -72,3 +72,6 @@ input[type=number] {
     color: #19BF00;
 }
 
+body .form-control {
+    margin-bottom: 0px
+}

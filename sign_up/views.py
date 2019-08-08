@@ -179,24 +179,6 @@ def sign_in(request):
 
     return HttpResponseRedirect('/')
 
-
-# def sign_up(request):
-#   if(request.method == 'POST'):
-#     if ('verify-email' in request.POST):
-#       return verify_email(request)
-#     else:
-#       return continueSignup(request)
-#     message = ''
-#
-#   else:
-#     self = SignUpPage.objects.get(slug='sign')
-#     if(not request.user.is_authenticated):
-#       return render(request, 'sign_up/sign_up_page.html', {
-#         'self': self,
-#       })
-#     else:
-#       return redirect('/')
-
 def sign_up(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -222,11 +204,11 @@ def sign_up(request):
         print(response.json())
         if response.status_code == 200:
             print("success")
+            return HttpResponseRedirect('sign_up/sign_up_page_landing.html')
         else:
             messages.error(request, json['details'])
             return HttpResponseRedirect('sign_up/sign_up_page.html')
 
-        return render(request, 'sign_up/sign_up_page.html')
     else:
         return render(request, 'sign_up/sign_up_page.html')
 
