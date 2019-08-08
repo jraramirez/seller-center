@@ -629,6 +629,10 @@ body.explorer-open .nav-main {
   text-align: right;
   float: right;
 }
+.template-productspage .alert {
+  margin-top: 2em;
+  margin-bottom: -2em;
+}
 .template-productspage .products-filters {
   margin: 0px -15px;
 }
