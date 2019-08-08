@@ -16,13 +16,11 @@ class AwsBackend:
 
         status_code = loginResponse.status_code
 
-
         if status_code == 401 and json['code'] == 'UNVERIFIED_LOGIN':
-            raise ValidationError(message="User not yet confirmed.", code=401)
+            raise ValidationError(message="User not yet verified.", code=401)
 
         if status_code == 403 and json['code'] == 'UNAUTHORIZED_ORIGIN':
             raise ValidationError(message="Unauthorized access.", code=401)
-
 
         if status_code == 200:
             try:

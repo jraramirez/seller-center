@@ -61,4 +61,26 @@ input[type=number] {
 
 .login .messages {
     display: none;
-  }
+ }
+
+
+.passwordCheck-notValid-customizable {
+    color: #DF3312;
+}
+
+.passwordCheck-valid-customizable {
+    color: #19BF00;
+}
+
+body .form-control {
+    margin-bottom: 0px
+}
+
+.wrapper {
+    padding-left: 0px;
+}
+
+.wrapper  .content-wrapper {
+    margin-left: 0px;
+    margin-right: 0px;
+}
