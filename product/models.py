@@ -164,15 +164,33 @@ class ProductsPage(BasePage):
     unlistedProducts = Product.objects.filter(profile_id=request.user.id, unlisted=True)
     unpublishedProducts = Product.objects.filter(profile_id=request.user.id, unpublished=True)
 
-    pageNumber = request.GET.get('page')
-    if(not pageNumber):
-      pageNumber = 1
-    paginator = Paginator(unpublishedProducts, 12)
-    unpublished = paginator.page(pageNumber)
-    unpublishedList = paginator.page(pageNumber).object_list
+    print(request.GET)
+
+    uPageNumber = request.GET.get('upage')
+    aPageNumber = request.GET.get('apage')
+    if(not uPageNumber):
+      uPageNumber = 1
+    if(not aPageNumber):
+      aPageNumber = 1
+    
+    allP = []
+    allPList = []
+    paginatorAll = Paginator(allProducts, 12)
+    if(paginatorAll.num_pages>=int(aPageNumber)):
+      allP = paginatorAll.page(aPageNumber)
+      allPList = paginatorAll.page(aPageNumber).object_list    
+
+    unpublished = []
+    unpublishedList = []
+    paginatorUnpublished = Paginator(unpublishedProducts, 12)
+    if(paginatorUnpublished.num_pages>=int(uPageNumber)):
+      unpublished = paginatorUnpublished.page(uPageNumber)
+      unpublishedList = paginatorUnpublished.page(uPageNumber).object_list
 
     subPages = self.get_children().live()
     context['allProducts'] = allProducts
+    context['allP'] = allP
+    context['allPList'] = allPList
     context['liveProducts'] = liveProducts
     context['soldOutProducts'] = soldOutProducts
     context['suspendedProducts'] = suspendedProducts
