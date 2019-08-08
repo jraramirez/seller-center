@@ -1,93 +1,134 @@
-{% extends "wagtailadmin/login.html" %}
+{% extends "base.html" %}
 
 {% load static menu_tags %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
 
 {% block branding_favicon %}
-    <link rel="shortcut icon" href="{% static 'images/logo.ico' %}" />
+<link rel="shortcut icon" href="{% static 'images/logo.ico' %}"/>
 {% endblock %}
 
 {% block css  %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,400i,700,700i,900&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/home/home.css' %}">
 {% endblock %}
 
-{% block content %}
-  <div class="">
-        <div class="row no-gutters">
-            <!--left panel-->
-            {% include 'wagtailadmin/partial_login_left_panel.html' %}
 
-            <div class="col-md-6 d-flex align-items-center mb-5">
-                <div class="container mt-5 px-5">
-                    <div class="d-flex align-items-center justify-content-center">
+{% block content %}
+<div class="">
+    <div class="row no-gutters">
+        <!--left panel-->
+        {% include 'wagtailadmin/partial_login_left_panel.html' %}
+
+        <div class="col-md-6 d-flex align-items-center mb-5">
+            <div class="container mt-5 px-5">
+                <div class="d-flex align-items-center justify-content-center">
 
                     <img src="{% static 'images/lyka_logo_trans.png' %}" style="height: 100px; width: 100px;"/>
-                    </div>
-                    <h3 class="text-center mb-3 text-uppercase text-primary-2 font-weight-bold">Seller Center</h3>
+                </div>
+                <h3 class="text-center mb-3 text-uppercase text-primary-2 font-weight-bold">Seller Center</h3>
 
-                    <p class="text-black-50 text-center">Sign up</p>
-                    <div class="rounded bg-white shadow pt-1" style="border-top: 5px solid #016fa7">
-                        <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="tab-email" role="tabpanel" aria-labelledby="tab-nav-email">
+                <p class="text-black-50 text-center">Sign up</p>
+                <div class="rounded bg-white shadow pt-1" style="border-top: 5px solid #016fa7">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="tab-email" role="tabpanel"
+                             aria-labelledby="tab-nav-email">
 
-                                    <div class="p-4">
-                                        <form id="email-form">
+                            {% include 'messages.html' %}
+                            <div class="p-4">
+                                <form id="email-form" action="/sign/sign_up" method="POST" novalidate>
 
-                                            {% csrf_token %}
-                                            <div class="form-group">
-                                                <label for="username">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        Email address
-                                                        <!-- <span class="ml-1 spinner-border spinner-border-sm text-primary-2" role="status" aria-hidden="true" id="email-spinner"></span> -->
-                                                    </div>
-                                                </label>
-                                                <div class="row no-gutters align-content-center border rounded bg-white" id="email-container">
-                                                    <!-- <div class="col-11">
-                                                        <input type="email" class="form-control border-0" id="email-login" aria-describedby="emailHelp" placeholder="Enter email">
-                                                    </div>
-                                                    <div class="col-1 d-flex align-items-center justify-content-center" id="email-spinner">
-                                                        <span class="spinner-border spinner-border-sm text-primary-2" role="status" aria-hidden="true"></span>
-                                                    </div> -->
-                                                    <input type="email" class="form-control border-0" id="username" aria-describedby="emailHelp" placeholder="Enter email" oninput="enableSignUpButton()">
-                                                </div>
-                                                <p class="text-danger small mt-2" id="error-email-login"></p>
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="username">
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                Email address
                                             </div>
-                                            <div class="form-group">
-                                                <label for="password">Password</label>
-                                                <input type="password" class="form-control" id="password"
-                                                    placeholder="Password" oninput="enableSignUpButton()">
-                                                <p class="text-danger small mt-2" id="error-password"></p>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="reenter-password">Confirm Password</label>
-                                                <input type="password" class="form-control" id="reenter-password"
-                                                    placeholder="Confirm Password" oninput="enableSignUpButton()">
-                                                <p class="text-danger small mt-2" id="error-reenter-password"></p>
-                                            </div>
-                                            <div class="form-group form-check">
-                                                <input type="checkbox" class="form-check-input" id="checkboxTerms" onchange="enableSignUpButton()">
-                                                <label class="form-check-label small" for="checkboxTerms">I've read and understood the <a href="#">LYKA Seller Center's Marketplace Agreement</a></label>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary-2 w-100 mt-3" disabled id="signup">Sign Up</button>
-                                        </form>
-                                        <p class="small mt-3 text-center">Already have an account? <a class="ml-1" href="/">Sign in</a></p>
+                                        </label>
+                                        <div class="row no-gutters align-content-center border rounded bg-white"
+                                             id="email-container">
+                                            <input type="email" name="username" class="form-control border-0"
+                                                   id="username" aria-describedby="emailHelp" placeholder="Enter email"
+                                                   oninput="enableSignUpButton()">
+                                        </div>
+                                        <p class="text-danger small mt-2" id="error-email-login"></p>
                                     </div>
-                                <!-- </div> -->
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" name="password" class="form-control" id="password"
+                                               placeholder="Password" oninput="enableSignUpButton()"
+                                               onkeyup="checkPasswordMatch();">
+                                        <p class="text-danger small mt-2" id="error-password"></p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="confirm-password">Confirm Password</label>
+                                        <input type="password" name="confirm-password" class="form-control"
+                                               id="confirm-password"
+                                               placeholder="Confirm Password" oninput="enableSignUpButton()" onkeyup="checkPasswordMatch();">
+                                        <p class="text-danger small mt-2" id="error-confirm-password"></p>
+                                    </div>
+                                    <div>
+                                        <div class="checkPasswordContainer">
+
+                                            <div class="checkPassword-lowerletter">
+                                                <span aria-hidden="true" class="check-lowerletter"></span>
+                                                <span class="checkPasswordText-lowerletter"></span>
+                                            </div>
+                                            <div class="checkPassword-upperletter">
+                                                <span aria-hidden="true" class="check-upperletter"></span>
+                                                <span class="checkPasswordText-upperletter"></span>
+                                            </div>
+                                            <div class="checkPassword-symbols">
+                                                <span aria-hidden="true" class="check-symbols"></span>
+                                                <span class="checkPasswordText-symbols"></span>
+                                            </div>
+                                            <div class="checkPassword-numbers">
+                                                <span aria-hidden="true" class="check-numbers"></span>
+                                                <span class="checkPasswordText-numbers"></span>
+                                            </div>
+                                            <div class="checkPassword-length">
+                                                <span aria-hidden="true" class="check-length"></span>
+                                                <span class="checkPasswordText-length"></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" class="form-check-input" id="checkboxTerms"
+                                               onchange="enableSignUpButton()">
+                                        <label class="form-check-label small" for="checkboxTerms">I've read and
+                                            understood the <a href="#">LYKA Seller Center's Marketplace
+                                                Agreement</a></label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary-2 w-100 mt-3" disabled id="signup">Sign
+                                        Up
+                                    </button>
+                                </form>
+                                <p class="small mt-3 text-center">Already have an account? <a class="ml-1" href="/">Sign
+                                    in</a></p>
                             </div>
+                            <!-- </div> -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="{% static 'js/home/sign_up.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="{% static 'js/home/sign_up.js' %}"></script>
 
 {% endblock %}

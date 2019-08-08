@@ -24,9 +24,12 @@
         <script type="text/javascript" src="{% static 'js/seller_center.js' %}"></script>
         
         <link rel='icon' href="{% static 'images/logo.ico' %}" type='image/x-icon'/ >
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,400i,700,700i,900&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{% static 'css/seller_center.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/home/home.css' %}">
         
 
         {% block extra_css %}
@@ -36,17 +39,14 @@
 
     <body class="{% block body_class %}{% endblock %}">
 
-        <div class="wrapper">
           {% if user.is_authenticated %}
           {% main_menu max_levels=1 use_specific=1 template="base/navigation/main_menu.html" %}
           {% endif %}
           <div class="content-wrapper">
             <div class="content">
-                {% include 'messages.html' %}
               {% block content %}{% endblock %}
             </div>
           </div>
-        </div>
         
         {% block extra_js %}
             {# Override this in templates to add extra javascript #}
