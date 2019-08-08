@@ -4,6 +4,38 @@
 <div class="tab-pane fade" id="live" role="tabpanel" aria-labelledby="live-tab">
 
     {% if liveProducts %}
+        {% if live.has_other_pages %}
+        <div>
+            <ul class="pagination custom-pagination">
+                {% if live.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?lpage=1#live" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">begin</span>
+                    </a>
+                </li>   
+                {% endif %}
+                {% for n in live.paginator.page_range %}
+                    {% if live.number == n %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ n }}<span class="sr-only">(current)</span></span>
+                    </li>
+                    {% elif n > live.number|add:'-6' and n < live.number|add:'6' %}
+                    <li class="page-item"><a class="page-link" href="?lpage={{ n }}#live">{{ n }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            
+                {% if live.has_next %}
+                <li class="page-item">
+                <a class="page-link" href="?lpage={{ live.paginator.num_pages }}#live" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">end</span>
+                </a>
+                </li>
+                {% endif %}   
+            </ul> 
+        </div>
+        {% endif %}
         <div class="body-content">
             <table class="table">
                 <thead>

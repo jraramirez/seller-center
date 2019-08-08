@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import transaction
+from django.contrib import messages
 from wagtail.images.models import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import pandas as pd
@@ -96,6 +97,7 @@ def product_import(request, selected_category):
           title=image.name
         )
         # v.image_upload.save(image.name, image)
+    messages.success(request, 'Product added successfully.')
     return HttpResponseRedirect("/products/#all")
   else:
     selected_category = Category.objects.filter(unique_id=selected_category)[0].name
@@ -270,6 +272,10 @@ def products_import(request):
               v.save()
           Product.objects.filter(id=t.id).update(stock_sum=stock_sum, unpublished=unpublished)
 
+    if(len(Errors.objects.all())):
+      messages.warning(request, 'Products added. Some products have data errors. Check out the unpublished tab to correct them.')
+    else:
+      messages.success(request, 'Products added successfully.')
     return HttpResponseRedirect("/products/#all")
   else:
     form = UploadFileForm()

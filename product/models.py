@@ -164,22 +164,92 @@ class ProductsPage(BasePage):
     unlistedProducts = Product.objects.filter(profile_id=request.user.id, unlisted=True)
     unpublishedProducts = Product.objects.filter(profile_id=request.user.id, unpublished=True)
 
-    pageNumber = request.GET.get('page')
-    if(not pageNumber):
-      pageNumber = 1
-    paginator = Paginator(unpublishedProducts, 12)
-    unpublished = paginator.page(pageNumber)
-    unpublishedList = paginator.page(pageNumber).object_list
+    aPageNumber = request.GET.get('apage')
+    lPageNumber = request.GET.get('lpage')
+    sPageNumber = request.GET.get('spage')
+    dPageNumber = request.GET.get('dpage')
+    nPageNumber = request.GET.get('npage')
+    uPageNumber = request.GET.get('upage')
+    if(not aPageNumber):
+      aPageNumber = 1
+    if(not lPageNumber):
+      lPageNumber = 1
+    if(not sPageNumber):
+      sPageNumber = 1
+    if(not dPageNumber):
+      dPageNumber = 1
+    if(not nPageNumber):
+      nPageNumber = 1
+    if(not uPageNumber):
+      uPageNumber = 1
+    
+    allP = []
+    allPList = []
+    paginatorAll = Paginator(allProducts, 12)
+    if(paginatorAll.num_pages>=int(aPageNumber)):
+      allP = paginatorAll.page(aPageNumber)
+      allPList = paginatorAll.page(aPageNumber).object_list    
+
+    live = []
+    liveList = []
+    paginatorLive = Paginator(liveProducts, 12)
+    if(paginatorLive.num_pages>=int(lPageNumber)):
+      live = paginatorLive.page(lPageNumber)
+      liveList = paginatorLive.page(lPageNumber).object_list    
+
+    sold = []
+    soldList = []
+    paginatorSold = Paginator(soldOutProducts, 12)
+    if(paginatorSold.num_pages>=int(sPageNumber)):
+      sold = paginatorSold.page(sPageNumber)
+      soldList = paginatorSold.page(sPageNumber).object_list
+
+    suspended = []
+    suspendedList = []
+    paginatorSuspended = Paginator(suspendedProducts, 12)
+    if(paginatorSuspended.num_pages>=int(dPageNumber)):
+      suspended = paginatorSuspended.page(dPageNumber)
+      suspendedList = paginatorSuspended.page(dPageNumber).object_list    
+
+    unlisted = []
+    unlistedList = []
+    paginatorUnlisted = Paginator(unlistedProducts, 12)
+    if(paginatorUnlisted.num_pages>=int(nPageNumber)):
+      unlisted = paginatorUnlisted.page(nPageNumber)
+      unlistedList = paginatorUnlisted.page(nPageNumber).object_list    
+
+    unpublished = []
+    unpublishedList = []
+    paginatorUnpublished = Paginator(unpublishedProducts, 12)
+    if(paginatorUnpublished.num_pages>=int(uPageNumber)):
+      unpublished = paginatorUnpublished.page(uPageNumber)
+      unpublishedList = paginatorUnpublished.page(uPageNumber).object_list
 
     subPages = self.get_children().live()
     context['allProducts'] = allProducts
+    context['allP'] = allP
+    context['allPList'] = allPList
+
     context['liveProducts'] = liveProducts
+    context['live'] = live
+    context['liveList'] = liveList
+
     context['soldOutProducts'] = soldOutProducts
+    context['sold'] = sold
+    context['soldList'] = soldList
+
     context['suspendedProducts'] = suspendedProducts
+    context['suspended'] = suspended
+    context['suspendedList'] = suspendedList
+
     context['unlistedProducts'] = unlistedProducts
+    context['unlisted'] = unlisted
+    context['unlistedList'] = unlistedList
+
     context['unpublishedProducts'] = unpublishedProducts
     context['unpublished'] = unpublished
     context['unpublishedList'] = unpublishedList
+    
     context['nUnpublished'] = len(unpublishedProducts)
     context['subPages'] = subPages
     return context
