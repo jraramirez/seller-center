@@ -1,4 +1,3 @@
-
 function toggleL2(event) {
   var btnID = event.target.className;
   var divID = event.target.getAttribute("aria-controls");
@@ -32,3 +31,15 @@ function showVariation(event, i) {
   var nextVariation = document.getElementsByClassName("variation-" + String(i))[0];
   nextVariation.style.display = 'block';
 }
+
+$(function(){
+  var hash = window.location.hash;
+  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+  $('.nav a').click(function (e) {
+    $(this).tab('show');
+    var scrollmem = $('body').scrollTop();
+    window.location.hash = this.hash;
+    $('html,body').scrollTop(scrollmem);
+  });
+});

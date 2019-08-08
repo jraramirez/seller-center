@@ -21,9 +21,18 @@
       border-top: none;
     }
     .custom-pagination{
-      li{
-        padding-left: 5px;
-        padding-right: 5px;
+      .page-link{
+        color: #05507b;
+      }
+      .page-link:hover{
+        color: #fff;
+        background-color: #3fbdd3;
+      }
+      .page-item.active .page-link {
+        z-index: 1;
+        color: #fff;
+        background-color: #05507b;
+        border-color: #05507b;
       }
     }    
   }
