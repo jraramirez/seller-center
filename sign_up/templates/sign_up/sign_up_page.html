@@ -18,17 +18,9 @@
 {% block content %}
   <div class="">
         <div class="row no-gutters">
-            <div class="col-md-6 align-content-center align-items-center bg-light d-none d-md-flex" style="min-height: 100vh; background: url('{% static 'images/bg-login.jpg'%}'); background-size: cover;">
-                <div class="container text-white">
-                    <div class="row align-items-center justify-content-center">
-                        <div class="col-8">
-                            <h1>Become a LYKA selleraaaa today</h1>
-                            <p class="text-white-50">Manage your shop with ease.</p>
-                            <p class="text-white-50">Designed for you to seamlessly organize products, track orders, manage customers &amp; measure shop performance - all in one go.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!--left panel-->
+            {% include 'wagtailadmin/partial_login_left_panel.html' %}
+
             <div class="col-md-6 d-flex align-items-center mb-5">
                 <div class="container mt-5 px-5">
                     <div class="d-flex align-items-center justify-content-center">
