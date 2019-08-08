@@ -1,6 +1,4 @@
 {% load static menu_tags wagtailuserbar %}
-
-<!DOCTYPE html>
 <html class="no-js">
     <head>
         <meta charset="utf-8" />
@@ -39,6 +37,7 @@
 
     <body class="{% block body_class %}{% endblock %}">
 
+        <div class="wrapper">
           {% if user.is_authenticated %}
           {% main_menu max_levels=1 use_specific=1 template="base/navigation/main_menu.html" %}
           {% endif %}
@@ -47,6 +46,7 @@
               {% block content %}{% endblock %}
             </div>
           </div>
+        </div>
         
         {% block extra_js %}
             {# Override this in templates to add extra javascript #}

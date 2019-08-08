@@ -75,3 +75,12 @@ input[type=number] {
 body .form-control {
     margin-bottom: 0px
 }
+
+.wrapper {
+    padding-left: 0px;
+}
+
+.wrapper  .content-wrapper {
+    margin-left: 0px;
+    margin-right: 0px;
+}
