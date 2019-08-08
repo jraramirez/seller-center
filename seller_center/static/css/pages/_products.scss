@@ -25,6 +25,10 @@
   .products-tab{
     .product-errors{
       border-top: none;
+      .alert{
+        margin-top: -15px;
+        margin-bottom: 1em;
+      }
     }
     .custom-pagination{
       .page-link{

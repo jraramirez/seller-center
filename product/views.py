@@ -272,6 +272,10 @@ def products_import(request):
               v.save()
           Product.objects.filter(id=t.id).update(stock_sum=stock_sum, unpublished=unpublished)
 
+    if(len(Errors.objects.all())):
+      messages.warning(request, 'Products added. Some products have data errors. Check out the unpublished tab to correct them.')
+    else:
+      messages.success(request, 'Products added successfully.')
     return HttpResponseRedirect("/products/#all")
   else:
     form = UploadFileForm()
