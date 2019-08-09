@@ -24,7 +24,7 @@ if 'RDS_HOSTNAME' in os.environ:
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_S3_CUSTOM_DOMAIN = 'https://d3rdlm5j4gpnnq.cloudfront.net'
+AWS_S3_CUSTOM_DOMAIN = 'd3rdlm5j4gpnnq.cloudfront.net'
 AWS_S3_FILE_OVERWRITE = True
 
 
