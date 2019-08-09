@@ -36,7 +36,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = '/static/'
-STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+STATIC_URL = "https:d3rdlm5j4gpnnq.cloudfront.net/"
 
 # Media files (Local)
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -49,7 +49,7 @@ AUTHENTICATION_BACKENDS = [
 
 # Media files (AWS)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+MEDIA_URL = "https:d3rdlm5j4gpnnq.cloudfront.net/"
 MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
