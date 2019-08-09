@@ -1,24 +1,5 @@
-function enableSignUpButton() {
-  var username = document.getElementById("username").value;
-  var password = document.getElementById("password").value;
-  var reenterPassword = document.getElementById("confirm-password").value;
-  var signUpButton = document.getElementById("signup");
-  var checkboxTerms = document.getElementById("checkboxTerms");
 
-  if (username.length > 0 && password.length > 0 && reenterPassword.length > 0 && checkboxTerms.checked == true) {
-    signUpButton.disabled = false;
-  } else {
-    signUpButton.disabled = true;
-  }
-}
-
-function hidePasswordChecker() {
-    var div = $('.checkPasswordContainer')
-
-    div.style.display = "none";
-}
-
-function checkPasswordHelper(password) {
+function checkPasswordHelper(password, confirmPassword) {
 var passwordPolicy = [];
         passwordPolicy.lowercase = "Password must contain a lower case letter";
         passwordPolicy.uppercase = "Password must contain an upper case letter";
@@ -26,6 +7,7 @@ var passwordPolicy = [];
         passwordPolicy.special = "Password must contain a special character";
         var passwordLength = 8;
         passwordPolicy.lengthCheck = "Password must contain at least 8 characters";
+        passwordPolicy.match = "Password and Confirm Password must match";
 
 
         var requireLowerletter = false;
@@ -33,6 +15,7 @@ var passwordPolicy = [];
         var requireNumber = false;
         var requireSymbol = false;
         var requireLength = false;
+        var requireMatch = false;
 
         if (password) {
             if (true) {
@@ -117,10 +100,49 @@ var passwordPolicy = [];
                     "passwordCheck-notValid-customizable");
                 requireLength = true;
             }
+
+
+            if (password !== confirmPassword) {
+                $(".check-match").html("&#10006;");
+                $(".checkPasswordText-match").html(passwordPolicy.match);
+                $(".checkPassword-match").addClass("passwordCheck-notValid-customizable").removeClass(
+                    "passwordCheck-valid-customizable");
+                requireMatch = false;
+            } else {
+                $(".check-match").html("&#10003;");
+                $(".checkPasswordText-match").html(passwordPolicy.match);
+                $(".checkPassword-match").addClass("passwordCheck-valid-customizable").removeClass(
+                    "passwordCheck-notValid-customizable");
+                requireMatch = true;
+            }
         }
 
-        return requireLowerletter && requireUpperletter && requireNumber && requireSymbol && requireLength;
+        return requireLowerletter && requireUpperletter && requireNumber && requireSymbol && requireLength && requireMatch;
 
+}
+
+function isEmail(email) {
+    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/;
+    return regex.test(emailReg);
+}
+
+function checkSignUpFormComplete() {
+//  if username, password, confirm password and terms is checked enable button
+
+    var username_input = $('input[name="username"]').val() != "";
+    var password = $('input[name="password"]').val();
+    var confirmPassword = $('input[name="confirm-password"]').val();
+    var terms = $('#checkboxTerms').checked;
+
+
+
+    if (password == "") {
+        $('.checkPasswordContainer').hide("slow");
+    } else {
+        $('.checkPasswordContainer').show("slow");
+    }
+
+    $('button[name="signUpButton"]').prop("disabled", !(checkPasswordHelper(password, confirmPassword) && username_input && terms));
 }
 
 function checkPasswordMatch() {
