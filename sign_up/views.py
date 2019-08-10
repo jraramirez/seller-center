@@ -204,7 +204,9 @@ def sign_up(request):
         print(response.json())
         if response.status_code == 200:
             print("success")
-            return HttpResponseRedirect('sign_up/sign_up_page_landing.html')
+            return render(request, 'sign_up/confirm_link.html', {
+                'request': request,
+            })
         else:
             messages.error(request, json['details'])
             return HttpResponseRedirect('sign_up/sign_up_page.html')
@@ -246,6 +248,10 @@ def reset_password(request):
             return render(request, 'signup/reset_password_page.html', {
 
             })
+
+def confirm_link(request):
+    return render(request, 'sign_up/confirm_link.html')
+
 
 def validate_email(email):
     from django.core.validators import validate_email
