@@ -206,6 +206,7 @@ def sign_up(request):
             print("success")
             return render(request, 'sign_up/confirm_link.html', {
                 'request': request,
+                'email': username
             })
         else:
             messages.error(request, json['details'])
