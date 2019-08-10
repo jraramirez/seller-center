@@ -1,8 +1,8 @@
 from .base import *
 
 DEBUG = True
-SECRET_KEY = 'tuIPxdVIRqVrLbOgOXnbeZ6MBVXBgngJa'
-ALLOWED_HOSTS = ['seller-center-dev.vpsbnhp5gf.ap-southeast-1.elasticbeanstalk.com'] 
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+ALLOWED_HOSTS = ['seller-center.ap-southeast-1.elasticbeanstalk.com']
 
 
 # Database
@@ -24,9 +24,12 @@ if 'RDS_HOSTNAME' in os.environ:
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_CUSTOM_DOMAIN = 'd3rdlm5j4gpnnq.cloudfront.net'
 AWS_S3_FILE_OVERWRITE = True
 
+
+STATIC_ROOT = '/static/'
+STATIC_URL = "https://d3rdlm5j4gpnnq.cloudfront.net/"
 
 # Static files (AWS)
 STATICFILES_LOCATION = os.environ.get('STATICFILES_LOCATION')
@@ -34,9 +37,6 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, 'static'),
 ]
-
-STATIC_ROOT = '/static/'
-STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 # Media files (Local)
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -49,9 +49,9 @@ AUTHENTICATION_BACKENDS = [
 
 # Media files (AWS)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+MEDIA_URL = "https://d3rdlm5j4gpnnq.cloudfront.net/"
 MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
-DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

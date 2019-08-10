@@ -21,18 +21,8 @@
   <div class="">
     <div class="row no-gutters">
       <!-- left panel-->
-        <div class="col-md-6 align-content-center align-items-center bg-light d-none d-md-flex" style="min-height: 100vh; background: url('{% static 'images/bg-login.jpg'%}'); background-size: cover;">
-            <div class="container text-white">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-8">
-                        <h1>Welcome back!</h1>
-                        <p class="text-white-50">Manage your shop with ease.</p>
-                        <p class="text-white-50">Designed for you to seamlessly organize products, track orders, manage customers &amp; measure shop performance - all in one go.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
+      {% include 'wagtailadmin/partial_login_left_panel.html' %}
       
       <div class="col-md-6 d-flex align-items-center mb-5">
           <div class="container mt-5 px-5">
@@ -41,7 +31,7 @@
                   <img src="{% static 'images/lyka_logo_trans.png' %}" style="height: 100px; width: 100px;"/>
                   </div>
                   <h3 class="text-center mb-3 text-uppercase text-primary-2 font-weight-bold">Seller Center</h3>
-                  <p class="text-black-50 text-center">Sign-in via:</p>
+                  <!--<p class="text-black-50 text-center">Sign-in via:</p>-->
                   
 
                   <form action=" {{ page.url }}" method="POST" novalidate>
@@ -50,11 +40,13 @@
                       <input type="hidden" name="next" value="/">
                     <div class="rounded bg-white shadow">
                         <nav class="nav nav-pills-2 nav-justified bg-light" role="tablist" id="tablist">
-                            <a class="nav-item nav-link active rounded-0 nav-border" id="tab-nav-email" data-toggle="tab" href="#tab-email" role="tab" aria-controls="tab-email" aria-selected="true">Email</a>
-                            <a class="nav-item nav-link rounded-0 nav-border-alt" id="tab-nav-phone" data-toggle="tab" href="#tab-phone" role="tab" aria-controls="tab-phone" aria-selected="false">Phone</a>
+                            <p class="nav-item nav-link active rounded-0 nav-border" id="tab-nav-email" data-toggle="tab" href="#tab-email" role="tab" aria-controls="tab-email" aria-selected="true">Sign In</p>
+                            <!--<a class="nav-item nav-link rounded-0 nav-border-alt" id="tab-nav-phone" data-toggle="tab" href="#tab-phone" role="tab" aria-controls="tab-phone" aria-selected="false">Phone</a>-->
                         </nav>
                         <div class="tab-pane fade show active" id="tab-email" role="tabpanel" aria-labelledby="tab-nav-email"></div>
+
                         {% include 'messages.html' %}
+
                         <div class="p-4">
                             <div id="email-form">
                                 <div class="form-group">
@@ -66,7 +58,7 @@
                                     <div class="row no-gutters align-content-center border rounded bg-white" id="email-container">
                                         <input type="email" name="username" class="form-control border-0" id="email-login" aria-describedby="emailHelp" placeholder="Enter email">
                                     </div>
-                                    <p class="text-danger small mt-2" id="error-email-login"></p>
+                                    <!--<p class="text-danger small mt-2" id="error-email-login"></p>-->
                                 </div>
                                 <div class="form-group">
                                     <div class="d-flex align-items-center justify-content-between">
@@ -75,12 +67,12 @@
                                     </div>
                                     <input type="password" class="form-control" name="password" id="password-login"
                                         placeholder="Password">
-                                    <p class="text-danger small mt-2" id="error-password-login"></p>
+                                    <!--<p class="text-danger small mt-2" id="error-password-login"></p>-->
                                 </div>
                                 <button type="submit" class="btn btn-primary-2 w-100 mt-3">Login</button>
                               </div>
-                            <p class="small mt-3 text-center">Don't have an account? <a class="ml-1" href="./signup.html">Sign up</a></p>
-                            <p class="text-center mt-3"><a href="./forgotpass.html" class="small">Forgot password?</a></p>
+                            <p class="small mt-3 text-center">Don't have an account? <a class="ml-1" href="/sign/sign_up">Sign up</a></p>
+                            <!--<p class="text-center mt-3"><a href="./forgotpass.html" class="small">Forgot password?</a></p>-->
                         </div>
                          
                         </div>

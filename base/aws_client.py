@@ -7,7 +7,7 @@ class ApiGatewayClient:
     EMAIL = "email",
     MOBILE = "phone_number"
 
-    HOST = "https://vak4dovce5.execute-api.ap-southeast-1.amazonaws.com/dev"
+    HOST = "https://ktqc7jhi81.execute-api.ap-southeast-1.amazonaws.com/prod"
     VERSION = "v1"
     ORIGIN = "seller-center"
     rootUrl = HOST + "/api/" + VERSION
@@ -38,7 +38,7 @@ class AuthClient:
         }
         return requests.post(url, headers=self.apiGateway.headers, json=json)
 
-    def register(self, type, value):
+    def register(self, type, value, password):
         """
         Register a given user using a mobile number or email
 
@@ -51,7 +51,8 @@ class AuthClient:
 
         json = {
             'type': type,
-            'value': value
+            'value': value,
+            'password': password
         }
         return requests.post(url, headers=self.apiGateway.headers, json=json)
 
