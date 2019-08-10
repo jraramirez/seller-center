@@ -132,9 +132,7 @@ function checkSignUpFormComplete() {
     var username_input = $('input[name="username"]').val() != "";
     var password = $('input[name="password"]').val();
     var confirmPassword = $('input[name="confirm-password"]').val();
-    var terms = $('#checkboxTerms').checked;
-
-
+    var terms = $('input[name="checkboxTerms"]').prop('checked');
 
     if (password == "") {
         $('.checkPasswordContainer').hide("slow");

@@ -7,7 +7,7 @@ class ApiGatewayClient:
     EMAIL = "email",
     MOBILE = "phone_number"
 
-    HOST = "https://vak4dovce5.execute-api.ap-southeast-1.amazonaws.com/dev"
+    HOST = "https://ktqc7jhi81.execute-api.ap-southeast-1.amazonaws.com/prod"
     VERSION = "v1"
     ORIGIN = "seller-center"
     rootUrl = HOST + "/api/" + VERSION
