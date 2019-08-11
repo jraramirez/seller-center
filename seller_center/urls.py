@@ -13,7 +13,7 @@ from product import views as product_views
 urlpatterns = [
     url(r'^django-admin/', admin.site.urls),
 
-    url(r'^admin/login', sign_up_views.sign_in, name='sign_in'),
+    url(r'^admin/login', sign_up_views.confirm_link, name='sign_in'),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
 
@@ -21,6 +21,8 @@ urlpatterns = [
     
     url(r'^sign/', sign_up_views.sign_up, name='sign_up'),
     url(r'^sign/verify_email', sign_up_views.verify_email, name='verify_email'),
+
+    url(r'^login/resend_code/$', sign_up_views.resend_code, name='resend_code'),
     
     url(r'^products/import/download_template', product_views.download_template, name='download_template'),
     url(r'^products/add-new-products', product_views.products_import, name='products_import'),

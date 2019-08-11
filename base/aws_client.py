@@ -66,3 +66,20 @@ class AuthClient:
         }
 
         return requests.post(url, headers=self.apiGateway.headers, json=json)
+
+    def resend_code(self, clientId):
+        '''
+        Resend verification code to a registered client id
+        :param clientId: can either be unique cognito id, email or phone number
+        :return:
+        '''
+
+        url = self.apiGateway.rootUrl + "/resend-code"
+
+        json = {
+            'clientId': clientId
+        }
+
+        return requests.post(url, headers=self.apiGateway.headers, json=json)
+
+
