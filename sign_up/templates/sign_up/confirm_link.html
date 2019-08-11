@@ -48,23 +48,37 @@
                             </div>
                             {% endif %}
 
+                            {% if confirmed %}
+                            <div class="alert alert-info mt-3 ml-3 mr-3" role="alert">
+                                Email already activated!
+
+                            </div>
+                            {% endif %}
 
                             <div class="p-3">
+
+                                {% if confirmed %}
+
+                                <a href="/"><button type="button" class="btn btn-primary-2 w-100" id="login">
+                                    Go to Login
+                            </button></a>
+                                {% else %}
                                 <div class="form-group">
 
                                         <div class="row no-gutters align-content-center border rounded bg-white"
                                              id="email-container">
                                             <input type="email" name="username" class="form-control border-0"
                                                    id="username" aria-describedby="emailHelp" placeholder="Enter email"
-                                                   >
+                                                   value="{{ email }}">
                                         </div>
                                         <p class="text-danger small mt-2" id="error-email-login">{{ error }}</p>
                                 </div>
                                 <button type="submit" class="btn btn-primary-2 w-100" id="resend_link">
                                     Resend Activation Link
                                 </button>
-                                <p class="small mt-3 text-center">Need help? Contact <a class="ml-1"
-                                                                                        href="/">Support</a></p>
+                                {% endif %}
+                                <p class="small mt-3 text-center">Go back to<a class="ml-1"
+                                                                                        href="/">Home</a></p>
                             </div>
 
 

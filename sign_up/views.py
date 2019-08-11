@@ -195,11 +195,6 @@ def sign_up(request):
             messages.error(request, 'Password does not match')
             return HttpResponseRedirect('sign_up/sign_up_page.html')
 
-        return render(request, 'sign_up/confirm_link.html', {
-            'request': request,
-            'email': username,
-            'success' : 'success'
-        })
         authClient = AuthClient(ApiGatewayClient())
 
         response = authClient.register("email", username, password)
@@ -209,9 +204,13 @@ def sign_up(request):
         print(response.json())
         if response.status_code == 200:
             print("success: %s" % username)
+
+            self = SignUpPage.objects.get(slug='sign')
             return render(request, 'sign_up/confirm_link.html', {
-                'request': request,
-                'email': username
+                'self': self,
+                'email': username,
+                'success': 'success',
+                'error': ''
             })
         else:
             messages.error(request, json['details'])
@@ -227,11 +226,56 @@ def resend_code(request):
         username = request.POST['username']
 
         if not validate_email(email=username):
+            self = SignUpPage.objects.get(slug='sign')
             return render(request, 'sign_up/confirm_link.html', {
-                'request': request,
-                'email': username,
+                'self': self,
                 'error': "Please enter a valid email address"
             })
+
+
+        authClient = AuthClient(ApiGatewayClient())
+
+        response = authClient.resend_code(username)
+
+        json = response.json()
+        print("%s code", response.status_code)
+        print(response.json())
+
+        if response.status_code == 200:
+            self = SignUpPage.objects.get(slug='sign')
+            return render(request, 'sign_up/confirm_link.html', {
+                'self': self,
+                'email': username,
+                'success': 'Email verification link sent',
+                'error': ''
+            })
+        elif response.status_code == 400:
+            self = SignUpPage.objects.get(slug='sign')
+            return render(request, 'sign_up/confirm_link.html', {
+                'self': self,
+                'email': username,
+                'confirmed': "Email already confirmed.",
+                'error': ''
+            })
+
+        elif response.status_code == 500:
+
+            self = SignUpPage.objects.get(slug='sign')
+            return render(request, 'sign_up/confirm_link.html', {
+                'self': self,
+                'email': username,
+                'error': "You're trying to send activation links too fast. Please try again later."
+            })
+
+        else:
+
+            self = SignUpPage.objects.get(slug='sign')
+            return render(request, 'sign_up/confirm_link.html', {
+                'self': self,
+                'email': username,
+                'error': "Email does not exist"
+            })
+
 
     pass
 def signUpWithEmail(request):
