@@ -14,17 +14,13 @@
     <a href="/products/add-new-products/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
             class="fas fa-plus text-white-50 mr-2"></i>Add Multiple Products</a>
 </div>
-  <!--<header>-->
-    <!--<div class="right">-->
-      <!--<div class="row buttons-container">-->
-        <!--<a class="btn btn-success" href="/products/add-single-product/index" role="button">+ ADD SINGLE PRODUCT</a>-->
-        <!--<a class="btn btn-success" href="/products/add-new-products/" role="button">+ ADD MULTIPLE PRODUCTS</a>-->
-      <!--</div>-->
-   <!--</div>-->
-  <!--</header>-->
 
+<div class="row">
   {% include 'product/includes/products_filter.html' %}
+</div>
 
+
+<div class="row">
   {# Tab Content #}
   <div class="tab-content products-tab" id="productsTabContent">
       {% include "product/includes/all_products.html" with allProducts=allProducts %}
@@ -34,5 +30,6 @@
       {% include "product/includes/suspended_products.html" with suspendedProducts=suspendedProducts %}
       {% include "product/includes/unpublished_products.html" with unpublishedProducts=unpublishedProducts %}
   </div>
+</div>
 
 {% endblock %}
