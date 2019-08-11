@@ -7,7 +7,7 @@ class ApiGatewayClient:
     EMAIL = "email",
     MOBILE = "phone_number"
 
-    HOST = "https://vak4dovce5.execute-api.ap-southeast-1.amazonaws.com/dev"
+    HOST = "https://ktqc7jhi81.execute-api.ap-southeast-1.amazonaws.com/prod"
     VERSION = "v1"
     ORIGIN = "seller-center"
     rootUrl = HOST + "/api/" + VERSION
@@ -66,3 +66,20 @@ class AuthClient:
         }
 
         return requests.post(url, headers=self.apiGateway.headers, json=json)
+
+    def resend_code(self, clientId):
+        '''
+        Resend verification code to a registered client id
+        :param clientId: can either be unique cognito id, email or phone number
+        :return:
+        '''
+
+        url = self.apiGateway.rootUrl + "/resend-code"
+
+        json = {
+            'clientId': clientId
+        }
+
+        return requests.post(url, headers=self.apiGateway.headers, json=json)
+
+

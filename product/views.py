@@ -97,6 +97,7 @@ def product_import(request, selected_category):
           title=image.name
         )
         # v.image_upload.save(image.name, image)
+    Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
     messages.success(request, 'Product added successfully.')
     return HttpResponseRedirect("/products/#all")
   else:
@@ -105,7 +106,74 @@ def product_import(request, selected_category):
       'selected_category': selected_category,
       'variations': range(nVariations)
     })
-    
+
+
+def product_edit(request, product_id):
+  CONDITION_CHOICES = [
+    ('N', 'New'),
+    ('U', 'Used'),
+  ]
+
+  # if(selected_category == 'index'):
+  #   categories = {}
+  #   with open('seller_center/static/documents/categories-full.json', 'r') as f:
+  #     categories = json.load(f)
+  #   return render(request, 'product/product_import_page.html', {
+  #     'categories': categories,
+  #     'selected_category': selected_category
+  #   })
+  if(request.method == "POST"):
+    Product.objects.filter(id=product_id).update(
+      product_code = request.POST.get('product-code'),
+      product_name = request.POST.get('product-name'),
+      product_description = request.POST.get('product-description'),
+      product_weight = request.POST.get('product-weight'),
+      parent_sku_reference_no = request.POST.get('product-parent-sku'),
+      product_condition = request.POST.get('product-condition'),
+    )
+    # stock_sum = 0
+    # for i in range(0,8):
+    #   if(request.POST.get('product-variation-'+str(i)+'-sku')):
+    #     variationStock = 0
+    #     if(request.POST.get('product-variation-'+str(i)+'-stock')):
+    #       variationStock = int(request.POST.get('product-variation-'+str(i)+'-stock'))
+    #     stock_sum = stock_sum + variationStock
+    #     v = Variations(
+    #       product_id = t.id,
+    #       image_url = None,
+    #       price =request.POST.get('product-variation-'+str(i)+'-price'),
+    #       sku = request.POST.get('product-variation-'+str(i)+'-sku'),
+    #       stock = variationStock,
+    #       name = request.POST.get('product-variation-'+str(i)+'-sku'),
+    #       image_url_from_sku = None
+    #     )
+    #     v.save()
+    #     image = request.FILES['product-variation-'+str(i)+'-image']
+    #     Image.objects.create(
+    #       file=image,
+    #       title=image.name
+    #     )
+    #     # v.image_upload.save(image.name, image)
+    messages.success(request, 'Product edited successfully.')
+    return HttpResponseRedirect("/products/#all")
+  else:
+    product = {}
+    selectedProduct = Product.objects.filter(id=product_id)[0]
+    product['product_code'] = selectedProduct.product_code
+    product['category'] = selectedProduct.category
+    product['product_name'] = selectedProduct.product_name
+    product['product_description'] = selectedProduct.product_description
+    product['product_price'] = Variations.objects.filter(product_id=product_id)[0].price
+    product['stock_sum'] = selectedProduct.stock_sum
+    product['product_weight'] = selectedProduct.product_weight
+    product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
+    product['product_category'] = Category.objects.filter(unique_id=selectedProduct.category)[0].name
+    product['variations'] = Variations.objects.filter(product_id=product_id)
+    return render(request, 'product/product_edit_page.html', {
+      'CONDITION_CHOICES': CONDITION_CHOICES,
+      'product': product,
+    })
+
 
 def products_import(request):
   if(request.method == "POST" and request.POST.get('upload')): 
@@ -123,7 +191,7 @@ def products_import(request):
           t = Product(
             product_code = row['product_code'],
             profile_id = request.user.id,
-            category = None,
+            category = row['category_id'],
             order_id = None,
             product_name = None,
             product_description = None,
