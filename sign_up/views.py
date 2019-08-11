@@ -195,6 +195,11 @@ def sign_up(request):
             messages.error(request, 'Password does not match')
             return HttpResponseRedirect('sign_up/sign_up_page.html')
 
+        return render(request, 'sign_up/confirm_link.html', {
+            'request': request,
+            'email': username,
+            'success' : 'success'
+        })
         authClient = AuthClient(ApiGatewayClient())
 
         response = authClient.register("email", username, password)
@@ -203,7 +208,7 @@ def sign_up(request):
         print("%s code", response.status_code)
         print(response.json())
         if response.status_code == 200:
-            print("success")
+            print("success: %s" % username)
             return render(request, 'sign_up/confirm_link.html', {
                 'request': request,
                 'email': username
@@ -216,6 +221,19 @@ def sign_up(request):
         return render(request, 'sign_up/sign_up_page.html')
 
 
+def resend_code(request):
+    if request.method == 'POST':
+
+        username = request.POST['username']
+
+        if not validate_email(email=username):
+            return render(request, 'sign_up/confirm_link.html', {
+                'request': request,
+                'email': username,
+                'error': "Please enter a valid email address"
+            })
+
+    pass
 def signUpWithEmail(request):
     username = request.POST['username']
     password = request.POST['password']
