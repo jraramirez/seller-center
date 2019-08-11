@@ -38,12 +38,7 @@
 
                       {% csrf_token %}
                       <input type="hidden" name="next" value="/">
-                    <div class="rounded bg-white shadow">
-                        <nav class="nav nav-pills-2 nav-justified bg-light" role="tablist" id="tablist">
-                            <p class="nav-item nav-link active rounded-0 nav-border" id="tab-nav-email" data-toggle="tab" href="#tab-email" role="tab" aria-controls="tab-email" aria-selected="true">Sign In</p>
-                            <!--<a class="nav-item nav-link rounded-0 nav-border-alt" id="tab-nav-phone" data-toggle="tab" href="#tab-phone" role="tab" aria-controls="tab-phone" aria-selected="false">Phone</a>-->
-                        </nav>
-                        <div class="tab-pane fade show active" id="tab-email" role="tabpanel" aria-labelledby="tab-nav-email"></div>
+                    <div class="rounded bg-white shadow mt-5" style="border-top: 5px solid #016fa7">
 
                         {% include 'messages.html' %}
 
