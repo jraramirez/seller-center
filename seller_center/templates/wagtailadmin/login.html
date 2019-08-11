@@ -5,45 +5,41 @@
 
 
 {% block branding_favicon %}
-    <link rel="shortcut icon" href="{% static 'images/logo.ico' %}" />
+<link rel="shortcut icon" href="{% static 'images/logo.ico' %}"/>
 {% endblock %}
 
 {% block css  %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,400i,700,700i,900&display=swap" rel="stylesheet"> 
-    
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,400i,700,700i,900&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/home/home.css' %}">
 {% endblock %}
 
 
 {% block login_form %}
 {% block content %}
-  <div class="">
+<div class="">
     <div class="row no-gutters">
-      <!-- left panel-->
+        <!-- left panel-->
 
-      {% include 'wagtailadmin/partial_login_left_panel.html' %}
-      
-      <div class="col-md-6 d-flex align-items-center mb-5">
-          <div class="container mt-5 px-5">
-              <div class="d-flex align-items-center justify-content-center">
+        {% include 'wagtailadmin/partial_login_left_panel.html' %}
 
-                  <img src="{% static 'images/lyka_logo_trans.png' %}" style="height: 100px; width: 100px;"/>
-                  </div>
-                  <h3 class="text-center mb-3 text-uppercase text-primary-2 font-weight-bold">Seller Center</h3>
-                  <!--<p class="text-black-50 text-center">Sign-in via:</p>-->
-                  
+        <div class="col-md-6 d-flex align-items-center mb-5">
+            <div class="container mt-5 px-5">
+                <div class="d-flex align-items-center justify-content-center">
 
-                  <form action=" {{ page.url }}" method="POST" novalidate>
+                    <img src="{% static 'images/lyka_logo_trans.png' %}" style="height: 100px; width: 100px;"/>
+                </div>
+                <h3 class="text-center mb-3 text-uppercase text-primary-2 font-weight-bold">Seller Center</h3>
+                <!--<p class="text-black-50 text-center">Sign-in via:</p>-->
 
-                      {% csrf_token %}
-                      <input type="hidden" name="next" value="/">
-                    <div class="rounded bg-white shadow">
-                        <nav class="nav nav-pills-2 nav-justified bg-light" role="tablist" id="tablist">
-                            <p class="nav-item nav-link active rounded-0 nav-border" id="tab-nav-email" data-toggle="tab" href="#tab-email" role="tab" aria-controls="tab-email" aria-selected="true">Sign In</p>
-                            <!--<a class="nav-item nav-link rounded-0 nav-border-alt" id="tab-nav-phone" data-toggle="tab" href="#tab-phone" role="tab" aria-controls="tab-phone" aria-selected="false">Phone</a>-->
-                        </nav>
-                        <div class="tab-pane fade show active" id="tab-email" role="tabpanel" aria-labelledby="tab-nav-email"></div>
+
+                <form action=" {{ page.url }}" method="POST" novalidate>
+
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="/">
+                    <div class="rounded bg-white shadow mt-5" style="border-top: 5px solid #016fa7">
 
                         {% include 'messages.html' %}
 
@@ -52,49 +48,63 @@
                                 <div class="form-group">
                                     <label for="email-login">
                                         <div class="d-flex align-items-center justify-content-center">
-                                            Email address 
+                                            Email address
                                         </div>
                                     </label>
-                                    <div class="row no-gutters align-content-center border rounded bg-white" id="email-container">
-                                        <input type="email" name="username" class="form-control border-0" id="email-login" aria-describedby="emailHelp" placeholder="Enter email">
+                                    <div class="row no-gutters align-content-center border rounded bg-white"
+                                         id="email-container">
+                                        <input type="email" name="username" class="form-control border-0"
+                                               id="email-login" aria-describedby="emailHelp" placeholder="Enter email">
                                     </div>
                                     <!--<p class="text-danger small mt-2" id="error-email-login"></p>-->
                                 </div>
                                 <div class="form-group">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <label for="password-login">Password</label>
-                                        <a id="show-pass" class="text-primary-2" href="#">show</a>
                                     </div>
-                                    <input type="password" class="form-control" name="password" id="password-login"
-                                        placeholder="Password">
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" name="password" id="password-login"
+                                               placeholder="Password">
+                                        <div class="input-group-append">
+                                            <a class="btn btn-outline-secondary" id="show-pass">show</a>
+                                        </div>
+                                    </div>
                                     <!--<p class="text-danger small mt-2" id="error-password-login"></p>-->
                                 </div>
                                 <button type="submit" class="btn btn-primary-2 w-100 mt-3">Login</button>
-                              </div>
-                            <p class="small mt-3 text-center">Don't have an account? <a class="ml-1" href="/sign/sign_up">Sign up</a></p>
+                            </div>
+                            <p class="small mt-3 text-center">Don't have an account? <a class="ml-1"
+                                                                                        href="/sign/sign_up">Sign up</a>
+                            </p>
                             <!--<p class="text-center mt-3"><a href="./forgotpass.html" class="small">Forgot password?</a></p>-->
                         </div>
-                         
-                        </div>
+
                     </div>
-                  </form>
+            </div>
+            </form>
         </div>
-      </div>
-
     </div>
-  </div>
 
-  {% endblock %}
+</div>
+</div>
+
+{% endblock %}
 
 
-  {# Global javascript #}
-  <script type="text/javascript" src="{% static 'js/seller_center.js' %}"></script>
-  
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
- 
-  <script type="text/javascript" src="{% static 'js/home/home.js' %}"></script>
+{# Global javascript #}
+<script type="text/javascript" src="{% static 'js/seller_center.js' %}"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="{% static 'js/home/home.js' %}"></script>
 
 
 {% endblock %}

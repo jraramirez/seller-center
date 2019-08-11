@@ -203,8 +203,15 @@ def sign_up(request):
         print("%s code", response.status_code)
         print(response.json())
         if response.status_code == 200:
-            print("success")
-            return HttpResponseRedirect('sign_up/sign_up_page_landing.html')
+            print("success: %s" % username)
+
+            self = SignUpPage.objects.get(slug='sign')
+            return render(request, 'sign_up/confirm_link.html', {
+                'self': self,
+                'email': username,
+                'success': 'success',
+                'error': ''
+            })
         else:
             messages.error(request, json['details'])
             return HttpResponseRedirect('sign_up/sign_up_page.html')
@@ -213,6 +220,64 @@ def sign_up(request):
         return render(request, 'sign_up/sign_up_page.html')
 
 
+def resend_code(request):
+    if request.method == 'POST':
+
+        username = request.POST['username']
+
+        if not validate_email(email=username):
+            self = SignUpPage.objects.get(slug='sign')
+            return render(request, 'sign_up/confirm_link.html', {
+                'self': self,
+                'error': "Please enter a valid email address"
+            })
+
+
+        authClient = AuthClient(ApiGatewayClient())
+
+        response = authClient.resend_code(username)
+
+        json = response.json()
+        print("%s code", response.status_code)
+        print(response.json())
+
+        if response.status_code == 200:
+            self = SignUpPage.objects.get(slug='sign')
+            return render(request, 'sign_up/confirm_link.html', {
+                'self': self,
+                'email': username,
+                'success': 'Email verification link sent',
+                'error': ''
+            })
+        elif response.status_code == 400:
+            self = SignUpPage.objects.get(slug='sign')
+            return render(request, 'sign_up/confirm_link.html', {
+                'self': self,
+                'email': username,
+                'confirmed': "Email already confirmed.",
+                'error': ''
+            })
+
+        elif response.status_code == 500:
+
+            self = SignUpPage.objects.get(slug='sign')
+            return render(request, 'sign_up/confirm_link.html', {
+                'self': self,
+                'email': username,
+                'error': "You're trying to send activation links too fast. Please try again later."
+            })
+
+        else:
+
+            self = SignUpPage.objects.get(slug='sign')
+            return render(request, 'sign_up/confirm_link.html', {
+                'self': self,
+                'email': username,
+                'error': "Email does not exist"
+            })
+
+
+    pass
 def signUpWithEmail(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -246,6 +311,10 @@ def reset_password(request):
             return render(request, 'signup/reset_password_page.html', {
 
             })
+
+def confirm_link(request):
+    return render(request, 'sign_up/confirm_link.html')
+
 
 def validate_email(email):
     from django.core.validators import validate_email
