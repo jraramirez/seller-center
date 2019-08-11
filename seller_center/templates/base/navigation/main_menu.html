@@ -1,40 +1,70 @@
 {% load static menu_tags wagtailimages_tags %}
 
-<div class="nav-wrapper" style="min-height: 642px;">
-	<div class="inner">
-		<a href="/admin/" class="logo" title="Wagtail v.2.2.2">
-			<img src="/static/images/logo.png" alt="Seller Center" width="80">
-		</a>
-		<nav class="nav-main">
-			<ul>
-				<li class="menu-item">
-					<a href="/" class="icon icon-list-ul">Dashboard</a>
-				</li>
-				<li class="menu-item">
-					<a href="/products/" class="icon icon-list-ul">My Products</a>
-				</li>
-				<li class="menu-item">
-					<a href="/admin/product/order/" class="icon icon-tag">My Orders</a>
-				</li>
-				<li class="menu-item menu-active">
-					<a href="/admin/images/" class="icon icon-image">My Images</a>
-				</li>
-				<li class="menu-item menu-active">
-					<a href="/admin/logout/" class="icon icon-image">Log Out</a>
-				</li>
-				<!-- <li class="footer" id="footer">
-					<div class="account" id="account-settings" title="Edit your account">
-						<span class="avatar square avatar-on-dark">
-							<img src="//www.gravatar.com/avatar/da2c14dff44ae49ba8712d8fead9ad11?s=100&amp;d=mm">
-						</span>
-					</div>
-					<ul class="footer-submenu">
-						<li><a href="/admin/account/" class="icon icon-user">Account settings</a></li>
-						<li><a href="/admin/logout/" class="icon icon-logout">Log out</a></li>
-					</ul>
-				</li> -->
-			</ul>
-		</nav>
-	</div>
-	<div class="explorer__wrapper" data-explorer-menu=""></div>
-</div>
+ <ul class="nav-main navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin/">
+            <div class="sidebar-brand-icon">
+            <img src="/static/images/logo.png" alt="Seller Center" width="42">
+            </div>
+
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="menu-item nav-item active">
+            <a class="nav-link" href="/">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Nav Item - Products Collapse Menu -->
+        <li class="menu-item nav-item">
+            <a class="nav-link collapsed" href="/products/" data-toggle="collapse" data-target="#collapseTwo"
+               aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Products</span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">View Product</h6>
+                    <a class="collapse-item" href="/products/">All</a>
+                    <a class="collapse-item" href="#">Live</a>
+                    <a class="collapse-item" href="#">Soldout</a>
+                    <a class="collapse-item" href="#">Unlisted</a>
+                    <h6 class="collapse-header">New Product</h6>
+                    <a class="collapse-item" href="#">Add Single</a>
+                    <a class="collapse-item" href="#">Add Multiple</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Orders Menu -->
+        <li class="menu-item nav-item">
+            <a class="nav-link" href="/admin/product/order/">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Orders</span>
+            </a>
+        </li>
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+        <!-- Nav Item - Image Manager Menu -->
+        <li class="menu-item nav-item">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Image Manager</span></a>
+        </li>
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+    </ul>
