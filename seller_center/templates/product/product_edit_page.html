@@ -15,6 +15,10 @@
         <h2>Basic</h2>
       </div>
       <div class="col-md-12">
+        <label for="product-name">Product Code: </label>
+        <input type="text" name="product-code" class="form-control" placeholder="Product Code" id="id_product-code" value="{{product.product_code}}">
+      </div>
+      <div class="col-md-12">
         <label for="product-name">Name: </label>
         <input type="text" name="product-name" class="form-control" placeholder="Product Name" id="id_product-name" value="{{product.product_name}}">
       </div>
@@ -79,9 +83,11 @@
         <h2>Sales</h2>
       </div>
       <div class="col-md-12">
+          <label for="product-price">Product Price: </label>
           <input type="text" name="product-price" class="form-control" placeholder="Price ₱" id="id_product-price" value="{{product.product_price}}">
       </div>
       <div class="col-md-12">
+          <label for="product-stock">Product Stock: </label>
         <input type="number" name="product-stock" class="form-control" placeholder="Stock" id="id_product-stock" value="{{product.stock_sum}}">
       </div>
       <div class="col-md-12">
@@ -100,6 +106,7 @@
         <input type="number" name="product-h" class="form-control" placeholder="H" id="id_product-h" value="{{product.product_height}}">
       </div>
       <div class="col-md-12">
+        <label for="product-weight">Product Weight: </label>
         <input type="number" name="product-weight" class="form-control" placeholder="Weight (kg)" id="id_product-weight" value="{{product.product_weight}}">
       </div>
       <div class="col-md-12">
@@ -120,6 +127,7 @@
         </div>
       </div>
       <div class="col-md-12">
+        <label for="product-price">Parent SKU: </label>
         <input type="text" name="product-parent-sku" class="form-control" placeholder="Parent SKU" id="id_product-parent-sku" value="{{product.parent_sku_reference_no}}">
       </div>
       <div class="col-md-12">
