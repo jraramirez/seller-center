@@ -152,7 +152,7 @@
         <a href="/products/add-new-products/"
            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Publish</a>
     </div>
-    <form action="{{page.url}}" enctype="multipart/form-data" method="POST">
+    <form action="{{page.url}}" enctype="multipart/form-data" method="POST" novalidate>
         {% csrf_token %}
 
         {# Basic Info #}
@@ -203,7 +203,7 @@
         {# Sales Info #}
         <div class="row mx-3 my-5">
             <div class="card shadow container-fluid p-0">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <div id="sales-information" class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Sales Information</h6>
                     <a href="/products/add-new-products/"
                        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Enable Variations</a>
@@ -236,18 +236,18 @@
 
                     {% for v in variations %}
                     {% if v != 0 %}
-                    <div class="form-group variation variation-{{forloop.counter0}}" style="display: none;">
+                    <div id="variation-container-{{forloop.counter}}" class="form-group variation variation-{{forloop.counter0}}" style="display: none;">
                     {% else %}
-                    <div class="form-group variation variation-{{forloop.counter0}}">
+                    <div id="variation-container-{{forloop.counter}}" class="form-group variation variation-{{forloop.counter0}}">
                     {% endif %}
 
                         {% if v != 0 %}
-                        <hr class="sidebar-divider mb-3"/>
+                        <hr class="sidebar-divider mb-4"/>
                             {% endif %}
                         <div class="d-flex">
                         <h5 class="text-primary">Variation {{forloop.counter}}</h5>
                         {% if v != 0 %}
-                        <a href="#" class="ml-3 mt-1 text-danger">
+                        <a class="ml-3 mt-1 text-danger" onclick="hideVariation({{forloop.counter}})">
                             <i class="fas fa-trash"></i>
                         </a>
                             {% endif %}
@@ -304,13 +304,13 @@
 
                     {% if forloop.counter0 < 6 %}
                     <div class="col-md-12">
-                        <button class="btn btn-primary" type="button"
+                        <button id="variation-add-button-{{forloop.counter}}"class="btn btn-primary" type="button"
                                 onclick="showVariation(event, '{{forloop.counter}}')"> + Add Another Variation
                         </button>
                     </div>
                     {% endif %}
-
                     </div>
+
                     {% endfor %}
 
                     {# End of Variation #}

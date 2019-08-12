@@ -32,6 +32,25 @@ function showVariation(event, i) {
   nextVariation.style.display = 'block';
 }
 
+
+function goToByScroll(id){
+      // Reove "link" from the ID
+    id = id.replace("link", "");
+      // Scroll
+    $('html,body').animate({
+        scrollTop: $("#"+id).offset().top},
+        'slow');
+}
+
+function hideVariation(i) {
+    var prevIndex = Math.max(0, i - 1);
+    var prevAddButton = 'variation-add-button-' + String(prevIndex);
+    var id = 'variation-container-' + String(i);
+    $("#"+id).hide();
+    $("#"+prevAddButton).show();
+    goToByScroll('sales-information');
+}
+
 $(function(){
   var hash = window.location.hash;
   hash && $('ul.nav a[href="' + hash + '"]').tab('show');
