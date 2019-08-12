@@ -252,7 +252,7 @@
                         <hr class="sidebar-divider mb-4"/>
                             {% endif %}
                         <div class="d-flex">
-                        <h5 class="text-primary">Variation {{forloop.counter}}</h5>
+                        <h5 class="mr-auto text-primary">Variation {{forloop.counter}}</h5>
                         {% if v != 0 %}
                         <a class="ml-3 mt-1 text-danger" onclick="hideVariation({{forloop.counter}})">
                             <i class="fas fa-trash"></i>
@@ -261,7 +261,7 @@
                         </div>
 
                         <div class="form-group row mt-3 mb-4">
-                            <label for="product-variation-{{forloop.counter0}}-name" class="col-sm-3 col-form-label">Name *</label>
+                            <label for="product-variation-{{forloop.counter0}}-name" class="col-sm-3 col-form-label">Name</label>
                             <div class="col-sm-9">
                                 <input type="text" name="product-variation-{{forloop.counter0}}-name" class="form-control" placeholder="Name"
                                        id="product-variation-{{forloop.counter0}}-name" required>
@@ -270,7 +270,7 @@
 
 
                         <div class="form-group row mt-3 mb-4">
-                            <label for="product-variation-{{forloop.counter0}}-sku" class="col-sm-3 col-form-label">SKU *</label>
+                            <label for="product-variation-{{forloop.counter0}}-sku" class="col-sm-3 col-form-label">SKU</label>
                             <div class="col-sm-9">
                                 <input type="text" name="product-variation-{{forloop.counter0}}-sku" class="form-control" placeholder="Name"
                                        id="product-variation-{{forloop.counter0}}-sku" required>
@@ -278,7 +278,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="product-variation-{{forloop.counter0}}-price" class="col-sm-3 col-form-label">Price *</label>
+                            <label for="product-variation-{{forloop.counter0}}-price" class="col-sm-3 col-form-label">Price</label>
 
                             <div class="col-sm-9">
                                 <input type="number" name="product-variation-{{forloop.counter0}}-price" class="form-control" placeholder="Price"
@@ -289,7 +289,7 @@
 
 
                         <div class="form-group row mt-3 mb-4">
-                            <label for="product-variation-{{forloop.counter0}}-stock" class="col-sm-3 col-form-label">Stock *</label>
+                            <label for="product-variation-{{forloop.counter0}}-stock" class="col-sm-3 col-form-label">Stock</label>
 
                             <div class="col-sm-9">
                                 <input type="number" name="product-variation-{{forloop.counter0}}-stock" class="form-control" placeholder="Stock"
@@ -299,8 +299,7 @@
                         </div>
 
                         <div class="form-group row mt-3 mb-4">
-                            <label for="product-variation-{{forloop.counter0}}-image" class="col-sm-3 col-form-label">Image
-                                * </label>
+                            <label for="product-variation-{{forloop.counter0}}-image" class="col-sm-3 col-form-label">Image</label>
                             {{ form }}
 
 
