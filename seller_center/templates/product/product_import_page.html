@@ -203,14 +203,18 @@
         {# Sales Info #}
         <div class="row mx-3 my-5">
             <div class="card shadow container-fluid p-0">
-                <div id="sales-information" class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Sales Information</h6>
-                    <a href="/products/add-new-products/"
-                       class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Enable Variations</a>
+               <div id="sales-information" class="card-header py-3 d-flex flex-row align-items-center justify-content-between list-group" role="tablist">
+                    <h6 class="font-weight-bold text-primary ml-3 mr-auto">Sales Information</h6>
+                    <a class="btn btn-sm shadow-sm list-group-item list-group-item-action col-sm-2 active mr-2" data-toggle="list" href="#without_variations" role="tab">Without Variations</a>
+                    <a class="btn btn-sm shadow-sm list-group-item list-group-item-action col-sm-2" data-toggle="list" href="#with_variations" role="tab">With Variations</a>
+
                 </div>
-                <div class="card-body mx-5">
+
+                <div class="tab-content card-body mx-5">
 
 
+                {# Without Variation Tab #}
+                    <div class="tab-pane fade active show" id="without_variations" role="tabpanel">
                     <div class="form-group row mt-3 mb-4">
                         <label for="id_product_name" class="col-sm-3 col-form-label">Price *</label>
 
@@ -230,9 +234,12 @@
                                    required>
                         </div>
                     </div>
+                    </div>
+                {# End of Without Variation Tab #}
 
 
-                    {# Variation #}
+                {# With Variation Tab #}
+                    <div class="tab-pane fade" id="with_variations" role="tabpanel">
 
                     {% for v in variations %}
                     {% if v != 0 %}
@@ -313,9 +320,10 @@
 
                     {% endfor %}
 
-                    {# End of Variation #}
-
+                    </div>
             </div>
+
+                {# End of With Variation Tab #}
         </div>
         {# End of Sales Info #}
 
