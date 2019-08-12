@@ -30,6 +30,8 @@ function showVariation(event, i) {
   event.target.style.display = 'none';
   var nextVariation = document.getElementsByClassName("variation-" + String(i))[0];
   nextVariation.style.display = 'block';
+  var id = 'variation-container-' + String(i);
+  goToByScroll(id)
 }
 
 
