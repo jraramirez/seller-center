@@ -41,16 +41,17 @@ function goToByScroll(id){
       // Scroll
     $('html,body').animate({
         scrollTop: $("#"+id).offset().top},
-        'slow');
+        '50');
 }
 
 function hideVariation(i) {
     var prevIndex = Math.max(0, i - 1);
     var prevAddButton = 'variation-add-button-' + String(prevIndex);
     var id = 'variation-container-' + String(i);
+    var prevContainerId = 'variation-container-' + String(prevIndex);
     $("#"+id).hide();
     $("#"+prevAddButton).show();
-    goToByScroll('sales-information');
+    goToByScroll(prevContainerId);
 }
 
 $(function(){
