@@ -10,50 +10,121 @@
 <div class="form-wrap">
 
   <!-- CATEGORIES -->
-  
+
   {% if selected_category == 'index' %}
+  <h1 class="h3 mr-auto mb-0 text-gray-800">Select Product Category</h1>
   <form action="" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
-    <div class="col-md-12">
-      <h2>Select Product Category</h2>
-    </div>
-    <div class="accordion categories" id="accordion1">
-      {% for c in categories %}
-      <div class="card">
-        <div id="heading1">
-          <button class="btn btn-link btn-level-1 btn-{{c.unique_id}}" type="button" data-toggle="collapse" data-target="#{{c.unique_id}}" aria-expanded="false" aria-controls="{{c.unique_id}}">
-            {{c.name}}
-          </button>
-        </div>
-        <div id="{{c.unique_id}}" class="collapse l2-categories level-2 parent-btn-{{c.unique_id}}" aria-labelledby="heading1" data-parent="#accordion1" style="position: absolute; left: 300px; top: {{c.top}};">
-          <div class="accordion" id="accordion2">
-            {% for c2 in c.children %}
-            <div class="card">
-              <div id="heading2">
-                <button class="btn btn-link btn-level-2 btn-{{c2.unique_id}}" type="button" data-toggle="collapse" data-target="#{{c2.unique_id}}" aria-expanded="false" aria-controls="{{c2.unique_id}}" onclick="toggleL2(event)">
-                  {{c2.name}}
-                </button>
-              </div>
-              <div id="{{c2.unique_id}}" class="collapse l3-categories level-3 parent-btn-{{c2.unique_id}}" aria-labelledby="heading2" data-parent="#accordion2" style="position: absolute; left: 300px; top: {{c2.top}};">
-                <div class="accordion" id="accordion3">
-                  {% for c3 in c2.children %}
-                  <div class="card">
-                    <div id="heading3">
-                      <a class="btn btn-link" name="category" href="/products/add-single-product/{{c3.unique_id}}">
-                        {{c3.name}}
-                      </a>
-                    </div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
+    <div class="row">
+
+      {# Primary Category #}
+      <div class="col-4">
+        <div class="list-group" id="list-tab" role="tablist">
+          {% for c in categories %}
+          <a class="list-group-item list-group-item-action" id="list-{{c.unique_id}}-list" data-toggle="list" href="#list-{{c.unique_id}}" role="tab" aria-controls="{{c.name}}">{{c.name}}</a>
+          {% endfor %}
         </div>
       </div>
-      {% endfor %}
+      {# End Primary Category #}
+
+      {# Sub Category #}
+      <div class="col-4">
+        <div class="tab-content" id="nav-tabContent">
+          {% for c in categories %}
+          <div class="tab-pane fade list-group" id="list-{{c.unique_id}}" role="tabpanel tablist" aria-labelledby="list-{{c.unique_id}}-list">
+            {% for c2 in c.children %}
+            <a class="list-group-item list-group-item-action" id="list-{{c2.unique_id}}-list" data-toggle="list" href="#list-{{c2.unique_id}}" role="tab" aria-controls="{{c2.name}}">{{c2.name}}</a>
+            {% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {# End Sub Category #}
+
+
+      {# Third Level Category #}
+      <div class="col-4">
+        <div class="tab-content" id="nav-tabContent-third-level">
+          {% for c in categories %}
+          {% for c2 in c.children %}
+          <div class="tab-pane fade list-group" id="list-{{c2.unique_id}}" role="tabpanel tablist" aria-labelledby="list-{{c2.unique_id}}-list">
+            {% for c3 in c2.children %}
+            <a class="list-group-item list-group-item-action" id="list-{{c3.unique_id}}-list" name="category" href="/products/add-single-product/{{c3.unique_id}}" role="tab" aria-controls="{{c3.name}}">{{c3.name}}</a>
+            {% endfor %}
+          </div>
+          {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+      {# End Third Level Category #}
+
     </div>
+    <!--<div class="row">-->
+        <!--{# First Level Category #}-->
+      <!--<div class="col-4">-->
+
+        <!--<div class="list-group" id="myList" role="tablist">-->
+          <!--{% for c in categories %}-->
+          <!--&lt;!&ndash; List group &ndash;&gt;-->
+          <!--<a class="list-group-item list-group-item-action" data-toggle="list" href="#{{c.unique_id}}" role="tab">{{c.name}}</a>-->
+
+
+          <!--{% endfor %}-->
+        <!--</div>-->
+      <!--</div>-->
+        <!--{# End of First Level Category #}-->
+
+
+        <!--{# Second Level Category #}-->
+        <!--<div class="col-8">-->
+        <!--<div class="tab-content">-->
+
+          <!--{% for c in categories %}-->
+          <!--<div class="tab-pane fade" id="{{c.unique_id}}" role="tabpanel">...</div>-->
+      <!--{% for c2 in c.children %}-->
+               <!--{{c2.name}} Child - -->
+
+      <!--{% endfor %}-->
+             <!--</div>-->
+          <!--{% endfor %}-->
+
+          <!--</div>-->
+        <!--</div>-->
+        <!--{# End of Second Level Category #}-->
+    <!--</div>-->
+      <!--<div class="card">-->
+        <!--<div id="heading1">-->
+          <!--<button class="btn btn-link btn-level-1 btn-{{c.unique_id}}" type="button" data-toggle="collapse" data-target="#{{c.unique_id}}" aria-expanded="false" aria-controls="{{c.unique_id}}">-->
+            <!--{{c.name}}-->
+          <!--</button>-->
+        <!--</div>-->
+        <!--<div id="{{c.unique_id}}" class="collapse l2-categories level-2 parent-btn-{{c.unique_id}}" aria-labelledby="heading1" data-parent="#accordion1" style="position: absolute; left: 300px; top: {{c.top}};">-->
+          <!--<div class="accordion" id="accordion2">-->
+            <!--{% for c2 in c.children %}-->
+            <!--<div class="card">-->
+              <!--<div id="heading2">-->
+                <!--<button class="btn btn-link btn-level-2 btn-{{c2.unique_id}}" type="button" data-toggle="collapse" data-target="#{{c2.unique_id}}" aria-expanded="false" aria-controls="{{c2.unique_id}}" onclick="toggleL2(event)">-->
+                  <!--{{c2.name}}-->
+                <!--</button>-->
+              <!--</div>-->
+              <!--<div id="{{c2.unique_id}}" class="collapse l3-categories level-3 parent-btn-{{c2.unique_id}}" aria-labelledby="heading2" data-parent="#accordion2" style="position: absolute; left: 300px; top: {{c2.top}};">-->
+                <!--<div class="accordion" id="accordion3">-->
+                  <!--{% for c3 in c2.children %}-->
+                  <!--<div class="card">-->
+                    <!--<div id="heading3">-->
+                      <!--<a class="btn btn-link" name="category" href="/products/add-single-product/{{c3.unique_id}}">-->
+                        <!--{{c3.name}}-->
+                      <!--</a>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--{% endfor %}-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--{% endfor %}-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
   </form>
   {% else %}
   <form action="{{page.url}}" enctype="multipart/form-data" method="POST">
