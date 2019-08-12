@@ -13,6 +13,13 @@
 
 {% block content %}
 
+{% if errors %}
+<div class="alert alert-danger" role="alert">
+{% for e in errors %}
+    {{e}}
+{% endfor %}        
+</div>
+{% endif %}
 <div class="form-wrap">
 
     <!-- CATEGORIES -->

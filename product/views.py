@@ -31,78 +31,84 @@ def product_import(request, selected_category):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
       categories = json.load(f)
-    # l1Categories = Category.objects.filter(parent_id=1891)
-    # categories = [{} for _ in range(len(l1Categories))]
-    # for i, c in zip(range(len(l1Categories)), l1Categories):
-    #   categories[i]['name'] = c.name
-    #   categories[i]['unique_id'] = c.unique_id
-    #   categories[i]['level'] = 1
-    #   categories[i]['top'] = str(-39*(i))+'px'
-    #   l2Categories = Category.objects.filter(parent_id=c.unique_id)
-    #   categories[i]['children'] = [{} for _ in range(len(l2Categories))]
-    #   for j, c2 in zip(range(len(l2Categories)), l2Categories):
-    #     categories[i]['children'][j]['name'] = c2.name
-    #     categories[i]['children'][j]['unique_id'] = c2.unique_id
-    #     categories[i]['children'][j]['level'] = c2.level
-    #     categories[i]['children'][j]['top'] = str(-39*(j))+'px'
-    #     l3Categories = Category.objects.filter(parent_id=c2.unique_id)
-    #     categories[i]['children'][j]['children'] = [{} for _ in range(len(l3Categories))]
-    #     for k, c3 in zip(range(len(l3Categories)), l3Categories):
-    #       categories[i]['children'][j]['children'][k]['name'] = c3.name
-    #       categories[i]['children'][j]['children'][k]['unique_id'] = c3.unique_id
-    #       categories[i]['children'][j]['children'][k]['level'] = c3.level
     return render(request, 'product/product_import_page.html', {
       'categories': categories,
       'selected_category': selected_category
     })
   elif(request.method == "POST"):
-    t = Product(
-      product_code = request.POST.get('product-code'),
-      profile_id = request.user.id,
-      category = selected_category,
-      order_id = None,
-      product_name = request.POST.get('product-name'),
-      product_description = request.POST.get('product-description'),
-      product_weight = request.POST.get('product-weight'),
-      ship_out_in = None,
-      parent_sku_reference_no = request.POST.get('product-parent-sku'),
-      other_logistics_provider_setting = None,
-      other_logistics_provider_fee = None,
-      live = False,
-      suspended = False,
-      unlisted = False,
-      unpublished = False
-    )
-    t.save()
-    stock_sum = 0
-    for i in range(0,8):
-      if(request.POST.get('product-variation-'+str(i)+'-sku')):
-        variationStock = 0
-        if(request.POST.get('product-variation-'+str(i)+'-stock')):
-          variationStock = int(request.POST.get('product-variation-'+str(i)+'-stock'))
-        stock_sum = stock_sum + variationStock
-        v = Variations(
-          product_id = t.id,
-          image_url = None,
-          price =request.POST.get('product-variation-'+str(i)+'-price'),
-          sku = request.POST.get('product-variation-'+str(i)+'-sku'),
-          stock = variationStock,
-          name = request.POST.get('product-variation-'+str(i)+'-sku'),
-          image_url_from_sku = None
-        )
-        v.save()
-        image = request.FILES['product-variation-'+str(i)+'-image']
-        Image.objects.create(
-          file=image,
-          title=image.name
-        )
-        # v.image_upload.save(image.name, image)
-    Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
-    messages.success(request, 'Product added successfully.')
-    return HttpResponseRedirect("/products/#all")
+    product = {}
+    product['product_code'] = request.POST.get('product-code')
+    product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
+    product['product_name'] = request.POST.get('product-name')
+    product['product_description'] = request.POST.get('product-description')
+    product['product_weight'] = request.POST.get('product-weight')
+    product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
+    errors = []
+    if(not product['product_code']):
+      errors.append('Product Code is required; ')
+    if(not product['category']):
+      errors.append('Product Category is required; ')
+    if(not product['product_name']):
+      errors.append('Product Name is required; ')
+    if(not product['product_description']):
+      errors.append('Product Description is required; ')
+    if(not errors):
+      t = Product(
+        product_code = request.POST.get('product-code'),
+        profile_id = request.user.id,
+        category = selected_category,
+        product_name = request.POST.get('product-name'),
+        product_description = request.POST.get('product-description'),
+        product_weight = request.POST.get('product-weight'),
+        parent_sku_reference_no = request.POST.get('product-parent-sku'),
+        live = False,
+        suspended = False,
+        unlisted = False,
+        unpublished = False
+      )
+      t.save()
+      stock_sum = 0
+      for i in range(0,8):
+        if(request.POST.get('product-variation-'+str(i)+'-sku')):
+          variationStock = 0
+          if(request.POST.get('product-variation-'+str(i)+'-stock')):
+            variationStock = int(request.POST.get('product-variation-'+str(i)+'-stock'))
+          stock_sum = stock_sum + variationStock
+          v = Variations(
+            product_id = t.id,
+            image_url = None,
+            price =request.POST.get('product-variation-'+str(i)+'-price'),
+            sku = request.POST.get('product-variation-'+str(i)+'-sku'),
+            stock = variationStock,
+            name = request.POST.get('product-variation-'+str(i)+'-sku'),
+            image_url_from_sku = None
+          )
+          v.save()
+          if(request.FILES):
+            image = request.FILES['product-variation-'+str(i)+'-image']
+            Image.objects.create(
+              file=image,
+              title=image.name
+            )
+            # v.image_upload.save(image.name, image)
+      Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
+      messages.success(request, 'Product added successfully.')
+      return HttpResponseRedirect("/products/#all")
+    else:
+      product = {}
+      product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
+      return render(request, 'product/product_import_page.html', {
+        'product': product,
+        'errors': errors,
+        'selected_category': selected_category,
+      'variations': range(nVariations)
+      })
+
   else:
-    selected_category = Category.objects.filter(unique_id=selected_category)[0].name
+    product = {}
+    product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     return render(request, 'product/product_import_page.html', {
+      'product': product,
       'selected_category': selected_category,
       'variations': range(nVariations)
     })
@@ -404,3 +410,25 @@ def uploadJSONCategoriesToDB():
         name = i['name'],
       )
       c.save()
+
+def queryCategories():
+    l1Categories = Category.objects.filter(parent_id=1891)
+    categories = [{} for _ in range(len(l1Categories))]
+    for i, c in zip(range(len(l1Categories)), l1Categories):
+      categories[i]['name'] = c.name
+      categories[i]['unique_id'] = c.unique_id
+      categories[i]['level'] = 1
+      categories[i]['top'] = str(-39*(i))+'px'
+      l2Categories = Category.objects.filter(parent_id=c.unique_id)
+      categories[i]['children'] = [{} for _ in range(len(l2Categories))]
+      for j, c2 in zip(range(len(l2Categories)), l2Categories):
+        categories[i]['children'][j]['name'] = c2.name
+        categories[i]['children'][j]['unique_id'] = c2.unique_id
+        categories[i]['children'][j]['level'] = c2.level
+        categories[i]['children'][j]['top'] = str(-39*(j))+'px'
+        l3Categories = Category.objects.filter(parent_id=c2.unique_id)
+        categories[i]['children'][j]['children'] = [{} for _ in range(len(l3Categories))]
+        for k, c3 in zip(range(len(l3Categories)), l3Categories):
+          categories[i]['children'][j]['children'][k]['name'] = c3.name
+          categories[i]['children'][j]['children'][k]['unique_id'] = c3.unique_id
+          categories[i]['children'][j]['children'][k]['level'] = c3.level
