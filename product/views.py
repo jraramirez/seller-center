@@ -84,25 +84,31 @@ def product_import(request, selected_category):
             image_url_from_sku = None
           )
           v.save()
-          image = request.FILES['product-variation-'+str(i)+'-image']
-          Image.objects.create(
-            file=image,
-            title=image.name
-          )
-          # v.image_upload.save(image.name, image)
+          if(request.FILES):
+            image = request.FILES['product-variation-'+str(i)+'-image']
+            Image.objects.create(
+              file=image,
+              title=image.name
+            )
+            # v.image_upload.save(image.name, image)
       Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
       messages.success(request, 'Product added successfully.')
       return HttpResponseRedirect("/products/#all")
     else:
+      product = {}
+      product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
       return render(request, 'product/product_import_page.html', {
         'product': product,
         'errors': errors,
-        'selected_category': selected_category
+        'selected_category': selected_category,
+      'variations': range(nVariations)
       })
 
   else:
-    selected_category = Category.objects.filter(unique_id=selected_category)[0].name
+    product = {}
+    product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     return render(request, 'product/product_import_page.html', {
+      'product': product,
       'selected_category': selected_category,
       'variations': range(nVariations)
     })

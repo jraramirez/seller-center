@@ -75,21 +75,21 @@
       </div>
       <div class="col-md-12">
         <label for="product-name">Product Code: </label>
-        <input type="text" name="product-code" class="form-control" placeholder="Product Code" id="id_product-code" value="{{product.product_code}}">
+        <input type="text" name="product-code" class="form-control" placeholder="Code" id="id_product-code" value="{{product.product_code}}">
       </div>
       <div class="col-md-12">
         <label for="product-name">Product Name: </label>
-        <input type="text" name="product-name" class="form-control" placeholder="Product Name" id="id_product-name" value="{{product.product_name}}">
+        <input type="text" name="product-name" class="form-control" placeholder="Name" id="id_product-name" value="{{product.product_name}}">
       </div>
       <div class="col-md-12">
         <label for="product-description">Product Description: </label>
-        <textarea name="product-description" class="form-control" placeholder="Product Description" id="id_product-description" value="{{product.product_description}}"></textarea>
+        <textarea name="product-description" class="form-control" placeholder="Description" id="id_product-description" value="{{product.product_description}}"></textarea>
       </div>
       <div class="col-md-12">
         <h2>Selected Category</h2>
       </div>
       <div class="col-md-10">
-        <input type="text" name="product-category" class="form-control" id="id_product-name" value="{{product.category}}" disabled>
+        <input type="text" name="selected_category" class="form-control" id="id_product-name" value="{{product.category}}" disabled>
       </div>
       <div class="col-md-2">
           <a class="btn btn-success" href="/products/add-single-product/index">
@@ -182,7 +182,7 @@
       </div>
       <div class="col-md-12">
           <label for="product-price">Parent SKU: </label>
-        <input type="text" name="product-parent-sku" class="form-control" placeholder="Parent SKU" id="id_product-parent-sku">
+        <input type="text" name="product-parent-sku" class="form-control" placeholder="SKU" id="id_product-parent-sku">
       </div>
       <div class="col-md-12">
       <button type="submit" class="btn btn-success block-button submit-button float-right">submit</button>
