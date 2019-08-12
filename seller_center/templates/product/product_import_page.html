@@ -139,18 +139,83 @@
 </div>
   <form action="{{page.url}}" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
+
     {# Basic Info #}
     <div class="row mx-3">
-      <div class="card">
+      <div class="card shadow container-fluid p-0">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Basic Information</h6>
         </div>
-        <div class="card-body">
-          "Dropdown menus can be placed in the card header in order to extend the functionality of a basic card. In this dropdown card example, the Font Awesome vertical ellipsis icon in the card header can be clicked on in order to toggle a dropdown menu."
+        <div class="card-body mx-5">
+
+
+          <div class="form-group row mt-3 mb-4">
+            <label for="id_product_name" class="col-sm-3 col-form-label">Product Name *</label>
+            <div class="col-sm-9">
+              <input type="text" name="product-name" class="form-control" placeholder="Product Name" id="id_product_name" value="{{productName}}" required>
+            </div>
+          </div>
+
+          <div class="form-group row mb-4">
+            <label for="id_product_description" class="col-sm-3 col-form-label">Product Description *</label>
+            <div class="col-sm-9">
+              <textarea name="product-description" class="form-control" placeholder="Product Description" id="id_product_description"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="id_product_description" class="col-sm-3 col-form-label"> Category *</label>
+            <div class="col-sm-9">
+              <div class="input-group mb-3">
+                <input type="text" name="product-category" class="form-control" id="id_product_category"
+                       value="{{selected_category}}" readonly disabled>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button">Change Category</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
     {# End of Basic Info #}
+
+
+    {# Sales Info #}
+    <div class="row mx-3 my-5">
+      <div class="card shadow container-fluid p-0">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Sales Information</h6>
+          <a href="/products/add-new-products/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Enable Variations</a>
+        </div>
+        <div class="card-body mx-5">
+
+
+          <div class="form-group row mt-3 mb-4">
+            <label for="id_product_name" class="col-sm-3 col-form-label">Price *</label>
+
+            <div class="col-sm-9">
+              <input type="number" name="product-name" class="form-control" placeholder="Price" id="id_product_price"
+                     required>
+            </div>
+          </div>
+
+          <div class="form-group row mt-3 mb-4">
+            <label for="id_product_name" class="col-sm-3 col-form-label">Stock *</label>
+
+            <div class="col-sm-9">
+              <input type="number" name="product-name" class="form-control" placeholder="Stock" id="id_product_stock"
+                     required>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {# End of Sales Info #}
+
+
     <div class="row">
       <div class="col-md-12">
         <h2>Basic</h2>
@@ -165,7 +230,7 @@
         <h2>Selected Category</h2>
       </div>
       <div class="col-md-10">
-        <input type="text" name="product-category" class="form-control" id="id_product-name" value="{{selected_category}}" disabled>
+        <input type="text" name="product-category" class="form-control" id="id_product-name2" value="{{selected_category}}" disabled>
       </div>
       <div class="col-md-2">
           <a class="btn btn-success" href="/products/add-single-product/index">
