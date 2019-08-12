@@ -12,7 +12,7 @@
   <!-- CATEGORIES -->
 
   {% if selected_category == 'index' %}
-  <h1 class="h3 mr-auto mb-0 text-gray-800">Select Product Category</h1>
+  <h1 class="h3 mr-auto mb-3 text-gray-800">Select Product Category</h1>
   <form action="" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
     <div class="row">
@@ -127,8 +127,30 @@
       <!--</div>-->
   </form>
   {% else %}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mr-auto mb-0 text-gray-800">Products</h1>
+
+    <a href="/products/add-single-product/index" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2">Cancel</a>
+    <a href="/products/add-single-product/index" class="d-none d-sm-inline-block btn btn-sm shadow-sm mr-2">Save and Delist</a>
+
+    <a href="/products/add-new-products/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Publish</a>
+</div>
   <form action="{{page.url}}" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
+    {# Basic Info #}
+    <div class="row mx-3">
+      <div class="card">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Basic Information</h6>
+        </div>
+        <div class="card-body">
+          "Dropdown menus can be placed in the card header in order to extend the functionality of a basic card. In this dropdown card example, the Font Awesome vertical ellipsis icon in the card header can be clicked on in order to toggle a dropdown menu."
+        </div>
+      </div>
+    </div>
+    {# End of Basic Info #}
     <div class="row">
       <div class="col-md-12">
         <h2>Basic</h2>
