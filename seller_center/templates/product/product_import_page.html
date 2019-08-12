@@ -236,12 +236,22 @@
 
                     {% for v in variations %}
                     {% if v != 0 %}
-                    <div class="variation variation-{{forloop.counter0}} col-md-12" style="display: none;">
+                    <div class="form-group variation variation-{{forloop.counter0}}" style="display: none;">
                     {% else %}
-                    <div class="variation variation-{{forloop.counter0}} col-md-12">
+                    <div class="form-group variation variation-{{forloop.counter0}}">
                     {% endif %}
 
+                        {% if v != 0 %}
+                        <hr class="sidebar-divider mb-3"/>
+                            {% endif %}
+                        <div class="d-flex">
                         <h5 class="text-primary">Variation {{forloop.counter}}</h5>
+                        {% if v != 0 %}
+                        <a href="#" class="ml-3 mt-1 text-danger">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                            {% endif %}
+                        </div>
 
                         <div class="form-group row mt-3 mb-4">
                             <label for="product-variation-{{forloop.counter0}}-name" class="col-sm-3 col-form-label">Name *</label>
@@ -302,7 +312,7 @@
 
                     </div>
                     {% endfor %}
-                        
+
                     {# End of Variation #}
 
             </div>
