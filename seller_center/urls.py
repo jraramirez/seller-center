@@ -9,6 +9,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from search import views as search_views
 from sign_up import views as sign_up_views
 from product import views as product_views
+from users import views as users_views
 
 urlpatterns = [
     url(r'^django-admin/', admin.site.urls),
@@ -23,6 +24,9 @@ urlpatterns = [
     url(r'^sign/verify_email', sign_up_views.verify_email, name='verify_email'),
 
     url(r'^login/resend_code/$', sign_up_views.resend_code, name='resend_code'),
+
+    url(r'^profile/edit', users_views.profile_edit, name='profile_edit'),
+    url(r'^profile/', users_views.profile, name='profile'),
     
     url(r'^products/import/download_template', product_views.download_template, name='download_template'),
     url(r'^products/add-new-products', product_views.products_import, name='products_import'),

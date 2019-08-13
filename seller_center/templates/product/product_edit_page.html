@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "index.html" %}
 {% load static %}
 
 {% load wagtailcore_tags wagtailimages_tags %}
@@ -8,120 +8,7 @@
 {% block content %}
 
 <div class="form-wrap">
-  <form action="{{page.url}}" enctype="multipart/form-data" method="POST">
-    {% csrf_token %}
-    <div class="row">
-      <div class="col-md-12">
-        <h2>Basic</h2>
-      </div>
-      <div class="col-md-12">
-        <input type="text" name="product-name" class="form-control" placeholder="Product Name" id="id_product-name" value="{{product.product_name}}">
-      </div>
-      <div class="col-md-12">
-        <textarea name="product-description" class="form-control" placeholder="Product Description" id="id_product-description" value="{{product.product_description}}"></textarea>
-      </div>
-      <div class="col-md-12">
-        <h2>Selected Category</h2>
-      </div>
-      <div class="col-md-10">
-        <input type="text" name="product-category" class="form-control" id="id_product-name" value="{{product.product_category}}" disabled>
-      </div>
-      <!-- <div class="col-md-2">
-          <a class="btn btn-success" href="/products/add-single-product/index">
-            Change Category
-          </a>
-      </div> -->
-      <!-- VARIATIONS -->
-      <div class="col-md-12">
-        <h2>Variations</h2>
-      </div>
-      {% for v in product.variations %}
-      {% if forloop.counter0 != 0 or v.sku %}
-      <div class="variation variation-{{forloop.counter0}} col-md-12" style="display: none;">
-      {% else %}
-        <div class="variation variation-{{forloop.counter0}} col-md-12">
-      {% endif %}
-        <div class="col-md-12">
-            <h3>Variation {{forloop.counter}}</h3>
-        </div>
-        <div class="col-md-12">
-            <input type="text" name="product-variation-{{forloop.counter0}}-name" class="form-control" placeholder="Name" id="id_product-variation-name" value="{{v.name}}">
-        </div>
-        <div class="col-md-12">
-            <input type="text" name="product-variation-{{forloop.counter0}}-price" class="form-control" placeholder="Price ₱" id="id_product-price"value="{{v.price}}">
-        </div>
-        <div class="col-md-12">
-            <input type="number" name="product-variation-{{forloop.counter0}}-stock" class="form-control" placeholder="Stock" id="id_product-variation-stock" value="{{v.stock}}">
-        </div>
-        <div class="col-md-12">
-            <input type="text" name="product-variation-{{forloop.counter0}}-sku" class="form-control" placeholder="SKU" id="id_product-variation-sku" value="{{v.sku}}">
-        </div>
-        <!-- <div class="col-md-12">
-          <label for="product-variation-{{forloop.counter0}}-image">Image: </label>
-          {{ form }}
-          <input type="file" name="product-variation-{{forloop.counter0}}-image" class="form-control" id="id_product-variation-image">
-        </div>
-        {% if forloop.counter0 < 6 %}
-        <div class="col-md-12">
-            <button class="btn btn-primary" type="button" onclick="showVariation(event, '{{forloop.counter}}')"> + Add Another Variation</button>
-        </div>
-        {% endif %} -->
-      </div>
-      {% endfor %}
-
-      
-      <div class="col-md-12">
-        <h2>Sales</h2>
-      </div>
-      <div class="col-md-12">
-          <input type="text" name="product-price" class="form-control" placeholder="Price ₱" id="id_product-price" value="{{product.product_price}}">
-      </div>
-      <div class="col-md-12">
-        <input type="number" name="product-stock" class="form-control" placeholder="Stock" id="id_product-stock" value="{{product.stock_sum}}">
-      </div>
-      <div class="col-md-12">
-        <h2>Shipping</h2>
-      </div>
-      <div class="col-md-12">
-        <label for="id_product-l">Parcel Size</label>
-      </div>
-      <div class="col-md-4">
-        <input type="number" name="product-l" class="form-control" placeholder="L" id="id_product-l" value="{{product.product_length}}">
-      </div>
-      <div class="col-md-4">
-        <input type="number" name="product-w" class="form-control" placeholder="W" id="id_product-w" value="{{product.product_width}}">
-      </div>
-      <div class="col-md-4">
-        <input type="number" name="product-h" class="form-control" placeholder="H" id="id_product-h" value="{{product.product_height}}">
-      </div>
-      <div class="col-md-12">
-        <input type="number" name="product-weight" class="form-control" placeholder="Weight (kg)" id="id_product-weight" value="{{product.product_weight}}">
-      </div>
-      <div class="col-md-12">
-        <h2>Others</h2>
-      </div>
-      <div class="col-md-12">
-        <div class="form-group">
-          <label for="id_product-condition">Condition </label>
-          <select class="form-control" id="id_product-condition" name="product-condition" >
-            {% for c in CONDITION_CHOICES %}
-            {% if c == product.product_condition %}
-            <option selected="">{{c.1}}</option>
-            {% else %}
-            <option >{{c.1}}</option>
-            {% endif %}
-            {% endfor %}
-          </select>
-        </div>
-      </div>
-      <div class="col-md-12">
-        <input type="text" name="product-parent-sku" class="form-control" placeholder="Parent SKU" id="id_product-parent-sku" value="{{product.parent_sku_reference_no}}">
-      </div>
-      <div class="col-md-12">
-      <button type="submit" class="btn btn-success block-button submit-button float-right">submit</button>
-      </div>
-    </div>
-  </form>
+  {% include 'product/includes/new_product.html' %}
 </div>
 
 {% endblock %}
