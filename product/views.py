@@ -57,8 +57,6 @@ def product_import(request, selected_category):
     product['product_price'] = request.POST.get('product-price')
 
     product['product_stock'] = request.POST.get('product-stock')
-
-    print("Product content %s" % product)
     product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
     errors = []
@@ -114,7 +112,7 @@ def product_import(request, selected_category):
             price =request.POST.get('product-variation-'+str(i)+'-price'),
             sku = request.POST.get('product-variation-'+str(i)+'-sku'),
             stock = variationStock,
-            name = request.POST.get('product-variation-'+str(i)+'-sku'),
+            name = request.POST.get('product-variation-'+str(i)+'-name'),
             image_url_from_sku = None
           )
           v.save()
@@ -176,6 +174,9 @@ def product_edit(request, product_id):
     ('U', 'Used'),
   ]
 
+  showVariations = ""
+  showWithoutVariation = "active show"
+
   # if(selected_category == 'index'):
   #   categories = {}
   #   with open('seller_center/static/documents/categories-full.json', 'r') as f:
@@ -222,7 +223,7 @@ def product_edit(request, product_id):
     product = {}
     selectedProduct = Product.objects.filter(id=product_id)[0]
     product['product_code'] = selectedProduct.product_code
-    product['category'] = selectedProduct.category
+    product['category'] = Category.objects.filter(unique_id=selectedProduct.category)[0].name
     product['product_name'] = selectedProduct.product_name
     product['product_description'] = selectedProduct.product_description
     product['product_price'] = selectedProduct.product_price
@@ -231,9 +232,26 @@ def product_edit(request, product_id):
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
     product['product_category'] = Category.objects.filter(unique_id=selectedProduct.category)[0].name
     product['variations'] = Variations.objects.filter(product_id=product_id)
+
+    variations = [{}]*7
+    for index, v in enumerate(product['variations']):
+      tmp = {
+        'variation_sku': v.sku,
+        'variation_price': v.price,
+        'variation_stock': v.stock,
+        'variation_name': v.name,
+        'variation_url': v.image_url
+      }
+      variations[index] = tmp
+      showVariations = "active show"
+      showWithoutVariation = ""
+    print("Variations: %s" % product['variations'])
     return render(request, 'product/product_edit_page.html', {
       'CONDITION_CHOICES': CONDITION_CHOICES,
       'product': product,
+      'variations': variations,
+      'showVariations': showVariations,
+      'showWithoutVariation': showWithoutVariation,
     })
 
 
