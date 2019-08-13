@@ -26,6 +26,11 @@ class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
 
 def product_import(request, selected_category):
+  CONDITION_CHOICES = [
+    ('N', 'New'),
+    ('U', 'Used'),
+  ]
+  nVariations = 7
   if(selected_category == 'index'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
@@ -37,11 +42,18 @@ def product_import(request, selected_category):
   elif(request.method == "POST"):
     product = {}
     variations = [{}]*7
+    print(request.POST)
     product['product_code'] = request.POST.get('product-code')
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     product['product_name'] = request.POST.get('product-name')
     product['product_description'] = request.POST.get('product-description')
+    product['product_length'] = request.POST.get('product-length')
+    product['product_width'] = request.POST.get('product-width')
+    product['product_height'] = request.POST.get('product-height')
     product['product_weight'] = request.POST.get('product-weight')
+    product['product_price'] = request.POST.get('product-price')
+    product['product_stock'] = request.POST.get('product-stock')
+    product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
     errors = []
     if(not product['product_code']):
@@ -60,7 +72,6 @@ def product_import(request, selected_category):
           errors.append('Variation ' + str(i+1) +': stock is required; ')
         if(not request.POST.get('product-variation-'+str(i)+'-price')):
           errors.append('Variation ' + str(i+1) +': price is required; ')
-        
     if(not errors):
       t = Product(
         product_code = request.POST.get('product-code'),
@@ -68,7 +79,13 @@ def product_import(request, selected_category):
         category = selected_category,
         product_name = request.POST.get('product-name'),
         product_description = request.POST.get('product-description'),
+        product_price = request.POST.get('product-price'),
+        stock_sum = request.POST.get('product-stock'),
+        product_length = request.POST.get('product_length'),
+        product_width = request.POST.get('product_width'),
+        product_height = request.POST.get('product_height'),
         product_weight = request.POST.get('product-weight'),
+        product_condition = request.POST.get('product-condition'),
         parent_sku_reference_no = request.POST.get('product-parent-sku'),
         live = False,
         suspended = False,
@@ -89,7 +106,7 @@ def product_import(request, selected_category):
             price =request.POST.get('product-variation-'+str(i)+'-price'),
             sku = request.POST.get('product-variation-'+str(i)+'-sku'),
             stock = variationStock,
-            name = request.POST.get('product-variation-'+str(i)+'-name'),
+            name = request.POST.get('product-variation-'+str(i)+'-sku'),
             image_url_from_sku = None
           )
           v.save()
@@ -105,6 +122,8 @@ def product_import(request, selected_category):
       return HttpResponseRedirect("/products/#all")
     else:
       product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
+      showVariations = ""
+      showWithoutVariation = "active show"
       for i in range(0,7):
         if(request.POST.get('product-variation-'+str(i)+'-sku')):
           variationStock = None
@@ -117,12 +136,18 @@ def product_import(request, selected_category):
             'variation_name': request.POST.get('product-variation-'+str(i)+'-name')
           }
           variations[i] = tmp
+          showVariations = "active show"
+          showWithoutVariation = ""
       return render(request, 'product/product_import_page.html', {
         'product': product,
         'errors': errors,
         'selected_category': selected_category,
-        'variations': variations
+        'variations': variations,
+        'showVariations': showVariations,
+        'showWithoutVariation': showWithoutVariation,
+        'CONDITION_CHOICES': CONDITION_CHOICES
       })
+
   else:
     product = {}
     variations = [{}]*7
@@ -130,7 +155,8 @@ def product_import(request, selected_category):
     return render(request, 'product/product_import_page.html', {
       'product': product,
       'selected_category': selected_category,
-      'variations': variations
+      'variations': variations,
+      'CONDITION_CHOICES': CONDITION_CHOICES
     })
 
 
@@ -189,7 +215,7 @@ def product_edit(request, product_id):
     product['category'] = selectedProduct.category
     product['product_name'] = selectedProduct.product_name
     product['product_description'] = selectedProduct.product_description
-    product['product_price'] = Variations.objects.filter(product_id=product_id)[0].price
+    product['product_price'] = selectedProduct.product_price
     product['stock_sum'] = selectedProduct.stock_sum
     product['product_weight'] = selectedProduct.product_weight
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
@@ -202,7 +228,7 @@ def product_edit(request, product_id):
 
 
 def products_import(request):
-  if(request.method == "POST" and request.POST.get('upload')): 
+  if(request.method == "POST" and request.POST.get('upload')):
     autoPair = request.POST.get('auto-pair')
     form = UploadFileForm(request.POST, request.FILES)
     if form.is_valid():
@@ -373,9 +399,9 @@ def products_import(request):
     return HttpResponseRedirect("/products/#all")
   else:
     form = UploadFileForm()
-    
+
   self = ProductsImportPage.objects.get(slug='add-new-products')
-  
+
   return render(request, 'product/products_import_page.html', {
     'self': self,
     'form': form,
