@@ -41,6 +41,7 @@ def product_import(request, selected_category):
     })
   elif(request.method == "POST"):
     product = {}
+    variations = [{}]*7
     print(request.POST)
     product['product_code'] = request.POST.get('product-code')
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
@@ -121,6 +122,8 @@ def product_import(request, selected_category):
       return HttpResponseRedirect("/products/#all")
     else:
       product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
+      showVariations = ""
+      showWithoutVariation = "active show"
       for i in range(0,7):
         if(request.POST.get('product-variation-'+str(i)+'-sku')):
           variationStock = None
@@ -133,11 +136,15 @@ def product_import(request, selected_category):
             'variation_name': request.POST.get('product-variation-'+str(i)+'-name')
           }
           variations[i] = tmp
+          showVariations = "active show"
+          showWithoutVariation = ""
       return render(request, 'product/product_import_page.html', {
         'product': product,
         'errors': errors,
         'selected_category': selected_category,
-        'variations': range(nVariations),
+        'variations': variations,
+        'showVariations': showVariations,
+        'showWithoutVariation': showWithoutVariation,
         'CONDITION_CHOICES': CONDITION_CHOICES
       })
 
