@@ -26,7 +26,6 @@ class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
 
 def product_import(request, selected_category):
-  nVariations = 7
   if(selected_category == 'index'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
@@ -37,6 +36,7 @@ def product_import(request, selected_category):
     })
   elif(request.method == "POST"):
     product = {}
+    variations = [{}]*7
     product['product_code'] = request.POST.get('product-code')
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     product['product_name'] = request.POST.get('product-name')
@@ -52,6 +52,15 @@ def product_import(request, selected_category):
       errors.append('Product Name is required; ')
     if(not product['product_description']):
       errors.append('Product Description is required; ')
+    for i in range(0,7):
+      if(request.POST.get('product-variation-'+str(i)+'-sku')):
+        if(not request.POST.get('product-variation-'+str(i)+'-name')):
+          errors.append('Variation ' + str(i+1) +': name is required; ')
+        if(not request.POST.get('product-variation-'+str(i)+'-stock')):
+          errors.append('Variation ' + str(i+1) +': stock is required; ')
+        if(not request.POST.get('product-variation-'+str(i)+'-price')):
+          errors.append('Variation ' + str(i+1) +': price is required; ')
+        
     if(not errors):
       t = Product(
         product_code = request.POST.get('product-code'),
@@ -80,7 +89,7 @@ def product_import(request, selected_category):
             price =request.POST.get('product-variation-'+str(i)+'-price'),
             sku = request.POST.get('product-variation-'+str(i)+'-sku'),
             stock = variationStock,
-            name = request.POST.get('product-variation-'+str(i)+'-sku'),
+            name = request.POST.get('product-variation-'+str(i)+'-name'),
             image_url_from_sku = None
           )
           v.save()
@@ -95,22 +104,33 @@ def product_import(request, selected_category):
       messages.success(request, 'Product added successfully.')
       return HttpResponseRedirect("/products/#all")
     else:
-      product = {}
       product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
+      for i in range(0,7):
+        if(request.POST.get('product-variation-'+str(i)+'-sku')):
+          variationStock = None
+          if(request.POST.get('product-variation-'+str(i)+'-stock')):
+            variationStock = int(request.POST.get('product-variation-'+str(i)+'-stock'))
+          tmp ={
+            'variation_sku': request.POST.get('product-variation-'+str(i)+'-sku'),
+            'variation_price': request.POST.get('product-variation-'+str(i)+'-price'),
+            'variation_stock': variationStock,
+            'variation_name': request.POST.get('product-variation-'+str(i)+'-name')
+          }
+          variations[i] = tmp
       return render(request, 'product/product_import_page.html', {
         'product': product,
         'errors': errors,
         'selected_category': selected_category,
-      'variations': range(nVariations)
+        'variations': variations
       })
-
   else:
     product = {}
+    variations = [{}]*7
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     return render(request, 'product/product_import_page.html', {
       'product': product,
       'selected_category': selected_category,
-      'variations': range(nVariations)
+      'variations': variations
     })
 
 

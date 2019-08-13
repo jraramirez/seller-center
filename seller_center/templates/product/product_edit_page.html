@@ -51,6 +51,10 @@
             <h3>Variation {{forloop.counter}}</h3>
         </div>
         <div class="col-md-12">
+            <label for="product-variation-{{forloop.counter0}}-sku">Variation SKU: </label>
+            <input type="text" name="product-variation-{{forloop.counter0}}-sku" class="form-control" placeholder="SKU" id="id_product-variation-sku" value="{{v.sku}}">
+        </div>
+        <div class="col-md-12">
             <label for="product-variation-{{forloop.counter0}}-name">Variation Name: </label>
             <input type="text" name="product-variation-{{forloop.counter0}}-name" class="form-control" placeholder="Name" id="id_product-variation-name" value="{{v.name}}">
         </div>
@@ -61,10 +65,6 @@
         <div class="col-md-12">
             <label for="product-variation-{{forloop.counter0}}-stock">Variation Stock: </label>
             <input type="number" name="product-variation-{{forloop.counter0}}-stock" class="form-control" placeholder="Stock" id="id_product-variation-stock" value="{{v.stock}}">
-        </div>
-        <div class="col-md-12">
-            <label for="product-variation-{{forloop.counter0}}-sku">Variation SKU: </label>
-            <input type="text" name="product-variation-{{forloop.counter0}}-sku" class="form-control" placeholder="SKU" id="id_product-variation-sku" value="{{v.sku}}">
         </div>
         <!-- <div class="col-md-12">
           <label for="product-variation-{{forloop.counter0}}-image">Variation Image: </label>

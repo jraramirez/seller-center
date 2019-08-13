@@ -11,6 +11,7 @@
 <div class="alert alert-danger" role="alert">
 {% for e in errors %}
     {{e}}
+    <br>
 {% endfor %}        
 </div>
 {% endif %}
@@ -63,10 +64,6 @@
     </div>
   </form>
   {% else %}
-  {% if errors %}
-  {{errors}}
-  {{product}}
-  {% endif %}
   <form action="{{page.url}}" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
     <div class="row">
@@ -83,7 +80,7 @@
       </div>
       <div class="col-md-12">
         <label for="product-description">Product Description: </label>
-        <textarea name="product-description" class="form-control" placeholder="Description" id="id_product-description" value="{{product.product_description}}"></textarea>
+        <textarea name="product-description" class="form-control" placeholder="Description" id="id_product-description" value="{{product.product_description}}">{{product.product_description}}</textarea>
       </div>
       <div class="col-md-12">
         <h2>Selected Category</h2>
@@ -100,30 +97,31 @@
       <div class="col-md-12">
         <h2>Variations</h2>
       </div>
+      {{variations}}
       {% for v in variations %}
-      {% if v != 0 %}
-      <div class="variation variation-{{forloop.counter0}} col-md-12" style="display: none;">
-      {% else %}
+      {% if forloop.counter0 == 0 or v.variation_sku %}
         <div class="variation variation-{{forloop.counter0}} col-md-12">
+      {% else %}
+        <div class="variation variation-{{forloop.counter0}} col-md-12" style="display: none;">
       {% endif %}
         <div class="col-md-12">
             <h3>Variation {{forloop.counter}}</h3>
         </div>
         <div class="col-md-12">
+            <label for="product-variation-{{forloop.counter0}}-sku">Variation SKU: </label>
+            <input type="text" name="product-variation-{{forloop.counter0}}-sku" class="form-control" placeholder="SKU" id="id_product-variation-sku" value="{{v.variation_sku}}">
+        </div>
+        <div class="col-md-12">
             <label for="product-variation-{{forloop.counter0}}-name">Variation Name: </label>
-            <input type="text" name="product-variation-{{forloop.counter0}}-name" class="form-control" placeholder="Name" id="id_product-variation-name">
+            <input type="text" name="product-variation-{{forloop.counter0}}-name" class="form-control" placeholder="Name" id="id_product-variation-name" value="{{v.variation_name}}">
         </div>
         <div class="col-md-12">
             <label for="product-variation-{{forloop.counter0}}-price">Variation Price: </label>
-            <input type="text" name="product-variation-{{forloop.counter0}}-price" class="form-control" placeholder="Price ₱" id="id_product-price">
+            <input type="text" name="product-variation-{{forloop.counter0}}-price" class="form-control" placeholder="Price ₱" id="id_product-price" value="{{v.variation_price}}">
         </div>
         <div class="col-md-12">
             <label for="product-variation-{{forloop.counter0}}-stock">Variation Stock: </label>
-            <input type="number" name="product-variation-{{forloop.counter0}}-stock" class="form-control" placeholder="Stock" id="id_product-variation-stock">
-        </div>
-        <div class="col-md-12">
-            <label for="product-variation-{{forloop.counter0}}-sku">Variation SKU: </label>
-            <input type="text" name="product-variation-{{forloop.counter0}}-sku" class="form-control" placeholder="SKU" id="id_product-variation-sku">
+            <input type="number" name="product-variation-{{forloop.counter0}}-stock" class="form-control" placeholder="Stock" id="id_product-variation-stock" value="{{v.variation_stock}}">
         </div>
         <div class="col-md-12">
           <label for="product-variation-{{forloop.counter0}}-image">Variation Image: </label>
