@@ -1,19 +1,4 @@
 {% load static %}
-{{ product }}
-{% for v in variations %}
-{% if v|length > 0%}
-    HELLOOO!
-{% endif %}
-{% endfor %}
-VARIATIONS : {{variations}}
-hasVariations :{{hasVariations}}
-
-                {% if hasVariations %}
-                HAS VARIATION
-                    {% else %}
-
-                NO VARIATION
-                {% endif %}
 <form action="{{page.url}}" enctype="multipart/form-data" method="POST" novalidate>
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
