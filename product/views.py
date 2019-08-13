@@ -31,6 +31,9 @@ def product_import(request, selected_category):
     ('U', 'Used'),
   ]
   nVariations = 7
+  showVariations = ""
+  showWithoutVariation = "active show"
+
   if(selected_category == 'index'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
@@ -42,7 +45,6 @@ def product_import(request, selected_category):
   elif(request.method == "POST"):
     product = {}
     variations = [{}]*7
-    print(request.POST)
     product['product_code'] = request.POST.get('product-code')
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     product['product_name'] = request.POST.get('product-name')
@@ -51,8 +53,12 @@ def product_import(request, selected_category):
     product['product_width'] = request.POST.get('product-width')
     product['product_height'] = request.POST.get('product-height')
     product['product_weight'] = request.POST.get('product-weight')
+
     product['product_price'] = request.POST.get('product-price')
+
     product['product_stock'] = request.POST.get('product-stock')
+
+    print("Product content %s" % product)
     product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
     errors = []
@@ -79,12 +85,14 @@ def product_import(request, selected_category):
         category = selected_category,
         product_name = request.POST.get('product-name'),
         product_description = request.POST.get('product-description'),
-        product_price = request.POST.get('product-price'),
-        stock_sum = request.POST.get('product-stock'),
-        product_length = request.POST.get('product_length'),
-        product_width = request.POST.get('product_width'),
-        product_height = request.POST.get('product_height'),
-        product_weight = request.POST.get('product-weight'),
+        # this may be empty strings so we replace it with None if empty string
+        product_price = request.POST.get('product-price') if request.POST.get('product-price') else None, #this is evaluates as tertiary operator
+        stock_sum = request.POST.get('product-stock') if request.POST.get('product-stock') else None,
+        product_length = request.POST.get('product_length') if request.POST.get('product_length') else None,
+        product_width = request.POST.get('product_width') if request.POST.get('product_width') else None,
+        product_height = request.POST.get('product_height') if request.POST.get('product_height') else None,
+        product_weight = request.POST.get('product-weight') if request.POST.get('product-weight') else None,
+
         product_condition = request.POST.get('product-condition'),
         parent_sku_reference_no = request.POST.get('product-parent-sku'),
         live = False,
@@ -156,6 +164,8 @@ def product_import(request, selected_category):
       'product': product,
       'selected_category': selected_category,
       'variations': variations,
+      'showVariations': showVariations,
+      'showWithoutVariation': showWithoutVariation,
       'CONDITION_CHOICES': CONDITION_CHOICES
     })
 
