@@ -79,72 +79,6 @@
             {# End Third Level Category #}
 
         </div>
-        <!--<div class="row">-->
-        <!--{# First Level Category #}-->
-        <!--<div class="col-4">-->
-
-        <!--<div class="list-group" id="myList" role="tablist">-->
-        <!--{% for c in categories %}-->
-        <!--&lt;!&ndash; List group &ndash;&gt;-->
-        <!--<a class="list-group-item list-group-item-action" data-toggle="list" href="#{{c.unique_id}}" role="tab">{{c.name}}</a>-->
-
-
-        <!--{% endfor %}-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--{# End of First Level Category #}-->
-
-
-        <!--{# Second Level Category #}-->
-        <!--<div class="col-8">-->
-        <!--<div class="tab-content">-->
-
-        <!--{% for c in categories %}-->
-        <!--<div class="tab-pane fade" id="{{c.unique_id}}" role="tabpanel">...</div>-->
-        <!--{% for c2 in c.children %}-->
-        <!--{{c2.name}} Child - -->
-
-        <!--{% endfor %}-->
-        <!--</div>-->
-        <!--{% endfor %}-->
-
-        <!--</div>-->
-        <!--</div>-->
-        <!--{# End of Second Level Category #}-->
-        <!--</div>-->
-        <!--<div class="card">-->
-        <!--<div id="heading1">-->
-        <!--<button class="btn btn-link btn-level-1 btn-{{c.unique_id}}" type="button" data-toggle="collapse" data-target="#{{c.unique_id}}" aria-expanded="false" aria-controls="{{c.unique_id}}">-->
-        <!--{{c.name}}-->
-        <!--</button>-->
-        <!--</div>-->
-        <!--<div id="{{c.unique_id}}" class="collapse l2-categories level-2 parent-btn-{{c.unique_id}}" aria-labelledby="heading1" data-parent="#accordion1" style="position: absolute; left: 300px; top: {{c.top}};">-->
-        <!--<div class="accordion" id="accordion2">-->
-        <!--{% for c2 in c.children %}-->
-        <!--<div class="card">-->
-        <!--<div id="heading2">-->
-        <!--<button class="btn btn-link btn-level-2 btn-{{c2.unique_id}}" type="button" data-toggle="collapse" data-target="#{{c2.unique_id}}" aria-expanded="false" aria-controls="{{c2.unique_id}}" onclick="toggleL2(event)">-->
-        <!--{{c2.name}}-->
-        <!--</button>-->
-        <!--</div>-->
-        <!--<div id="{{c2.unique_id}}" class="collapse l3-categories level-3 parent-btn-{{c2.unique_id}}" aria-labelledby="heading2" data-parent="#accordion2" style="position: absolute; left: 300px; top: {{c2.top}};">-->
-        <!--<div class="accordion" id="accordion3">-->
-        <!--{% for c3 in c2.children %}-->
-        <!--<div class="card">-->
-        <!--<div id="heading3">-->
-        <!--<a class="btn btn-link" name="category" href="/products/add-single-product/{{c3.unique_id}}">-->
-        <!--{{c3.name}}-->
-        <!--</a>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--{% endfor %}-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--{% endfor %}-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
     </form>
     {% else %}
 
@@ -161,68 +95,7 @@
 
         <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl">Publish</button>
     </div>
-<<<<<<< HEAD
-  </form>
-  {% else %}
-  <form action="{{page.url}}" enctype="multipart/form-data" method="POST">
-    {% csrf_token %}
-    <div class="row">
-      <div class="col-md-12">
-        <h2>Basic</h2>
-      </div>
-      <div class="col-md-12">
-        <label for="product-name">Product Code: </label>
-        <input type="text" name="product-code" class="form-control" placeholder="Code" id="id_product-code" value="{{product.product_code}}">
-      </div>
-      <div class="col-md-12">
-        <label for="product-name">Product Name: </label>
-        <input type="text" name="product-name" class="form-control" placeholder="Name" id="id_product-name" value="{{product.product_name}}">
-      </div>
-      <div class="col-md-12">
-        <label for="product-description">Product Description: </label>
-        <textarea name="product-description" class="form-control" placeholder="Description" id="id_product-description" value="{{product.product_description}}">{{product.product_description}}</textarea>
-      </div>
-      <div class="col-md-12">
-        <h2>Selected Category</h2>
-      </div>
-      <div class="col-md-10">
-        <input type="text" name="selected_category" class="form-control" id="id_product-name" value="{{product.category}}" disabled>
-      </div>
-      <div class="col-md-2">
-          <a class="btn btn-success" href="/products/add-single-product/index">
-            Change Category
-          </a>
-      </div>
-      <!-- VARIATIONS -->
-      <div class="col-md-12">
-        <h2>Variations</h2>
-      </div>
-      {{variations}}
-      {% for v in variations %}
-      {% if forloop.counter0 == 0 or v.variation_sku %}
-        <div class="variation variation-{{forloop.counter0}} col-md-12">
-      {% else %}
-        <div class="variation variation-{{forloop.counter0}} col-md-12" style="display: none;">
-      {% endif %}
-        <div class="col-md-12">
-            <h3>Variation {{forloop.counter}}</h3>
-        </div>
-        <div class="col-md-12">
-            <label for="product-variation-{{forloop.counter0}}-sku">Variation SKU: </label>
-            <input type="text" name="product-variation-{{forloop.counter0}}-sku" class="form-control" placeholder="SKU" id="id_product-variation-sku" value="{{v.variation_sku}}">
-        </div>
-        <div class="col-md-12">
-            <label for="product-variation-{{forloop.counter0}}-name">Variation Name: </label>
-            <input type="text" name="product-variation-{{forloop.counter0}}-name" class="form-control" placeholder="Name" id="id_product-variation-name" value="{{v.variation_name}}">
-        </div>
-        <div class="col-md-12">
-            <label for="product-variation-{{forloop.counter0}}-price">Variation Price: </label>
-            <input type="text" name="product-variation-{{forloop.counter0}}-price" class="form-control" placeholder="Price ₱" id="id_product-price" value="{{v.variation_price}}">
-        </div>
-        <div class="col-md-12">
-            <label for="product-variation-{{forloop.counter0}}-stock">Variation Stock: </label>
-            <input type="number" name="product-variation-{{forloop.counter0}}-stock" class="form-control" placeholder="Stock" id="id_product-variation-stock" value="{{v.variation_stock}}">
-=======
+
         {% csrf_token %}
 
         {# Basic Info #}
@@ -273,7 +146,6 @@
 
                 </div>
             </div>
->>>>>>> b37972bb6a52dc028d0f8e005817927df2c1c107
         </div>
         {# End of Basic Info #}
 
@@ -318,23 +190,25 @@
 
                 {# With Variation Tab #}
                     <div class="tab-pane fade" id="with_variations" role="tabpanel">
+                        {% for v in variations %}
+                        {% if forloop.counter0 == 0 or v.variation_sku %}
+                        <div id="variation-container-{{forloop.counter}}"
+                             class="form-group variation variation-{{forloop.counter0}}">
+                            {% else %}
+                            <div id="variation-container-{{forloop.counter}}"
+                                 class="form-group variation variation-{{forloop.counter0}}" style="display: none;">
+                                {% endif %}
 
-                    {% for v in variations %}
-                    {% if v != 0 %}
-                    <div id="variation-container-{{forloop.counter}}" class="form-group variation variation-{{forloop.counter0}}" style="display: none;">
-                    {% else %}
-                    <div id="variation-container-{{forloop.counter}}" class="form-group variation variation-{{forloop.counter0}}">
-                    {% endif %}
+                                {% if forloop.counter0 != 0 or not v.variation_sku %}
+                                <hr class="sidebar-divider mb-4"/>
+                                {% endif %}
+                                <div class="d-flex">
+                                    <h5 class="mr-auto text-primary">Variation {{forloop.counter}}</h5>
 
-                        {% if v != 0 %}
-                        <hr class="sidebar-divider mb-4"/>
-                            {% endif %}
-                        <div class="d-flex">
-                        <h5 class="mr-auto text-primary">Variation {{forloop.counter}}</h5>
-                        {% if v != 0 %}
-                        <a class="ml-3 mt-1 text-danger" onclick="hideVariation({{forloop.counter}})">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                            {% if forloop.counter0 != 0 %}
+                            <a class="ml-3 mt-1 text-danger" onclick="hideVariation({{forloop.counter}})">
+                                <i class="fas fa-trash"></i>
+                            </a>
                             {% endif %}
                         </div>
 
@@ -342,7 +216,7 @@
                             <label for="product-variation-{{forloop.counter0}}-name" class="col-sm-3 col-form-label">Name</label>
                             <div class="col-sm-9">
                                 <input type="text" name="product-variation-{{forloop.counter0}}-name" class="form-control" placeholder="Name"
-                                       id="product-variation-{{forloop.counter0}}-name" required>
+                                       id="product-variation-{{forloop.counter0}}-name" required value="{{v.variation_name}}">
                             </div>
                         </div>
 
@@ -350,8 +224,8 @@
                         <div class="form-group row mt-3 mb-4">
                             <label for="product-variation-{{forloop.counter0}}-sku" class="col-sm-3 col-form-label">SKU</label>
                             <div class="col-sm-9">
-                                <input type="text" name="product-variation-{{forloop.counter0}}-sku" class="form-control" placeholder="Name"
-                                       id="product-variation-{{forloop.counter0}}-sku" required>
+                                <input type="text" name="product-variation-{{forloop.counter0}}-sku" class="form-control" placeholder="SKU"
+                                       id="product-variation-{{forloop.counter0}}-sku" required value="{{v.variation_sku}}">
                             </div>
                         </div>
 
@@ -360,7 +234,7 @@
 
                             <div class="col-sm-9">
                                 <input type="number" name="product-variation-{{forloop.counter0}}-price" class="form-control" placeholder="Price"
-                                       id="product-variation-{{forloop.counter0}}-price"
+                                       id="product-variation-{{forloop.counter0}}-price" value="{{v.variation_price}}"
                                        required>
                             </div>
                         </div>
@@ -371,7 +245,7 @@
 
                             <div class="col-sm-9">
                                 <input type="number" name="product-variation-{{forloop.counter0}}-stock" class="form-control" placeholder="Stock"
-                                       id="product-variation-{{forloop.counter0}}-stock"
+                                       id="product-variation-{{forloop.counter0}}-stock" value="{{v.variation_stock}}"
                                        required>
                             </div>
                         </div>
