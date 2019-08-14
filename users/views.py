@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from wagtail.core.models import Collection, GroupCollectionPermission
+from django.contrib.auth.models import Group, Permission
 
 from django.contrib.auth.models import User
 from users.models import Profile
