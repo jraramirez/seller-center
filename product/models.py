@@ -45,7 +45,7 @@ class Product(ClusterableModel):
   ]
   product_code = models.CharField(null=True, blank=True, max_length=500)
   product_name = models.CharField(null=True, blank=True, max_length=500)
-  product_description = models.CharField(null=True, blank=True, max_length=500)
+  product_description = models.TextField(null=True, blank=True)
   product_weight = models.CharField(null=True, blank=True, max_length=500)
   product_condition = models.CharField(null=True, blank=True, choices=CONDITION_CHOICES, default=CONDITION_CHOICES[0], max_length=500)
   product_price = models.IntegerField(blank=True, null=True, default=None)
