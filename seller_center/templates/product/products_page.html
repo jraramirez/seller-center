@@ -22,7 +22,7 @@
 
 <div class="row">
   {# Tab Content #}
-  <div class="tab-content products-tab" id="productsTabContent">
+  <div class="container-fluid tab-content products-tab" id="productsTabContent">
       {% include "product/includes/all_products.html" with allProducts=allProducts %}
       {% include "product/includes/live_products.html" with liveProducts=liveProducts %}
       {% include "product/includes/sold_out_products.html" with soldOutProducts=soldOutProducts %}
