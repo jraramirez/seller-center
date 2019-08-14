@@ -94,7 +94,7 @@ def product_import(request, selected_category):
         parent_sku_reference_no = request.POST.get('product-parent-sku'),
         live = False,
         suspended = False,
-        unlisted = False,
+        unlisted = True,
         unpublished = False
       )
       t.save()
@@ -472,6 +472,8 @@ def products_import(request):
                   image_url_from_sku = image_url_from_sku
                 )
                 v.save()
+          if(not unpublished):
+            Product.objects.filter(id=productID).update(unlisted=True)  
           Product.objects.filter(id=productID).update(stock_sum=stock_sum, unpublished=unpublished)
 
     if(len(Errors.objects.all())):
