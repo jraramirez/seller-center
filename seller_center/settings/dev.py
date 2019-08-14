@@ -40,12 +40,13 @@ STATIC_URL = '/static/'
 AWS_STORAGE_BUCKET_NAME = 'lyka-seller-center'
 AWS_ACCESS_KEY_ID = 'AKIAYO6GTQEHMJXJRD3Y'
 AWS_SECRET_ACCESS_KEY = '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'
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_CUSTOM_DOMAIN = 'd3rdlm5j4gpnnq.cloudfront.net'
 AWS_S3_FILE_OVERWRITE = True
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
-MEDIAFILES_LOCATION = 'media'
-DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+MEDIA_URL = "https://d3rdlm5j4gpnnq.cloudfront.net/"
+MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 # SECURITY WARNING: define the correct hosts in production!

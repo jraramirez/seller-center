@@ -6,7 +6,6 @@ ALLOWED_HOSTS = ['seller-center.ap-southeast-1.elasticbeanstalk.com']
 
 
 # Database
-print(os.environ)
 if 'RDS_HOSTNAME' in os.environ:
     DATABASES = {
         'default': {

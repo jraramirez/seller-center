@@ -17,9 +17,9 @@ from product.models import Category
 from product.models import Variations
 from product.models import Errors
 
-AWS_STORAGE_BUCKET_NAME = 'lyka-seller-center'
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-media_url = "https://%s/media/" % AWS_S3_CUSTOM_DOMAIN
+from seller_center.settings.production import MEDIA_URL
+
+media_url = MEDIA_URL
 
 
 class UploadFileForm(forms.Form):
@@ -30,7 +30,9 @@ def product_import(request, selected_category):
     ('N', 'New'),
     ('U', 'Used'),
   ]
-  nVariations = 7
+  showVariations = ""
+  showWithoutVariation = "active show"
+
   if(selected_category == 'index'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
@@ -42,7 +44,6 @@ def product_import(request, selected_category):
   elif(request.method == "POST"):
     product = {}
     variations = [{}]*7
-    print(request.POST)
     product['product_code'] = request.POST.get('product-code')
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     product['product_name'] = request.POST.get('product-name')
@@ -51,7 +52,9 @@ def product_import(request, selected_category):
     product['product_width'] = request.POST.get('product-width')
     product['product_height'] = request.POST.get('product-height')
     product['product_weight'] = request.POST.get('product-weight')
+
     product['product_price'] = request.POST.get('product-price')
+
     product['product_stock'] = request.POST.get('product-stock')
     product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
@@ -79,12 +82,14 @@ def product_import(request, selected_category):
         category = selected_category,
         product_name = request.POST.get('product-name'),
         product_description = request.POST.get('product-description'),
-        product_price = request.POST.get('product-price'),
-        stock_sum = request.POST.get('product-stock'),
-        product_length = request.POST.get('product_length'),
-        product_width = request.POST.get('product_width'),
-        product_height = request.POST.get('product_height'),
-        product_weight = request.POST.get('product-weight'),
+        # this may be empty strings so we replace it with None if empty string
+        product_price = request.POST.get('product-price') if request.POST.get('product-price') else None, #this is evaluates as tertiary operator
+        stock_sum = request.POST.get('product-stock') if request.POST.get('product-stock') else None,
+        product_length = request.POST.get('product_length') if request.POST.get('product_length') else None,
+        product_width = request.POST.get('product_width') if request.POST.get('product_width') else None,
+        product_height = request.POST.get('product_height') if request.POST.get('product_height') else None,
+        product_weight = request.POST.get('product-weight') if request.POST.get('product-weight') else None,
+
         product_condition = request.POST.get('product-condition'),
         parent_sku_reference_no = request.POST.get('product-parent-sku'),
         live = False,
@@ -106,17 +111,17 @@ def product_import(request, selected_category):
             price =request.POST.get('product-variation-'+str(i)+'-price'),
             sku = request.POST.get('product-variation-'+str(i)+'-sku'),
             stock = variationStock,
-            name = request.POST.get('product-variation-'+str(i)+'-sku'),
+            name = request.POST.get('product-variation-'+str(i)+'-name'),
             image_url_from_sku = None
           )
           v.save()
           if(request.FILES):
             image = request.FILES['product-variation-'+str(i)+'-image']
-            Image.objects.create(
-              file=image,
-              title=image.name
-            )
-            # v.image_upload.save(image.name, image)
+            # Image.objects.create(
+            #   file=image,
+            #   title=image.name
+            # )
+            v.image_upload.save(image.name, image)
       Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
       messages.success(request, 'Product added successfully.')
       return HttpResponseRedirect("/products/#all")
@@ -156,6 +161,8 @@ def product_import(request, selected_category):
       'product': product,
       'selected_category': selected_category,
       'variations': variations,
+      'showVariations': showVariations,
+      'showWithoutVariation': showWithoutVariation,
       'CONDITION_CHOICES': CONDITION_CHOICES
     })
 
@@ -165,6 +172,9 @@ def product_edit(request, product_id):
     ('N', 'New'),
     ('U', 'Used'),
   ]
+
+  showVariations = ""
+  showWithoutVariation = "active show"
 
   # if(selected_category == 'index'):
   #   categories = {}
@@ -212,7 +222,7 @@ def product_edit(request, product_id):
     product = {}
     selectedProduct = Product.objects.filter(id=product_id)[0]
     product['product_code'] = selectedProduct.product_code
-    product['category'] = selectedProduct.category
+    product['category'] = Category.objects.filter(unique_id=selectedProduct.category)[0].name
     product['product_name'] = selectedProduct.product_name
     product['product_description'] = selectedProduct.product_description
     product['product_price'] = selectedProduct.product_price
@@ -221,13 +231,35 @@ def product_edit(request, product_id):
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
     product['product_category'] = Category.objects.filter(unique_id=selectedProduct.category)[0].name
     product['variations'] = Variations.objects.filter(product_id=product_id)
+
+    variations = [{}]*7
+    for index, v in enumerate(product['variations']):
+      tmp = {
+        'variation_sku': v.sku,
+        'variation_price': v.price,
+        'variation_stock': v.stock,
+        'variation_name': v.name,
+        'variation_url': v.image_url
+      }
+      variations[index] = tmp
+      showVariations = "active show"
+      showWithoutVariation = ""
+    print("Variations: %s" % product['variations'])
     return render(request, 'product/product_edit_page.html', {
       'CONDITION_CHOICES': CONDITION_CHOICES,
       'product': product,
+      'variations': variations,
+      'showVariations': showVariations,
+      'showWithoutVariation': showWithoutVariation,
     })
 
 
 def products_import(request):
+  '''
+  Bulk upload via csv
+  :param request:
+  :return:
+  '''
   if(request.method == "POST" and request.POST.get('upload')):
     autoPair = request.POST.get('auto-pair')
     form = UploadFileForm(request.POST, request.FILES)
