@@ -66,33 +66,33 @@
                             {% endif %}
                         </a>
                     </td>
-                    <td>{{product.product_name}}</td>
-                    <td>{{product.parent_sku_reference_no}}</td>
-                    <td>
+                    <td class="text-center">{{product.product_name}}</td>
+                    <td class="text-center">{{product.parent_sku_reference_no}}</td>
+                    <td class="text-center">
                     {% for v in product.variations.all %}
                         {{v.name}}
                         <br>
                     {% endfor %}
                     </td>
-                    <td>
+                    <td class="text-center">
                     {% for v in product.variations.all %}
                         {{v.price}}
                         <br>
                     {% endfor %}
                     </td>
-                    <td>
+                    <td class="text-center">
                     {% for v in product.variations.all %}
                         {{v.stock}}
                         <br>
                     {% endfor %}
                     </td>
-                    <td>
+                    <td class="text-center">
                     {% for v in product.variations.all %}
                         0
                         <br>
                     {% endfor %}
                     </td>
-                    <td>
+                    <td class="text-center">
                         <div class="dropdown show">
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a>
