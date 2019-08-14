@@ -30,7 +30,6 @@ def product_import(request, selected_category):
     ('N', 'New'),
     ('U', 'Used'),
   ]
-  nVariations = 7
   showVariations = ""
   showWithoutVariation = "active show"
 
@@ -118,11 +117,11 @@ def product_import(request, selected_category):
           v.save()
           if(request.FILES):
             image = request.FILES['product-variation-'+str(i)+'-image']
-            Image.objects.create(
-              file=image,
-              title=image.name
-            )
-            # v.image_upload.save(image.name, image)
+            # Image.objects.create(
+            #   file=image,
+            #   title=image.name
+            # )
+            v.image_upload.save(image.name, image)
       Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
       messages.success(request, 'Product added successfully.')
       return HttpResponseRedirect("/products/#all")
