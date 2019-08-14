@@ -58,7 +58,7 @@
                             {% if product.variations.all.0.image_url %}
                                 <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
                             {% elif product.variations.all.0.image_upload %}
-                                <img src="{{product.variations.all.0.image_upload.url}}" alt="" width="80"/>
+                                <img src="{{product.variations.all.0.image_url_from_upload}}" alt="" width="80"/>
                             {% elif product.variations.all.0.image_url_from_sku %}
                                 <img src="{{product.variations.all.0.image_url_from_sku}}" alt="" width="80"/>
                             {% else %}
