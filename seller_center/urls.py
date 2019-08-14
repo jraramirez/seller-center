@@ -10,6 +10,7 @@ from search import views as search_views
 from sign_up import views as sign_up_views
 from product import views as product_views
 from users import views as users_views
+from sales import views as sales_views
 
 urlpatterns = [
     url(r'^django-admin/', admin.site.urls),
@@ -37,7 +38,7 @@ urlpatterns = [
     url(r'^products/unlist/(?P<product_id>.*)/$', product_views.product_unlist, name='product_unlist'),
     url(r'^products/suspend/(?P<product_id>.*)/$', product_views.product_suspend, name='product_suspend'),
     url(r'^products/live/(?P<product_id>.*)/$', product_views.product_live, name='product_live'),
-
+    url(r'^orders/', sales_views.orders, name='orders'),
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
     # the list:

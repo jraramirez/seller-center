@@ -1,9 +1,29 @@
-{% extends "base.html" %}
-
+{% extends "index.html" %}
+{% load static %}
 {% load wagtailcore_tags wagtailimages_tags %}
+{% block extra_css %}
 
+{% endblock %}
 {% block body_class %}template-salespage{% endblock %}
 
 {% block content %}
+	{% if errors %}
+	<div class="alert alert-danger" role="alert">
+		{% for e in errors %}
+			{{e}}
+		{% endfor %}        
+		</div>
+	{% endif %}
+	<div class="form-wrap">
+		<!-- Page Heading -->
+		<div class="d-sm-flex align-items-center justify-content-between mb-4">
+			<h1 class="h3 mr-auto mb-0 text-gray-800">Orders</h1>
+		</div>
+		<div class="row mx-3">
+			<p>insert all merchant orders here...</p>
+		</div>
+	</div>
+{% endblock %}
+{% block extra_js %}
 
 {% endblock %}
