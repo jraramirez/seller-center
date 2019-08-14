@@ -92,7 +92,7 @@ class Product(ClusterableModel):
         Errors.objects.filter(product_id=self.id).filter(name='Product name should have at least 16 characters').delete()
     if(self.product_code):
       Errors.objects.filter(product_id=self.id).filter(name='Product code is required').delete()
-      if(len(self.product_code)<=100):
+      if(len(str(self.product_code))<=100):
         Errors.objects.filter(product_id=self.id).filter(name='Product code exceeds maximum lenght of 100').delete()
     if(self.product_description):
       Errors.objects.filter(product_id=self.id).filter(name='Product description is required').delete()
@@ -121,6 +121,7 @@ class Variations(Orderable, models.Model):
     blank=True,
     help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
   )
+  image_url_from_upload = models.CharField(null=True, blank=True, max_length=2000)
   image_url_from_sku = models.CharField(null=True, blank=True, max_length=2000)
   product = ParentalKey('Product', related_name='variations', null=True, blank=True)
 
