@@ -17,9 +17,9 @@ from product.models import Category
 from product.models import Variations
 from product.models import Errors
 
-AWS_STORAGE_BUCKET_NAME = 'lyka-seller-center'
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-media_url = "https://%s/media/" % AWS_S3_CUSTOM_DOMAIN
+from seller_center.settings.production import MEDIA_URL
+
+media_url = MEDIA_URL
 
 
 class UploadFileForm(forms.Form):
@@ -256,6 +256,11 @@ def product_edit(request, product_id):
 
 
 def products_import(request):
+  '''
+  Bulk upload via csv
+  :param request:
+  :return:
+  '''
   if(request.method == "POST" and request.POST.get('upload')):
     autoPair = request.POST.get('auto-pair')
     form = UploadFileForm(request.POST, request.FILES)

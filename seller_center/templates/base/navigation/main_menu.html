@@ -3,7 +3,7 @@
  <ul class="nav-main navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin/">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
             <div class="sidebar-brand-icon">
             <img src="{% static 'images/logo_white_transparent_bg.svg'%}" alt="Seller Center" width="42">
             </div>
@@ -45,9 +45,10 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">View Product</h6>
                     <a class="collapse-item" href="/products/">All</a>
-                    <a class="collapse-item" href="#">Live</a>
-                    <a class="collapse-item" href="#">Soldout</a>
-                    <a class="collapse-item" href="#">Unlisted</a>
+                    <a class="collapse-item" href="/products/#live">Live</a>
+                    <a class="collapse-item" href="/products/#souldout">Soldout</a>
+                    <a class="collapse-item" href="/products/#unlisted">Unlisted</a>
+                    <a class="collapse-item" href="/products/#suspended">Suspended</a>
                     <h6 class="collapse-header">New Product</h6>
                     <a class="collapse-item" href="#">Add Single</a>
                     <a class="collapse-item" href="#">Add Multiple</a>
@@ -68,7 +69,7 @@
         <hr class="sidebar-divider">
         <!-- Nav Item - Image Manager Menu -->
         <li class="menu-item nav-item">
-            <a class="nav-link" href="charts.html">
+            <a class="nav-link" href="/admin/images/">
                 <i class="fas fa-fw fa-images" aria-hidden="true"></i>
                 <span>Image Manager</span></a>
         </li>
