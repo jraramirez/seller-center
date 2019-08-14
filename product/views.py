@@ -105,6 +105,7 @@ def product_import(request, selected_category):
           if(request.POST.get('product-variation-'+str(i)+'-stock')):
             variationStock = int(request.POST.get('product-variation-'+str(i)+'-stock'))
           stock_sum = stock_sum + variationStock
+
           v = Variations(
             product_id = t.id,
             image_url = None,
@@ -278,7 +279,6 @@ def products_import(request):
           productID = None
           product = Product.objects.filter(profile_id=request.user.id).filter(product_code=row['product_code'])
           if(len(product)):
-            print(product[0].id)
             product.update(
               product_code = row['product_code'],
               profile_id = request.user.id,
@@ -439,16 +439,28 @@ def products_import(request):
               image_url = row['image1']
               if(row['image1'] != row['image1']):
                 image_url = None
-              v = Variations(
-                product_id = productID,
-                image_url = image_url,
-                price = row['variation'+str(i+1)+'_price'],
-                sku = row['variation'+str(i+1)+'_id'],
-                stock = variationStock,
-                name = row['variation'+str(i+1)+'_name'],
-                image_url_from_sku = image_url_from_sku
-              )
-              v.save()
+              variation = Variations.objects.filter(product_id=productID).filter(sku=row['variation'+str(i+1)+'_id'])
+              if(len(variation)):
+                variation.update(
+                  product_id = productID,
+                  image_url = image_url,
+                  price = row['variation'+str(i+1)+'_price'],
+                  sku = row['variation'+str(i+1)+'_id'],
+                  stock = variationStock,
+                  name = row['variation'+str(i+1)+'_name'],
+                  image_url_from_sku = image_url_from_sku
+                )
+              else:
+                v = Variations(
+                  product_id = productID,
+                  image_url = image_url,
+                  price = row['variation'+str(i+1)+'_price'],
+                  sku = row['variation'+str(i+1)+'_id'],
+                  stock = variationStock,
+                  name = row['variation'+str(i+1)+'_name'],
+                  image_url_from_sku = image_url_from_sku
+                )
+                v.save()
           Product.objects.filter(id=productID).update(stock_sum=stock_sum, unpublished=unpublished)
 
     if(len(Errors.objects.all())):
