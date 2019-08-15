@@ -49,6 +49,8 @@ def product_import(request, selected_category):
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     product['product_name'] = request.POST.get('product-name')
     product['product_description'] = request.POST.get('product-description')
+
+    #Shipping Info
     product['product_length'] = request.POST.get('product-length')
     product['product_width'] = request.POST.get('product-width')
     product['product_height'] = request.POST.get('product-height')
@@ -86,9 +88,9 @@ def product_import(request, selected_category):
         # this may be empty strings so we replace it with None if empty string
         product_price = request.POST.get('product-price') if request.POST.get('product-price') else None, #this is evaluates as tertiary operator
         stock_sum = request.POST.get('product-stock') if request.POST.get('product-stock') else None,
-        product_length = request.POST.get('product_length') if request.POST.get('product_length') else None,
-        product_width = request.POST.get('product_width') if request.POST.get('product_width') else None,
-        product_height = request.POST.get('product_height') if request.POST.get('product_height') else None,
+        product_length = request.POST.get('product-length') if request.POST.get('product-length') else None,
+        product_width = request.POST.get('product-width') if request.POST.get('product-width') else None,
+        product_height = request.POST.get('product-height') if request.POST.get('product-height') else None,
         product_weight = request.POST.get('product-weight') if request.POST.get('product-weight') else None,
 
         product_condition = request.POST.get('product-condition'),
@@ -185,12 +187,13 @@ def product_edit(request, product_id):
   if (request.method == "POST"):
     product = {}
     variations = [{}] * 7
-    print("EDIT POST %s" % request.POST.get('product_category_id'))
+    print("EDIT POST %s" % request.POST)
 
     product['product_code'] = request.POST.get('product-code')
     product['product-category-id'] = request.POST.get('product-category-id')
     product['product_name'] = request.POST.get('product-name')
     product['product_description'] = request.POST.get('product-description')
+
     product['product_length'] = request.POST.get('product-length')
     product['product_width'] = request.POST.get('product-width')
     product['product_height'] = request.POST.get('product-height')
@@ -230,9 +233,9 @@ def product_edit(request, product_id):
         product_price=request.POST.get('product-price') if request.POST.get('product-price') else None,
         # this is evaluates as tertiary operator
         stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
-        product_length=request.POST.get('product_length') if request.POST.get('product_length') else None,
-        product_width=request.POST.get('product_width') if request.POST.get('product_width') else None,
-        product_height=request.POST.get('product_height') if request.POST.get('product_height') else None,
+        product_length=request.POST.get('product-length') if request.POST.get('product-length') else None,
+        product_width=request.POST.get('product-width') if request.POST.get('product-width') else None,
+        product_height=request.POST.get('product-height') if request.POST.get('product-height') else None,
         product_weight=request.POST.get('product-weight') if request.POST.get('product-weight') else None,
 
         product_condition=request.POST.get('product-condition'),
@@ -320,11 +323,17 @@ def product_edit(request, product_id):
     product['category'] = Category.objects.filter(unique_id=selectedProduct.category)[0].name
     product['product_name'] = selectedProduct.product_name
     product['product_description'] = selectedProduct.product_description
+
     product['product_price'] = selectedProduct.product_price
     product['stock_sum'] = selectedProduct.stock_sum
-    product['product_weight'] = selectedProduct.product_weight
+
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
     product['product_category_id'] = selectedProduct.category
+
+    product['product_length'] = selectedProduct.product_length
+    product['product_width'] = selectedProduct.product_width
+    product['product_height'] = selectedProduct.product_height
+    product['product_weight'] = selectedProduct.product_weight
     product['variations'] = Variations.objects.filter(product_id=product_id)
 
     variations = [{}]*7
