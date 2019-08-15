@@ -20,7 +20,7 @@ from product.models import Errors
 from seller_center.settings.production import MEDIA_URL
 from seller_center.settings.base import CSV_COLUMNS
 
-media_url = MEDIA_URL
+media_url = MEDIA_URL 
 
 
 class UploadFileForm(forms.Form):
@@ -123,9 +123,9 @@ def product_import(request, selected_category):
             #   file=image,
             #   title=image.name
             # )
-            v.image_upload.save(image.name, image)
+            v.image_upload.save(str(request.user.id) + '/' + image.name, image)
             Variations.objects.filter(id=v.id).update(
-              image_url_from_upload = media_url + 'original_images/' + str(image.name)
+              image_url_from_upload = media_url + 'original_images/' + str(request.user.id) + '/'  + str(image.name)
             )
       Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
       messages.success(request, 'Product added successfully.')
@@ -249,7 +249,6 @@ def product_edit(request, product_id):
       variations[index] = tmp
       showVariations = "active show"
       showWithoutVariation = ""
-    print("Variations: %s" % product['variations'])
     return render(request, 'product/product_edit_page.html', {
       'CONDITION_CHOICES': CONDITION_CHOICES,
       'product': product,
@@ -282,9 +281,9 @@ def products_import(request):
       if(not invalid):
         # Obtain titles of images
         imageTitles = []
-        for title in Image.objects.values_list('title', flat=True):
+        for title in Image.objects.all().values_list('title', flat=True):
           imageTitles.append(os.path.splitext(title)[0])
-        
+
         # Insert/Update each product from file to database
         with transaction.atomic():
           for index, row, in inputFileDF.head(500).iterrows():
