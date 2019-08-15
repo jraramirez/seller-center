@@ -27,8 +27,7 @@ class AwsBackend:
                 user = User.objects.get(username=username)
                 return user
             except User.DoesNotExist:
-                # Create a new user. There's no need to set a password
-                # because only the password from settings.py is checked.
+                # Create a new user.
                 user = User.objects.create_user(username=username, password=password)
                 group = Group.objects.get(name='Seller')
                 user.groups.add(group)
