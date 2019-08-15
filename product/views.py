@@ -55,8 +55,8 @@ def product_import(request, selected_category):
     product['product_weight'] = request.POST.get('product-weight')
 
     product['product_price'] = request.POST.get('product-price')
-
     product['product_stock'] = request.POST.get('product-stock')
+
     product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
     errors = []
@@ -244,40 +244,46 @@ def product_edit(request, product_id):
         unpublished=False
       )
       t.save()
-      stock_sum = 0
-      variations = Variations.objects.filter(product_id=product_id)
-      for i in range(0, 8):
-        if (request.POST.get('product-variation-' + str(i) + '-sku')):
-          variationStock = 0
-          if (request.POST.get('product-variation-' + str(i) + '-stock')):
-            variationStock = int(request.POST.get('product-variation-' + str(i) + '-stock'))
-          stock_sum = stock_sum + variationStock
 
-          if i < variations.count():
-            v=variations[i]
-          else:
-            v = Variations()
-            v.product_id = product_id
+      # this means that product has no variation so we delete any existing variation
+      if request.POST.get('product-price'):
+        Variations.objects.filter(product_id=product_id).delete()
+      else:
+        stock_sum = 0
+        variations = Variations.objects.filter(product_id=product_id)
+        for i in range(0, 8):
+          if (request.POST.get('product-variation-' + str(i) + '-sku')):
+            variationStock = 0
+            if (request.POST.get('product-variation-' + str(i) + '-stock')):
+              variationStock = int(request.POST.get('product-variation-' + str(i) + '-stock'))
+            stock_sum = stock_sum + variationStock
 
-          v.image_url=None
-          v.price=request.POST.get('product-variation-' + str(i) + '-price')
-          v.sku=request.POST.get('product-variation-' + str(i) + '-sku')
-          v.stock=variationStock
-          v.name=request.POST.get('product-variation-' + str(i) + '-name')
-          v.image_url_from_sku=None
+            if i < variations.count():
+              v=variations[i]
+            else:
+              v = Variations()
+              v.product_id = product_id
 
-          v.save()
-          if (request.FILES):
-            image = request.FILES['product-variation-' + str(i) + '-image']
-            # Image.objects.create(
-            #   file=image,
-            #   title=image.name
-            # )
-            v.image_upload.save(str(request.user.id) + '/' + image.name, image)
-            Variations.objects.filter(id=v.id).update(
-              image_url_from_upload=media_url + 'original_images/' + str(request.user.id) + '/' + str(image.name)
-            )
-      Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
+            v.image_url=None
+            v.price=request.POST.get('product-variation-' + str(i) + '-price')
+            v.sku=request.POST.get('product-variation-' + str(i) + '-sku')
+            v.stock=variationStock
+            v.name=request.POST.get('product-variation-' + str(i) + '-name')
+            v.image_url_from_sku=None
+
+            v.save()
+            if (request.FILES):
+              image = request.FILES['product-variation-' + str(i) + '-image']
+              # Image.objects.create(
+              #   file=image,
+              #   title=image.name
+              # )
+              v.image_upload.save(str(request.user.id) + '/' + image.name, image)
+              Variations.objects.filter(id=v.id).update(
+                image_url_from_upload=media_url + 'original_images/' + str(request.user.id) + '/' + str(image.name)
+              )
+        Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
+
       messages.success(request, 'Product edited successfully.')
       return HttpResponseRedirect("/products/#unlisted")
     else:
@@ -310,6 +316,7 @@ def product_edit(request, product_id):
     product = {}
     selectedProduct = Product.objects.filter(id=product_id)[0]
     product['product_code'] = selectedProduct.product_code
+    product['product_stock'] = selectedProduct.stock_sum
     product['category'] = Category.objects.filter(unique_id=selectedProduct.category)[0].name
     product['product_name'] = selectedProduct.product_name
     product['product_description'] = selectedProduct.product_description
