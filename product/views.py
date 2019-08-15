@@ -327,13 +327,17 @@ def product_edit(request, product_id):
     product['product_price'] = selectedProduct.product_price
     product['stock_sum'] = selectedProduct.stock_sum
 
-    product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
+
     product['product_category_id'] = selectedProduct.category
 
     product['product_length'] = selectedProduct.product_length
     product['product_width'] = selectedProduct.product_width
     product['product_height'] = selectedProduct.product_height
     product['product_weight'] = selectedProduct.product_weight
+
+    product['product_condition'] = selectedProduct.product_condition
+    product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
+
     product['variations'] = Variations.objects.filter(product_id=product_id)
 
     variations = [{}]*7
