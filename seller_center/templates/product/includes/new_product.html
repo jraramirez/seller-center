@@ -50,8 +50,10 @@
                     <label for="id_product_description" class="col-sm-3 col-form-label"> Category</label>
                     <div class="col-sm-9">
                         <div class="input-group mb-3">
+                            <input type="hidden" name="product-category-id" class="form-control" id="id_product_category_id"
+                                   value="{{product.product_category_id}}">
                             <input type="text" name="product-category" class="form-control" id="id_product_category"
-                                   value="{{product.category}}" readonly disabled>
+                                   value="{{product.category}}" disabled>
                             <div class="input-group-append">
 
                           <a class="btn btn-outline-secondary" href="/products/add-single-product/index">
