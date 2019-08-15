@@ -482,7 +482,7 @@ def products_import(request):
       return HttpResponseRedirect("/products/add-new-products/")
     elif(len(Errors.objects.all())):
       messages.warning(request, 'Products added. Some products have data errors. Check out the unpublished tab to correct them.')
-      return HttpResponseRedirect("/products/#all")
+      return HttpResponseRedirect("/products/#unpublished")
     else:
       messages.success(request, 'Products added successfully.')
       return HttpResponseRedirect("/products/#all")
