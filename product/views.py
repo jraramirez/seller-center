@@ -49,14 +49,16 @@ def product_import(request, selected_category):
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     product['product_name'] = request.POST.get('product-name')
     product['product_description'] = request.POST.get('product-description')
+
+    #Shipping Info
     product['product_length'] = request.POST.get('product-length')
     product['product_width'] = request.POST.get('product-width')
     product['product_height'] = request.POST.get('product-height')
     product['product_weight'] = request.POST.get('product-weight')
 
     product['product_price'] = request.POST.get('product-price')
-
     product['product_stock'] = request.POST.get('product-stock')
+
     product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
     errors = []
@@ -86,9 +88,9 @@ def product_import(request, selected_category):
         # this may be empty strings so we replace it with None if empty string
         product_price = request.POST.get('product-price') if request.POST.get('product-price') else None, #this is evaluates as tertiary operator
         stock_sum = request.POST.get('product-stock') if request.POST.get('product-stock') else None,
-        product_length = request.POST.get('product_length') if request.POST.get('product_length') else None,
-        product_width = request.POST.get('product_width') if request.POST.get('product_width') else None,
-        product_height = request.POST.get('product_height') if request.POST.get('product_height') else None,
+        product_length = request.POST.get('product-length') if request.POST.get('product-length') else None,
+        product_width = request.POST.get('product-width') if request.POST.get('product-width') else None,
+        product_height = request.POST.get('product-height') if request.POST.get('product-height') else None,
         product_weight = request.POST.get('product-weight') if request.POST.get('product-weight') else None,
 
         product_condition = request.POST.get('product-condition'),
@@ -181,60 +183,161 @@ def product_edit(request, product_id):
   showVariations = ""
   showWithoutVariation = "active show"
 
-  # if(selected_category == 'index'):
-  #   categories = {}
-  #   with open('seller_center/static/documents/categories-full.json', 'r') as f:
-  #     categories = json.load(f)
-  #   return render(request, 'product/product_import_page.html', {
-  #     'categories': categories,
-  #     'selected_category': selected_category
-  #   })
-  if(request.method == "POST"):
-    Product.objects.filter(id=product_id).update(
-      product_code = request.POST.get('product-code'),
-      product_name = request.POST.get('product-name'),
-      product_description = request.POST.get('product-description'),
-      product_weight = request.POST.get('product-weight'),
-      parent_sku_reference_no = request.POST.get('product-parent-sku'),
-      product_condition = request.POST.get('product-condition'),
-    )
-    # stock_sum = 0
-    # for i in range(0,8):
-    #   if(request.POST.get('product-variation-'+str(i)+'-sku')):
-    #     variationStock = 0
-    #     if(request.POST.get('product-variation-'+str(i)+'-stock')):
-    #       variationStock = int(request.POST.get('product-variation-'+str(i)+'-stock'))
-    #     stock_sum = stock_sum + variationStock
-    #     v = Variations(
-    #       product_id = t.id,
-    #       image_url = None,
-    #       price =request.POST.get('product-variation-'+str(i)+'-price'),
-    #       sku = request.POST.get('product-variation-'+str(i)+'-sku'),
-    #       stock = variationStock,
-    #       name = request.POST.get('product-variation-'+str(i)+'-sku'),
-    #       image_url_from_sku = None
-    #     )
-    #     v.save()
-    #     image = request.FILES['product-variation-'+str(i)+'-image']
-    #     Image.objects.create(
-    #       file=image,
-    #       title=image.name
-    #     )
-    #     # v.image_upload.save(image.name, image)
-    messages.success(request, 'Product edited successfully.')
-    return HttpResponseRedirect("/products/#all")
+
+  if (request.method == "POST"):
+    product = {}
+    variations = [{}] * 7
+    print("EDIT POST %s" % request.POST)
+
+    product['product_code'] = request.POST.get('product-code')
+    product['product-category-id'] = request.POST.get('product-category-id')
+    product['product_name'] = request.POST.get('product-name')
+    product['product_description'] = request.POST.get('product-description')
+
+    product['product_length'] = request.POST.get('product-length')
+    product['product_width'] = request.POST.get('product-width')
+    product['product_height'] = request.POST.get('product-height')
+    product['product_weight'] = request.POST.get('product-weight')
+
+    product['product_price'] = request.POST.get('product-price')
+
+    product['product_stock'] = request.POST.get('product-stock')
+    product['product_condition'] = request.POST.get('product-condition')
+    product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
+    errors = []
+    if (not product['product_code']):
+      errors.append('Product Code is required; ')
+    if (not product['product-category-id']):
+      errors.append('Product Category is required; ')
+    if (not product['product_name']):
+      errors.append('Product Name is required; ')
+    if (not product['product_description']):
+      errors.append('Product Description is required; ')
+    for i in range(0, 7):
+      if (request.POST.get('product-variation-' + str(i) + '-sku')):
+        if (not request.POST.get('product-variation-' + str(i) + '-name')):
+          errors.append('Variation ' + str(i + 1) + ': name is required; ')
+        if (not request.POST.get('product-variation-' + str(i) + '-stock')):
+          errors.append('Variation ' + str(i + 1) + ': stock is required; ')
+        if (not request.POST.get('product-variation-' + str(i) + '-price')):
+          errors.append('Variation ' + str(i + 1) + ': price is required; ')
+    if (not errors):
+
+      t = Product(id=product_id,
+        product_code=request.POST.get('product-code'),
+        profile_id=request.user.id,
+        category=request.POST.get('product-category-id'),
+        product_name=request.POST.get('product-name'),
+        product_description=request.POST.get('product-description'),
+        # this may be empty strings so we replace it with None if empty string
+        product_price=request.POST.get('product-price') if request.POST.get('product-price') else None,
+        # this is evaluates as tertiary operator
+        stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
+        product_length=request.POST.get('product-length') if request.POST.get('product-length') else None,
+        product_width=request.POST.get('product-width') if request.POST.get('product-width') else None,
+        product_height=request.POST.get('product-height') if request.POST.get('product-height') else None,
+        product_weight=request.POST.get('product-weight') if request.POST.get('product-weight') else None,
+
+        product_condition=request.POST.get('product-condition'),
+        parent_sku_reference_no=request.POST.get('product-parent-sku'),
+
+        live=False,
+        suspended=False,
+        unlisted=True,
+        unpublished=False
+      )
+      t.save()
+
+      # this means that product has no variation so we delete any existing variation
+      if request.POST.get('product-price'):
+        Variations.objects.filter(product_id=product_id).delete()
+      else:
+        stock_sum = 0
+        variations = Variations.objects.filter(product_id=product_id)
+        for i in range(0, 8):
+          if (request.POST.get('product-variation-' + str(i) + '-sku')):
+            variationStock = 0
+            if (request.POST.get('product-variation-' + str(i) + '-stock')):
+              variationStock = int(request.POST.get('product-variation-' + str(i) + '-stock'))
+            stock_sum = stock_sum + variationStock
+
+            if i < variations.count():
+              v=variations[i]
+            else:
+              v = Variations()
+              v.product_id = product_id
+
+            v.image_url=None
+            v.price=request.POST.get('product-variation-' + str(i) + '-price')
+            v.sku=request.POST.get('product-variation-' + str(i) + '-sku')
+            v.stock=variationStock
+            v.name=request.POST.get('product-variation-' + str(i) + '-name')
+            v.image_url_from_sku=None
+
+            v.save()
+            if (request.FILES):
+              image = request.FILES['product-variation-' + str(i) + '-image']
+              # Image.objects.create(
+              #   file=image,
+              #   title=image.name
+              # )
+              v.image_upload.save(str(request.user.id) + '/' + image.name, image)
+              Variations.objects.filter(id=v.id).update(
+                image_url_from_upload=media_url + 'original_images/' + str(request.user.id) + '/' + str(image.name)
+              )
+        Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
+
+      messages.success(request, 'Product edited successfully.')
+      return HttpResponseRedirect("/products/#unlisted")
+    else:
+      showVariations = ""
+      showWithoutVariation = "active show"
+      for i in range(0, 7):
+        if (request.POST.get('product-variation-' + str(i) + '-sku')):
+          variationStock = None
+          if (request.POST.get('product-variation-' + str(i) + '-stock')):
+            variationStock = int(request.POST.get('product-variation-' + str(i) + '-stock'))
+          tmp = {
+            'variation_sku': request.POST.get('product-variation-' + str(i) + '-sku'),
+            'variation_price': request.POST.get('product-variation-' + str(i) + '-price'),
+            'variation_stock': variationStock,
+            'variation_name': request.POST.get('product-variation-' + str(i) + '-name')
+          }
+          variations[i] = tmp
+          showVariations = "active show"
+          showWithoutVariation = ""
+      return render(request, 'product/product_import_page.html', {
+        'product': product,
+        'errors': errors,
+        'selected_category': request.POST.get('product-category-id'),
+        'variations': variations,
+        'showVariations': showVariations,
+        'showWithoutVariation': showWithoutVariation,
+        'CONDITION_CHOICES': CONDITION_CHOICES
+      })
   else:
     product = {}
     selectedProduct = Product.objects.filter(id=product_id)[0]
     product['product_code'] = selectedProduct.product_code
+    product['product_stock'] = selectedProduct.stock_sum
     product['category'] = Category.objects.filter(unique_id=selectedProduct.category)[0].name
     product['product_name'] = selectedProduct.product_name
     product['product_description'] = selectedProduct.product_description
+
     product['product_price'] = selectedProduct.product_price
     product['stock_sum'] = selectedProduct.stock_sum
+
+
+    product['product_category_id'] = selectedProduct.category
+
+    product['product_length'] = selectedProduct.product_length
+    product['product_width'] = selectedProduct.product_width
+    product['product_height'] = selectedProduct.product_height
     product['product_weight'] = selectedProduct.product_weight
+
+    product['product_condition'] = selectedProduct.product_condition
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
-    product['product_category'] = Category.objects.filter(unique_id=selectedProduct.category)[0].name
+
     product['variations'] = Variations.objects.filter(product_id=product_id)
 
     variations = [{}]*7
