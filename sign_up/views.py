@@ -324,18 +324,3 @@ def validate_email(email):
         return True
     except ValidationError:
         return False
-
-
-def setupUserPermissions(request):
-  userData = User.objects.filter(id=request.user.id)[0]
-  Collection.get_first_root_node().add_child(name=str(request.user.id))
-  newGroup, created = Group.objects.get_or_create(name=str(request.user.id))
-  newGroup.user_set.add(userData)
-  access_admin = Permission.objects.get(codename='access_admin')
-  newGroup.permissions.add(access_admin)
-  GroupCollectionPermission.objects.create(
-    group=newGroup,
-    collection=Collection.objects.get(name=str(request.user.id)),
-    permission=Permission.objects.get(codename='add_image')
-  )
-  

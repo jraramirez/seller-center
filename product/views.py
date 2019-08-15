@@ -18,6 +18,7 @@ from product.models import Variations
 from product.models import Errors
 
 from seller_center.settings.production import MEDIA_URL
+from seller_center.settings.base import CSV_COLUMNS
 
 media_url = MEDIA_URL
 
@@ -267,220 +268,222 @@ def products_import(request):
   if(request.method == "POST" and request.POST.get('upload')):
     autoPair = request.POST.get('auto-pair')
     form = UploadFileForm(request.POST, request.FILES)
+    invalid = False
+    missingColumns = []
     if form.is_valid():
       inputFile = request.FILES['file']
       inputFileDF = pd.read_csv(inputFile)
-      imageTitles = []
-      for title in Image.objects.values_list('title', flat=True):
-        imageTitles.append(os.path.splitext(title)[0])
-      with transaction.atomic():
-        for index, row, in inputFileDF.head(500).iterrows():
-          unpublished = False
-          productID = None
-          product = Product.objects.filter(profile_id=request.user.id).filter(product_code=row['product_code'])
-          if(len(product)):
-            product.update(
-              product_code = row['product_code'],
-              profile_id = request.user.id,
-              category = row['category_id'],
-              order_id = None,
-              product_name = None,
-              product_description = None,
-              product_weight = row['product_weight'],
-              ship_out_in = row['ship_out_in'],
-              parent_sku_reference_no = row['parent_sku_reference_no'],
-              other_logistics_provider_setting = row['other_logistics_provider_setting'],
-              other_logistics_provider_fee = row['other_logistics_provider_fee'],
-              live = False,
-              suspended = False,
-              unlisted = False,
-              unpublished = unpublished
-            )
-            productID = product[0].id
-          else:
-            t = Product(
-              product_code = row['product_code'],
-              profile_id = request.user.id,
-              category = row['category_id'],
-              order_id = None,
-              product_name = None,
-              product_description = None,
-              product_weight = row['product_weight'],
-              ship_out_in = row['ship_out_in'],
-              parent_sku_reference_no = row['parent_sku_reference_no'],
-              other_logistics_provider_setting = row['other_logistics_provider_setting'],
-              other_logistics_provider_fee = row['other_logistics_provider_fee'],
-              live = False,
-              suspended = False,
-              unlisted = False,
-              unpublished = unpublished
-            )
-            t.save()
-            productID = t.id
-          Errors.objects.filter(product_id = productID).delete()
 
-          # Product name validation
-          if(row['product_name'] != row['product_name']):
-            Product.objects.filter(id=productID).update(product_name=None)
-            e = Errors(
-              product_id = productID,
-              name = 'Product name is required',
-              profile_id = request.user.id
-            )
-            e.save()
-            unpublished = True
-          else:
-            Product.objects.filter(id=productID).update(product_name=row['product_name'])
-            if(len(row['product_name'])<16):
+      # Check if there are missing columns
+      for column in CSV_COLUMNS: 
+        if(column not in inputFileDF.columns.values):
+          missingColumns.append(column)
+          invalid = True
+      if(not invalid):
+        # Obtain titles of images
+        imageTitles = []
+        for title in Image.objects.values_list('title', flat=True):
+          imageTitles.append(os.path.splitext(title)[0])
+        
+        # Insert/Update each product from file to database
+        with transaction.atomic():
+          for index, row, in inputFileDF.head(500).iterrows():
+            unpublished = False
+            productID = None
+            product = Product.objects.filter(profile_id=request.user.id).filter(product_code=row['product_code'])
+            if(len(product)):
+              product.update(
+                product_code = row['product_code'],
+                profile_id = request.user.id,
+                category = row['category_id'],
+                order_id = None,
+                product_name = None,
+                product_description = None,
+                product_weight = row['product_weight'],
+                ship_out_in = row['ship_out_in'],
+                parent_sku_reference_no = row['parent_sku_reference_no'],
+                other_logistics_provider_setting = row['other_logistics_provider_setting'],
+                other_logistics_provider_fee = row['other_logistics_provider_fee'],
+                live = False,
+                suspended = False,
+                unlisted = False,
+                unpublished = unpublished
+              )
+              productID = product[0].id
+            else:
+              t = Product(
+                product_code = row['product_code'],
+                profile_id = request.user.id,
+                category = row['category_id'],
+                order_id = None,
+                product_name = None,
+                product_description = None,
+                product_weight = row['product_weight'],
+                ship_out_in = row['ship_out_in'],
+                parent_sku_reference_no = row['parent_sku_reference_no'],
+                other_logistics_provider_setting = row['other_logistics_provider_setting'],
+                other_logistics_provider_fee = row['other_logistics_provider_fee'],
+                live = False,
+                suspended = False,
+                unlisted = False,
+                unpublished = unpublished
+              )
+              t.save()
+              productID = t.id
+            
+            Errors.objects.filter(product_id = productID).delete()
+
+            # Product name validation
+            if(row['product_name'] != row['product_name']):
+              Product.objects.filter(id=productID).update(product_name=None)
               e = Errors(
                 product_id = productID,
-                name = 'Product name should have at least 16 characters',
+                name = 'Product name is required',
+                profile_id = request.user.id
+              )
+              e.save()
+              unpublished = True
+            else:
+              Product.objects.filter(id=productID).update(product_name=row['product_name'])
+              if(len(row['product_name'])<16):
+                e = Errors(
+                  product_id = productID,
+                  name = 'Product name should have at least 16 characters',
+                  profile_id = request.user.id
+                )
+                e.save()
+                unpublished = True
+
+            # Product code validation
+            if(row['product_code'] != row['product_code']):
+              Product.objects.filter(id=productID).update(product_code=None)
+              e = Errors(
+                product_id = productID,
+                name = 'Product code is required',
+                profile_id = request.user.id
+              )
+              e.save()
+              unpublished = True
+            else:
+              Product.objects.filter(id=productID).update(product_code=row['product_code'])
+              if(len(str(row['product_code']))>100):
+                e = Errors(
+                  product_id = productID,
+                  name = 'Product code exceeds maximum lenght of 100',
+                  profile_id = request.user.id
+                )
+                e.save()
+                unpublished = True
+
+            # Product description validation
+            if(row['product_description'] != row['product_description']):
+              Product.objects.filter(id=productID).update(product_description=None)
+              e = Errors(
+                product_id = productID,
+                name = 'Product description is required',
+                profile_id = request.user.id
+
+              )
+              e.save()
+              unpublished = True
+            else:
+              Product.objects.filter(id=productID).update(product_description=row['product_description'])
+              if(len(row['product_description'])<100):
+                e = Errors(
+                  product_id = productID,
+                  name = 'Product description should have at least 100 characters',
+                  profile_id = request.user.id
+                )
+                e.save()
+                unpublished = True
+
+            # Product weight validation
+            if(row['product_weight'] != row['product_weight']):
+              Product.objects.filter(id=productID).update(product_description=None)
+              e = Errors(
+                product_id = productID,
+                name = 'Product weight is required',
                 profile_id = request.user.id
               )
               e.save()
               unpublished = True
 
-          # Product code validation
-          if(row['product_code'] != row['product_code']):
-            Product.objects.filter(id=productID).update(product_code=None)
-            e = Errors(
-              product_id = productID,
-              name = 'Product code is required',
-              profile_id = request.user.id
-            )
-            e.save()
-            unpublished = True
-          else:
-            Product.objects.filter(id=productID).update(product_code=row['product_code'])
-            if(len(str(row['product_code']))>100):
-              e = Errors(
-                product_id = productID,
-                name = 'Product code exceeds maximum lenght of 100',
-                profile_id = request.user.id
-              )
-              e.save()
-              unpublished = True
-
-          # Product description validation
-          if(row['product_description'] != row['product_description']):
-            Product.objects.filter(id=productID).update(product_description=None)
-            e = Errors(
-              product_id = productID,
-              name = 'Product description is required',
-              profile_id = request.user.id
-
-            )
-            e.save()
-            unpublished = True
-          else:
-            Product.objects.filter(id=productID).update(product_description=row['product_description'])
-            if(len(row['product_description'])<100):
-              e = Errors(
-                product_id = productID,
-                name = 'Product description should have at least 100 characters',
-                profile_id = request.user.id
-              )
-              e.save()
-              unpublished = True
-
-          # Product weight validation
-          if(row['product_weight'] != row['product_weight']):
-            Product.objects.filter(id=productID).update(product_description=None)
-            e = Errors(
-              product_id = productID,
-              name = 'Product weight is required',
-              profile_id = request.user.id
-            )
-            e.save()
-            unpublished = True
-
-          # Product image validation
-          imageInS3 = False
-          if(autoPair):
-            image_url_from_sku = None
-            if(row['variation1_id'] == row['variation1_id']):
+            # Product image validation
+            imageInS3 = False
+            if(autoPair):
+              image_url_from_sku = None
+              if(row['variation1_id'] == row['variation1_id']):
+                if(row['image1'] != row['image1']):
+                  if(str(row['variation1_id']) in imageTitles):
+                    image_url_from_sku = media_url + str(Image.objects.all()[imageTitles.index(str(row['variation1_id']))].file)
+                    imageInS3 = True
+                  else:
+                    unpublished = True
+                    e = Errors(
+                      product_id = productID,
+                      name = 'Product image is required',
+                      profile_id = request.user.id
+                    )
+                    e.save()
+            else:
               if(row['image1'] != row['image1']):
-                if(str(row['variation1_id']) in imageTitles):
-                  image_url_from_sku = media_url + str(Image.objects.all()[imageTitles.index(str(row['variation1_id']))].file)
-                  imageInS3 = True
-                else:
-                  unpublished = True
-                  e = Errors(
+                unpublished = True
+                e = Errors(
+                  product_id = productID,
+                  name = 'Product image is required',
+                  profile_id = request.user.id
+                )
+                e.save()
+            
+            # Insert/Update each product variation from file to database
+            stock_sum = 0
+            for i in range(0,7):
+              if(row['variation'+str(i+1)+'_id'] == row['variation'+str(i+1)+'_id']):
+                variationStock = 0
+                if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
+                  variationStock = row['variation'+str(i+1)+'_stock']
+                stock_sum = stock_sum + variationStock
+                if(i == 0 and not imageInS3 and not autoPair):
+                  image_url_from_sku = None
+                image_url = row['image1']
+                if(row['image1'] != row['image1']):
+                  image_url = None
+                variation = Variations.objects.filter(product_id=productID).filter(sku=row['variation'+str(i+1)+'_id'])
+                if(len(variation)):
+                  variation.update(
                     product_id = productID,
-                    name = 'Product image is required',
-                    profile_id = request.user.id
+                    image_url = image_url,
+                    price = row['variation'+str(i+1)+'_price'],
+                    sku = row['variation'+str(i+1)+'_id'],
+                    stock = variationStock,
+                    name = row['variation'+str(i+1)+'_name'],
+                    image_url_from_sku = image_url_from_sku
                   )
-                  e.save()
-                # url = media_url + str(row['variation1_id']) + '.jpg'
-                # r = requests.get(url)
-                # if r.status_code == 200:
-                #   image_url_from_sku = url
-                #   imageInS3 = True
-                # else:
-                #   url = media_url + str(row['variation1_id']) + '.png'
-                #   r = requests.get(url)
-                #   if r.status_code == 200:
-                #     image_url_from_sku = url
-                #     imageInS3 = True
-                #   else:
-                #     unpublished = True
-                #     e = Errors(
-                #       product_id = productID,
-                #       name = 'Product image is required'
-                #     )
-                #     e.save()
-          else:
-            if(row['image1'] != row['image1']):
-              unpublished = True
-              e = Errors(
-                product_id = productID,
-                name = 'Product image is required',
-                profile_id = request.user.id
-              )
-              e.save()
-          stock_sum = 0
-          for i in range(0,7):
-            if(row['variation'+str(i+1)+'_id'] == row['variation'+str(i+1)+'_id']):
-              variationStock = 0
-              if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
-                variationStock = row['variation'+str(i+1)+'_stock']
-              stock_sum = stock_sum + variationStock
-              if(i == 0 and not imageInS3 and not autoPair):
-                image_url_from_sku = None
-              image_url = row['image1']
-              if(row['image1'] != row['image1']):
-                image_url = None
-              variation = Variations.objects.filter(product_id=productID).filter(sku=row['variation'+str(i+1)+'_id'])
-              if(len(variation)):
-                variation.update(
-                  product_id = productID,
-                  image_url = image_url,
-                  price = row['variation'+str(i+1)+'_price'],
-                  sku = row['variation'+str(i+1)+'_id'],
-                  stock = variationStock,
-                  name = row['variation'+str(i+1)+'_name'],
-                  image_url_from_sku = image_url_from_sku
-                )
-              else:
-                v = Variations(
-                  product_id = productID,
-                  image_url = image_url,
-                  price = row['variation'+str(i+1)+'_price'],
-                  sku = row['variation'+str(i+1)+'_id'],
-                  stock = variationStock,
-                  name = row['variation'+str(i+1)+'_name'],
-                  image_url_from_sku = image_url_from_sku
-                )
-                v.save()
-          if(not unpublished):
-            Product.objects.filter(id=productID).update(unlisted=True)  
-          Product.objects.filter(id=productID).update(stock_sum=stock_sum, unpublished=unpublished)
+                else:
+                  v = Variations(
+                    product_id = productID,
+                    image_url = image_url,
+                    price = row['variation'+str(i+1)+'_price'],
+                    sku = row['variation'+str(i+1)+'_id'],
+                    stock = variationStock,
+                    name = row['variation'+str(i+1)+'_name'],
+                    image_url_from_sku = image_url_from_sku
+                  )
+                  v.save()
+            if(not unpublished):
+              Product.objects.filter(id=productID).update(unlisted=True)  
+            Product.objects.filter(id=productID).update(stock_sum=stock_sum, unpublished=unpublished)
 
-    if(len(Errors.objects.all())):
+    if(invalid):
+      errorMessage = 'Invalid csv template please download the correct one. Missing column(s): '
+      for column in missingColumns:
+        errorMessage = errorMessage + column + ', '
+      messages.error(request, errorMessage)
+      return HttpResponseRedirect("/products/add-new-products/")
+    elif(len(Errors.objects.all())):
       messages.warning(request, 'Products added. Some products have data errors. Check out the unpublished tab to correct them.')
     else:
       messages.success(request, 'Products added successfully.')
-    return HttpResponseRedirect("/products/#all")
   else:
     form = UploadFileForm()
 
