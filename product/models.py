@@ -98,7 +98,6 @@ class Product(ClusterableModel):
       Errors.objects.filter(product_id=self.id).filter(name='Product description is required').delete()
       if(len(self.product_description)>=100):
         Errors.objects.filter(product_id=self.id).filter(name='Product description should have at least 100 characters').delete()
-    print(len(Errors.objects.filter(product_id=self.id)) == 0)
     if(len(Errors.objects.filter(product_id=self.id)) == 0):
       Product.objects.filter(id=self.id).update(unlisted=True)
       Product.objects.filter(id=self.id).update(unpublished=False)

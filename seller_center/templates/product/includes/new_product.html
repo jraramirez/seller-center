@@ -4,13 +4,12 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mr-auto mb-0 text-gray-800">Products</h1>
 
-        <a href="/products/add-single-product/index"
+        <a href="/products/#all"
            class="d-none d-sm-inline-block btn btn-xl shadow-sm mr-2">Cancel</a>
-        <a href="/products/add-single-product/index" class="d-none d-sm-inline-block btn btn-xl shadow-sm mr-2">Save and
-            Delist</a>
 
 
-        <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl">Publish</button>
+        <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl">Save and
+            Delist</button>
     </div>
     {% csrf_token %}
 
@@ -51,10 +50,15 @@
                     <label for="id_product_description" class="col-sm-3 col-form-label"> Category</label>
                     <div class="col-sm-9">
                         <div class="input-group mb-3">
+                            <input type="hidden" name="product-category-id" class="form-control" id="id_product_category_id"
+                                   value="{{product.product_category_id}}">
                             <input type="text" name="product-category" class="form-control" id="id_product_category"
-                                   value="{{product.category}}" readonly disabled>
+                                   value="{{product.category}}" disabled>
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">Change Category</button>
+
+                          <a class="btn btn-outline-secondary" href="/products/add-single-product/index">
+                                Change Category
+                          </a>
                             </div>
                         </div>
                     </div>

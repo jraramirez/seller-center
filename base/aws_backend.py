@@ -31,8 +31,8 @@ class AwsBackend:
             except User.DoesNotExist:
                 # Create a new user.
                 user = User.objects.create_user(username=username, password=password)
-                Collection.get_first_root_node().add_child(name=str(request.user.id))
-                newGroup, created = Group.objects.get_or_create(name=str(request.user.id))
+                Collection.get_first_root_node().add_child(name=str(user.id))
+                newGroup, created = Group.objects.get_or_create(name=str(user.id))
                 group = Group.objects.get(name='Seller')
                 user.groups.add(group)
                 user.groups.add(newGroup)
@@ -40,7 +40,7 @@ class AwsBackend:
                 newGroup.permissions.add(access_admin)
                 GroupCollectionPermission.objects.create(
                     group=newGroup,
-                    collection=Collection.objects.get(name=str(request.user.id)),
+                    collection=Collection.objects.get(name=str(user.id)),
                     permission=Permission.objects.get(codename='add_image')
                 )
   
