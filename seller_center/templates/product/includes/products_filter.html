@@ -1,5 +1,5 @@
 <div class="card container-fluid mb-3">
-    <ul class="nav" role="tablist">
+    <ul class="nav nav-pills nav-fill" role="tablist">
         <li class="nav-item ml-2 p-1">
             <a class="nav-link topic-filter-item active" id="all-tab" data-toggle="tab" href="#all" role="tab">All</a>
         </li>
@@ -10,10 +10,10 @@
             <a class="nav-link topic-filter-item" id="sold-tab" data-toggle="tab" href="#sold" role="tab">Sold Out</a>
         </li>
         <li class="nav-item ml-2 p-1 ">
-            <a class="nav-link topic-filter-item" id="suspended-tab" data-toggle="tab" href="#suspended" role="tab">Suspended</a>
+            <a class="nav-link topic-filter-item" id="unlisted-tab" data-toggle="tab" href="#unlisted" role="tab">Unlisted</a>
         </li>
         <li class="nav-item ml-2 p-1 ">
-            <a class="nav-link topic-filter-item" id="unlisted-tab" data-toggle="tab" href="#unlisted" role="tab">Unlisted</a>
+            <a class="nav-link topic-filter-item" id="suspended-tab" data-toggle="tab" href="#suspended" role="tab">Suspended</a>
         </li>
         {% if nUnpublished %}
         <li class="nav-item ml-2 p-1 ">
@@ -21,7 +21,7 @@
         </li>
         {% endif %}
         <li class="nav-item ml-2 p-1">
-            <a class="nav-link" id="unpublished-tab" href="/products/delete-all">Delete All Products</a>
+            <a class="nav-link" id="delete-all" href="/products/delete-all">Delete All Products</a>
         </li>
     </ul>
 </div>
