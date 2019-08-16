@@ -42,6 +42,51 @@
             </div>
         </div>
         {# End of Basic Info #}
+        {# Business Permits Documents #}
+        <div class="row mx-3">
+            <div class="card shadow container-fluid p-0">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Business Permits Documents</h6>
+                </div>
+                <div class="card-body mx-5">
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="dti" class="col-sm-3 col-form-label">DTI </label>
+                        <div class="col-sm-9">
+                          {% if dtiDocument%}
+                            <a href="{{dtiDocument.url}}" class="btn btn-sm btn-link">{{dtiDocument}}</a>
+                          {% else %}
+                          <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
+                          {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body mx-5">
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="dti" class="col-sm-3 col-form-label">SEC </label>
+                        <div class="col-sm-9">
+                          {% if secDocument%}
+                            <a href="{{secDocument.url}}" class="btn btn-sm btn-link">{{secDocument}}</a>
+                          {% else %}
+                            <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
+                          {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body mx-5">
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="dti" class="col-sm-3 col-form-label">PERMIT </label>
+                        <div class="col-sm-9">
+                          {% if permitDocument%}
+                            <a href="{{permitDocument.url}}" class="btn btn-sm btn-link">{{permitDocument}}</a>
+                          {% else %}
+                          <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
+                          {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {# End of Business Permits Documents #}
 
     </form>
 </div>
