@@ -21,7 +21,6 @@
         <a href="/profile/edit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i
                 class="fas text-white-50 mr-2"></i>Edit Profile</a>
     </div>
-{{profile}}
         {% csrf_token %}
 
         {# Basic Info #}
@@ -33,9 +32,9 @@
                 <div class="card-body mx-5">
 
                     <div class="form-group row mt-3 mb-4">
-                        <label for="id_product-code" class="col-sm-3 col-form-label">Full Name </label>
+                        <label for="user-name" class="col-sm-3 col-form-label">Full Name </label>
                         <div class="col-sm-9">
-                            <input type="text" name="user-name" class="form-control" value="{{userData.first_name}}{{userData.last_name}}" disabled>
+                            <input type="text" id="user-name" name="user-name" class="form-control" value="{{userData.first_name}}{{userData.last_name}}" disabled>
                         </div>
                     </div>
                 </div>
