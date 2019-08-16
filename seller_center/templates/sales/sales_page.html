@@ -11,16 +11,80 @@
 	<div class="alert alert-danger" role="alert">
 		{% for e in errors %}
 			{{e}}
-		{% endfor %}        
-		</div>
+		{% endfor %}
+	</div>
 	{% endif %}
 	<div class="form-wrap">
-		<!-- Page Heading -->
 		<div class="d-sm-flex align-items-center justify-content-between mb-4">
 			<h1 class="h3 mr-auto mb-0 text-gray-800">Orders</h1>
+			<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-shipping-fast"></i> Ship My Orders</a>
 		</div>
-		<div class="row mx-3">
-			<p>insert all merchant orders here...</p>
+		<div class="row">
+			<div class="card container-fluid mb-3">
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link active" id="all-tab" data-toggle="tab" href="#" role="tab">All</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="unpaid-tab" data-toggle="tab" href="#" role="tab">Unpaid</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="to-ship-tab" data-toggle="tab" href="#" role="tab">To Ship</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="shipping-tab" data-toggle="tab" href="#" role="tab">Shipping<var>(1)</var></a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="completed-tab" data-toggle="tab" href="#" role="tab">Completed</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="cancellation-tab" data-toggle="tab" href="#" role="tab">Cancellation</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="return-refund-tab" data-toggle="tab" href="#" role="tab">Return / Refund</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row" id="process" style="display: none;">
+			<ul class="nav" role="tablist">
+				<li class="nav-item ml-2 p-1">
+					<a class="btn btn-sm btn-outline-primary active" id="all2" data-toggle="tab" href="#" role="tab">All</a>
+				</li>
+				<li class="nav-item ml-2 p-1">
+					<a class="btn btn-sm btn-outline-primary" id="to_process" data-toggle="tab" href="#" role="tab">To Process</a>
+				</li>
+				<li class="nav-item ml-2 p-1">
+					<a class="btn btn-sm btn-outline-primary" id="processed" data-toggle="tab" href="#" role="tab">Processed</a>
+				</li>
+			</ul>
+		</div>
+		<div class="row">
+			<div class="body-content table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Product(s)</th>
+							<th scope="col">Order Total</th>
+							<th scope="col">Status</th>
+							<th scope="col">
+								<a class="dropdown-toggle" id="all_channels" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All Channels</a>
+								<ul class="dropdown-menu">
+									<li class="dropdown-item">Sample</li>
+									<li class="dropdown-item">List</li>
+									<li class="dropdown-item">Items</li>
+									<li class="dropdown-item">Value</li>
+									<li class="dropdown-item">Hi!</li>
+								</ul>
+							</th>
+							<th scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody id="orders">
+						<td colspan="5" style="text-align: center;"><p>No orders found.</p></td>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 {% endblock %}
