@@ -32,33 +32,119 @@
         <h1 class="h3 mr-auto mb-0 text-gray-800">Profile</h1>
         <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl">Publish</button>
     </div>
-{{profile}}
         {% csrf_token %}
 
         {# Basic Info #}
-        <div class="row mx-3">
+        <div class="row mx-3 my-5">
             <div class="card shadow container-fluid p-0">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Basic Information</h6>
                 </div>
                 <div class="card-body mx-5">
-
                     <div class="form-group row mt-3 mb-4">
-                        <label for="id_product-code" class="col-sm-3 col-form-label">First Name </label>
+                        <label for="first-name" class="col-sm-3 col-form-label">First Name </label>
                         <div class="col-sm-9">
                             <input type="text" name="first-name" class="form-control" value="{{userData.first_name}}">
                         </div>
                     </div>
                     <div class="form-group row mt-3 mb-4">
-                        <label for="id_product-code" class="col-sm-3 col-form-label">Last Name </label>
+                        <label for="last-name" class="col-sm-3 col-form-label">Last Name </label>
                         <div class="col-sm-9">
                             <input type="text" name="last-name" class="form-control" value="{{userData.last_name}}">
+                        </div>
+                    </div>
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="birthday" class="col-sm-3 col-form-label">Birthday </label>
+                        <div class="col-sm-9">
+                            <input type="date" name="birthday" class="form-control" value="{{userData.birthday}}">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         {# End of Basic Info #}
+
+        {# Addresses #}
+        <div class="row mx-3 my-5">
+          <div class="card shadow container-fluid p-0">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Addresses</h6>
+            </div>
+            {% for a in addresses %}
+              {% if forloop.counter0 == 0 or a.name %}
+              <div id="address-container-{{forloop.counter}}"
+                  class="form-group card-body mx-5 address-{{forloop.counter0}}">
+              {% else %}
+              <div id="address-container-{{forloop.counter}}"
+                  class="form-group card-body mx-5 address-{{forloop.counter0}}" style="display: none;">
+              {% endif %}
+                {% if forloop.counter0 > 0 %}
+                <hr class="sidebar-divider mb-4"/>
+                {% endif %}
+                <div class="d-flex">
+                    <h5 class="mr-auto text-primary">Address {{forloop.counter}}</h5>
+                    {% if forloop.counter0 > 0 %}
+                    <a class="ml-3 mt-1 text-danger" onclick="hideAddress({{forloop.counter}})">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="form-group row mt-3 mb-4">
+                    <label for="address-{{forloop.counter0}}-name" class="col-sm-3 col-form-label">Address </label>
+                    <div class="col-sm-9">
+                        <input type="text" name="address-{{forloop.counter0}}-name" required
+                              class="form-control" placeholder="Address"
+                              id="address-{{forloop.counter0}}-name"
+                              value="{{a.name}}">
+                    </div>
+                </div>
+                {% if forloop.counter0 < 6 %}
+                <div class="col-md-12">
+                    <button id="address-add-button-{{forloop.counter}}" class="btn btn-primary"
+                            type="button"
+                            onclick="showAddress(event, '{{forloop.counter}}')"> + Add Another Address
+                    </button>
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+          </div>
+        </div>
+        {# End of Address #}
+        
+        {# Business Permits Documents #}
+        <div class="row mx-3 my-5">
+            <div class="card shadow container-fluid p-0">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Business Permits Documents</h6>
+                </div>
+                <div class="card-body mx-5">
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="dti" class="col-sm-3 col-form-label">DTI </label>
+                        <div class="col-sm-9">
+                            <input type="file" name="dti" class="form-control" value="{{userData.first_name}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body mx-5">
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="sec" class="col-sm-3 col-form-label">SEC </label>
+                        <div class="col-sm-9">
+                            <input type="file" name="sec" class="form-control" value="{{userData.first_name}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body mx-5">
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="permit" class="col-sm-3 col-form-label">PERMIT </label>
+                        <div class="col-sm-9">
+                            <input type="file" name="permit" class="form-control" value="{{userData.first_name}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {# End of Business Permits Documents #}
 
     </form>
 </div>
