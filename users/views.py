@@ -17,6 +17,19 @@ def profile_edit(request):
       first_name = request.POST.get('first-name'),
       last_name = request.POST.get('last-name'),
     )
+    dtiDocument = None
+    # secDocument = None
+    # permitDocument = None
+    # if(request.FILES['dti']):
+    #   dtiDocument = request.FILES['dti']
+    # if(request.FILES['sec']):
+    #   secDocument = request.FILES['sec']
+    # if(request.FILES['permit']):
+    #   permitDocument = request.FILES['permit']
+    # p = Profile()
+    # p.user_id = request.user.id
+    # p.dti = dtiDocument.file
+    # p.save()
     userData = User.objects.filter(id=request.user.id)[0]
     profileData = Profile.objects.filter(id=request.user.id)[0]
     return render(request, 'users/profile_page.html', {
