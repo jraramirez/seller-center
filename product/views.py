@@ -320,7 +320,11 @@ def product_edit(request, product_id):
     selectedProduct = Product.objects.filter(id=product_id)[0]
     product['product_code'] = selectedProduct.product_code
     product['product_stock'] = selectedProduct.stock_sum
-    product['category'] = Category.objects.filter(unique_id=selectedProduct.category)[0].name
+    category = Category.objects.filter(unique_id=selectedProduct.category)
+    if len(category) == 0:
+      product['category'] = ""
+    else:
+     product['category'] = category[0].name
     product['product_name'] = selectedProduct.product_name
     product['product_description'] = selectedProduct.product_description
 
@@ -450,7 +454,7 @@ def products_import(request):
                 t = Product(
                   product_code = row['product_code'],
                   profile_id = request.user.id,
-                  category = row['category_id'],
+                  category = None,
                   order_id = None,
                   product_name = None,
                   product_description = None,
@@ -513,6 +517,32 @@ def products_import(request):
                 )
                 e.save()
                 unpublished = True
+
+            # Product Category Validation
+            if(row['category_id'] != row['category_id']):
+              Product.objects.filter(id=productID).update(category=None)
+              e = Errors(
+                product_id = productID,
+                name = 'Product category is required',
+                profile_id = request.user.id
+              )
+              e.save()
+              unpublished = True
+            else:
+              print("Checking category_id")
+              found_category = Category.objects.filter(unique_id=row['category_id'])
+              print("Checking found_category %s" %found_category)
+
+              if (len(found_category) == 0):
+                Product.objects.filter(id=productID).update(category=None)
+                e = Errors(
+                    product_id = productID,
+                    name = 'Invalid category ID',
+                    profile_id = request.user.id
+                  )
+                e.save()
+                unpublished = True
+
 
             # Product description validation
             if(row['product_description'] != row['product_description']):
