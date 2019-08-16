@@ -619,6 +619,11 @@ body.explorer-open .nav-main {
     text-align: center;
   }
 }
+.template-profilepage .address {
+  margin-bottom: 30px;
+  margin-left: -15px;
+}
+
 .template-productspage header {
   padding-top: 1.5em;
   padding-bottom: 1.5em;

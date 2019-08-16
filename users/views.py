@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from django.contrib.auth.models import User
 from users.models import Profile
+from users.models import Address
 
 from wagtail.documents.models import get_document_model
 from wagtail.documents.forms import get_document_form
@@ -9,6 +10,7 @@ from wagtail.documents.forms import get_document_form
 def profile(request):
   userData = User.objects.filter(id=request.user.id)[0]
   profileData = Profile.objects.filter(id=request.user.id)[0]
+  addresses = Address.objects.filter(profile_id=request.user.id)
   Document = get_document_model()
   dtiDocument = Document.objects.filter(id=profileData.dti_id)[0] if len(Document.objects.filter(id=profileData.dti_id)) else None
   secDocument = Document.objects.filter(id=profileData.sec_id)[0] if len(Document.objects.filter(id=profileData.sec_id)) else None
@@ -18,7 +20,8 @@ def profile(request):
     'userData': userData,
     'dtiDocument': dtiDocument,
     'secDocument': secDocument,
-    'permitDocument': permitDocument
+    'permitDocument': permitDocument,
+    'addresses': addresses
   })
 
 def profile_edit(request):
@@ -56,8 +59,23 @@ def profile_edit(request):
       first_name = request.POST.get('first-name'),
       last_name = request.POST.get('last-name')
     )
+    for i in range(0,8):
+      if(request.POST.get('address-'+str(i)+'-name')):
+        if(Address.objects.filter(profile_id=request.user.id).filter(index=i)):
+          Address.objects.filter(profile_id=request.user.id).filter(index=i).update(
+            name = request.POST.get('address-'+str(i)+'-name'),
+          )
+        else:
+          a = Address(
+            profile_id = request.user.id,
+            name = request.POST.get('address-'+str(i)+'-name'),
+            index = i
+          )
+          a.save()
+
     userData = User.objects.filter(id=request.user.id)[0]
     profileData = Profile.objects.filter(id=request.user.id)[0]
+    addresses = Address.objects.filter(profile_id=request.user.id)
     Document = get_document_model()
     dtiDocument = Document.objects.filter(id=profileData.dti_id)[0] if len(Document.objects.filter(id=profileData.dti_id)) else None
     secDocument = Document.objects.filter(id=profileData.sec_id)[0] if len(Document.objects.filter(id=profileData.sec_id)) else None
@@ -67,12 +85,27 @@ def profile_edit(request):
       'userData': userData,
       'dtiDocument': dtiDocument,
       'secDocument': secDocument,
-      'permitDocument': permitDocument
+      'permitDocument': permitDocument,
+      'addresses': addresses
     })
 
   userData = User.objects.filter(id=request.user.id)[0]
   profileData = Profile.objects.filter(id=request.user.id)[0]
+  
+  addresses = [{}]*7
+  profileAddresses = Address.objects.filter(profile_id=request.user.id)
+  if(len(profileAddresses)):
+    for i, a in zip(range(0, len(profileAddresses)), profileAddresses):
+      addresses[i] = a
+    for i in range(len(profileAddresses), 7):
+      addresses.append({})
+  else:
+    for i, a in zip(range(0,7), addresses):
+      addresses[i] = {}
+  
+  print(addresses)
   return render(request, 'users/profile_edit_page.html', {
     'profileData': profileData,
     'userData': userData,
+    'addresses': addresses
   })

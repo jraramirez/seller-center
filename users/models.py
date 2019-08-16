@@ -44,4 +44,5 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 class Address(Orderable, models.Model):  
   name = models.TextField(null=True, blank=True)
+  index = models.IntegerField(null=True, blank=True)
   profile = ParentalKey('Profile', related_name='address', null=True, blank=True)
