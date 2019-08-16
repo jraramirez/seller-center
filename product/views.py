@@ -365,7 +365,6 @@ def product_edit(request, product_id):
       'showWithoutVariation': showWithoutVariation,
     })
 
-
 def products_import(request):
   '''
   Bulk upload via csv
@@ -376,7 +375,9 @@ def products_import(request):
     autoPair = request.POST.get('auto-pair')
     form = UploadFileForm(request.POST, request.FILES)
     invalid = False
+    invalidCategory = False
     missingRequiredFields = False
+    invalidRows = []
     missingColumns = []
     if form.is_valid():
       inputFile = request.FILES['file']
@@ -409,34 +410,39 @@ def products_import(request):
 
               if row['product_code'] != row['product_code']:
                 missingRequiredFields = True
-
-                messages.error(request, "Missing required Product Code on Row %s" % (index + 2))
+                invalidRows.append(index + 2)
 
               elif row['category_id'] != row['category_id']:
                 missingRequiredFields = True
-
-                messages.error(request, "Missing required Category ID< code on Row %s" % (index + 2))
+                invalidRows.append(index + 2)
               else:
-                product.update(
-                  product_code = row['product_code'],
-                  profile_id = request.user.id,
-                  category = row['category_id'],
-                  order_id = None,
-                  product_name = None,
-                  product_description = None,
-                  product_weight = row['product_weight'] if row['product_weight'] else None,
-                  ship_out_in = row['ship_out_in'] if row['ship_out_in'] else None,
-                  parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] else None,
-                  other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] else None,
-                  other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] else None,
-                  live = False,
-                  suspended = False,
-                  unlisted = False,
-                  unpublished = unpublished
-                )
-                productID = product[0].id
 
-                Errors.objects.filter(product_id=productID).delete()
+                found_category = Category.objects.filter(unique_id=row['category_id'])
+
+                if (len(found_category) == 0):
+                  invalidCategory = True
+                  invalidRows.append(index + 2)
+                else:
+                  product.update(
+                    product_code = row['product_code'],
+                    profile_id = request.user.id,
+                    category = row['category_id'],
+                    order_id = None,
+                    product_name = None,
+                    product_description = None,
+                    product_weight = row['product_weight'] if row['product_weight'] else None,
+                    ship_out_in = row['ship_out_in'] if row['ship_out_in'] else None,
+                    parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] else None,
+                    other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] else None,
+                    other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] else None,
+                    live = False,
+                    suspended = False,
+                    unlisted = False,
+                    unpublished = unpublished
+                  )
+                  productID = product[0].id
+
+                  Errors.objects.filter(product_id=productID).delete()
             else:
               print("Creating product %s" % row['product_code'])
 
@@ -444,35 +450,40 @@ def products_import(request):
 
               if row['product_code'] != row['product_code']:
                 missingRequiredFields = True
-
-                messages.error(request, "Missing required Product Code on Row %s" % (index + 2))
+                invalidRows.append(index + 2)
 
               elif row['category_id'] != row['category_id']:
                 missingRequiredFields = True
-
-                messages.error(request, "Missing required Category ID< code on Row %s" % (index + 2))
+                invalidRows.append(index + 2)
               else:
-                t = Product(
-                  product_code = row['product_code'],
-                  profile_id = request.user.id,
-                  category = None,
-                  order_id = None,
-                  product_name = None,
-                  product_description = None,
-                  product_weight = row['product_weight'] if row['product_weight'] else None,
-                  ship_out_in = row['ship_out_in'] if row['ship_out_in'] else None,
-                  parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] else None,
-                  other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] else None,
-                  other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] else None,
-                  live = False,
-                  suspended = False,
-                  unlisted = False,
-                  unpublished = unpublished
-                )
-                t.save()
-                productID = t.id
 
-                Errors.objects.filter(product_id = productID).delete()
+                found_category = Category.objects.filter(unique_id=row['category_id'])
+
+                if (len(found_category) == 0):
+                  invalidCategory = True
+                  invalidRows.append(index + 2)
+                else:
+                  t = Product(
+                    product_code = row['product_code'],
+                    profile_id = request.user.id,
+                    category = None,
+                    order_id = None,
+                    product_name = None,
+                    product_description = None,
+                    product_weight = row['product_weight'] if row['product_weight'] else None,
+                    ship_out_in = row['ship_out_in'] if row['ship_out_in'] else None,
+                    parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] else None,
+                    other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] else None,
+                    other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] else None,
+                    live = False,
+                    suspended = False,
+                    unlisted = False,
+                    unpublished = unpublished
+                  )
+                  t.save()
+                  productID = t.id
+
+                  Errors.objects.filter(product_id = productID).delete()
 
             # Product name validation
 
@@ -516,29 +527,6 @@ def products_import(request):
                   name = 'Product code exceeds maximum lenght of 100',
                   profile_id = request.user.id
                 )
-                e.save()
-                unpublished = True
-
-            # Product Category Validation
-            if(row['category_id'] != row['category_id']):
-              Product.objects.filter(id=productID).update(category=None)
-              e = Errors(
-                product_id = productID,
-                name = 'Product category is required',
-                profile_id = request.user.id
-              )
-              e.save()
-              unpublished = True
-            else:
-              found_category = Category.objects.filter(unique_id=row['category_id'])
-
-              if (len(found_category) == 0):
-                Product.objects.filter(id=productID).update(category=None)
-                e = Errors(
-                    product_id = productID,
-                    name = 'Invalid category ID',
-                    profile_id = request.user.id
-                  )
                 e.save()
                 unpublished = True
 
@@ -642,7 +630,16 @@ def products_import(request):
               Product.objects.filter(id=productID).update(unlisted=True)  
             Product.objects.filter(id=productID).update(stock_sum=stock_sum, unpublished=unpublished)
 
-    if (missingRequiredFields):
+    if (invalidCategory):
+      errorMessage = 'Incorrect Category ID on Row/s: '
+      for row in invalidRows:
+        errorMessage = errorMessage + str(row) + ', '
+      messages.error(request, errorMessage)
+    elif (missingRequiredFields):
+      errorMessage = 'Missing required Product Code / Category ID: '
+      for row in invalidRows:
+        errorMessage = errorMessage + str(row) + ', '
+      messages.error(request, errorMessage)
       return HttpResponseRedirect("/products/add-new-products/")
     elif(invalid):
       errorMessage = 'Invalid csv template please download the correct one. Missing column(s): '
