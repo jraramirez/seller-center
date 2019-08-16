@@ -205,9 +205,10 @@ def product_edit(request, product_id):
     product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
     errors = []
+
     if (not product['product_code']):
       errors.append('Product Code is required; ')
-    if (not product['product-category-id']):
+    if (not product['product-category-id'] or request.POST.get('product-category-id') == "None"):
       errors.append('Product Category is required; ')
     if (not product['product_name']):
       errors.append('Product Name is required; ')
@@ -529,9 +530,7 @@ def products_import(request):
               e.save()
               unpublished = True
             else:
-              print("Checking category_id")
               found_category = Category.objects.filter(unique_id=row['category_id'])
-              print("Checking found_category %s" %found_category)
 
               if (len(found_category) == 0):
                 Product.objects.filter(id=productID).update(category=None)
