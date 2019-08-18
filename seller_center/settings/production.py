@@ -23,12 +23,15 @@ if 'RDS_HOSTNAME' in os.environ:
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_S3_CUSTOM_DOMAIN = 'd3rdlm5j4gpnnq.cloudfront.net'
+
+#This is where you put your CLOUDFRONT URL ex: 'd3rdlm5j4gpnnq.cloudfront.net'
+AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_S3_CUSTOM_DOMAIN')
 AWS_S3_FILE_OVERWRITE = True
 
 
 STATIC_ROOT = '/static/'
-STATIC_URL = "https://d3rdlm5j4gpnnq.cloudfront.net/"
+#url for static files ex: "https://d3rdlm5j4gpnnq.cloudfront.net/"
+STATIC_URL = os.environ.get('STATIC_URL')
 
 # Static files (AWS)
 STATICFILES_LOCATION = os.environ.get('STATICFILES_LOCATION')
@@ -48,7 +51,8 @@ AUTHENTICATION_BACKENDS = [
 
 # Media files (AWS)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = "https://d3rdlm5j4gpnnq.cloudfront.net/"
+#Media url ex: "https://d3rdlm5j4gpnnq.cloudfront.net/"
+MEDIA_URL = os.environ.get('MEDIA_URL')
 MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
