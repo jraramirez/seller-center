@@ -34,6 +34,33 @@ function showVariation(event, i) {
   goToByScroll(id)
 }
 
+function hideVariation(i) {
+    var prevIndex = Math.max(0, i - 1);
+    var prevAddButton = 'variation-add-button-' + String(prevIndex);
+    var id = 'variation-container-' + String(i);
+    var prevContainerId = 'variation-container-' + String(prevIndex);
+    $("#"+id).hide();
+    $("#"+prevAddButton).show();
+    goToByScroll(prevContainerId);
+}
+
+function showAddress(event, i) {
+  event.target.style.display = 'none';
+  var nexAddress = document.getElementsByClassName("address-" + String(i))[0];
+  nexAddress.style.display = 'block';
+  var id = 'address-container-' + String(i);
+  goToByScroll(id)
+}
+
+function hideAddress(i) {
+    var prevIndex = Math.max(0, i - 1);
+    var prevAddButton = 'address-add-button-' + String(prevIndex);
+    var id = 'address-container-' + String(i);
+    var prevContainerId = 'address-container-' + String(prevIndex);
+    $("#"+id).hide();
+    $("#"+prevAddButton).show();
+    goToByScroll(prevContainerId);
+}
 
 function goToByScroll(id){
       // Reove "link" from the ID
@@ -44,15 +71,6 @@ function goToByScroll(id){
         '50');
 }
 
-function hideVariation(i) {
-    var prevIndex = Math.max(0, i - 1);
-    var prevAddButton = 'variation-add-button-' + String(prevIndex);
-    var id = 'variation-container-' + String(i);
-    var prevContainerId = 'variation-container-' + String(prevIndex);
-    $("#"+id).hide();
-    $("#"+prevAddButton).show();
-    goToByScroll(prevContainerId);
-}
 
 $(function(){
   var hash = window.location.hash;

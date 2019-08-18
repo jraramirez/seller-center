@@ -36,9 +36,9 @@ def global_admin_css():
 def hide_snippets_menu_item(request, menu_items):
   menu_items[:] = [item for item in menu_items if item.name != 'snippets']
 
-@hooks.register('construct_main_menu')
-def hide_documents_menu_item(request, menu_items):
-  menu_items[:] = [item for item in menu_items if item.name != 'documents']
+# @hooks.register('construct_main_menu')
+# def hide_documents_menu_item(request, menu_items):
+#   menu_items[:] = [item for item in menu_items if item.name != 'documents']
 
 @hooks.register('construct_main_menu')
 def hide_forms_menu_item(request, menu_items):
