@@ -58,6 +58,7 @@ def product_import(request, selected_category):
 
     product['product_price'] = request.POST.get('product-price')
     product['product_stock'] = request.POST.get('product-stock')
+    print(request.POST.get('product-variation-0-sku') == '')
 
     product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
@@ -70,6 +71,10 @@ def product_import(request, selected_category):
       errors.append('Product Name is required; ')
     if(not product['product_description']):
       errors.append('Product Description is required; ')
+    if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
+      errors.append('Product Price is required; ')
+    if(request.POST.get('product-variation-0-sku') == '' and not product['product_stock']):
+      errors.append('Product Stock is required; ')
     for i in range(0,7):
       if(request.POST.get('product-variation-'+str(i)+'-sku')):
         if(not request.POST.get('product-variation-'+str(i)+'-name')):
@@ -121,10 +126,6 @@ def product_import(request, selected_category):
           v.save()
           if(request.FILES):
             image = request.FILES['product-variation-'+str(i)+'-image']
-            # Image.objects.create(
-            #   file=image,
-            #   title=image.name
-            # )
             v.image_upload.save(str(request.user.id) + '/' + image.name, image)
             Variations.objects.filter(id=v.id).update(
               image_url_from_upload = media_url + 'original_images/' + str(request.user.id) + '/'  + str(image.name)
@@ -364,6 +365,7 @@ def product_edit(request, product_id):
       'showVariations': showVariations,
       'showWithoutVariation': showWithoutVariation,
     })
+
 
 def products_import(request):
   '''
