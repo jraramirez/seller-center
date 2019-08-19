@@ -147,8 +147,6 @@ class Variations(Orderable, models.Model):
 class Errors(ClusterableModel):  
   name = models.CharField(null=True, blank=True, max_length=500)
   product = ParentalKey('Product', related_name='errors', null=True, blank=True)
-  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
-
 
 class ProductPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)

@@ -17,7 +17,7 @@ from product.models import Category
 from product.models import Variations
 from product.models import Errors
 
-from seller_center.settings.production import MEDIA_URL
+from seller_center.settings.dev import MEDIA_URL
 from seller_center.settings.base import CSV_COLUMNS
 
 media_url = MEDIA_URL 
@@ -403,8 +403,6 @@ def products_import(request):
 
             product = Product.objects.filter(profile_id=request.user.id).filter(product_code=row['product_code'])
 
-
-
             if(len(product)):
               print("Updating product %s" % product)
 
@@ -494,7 +492,6 @@ def products_import(request):
               e = Errors(
                 product_id = productID,
                 name = 'Product name is required',
-                profile_id = request.user.id
               )
               e.save()
               unpublished = True
@@ -504,7 +501,6 @@ def products_import(request):
                 e = Errors(
                   product_id = productID,
                   name = 'Product name should have at least 16 characters',
-                  profile_id = request.user.id
                 )
                 e.save()
                 unpublished = True
@@ -515,7 +511,6 @@ def products_import(request):
               e = Errors(
                 product_id = productID,
                 name = 'Product code is required',
-                profile_id = request.user.id
               )
               e.save()
               unpublished = True
@@ -525,11 +520,9 @@ def products_import(request):
                 e = Errors(
                   product_id = productID,
                   name = 'Product code exceeds maximum lenght of 100',
-                  profile_id = request.user.id
                 )
                 e.save()
                 unpublished = True
-
 
             # Product description validation
             if(row['product_description'] != row['product_description']):
@@ -537,7 +530,6 @@ def products_import(request):
               e = Errors(
                 product_id = productID,
                 name = 'Product description is required',
-                profile_id = request.user.id
 
               )
               e.save()
@@ -548,7 +540,6 @@ def products_import(request):
                 e = Errors(
                   product_id = productID,
                   name = 'Product description should have at least 100 characters',
-                  profile_id = request.user.id
                 )
                 e.save()
                 unpublished = True
@@ -559,7 +550,6 @@ def products_import(request):
               e = Errors(
                 product_id = productID,
                 name = 'Product weight is required',
-                profile_id = request.user.id
               )
               e.save()
               unpublished = True
@@ -578,7 +568,6 @@ def products_import(request):
                     e = Errors(
                       product_id = productID,
                       name = 'Product image is required',
-                      profile_id = request.user.id
                     )
                     e.save()
             else:
@@ -587,7 +576,6 @@ def products_import(request):
                 e = Errors(
                   product_id = productID,
                   name = 'Product image is required',
-                  profile_id = request.user.id
                 )
                 e.save()
             
@@ -595,34 +583,63 @@ def products_import(request):
             stock_sum = 0
             for i in range(0,7):
               if(row['variation'+str(i+1)+'_id'] == row['variation'+str(i+1)+'_id']):
-                variationStock = 0
-                if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
-                  variationStock = row['variation'+str(i+1)+'_stock']
-                stock_sum = stock_sum + variationStock
+                variationID = row['variation'+str(i+1)+'_id']
+                variationStock = row['variation'+str(i+1)+'_stock']
+                variationPrice = row['variation'+str(i+1)+'_price']
+                variationName = row['variation'+str(i+1)+'_name']
+
+                # Product variation stock validation
+                if(variationStock != variationStock):
+                  variationStock = 0
+                else:
+                  stock_sum = stock_sum + int(variationStock)
+
+                # Product variation image1 validation
                 if(i == 0 and not imageInS3 and not autoPair):
                   image_url_from_sku = None
                 image_url = row['image1']
                 if(row['image1'] != row['image1']):
                   image_url = None
+                
+                # Product variation name validation
+                if(variationName != variationName):
+                  variationName = None
+                  unpublished = True
+                  e = Errors(
+                    product_id = productID,
+                    name = 'Variation '+str(i+1)+' name is required',
+                  )
+                  e.save()
+
+                # Product variation price validation
+                if(variationPrice != variationPrice):
+                  variationPrice = None
+                  unpublished = True
+                  e = Errors(
+                    product_id = productID,
+                    name = 'Variation '+str(i+1)+' price is required',
+                  )
+                  e.save()
+
                 variation = Variations.objects.filter(product_id=productID).filter(sku=row['variation'+str(i+1)+'_id'])
                 if(len(variation)):
                   variation.update(
                     product_id = productID,
                     image_url = image_url,
-                    price = row['variation'+str(i+1)+'_price'],
-                    sku = row['variation'+str(i+1)+'_id'],
+                    price = variationPrice,
+                    sku = variationID,
                     stock = variationStock,
-                    name = row['variation'+str(i+1)+'_name'],
+                    name = variationName,
                     image_url_from_sku = image_url_from_sku
                   )
                 else:
                   v = Variations(
                     product_id = productID,
                     image_url = image_url,
-                    price = row['variation'+str(i+1)+'_price'],
-                    sku = row['variation'+str(i+1)+'_id'],
+                    price = variationPrice,
+                    sku = variationID,
                     stock = variationStock,
-                    name = row['variation'+str(i+1)+'_name'],
+                    name = variationName,
                     image_url_from_sku = image_url_from_sku
                   )
                   v.save()
