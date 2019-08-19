@@ -466,7 +466,7 @@ def products_import(request):
                   t = Product(
                     product_code = row['product_code'],
                     profile_id = request.user.id,
-                    category = None,
+                    category = row['category_id'],
                     order_id = None,
                     product_name = None,
                     product_description = None,
