@@ -107,7 +107,6 @@
   transition: all .2s ease;
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {}
 .drop-area-text{
     text-align: center;
     color: #e0dfdf;
