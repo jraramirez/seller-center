@@ -71,6 +71,19 @@ function goToByScroll(id){
         '50');
 }
 
+function handleFileSelect(evt) {
+  var files = evt.target.files;
+  f = files[0];
+  Papa.parse(f, {
+    header: true,
+    dynamicTyping: true,
+    complete: function(results) {
+      data = results;
+      console.log(data);
+    }
+  });
+}
+document.getElementById('id_file').addEventListener('change', handleFileSelect, false);
 
 $(function(){
   var hash = window.location.hash;
