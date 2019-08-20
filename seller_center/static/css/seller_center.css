@@ -602,6 +602,10 @@ body.explorer-open .nav-main {
   body.explorer-open .nav-wrapper {
     width: 180px;
   }
+
+  .collapse .collapse-item {
+    cursor: pointer;
+  }
 }
 .logo {
   display: block;
