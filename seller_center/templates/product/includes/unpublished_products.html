@@ -88,7 +88,7 @@
                     </td>
                     <td class="text-center">
                     {% for v in product.variations.all %}
-                        {% if v.price %} {{v.price}}
+                        {% if v.price %}₱ {{v.price}}
                         {% else %} -
                         {% endif %}
                         <br>

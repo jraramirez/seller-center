@@ -94,7 +94,10 @@
                     <div class="form-group row mt-3 mb-4">
                         <label for="id_product-price" class="col-sm-3 col-form-label">Price *</label>
 
-                        <div class="col-sm-9">
+                        <div class="input-group col-sm-9">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="basic-addon1">₱</span>
+                            </div>
                             <input type="number" name="product-price" class="form-control" placeholder="Price"
                                    id="id_product-price" value="{{product.product_price}}"
                                    required>
@@ -165,9 +168,12 @@
                                 <label for="product-variation-{{forloop.counter0}}-price"
                                        class="col-sm-3 col-form-label">Price</label>
 
-                                <div class="col-sm-9">
+                                <div class="input-group col-sm-9">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">₱</span>
+                                    </div>
                                     <input type="number" name="product-variation-{{forloop.counter0}}-price" required
-                                           class="form-control" placeholder="Price ₱" value="{{v.variation_price}}"
+                                           class="form-control" placeholder="Price" value="{{v.variation_price}}"
                                            id="product-variation-{{forloop.counter0}}-price"
                                            required>
                                 </div>
