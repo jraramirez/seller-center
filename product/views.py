@@ -26,7 +26,7 @@ media_url = MEDIA_URL
 class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
 
-def product_import(request, selected_category):
+def product_import(request, selected_category, product_id):
   CONDITION_CHOICES = [
     ('N', 'New'),
     ('U', 'Used'),
@@ -34,14 +34,79 @@ def product_import(request, selected_category):
   showVariations = ""
   showWithoutVariation = "active show"
 
-  if(selected_category == 'index'):
+  if(selected_category == '0' and product_id == '0'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
       categories = json.load(f)
     return render(request, 'product/product_import_page.html', {
+      'product_id': product_id,
       'categories': categories,
       'selected_category': selected_category
     })
+
+  elif(selected_category != '0' and product_id != '0'):
+    if(len(Product.objects.filter(id=product_id))):
+      product = {}
+      selectedProduct = Product.objects.filter(id=product_id)[0]
+      product['product_code'] = selectedProduct.product_code
+      product['product_stock'] = selectedProduct.stock_sum
+      category = Category.objects.filter(unique_id=selected_category)
+      if len(category) == 0:
+        product['category'] = ""
+      else:
+        product['category'] = category[0].name
+      product['product_name'] = selectedProduct.product_name
+      product['product_description'] = selectedProduct.product_description
+
+      product['product_price'] = selectedProduct.product_price
+      product['stock_sum'] = selectedProduct.stock_sum
+
+
+      product['product_category_id'] = selected_category
+
+      product['product_length'] = selectedProduct.product_length
+      product['product_width'] = selectedProduct.product_width
+      product['product_height'] = selectedProduct.product_height
+      product['product_weight'] = selectedProduct.product_weight
+
+      product['product_condition'] = selectedProduct.product_condition
+      product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
+
+      product['variations'] = Variations.objects.filter(product_id=product_id)
+
+      variations = [{}]*7
+      for index, v in enumerate(product['variations']):
+        tmp = {
+          'variation_sku': v.sku,
+          'variation_price': v.price,
+          'variation_stock': v.stock,
+          'variation_name': v.name,
+          'variation_url': v.image_url
+        }
+        variations[index] = tmp
+        showVariations = "active show"
+        showWithoutVariation = ""
+      return render(request, 'product/product_edit_page.html', {
+        'product_id': product_id,
+        'selected_category': selected_category,
+        'CONDITION_CHOICES': CONDITION_CHOICES,
+        'product': product,
+        'variations': variations,
+        'showVariations': showVariations,
+        'showWithoutVariation': showWithoutVariation,
+      })
+
+    else:
+      selected_category = '0'
+      categories = {}
+      with open('seller_center/static/documents/categories-full.json', 'r') as f:
+        categories = json.load(f)
+      return render(request, 'product/product_import_page.html', {
+        'product_id': product_id,
+        'categories': categories,
+        'selected_category': selected_category
+      })
+
   elif(request.method == "POST"):
     product = {}
     variations = [{}]*7
@@ -58,7 +123,6 @@ def product_import(request, selected_category):
 
     product['product_price'] = request.POST.get('product-price')
     product['product_stock'] = request.POST.get('product-stock')
-    print(request.POST.get('product-variation-0-sku') == '')
 
     product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
@@ -152,6 +216,7 @@ def product_import(request, selected_category):
           showVariations = "active show"
           showWithoutVariation = ""
       return render(request, 'product/product_import_page.html', {
+        'product_id': product_id,
         'product': product,
         'errors': errors,
         'selected_category': selected_category,
@@ -166,6 +231,7 @@ def product_import(request, selected_category):
     variations = [{}]*7
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     return render(request, 'product/product_import_page.html', {
+      'product_id': product_id,
       'product': product,
       'selected_category': selected_category,
       'variations': variations,
@@ -359,6 +425,8 @@ def product_edit(request, product_id):
       showVariations = "active show"
       showWithoutVariation = ""
     return render(request, 'product/product_edit_page.html', {
+      'product_id': product_id,
+      'selected_category': product['product_category_id'],
       'CONDITION_CHOICES': CONDITION_CHOICES,
       'product': product,
       'variations': variations,
