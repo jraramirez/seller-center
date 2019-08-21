@@ -71,19 +71,39 @@ function goToByScroll(id){
         '50');
 }
 
-function handleFileSelect(evt) {
-  var files = evt.target.files;
+function startProgressBar() {
+  var files = document.getElementById("id_file").files; 
   f = files[0];
   Papa.parse(f, {
     header: true,
     dynamicTyping: true,
     complete: function(results) {
       data = results;
-      console.log(data);
+      var progressBar = document.getElementById("progress-bar"); 
+      var progressBarSubtitle = document.getElementById("progress-bar-subtitle"); 
+      progressBar.style.display = "block";
+      progressBarSubtitle.style.display = "block";
+      var width = 0;
+      var count = 0;
+      var nRows = data.data.length
+      if(nRows>=500){
+        nRows = 500;
+      }
+      var id = setInterval(frame, 22);
+      function frame() {
+        if (count >= nRows) {
+          clearInterval(id);
+        } 
+        else {
+          count++;
+          width = count/nRows*100
+          progressBar.style.width = width + '%'; 
+          progressBarSubtitle.innerHTML = count * 1 + ' / '+ String(nRows) + ' rows processed.';
+        }
+      }
     }
   });
 }
-document.getElementById('id_file').addEventListener('change', handleFileSelect, false);
 
 $(function(){
   var hash = window.location.hash;

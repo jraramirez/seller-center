@@ -763,6 +763,17 @@ body.explorer-open .nav-main {
   margin-bottom: 30px;
   margin-left: -15px;
 }
+.template-productsimportpage .cards-container .file-upload-progress-bar {
+  display: none;
+  width: 0%;
+  height: 30px;
+  background-color: #05507b;
+  line-height: 30px;
+  color: white;
+}
+.template-productsimportpage .cards-container .file-upload-progress-bar-subtitle {
+  display: none;
+}
 
 .login .wrapper {
   font-family: "Montserrat", sans-serif;

@@ -1,0 +1,19 @@
+.template-productsimportpage .cards-container .progress-bar-background {
+  width: 100%;
+  background-color: lightgray;
+  border: 0px;
+}
+.template-productsimportpage .cards-container .file-upload-progress-bar {
+  display: none;
+  width: 0%;
+  height: 30px;
+  background-color: #005782;
+  line-height: 30px;
+  color: white;
+  border: 0px;
+}
+.template-productsimportpage .cards-container .file-upload-progress-bar-subtitle {
+  display: none;
+}
+
+/*# sourceMappingURL=seller_center_new.css.map */
