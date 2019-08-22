@@ -69,24 +69,36 @@
                     <td class="text-center">
                         {% if product.product_name %}
                         {{product.product_name}}
+                        {% else %} -
                         {% endif %}
                     </td>
-                    <td class="text-center">{{product.parent_sku_reference_no}}</td>
+                    <td class="text-center">
+                        {% if product.parent_sku_reference_no %}
+                        {{product.parent_sku_reference_no}}
+                        {% else %} -
+                        {% endif %}
+                    </td>
                     <td class="text-center">
                     {% for v in product.variations.all %}
-                        {{v.name}}
+                        {% if v.name %} {{v.name}}
+                        {% else %} -
+                        {% endif %}
                         <br>
                     {% endfor %}
                     </td>
                     <td class="text-center">
                     {% for v in product.variations.all %}
-                        {{v.price}}
+                        {% if v.price %}₱ {{v.price}}
+                        {% else %} -
+                        {% endif %}
                         <br>
                     {% endfor %}
                     </td>
                     <td class="text-center">
                     {% for v in product.variations.all %}
-                        {{v.stock}}
+                        {% if v.stock %} {{v.stock}}
+                        {% else %} -
+                        {% endif %}
                         <br>
                     {% endfor %}
                     </td>

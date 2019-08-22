@@ -44,14 +44,38 @@ function goToByScroll(id){
         '50');
 }
 
-function hideVariation(i) {
-    var prevIndex = Math.max(0, i - 1);
-    var prevAddButton = 'variation-add-button-' + String(prevIndex);
-    var id = 'variation-container-' + String(i);
-    var prevContainerId = 'variation-container-' + String(prevIndex);
-    $("#"+id).hide();
-    $("#"+prevAddButton).show();
-    goToByScroll(prevContainerId);
+function startProgressBar() {
+  var files = document.getElementById("id_file").files; 
+  f = files[0];
+  Papa.parse(f, {
+    header: true,
+    dynamicTyping: true,
+    complete: function(results) {
+      data = results;
+      var progressBar = document.getElementById("progress-bar"); 
+      var progressBarSubtitle = document.getElementById("progress-bar-subtitle"); 
+      progressBar.style.display = "block";
+      progressBarSubtitle.style.display = "block";
+      var width = 0;
+      var count = 0;
+      var nRows = data.data.length
+      if(nRows>=500){
+        nRows = 500;
+      }
+      var id = setInterval(frame, 22);
+      function frame() {
+        if (count >= nRows) {
+          clearInterval(id);
+        } 
+        else {
+          count++;
+          width = count/nRows*100
+          progressBar.style.width = width + '%'; 
+          progressBarSubtitle.innerHTML = count * 1 + ' / '+ String(nRows) + ' rows processed.';
+        }
+      }
+    }
+  });
 }
 
 $(function(){

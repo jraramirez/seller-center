@@ -602,6 +602,10 @@ body.explorer-open .nav-main {
   body.explorer-open .nav-wrapper {
     width: 180px;
   }
+
+  .collapse .collapse-item {
+    cursor: pointer;
+  }
 }
 .logo {
   display: block;
@@ -758,6 +762,17 @@ body.explorer-open .nav-main {
 .template-productsimportpage .variation {
   margin-bottom: 30px;
   margin-left: -15px;
+}
+.template-productsimportpage .cards-container .file-upload-progress-bar {
+  display: none;
+  width: 0%;
+  height: 30px;
+  background-color: #05507b;
+  line-height: 30px;
+  color: white;
+}
+.template-productsimportpage .cards-container .file-upload-progress-bar-subtitle {
+  display: none;
 }
 
 .login .wrapper {

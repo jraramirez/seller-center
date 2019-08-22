@@ -17,7 +17,7 @@ from product.models import Category
 from product.models import Variations
 from product.models import Errors
 
-from seller_center.settings.production import MEDIA_URL
+from seller_center.settings.dev import MEDIA_URL
 from seller_center.settings.base import CSV_COLUMNS
 
 media_url = MEDIA_URL 
@@ -26,7 +26,7 @@ media_url = MEDIA_URL
 class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
 
-def product_import(request, selected_category):
+def product_import(request, selected_category, product_id):
   CONDITION_CHOICES = [
     ('N', 'New'),
     ('U', 'Used'),
@@ -34,14 +34,79 @@ def product_import(request, selected_category):
   showVariations = ""
   showWithoutVariation = "active show"
 
-  if(selected_category == 'index'):
+  if(selected_category == '0' and product_id == '0'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
       categories = json.load(f)
     return render(request, 'product/product_import_page.html', {
+      'product_id': product_id,
       'categories': categories,
       'selected_category': selected_category
     })
+
+  elif(selected_category != '0' and product_id != '0'):
+    if(len(Product.objects.filter(id=product_id))):
+      product = {}
+      selectedProduct = Product.objects.filter(id=product_id)[0]
+      product['product_code'] = selectedProduct.product_code
+      product['product_stock'] = selectedProduct.stock_sum
+      category = Category.objects.filter(unique_id=selected_category)
+      if len(category) == 0:
+        product['category'] = ""
+      else:
+        product['category'] = category[0].name
+      product['product_name'] = selectedProduct.product_name
+      product['product_description'] = selectedProduct.product_description
+
+      product['product_price'] = selectedProduct.product_price
+      product['stock_sum'] = selectedProduct.stock_sum
+
+
+      product['product_category_id'] = selected_category
+
+      product['product_length'] = selectedProduct.product_length
+      product['product_width'] = selectedProduct.product_width
+      product['product_height'] = selectedProduct.product_height
+      product['product_weight'] = selectedProduct.product_weight
+
+      product['product_condition'] = selectedProduct.product_condition
+      product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
+
+      product['variations'] = Variations.objects.filter(product_id=product_id)
+
+      variations = [{}]*7
+      for index, v in enumerate(product['variations']):
+        tmp = {
+          'variation_sku': v.sku,
+          'variation_price': v.price,
+          'variation_stock': v.stock,
+          'variation_name': v.name,
+          'variation_url': v.image_url
+        }
+        variations[index] = tmp
+        showVariations = "active show"
+        showWithoutVariation = ""
+      return render(request, 'product/product_edit_page.html', {
+        'product_id': product_id,
+        'selected_category': selected_category,
+        'CONDITION_CHOICES': CONDITION_CHOICES,
+        'product': product,
+        'variations': variations,
+        'showVariations': showVariations,
+        'showWithoutVariation': showWithoutVariation,
+      })
+
+    else:
+      selected_category = '0'
+      categories = {}
+      with open('seller_center/static/documents/categories-full.json', 'r') as f:
+        categories = json.load(f)
+      return render(request, 'product/product_import_page.html', {
+        'product_id': product_id,
+        'categories': categories,
+        'selected_category': selected_category
+      })
+
   elif(request.method == "POST"):
     product = {}
     variations = [{}]*7
@@ -70,6 +135,10 @@ def product_import(request, selected_category):
       errors.append('Product Name is required; ')
     if(not product['product_description']):
       errors.append('Product Description is required; ')
+    if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
+      errors.append('Product Price is required; ')
+    if(request.POST.get('product-variation-0-sku') == '' and not product['product_stock']):
+      errors.append('Product Stock is required; ')
     for i in range(0,7):
       if(request.POST.get('product-variation-'+str(i)+'-sku')):
         if(not request.POST.get('product-variation-'+str(i)+'-name')):
@@ -121,10 +190,6 @@ def product_import(request, selected_category):
           v.save()
           if(request.FILES):
             image = request.FILES['product-variation-'+str(i)+'-image']
-            # Image.objects.create(
-            #   file=image,
-            #   title=image.name
-            # )
             v.image_upload.save(str(request.user.id) + '/' + image.name, image)
             Variations.objects.filter(id=v.id).update(
               image_url_from_upload = media_url + 'original_images/' + str(request.user.id) + '/'  + str(image.name)
@@ -151,6 +216,7 @@ def product_import(request, selected_category):
           showVariations = "active show"
           showWithoutVariation = ""
       return render(request, 'product/product_import_page.html', {
+        'product_id': product_id,
         'product': product,
         'errors': errors,
         'selected_category': selected_category,
@@ -165,6 +231,7 @@ def product_import(request, selected_category):
     variations = [{}]*7
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     return render(request, 'product/product_import_page.html', {
+      'product_id': product_id,
       'product': product,
       'selected_category': selected_category,
       'variations': variations,
@@ -358,12 +425,15 @@ def product_edit(request, product_id):
       showVariations = "active show"
       showWithoutVariation = ""
     return render(request, 'product/product_edit_page.html', {
+      'product_id': product_id,
+      'selected_category': product['product_category_id'],
       'CONDITION_CHOICES': CONDITION_CHOICES,
       'product': product,
       'variations': variations,
       'showVariations': showVariations,
       'showWithoutVariation': showWithoutVariation,
     })
+
 
 def products_import(request):
   '''
@@ -402,8 +472,6 @@ def products_import(request):
             productID = None
 
             product = Product.objects.filter(profile_id=request.user.id).filter(product_code=row['product_code'])
-
-
 
             if(len(product)):
               print("Updating product %s" % product)
@@ -494,7 +562,6 @@ def products_import(request):
               e = Errors(
                 product_id = productID,
                 name = 'Product name is required',
-                profile_id = request.user.id
               )
               e.save()
               unpublished = True
@@ -504,7 +571,6 @@ def products_import(request):
                 e = Errors(
                   product_id = productID,
                   name = 'Product name should have at least 16 characters',
-                  profile_id = request.user.id
                 )
                 e.save()
                 unpublished = True
@@ -515,7 +581,6 @@ def products_import(request):
               e = Errors(
                 product_id = productID,
                 name = 'Product code is required',
-                profile_id = request.user.id
               )
               e.save()
               unpublished = True
@@ -525,11 +590,9 @@ def products_import(request):
                 e = Errors(
                   product_id = productID,
                   name = 'Product code exceeds maximum lenght of 100',
-                  profile_id = request.user.id
                 )
                 e.save()
                 unpublished = True
-
 
             # Product description validation
             if(row['product_description'] != row['product_description']):
@@ -537,7 +600,6 @@ def products_import(request):
               e = Errors(
                 product_id = productID,
                 name = 'Product description is required',
-                profile_id = request.user.id
 
               )
               e.save()
@@ -548,7 +610,6 @@ def products_import(request):
                 e = Errors(
                   product_id = productID,
                   name = 'Product description should have at least 100 characters',
-                  profile_id = request.user.id
                 )
                 e.save()
                 unpublished = True
@@ -559,7 +620,6 @@ def products_import(request):
               e = Errors(
                 product_id = productID,
                 name = 'Product weight is required',
-                profile_id = request.user.id
               )
               e.save()
               unpublished = True
@@ -578,7 +638,6 @@ def products_import(request):
                     e = Errors(
                       product_id = productID,
                       name = 'Product image is required',
-                      profile_id = request.user.id
                     )
                     e.save()
             else:
@@ -587,7 +646,6 @@ def products_import(request):
                 e = Errors(
                   product_id = productID,
                   name = 'Product image is required',
-                  profile_id = request.user.id
                 )
                 e.save()
             
@@ -595,34 +653,63 @@ def products_import(request):
             stock_sum = 0
             for i in range(0,7):
               if(row['variation'+str(i+1)+'_id'] == row['variation'+str(i+1)+'_id']):
-                variationStock = 0
-                if(row['variation'+str(i+1)+'_stock'] == row['variation'+str(i+1)+'_stock']):
-                  variationStock = row['variation'+str(i+1)+'_stock']
-                stock_sum = stock_sum + variationStock
+                variationID = row['variation'+str(i+1)+'_id']
+                variationStock = row['variation'+str(i+1)+'_stock']
+                variationPrice = row['variation'+str(i+1)+'_price']
+                variationName = row['variation'+str(i+1)+'_name']
+
+                # Product variation stock validation
+                if(variationStock != variationStock):
+                  variationStock = 0
+                else:
+                  stock_sum = stock_sum + int(variationStock)
+
+                # Product variation image1 validation
                 if(i == 0 and not imageInS3 and not autoPair):
                   image_url_from_sku = None
                 image_url = row['image1']
                 if(row['image1'] != row['image1']):
                   image_url = None
+                
+                # Product variation name validation
+                if(variationName != variationName):
+                  variationName = None
+                  unpublished = True
+                  e = Errors(
+                    product_id = productID,
+                    name = 'Variation '+str(i+1)+' name is required',
+                  )
+                  e.save()
+
+                # Product variation price validation
+                if(variationPrice != variationPrice):
+                  variationPrice = None
+                  unpublished = True
+                  e = Errors(
+                    product_id = productID,
+                    name = 'Variation '+str(i+1)+' price is required',
+                  )
+                  e.save()
+
                 variation = Variations.objects.filter(product_id=productID).filter(sku=row['variation'+str(i+1)+'_id'])
                 if(len(variation)):
                   variation.update(
                     product_id = productID,
                     image_url = image_url,
-                    price = row['variation'+str(i+1)+'_price'],
-                    sku = row['variation'+str(i+1)+'_id'],
+                    price = variationPrice,
+                    sku = variationID,
                     stock = variationStock,
-                    name = row['variation'+str(i+1)+'_name'],
+                    name = variationName,
                     image_url_from_sku = image_url_from_sku
                   )
                 else:
                   v = Variations(
                     product_id = productID,
                     image_url = image_url,
-                    price = row['variation'+str(i+1)+'_price'],
-                    sku = row['variation'+str(i+1)+'_id'],
+                    price = variationPrice,
+                    sku = variationID,
                     stock = variationStock,
-                    name = row['variation'+str(i+1)+'_name'],
+                    name = variationName,
                     image_url_from_sku = image_url_from_sku
                   )
                   v.save()

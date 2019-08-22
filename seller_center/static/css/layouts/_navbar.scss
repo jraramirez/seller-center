@@ -402,6 +402,10 @@
 	body.explorer-open .nav-wrapper{
 	width:180px
 	}
-	
+	.collapse{
+		.collapse-item{
+			cursor: pointer;
+		}	
+	}
   }
   .logo{display:block;text-align:left;text-decoration:none;color:#aaa;padding:.9em 1.2em;margin:0;-webkit-font-smoothing:auto}@media screen and (min-width:50em){.logo{margin:1em auto;text-align:center}}
