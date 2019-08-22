@@ -2,8 +2,10 @@ $(function(){
     $('#email-login').keyup(function(){
         if($(this).val() != ''){
             $('#verify_user_btn').removeAttr('disabled');
+            $('#verify_user_btn').removeClass('disabled');
         } else{
             $('#verify_user_btn').attr('disabled', true);
+            $('#verify_user_btn').addClass('disabled');
         }
     });
 
@@ -24,6 +26,7 @@ $(function(){
     });
 
     function checkSignUpFormComplete(){
+        var veri_code=$('#veri_code').val();
         var password=$('#new_pw').val();
         var confirmPassword=$('#repeat_pw').val();
         if(password == ''){
@@ -32,6 +35,11 @@ $(function(){
             $('.checkPasswordContainer').show('slow');
         }
         $('#reset_pw_btn').prop('disabled', !(checkPasswordHelper(password, confirmPassword)));
+        if(veri_code != '' && checkPasswordHelper(password, confirmPassword)){
+            $('#reset_pw_btn').removeClass('disabled');
+        } else{
+            $('#reset_pw_btn').addClass('disabled');
+        }
     }
 
     function show_hide_pw(el, id){

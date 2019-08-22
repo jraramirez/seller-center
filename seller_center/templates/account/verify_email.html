@@ -29,6 +29,7 @@
                             <div class="tab-pane fade show active" id="tab-email" role="tabpanel" aria-labelledby="tab-nav-email">
                                 <div class="pt-2 pb-4 pl-4 pr-4">
                                     <form action="" method="post" id="email-form">
+                                        {% csrf_token %}
                                         <div class="form-group">
                                             <label for="email-login">
                                                 <div class="d-flex align-items-center justify-content-center">
@@ -40,7 +41,7 @@
                                             </div>
                                             <p class="text-danger small mt-2" id="error-email-login"></p>
                                         </div>
-                                        <button type="submit" class="btn btn-primary-2 w-100 mt-3" id="verify_user_btn" disabled>Send Verification Request</button>
+                                        <button type="submit" class="btn btn-primary-2 w-100 mt-3 disabled" id="verify_user_btn" disabled>Send Verification Request</button>
                                     </form>
                                     <p class="small mt-3 text-center">Remembered your account? Click<a class="ml-1" href="/_util/login">here</a> to Sign In!</p>
                                 </div>
