@@ -192,6 +192,12 @@ def product_edit(request, selected_category, product_id):
 
     product['product_code'] = request.POST.get('product-code')
     product['product-category-id'] = request.POST.get('product-category-id')
+    if(selected_category == '0'):
+      category = Category.objects.filter(unique_id=int(product['product-category-id']))
+    else:
+      category = Category.objects.filter(unique_id=int(selected_category))
+    product['category'] = category[0].name
+    
     product['product_name'] = request.POST.get('product-name')
     product['product_description'] = request.POST.get('product-description')
 
