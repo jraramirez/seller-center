@@ -13,6 +13,7 @@ $(function(){
             removeUpload();
         }
     }
+    
     function removeUpload() {
       $('.file-upload-input').replaceWith($('.file-upload-input').clone());
       $('.file-upload-content').hide();
@@ -24,42 +25,6 @@ $(function(){
         });
         $('.image-upload-wrap').bind('dragleave', function () {
             $('.image-upload-wrap').removeClass('image-dropping');
-    });
-
-    $('#drop-container').hover(function(){
-        $('#rmv_cover_img').css({'opacity': 1})
-    }, function(){
-        $('#rmv_cover_img').css({'opacity': 0})
-    });
-
-    $('#drop-container1').hover(function(){
-        $('#rmv_img_1').css({'opacity': 1})
-    }, function(){
-        $('#rmv_img_1').css({'opacity': 0})
-    });
-
-    $('#drop-container2').hover(function(){
-        $('#rmv_img_2').css({'opacity': 1})
-    }, function(){
-        $('#rmv_img_2').css({'opacity': 0})
-    });
-
-    $('#drop-container3').hover(function(){
-        $('#rmv_img_3').css({'opacity': 1})
-    }, function(){
-        $('#rmv_img_3').css({'opacity': 0})
-    });
-
-    $('#drop-container4').hover(function(){
-        $('#rmv_img_4').css({'opacity': 1})
-    }, function(){
-        $('#rmv_img_4').css({'opacity': 0})
-    });
-
-    $('#drop-container5').hover(function(){
-        $('#rmv_img_5').css({'opacity': 1})
-    }, function(){
-        $('#rmv_img_5').css({'opacity': 0})
     });
 
     $('#rmv_cover_img').click(function(e){
