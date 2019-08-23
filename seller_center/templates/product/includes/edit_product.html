@@ -196,13 +196,15 @@
                                 <label for="product-variation-{{forloop.counter0}}-image"
                                        class="col-sm-3 col-form-label">Image</label>
                                 {{ form }}
-
-
-                                <input type="file" name="product-variation-{{forloop.counter0}}-image"
-                                       class="col-sm-9 form-control"
-                                       id="product-variation-{{forloop.counter0}}-image">
+                                <div class="col-sm-3">
+                                    <div class="img_container" id="var-drop-container" var_ctr="{{ forloop.counter0 }}">
+                                        <label for="product-variation-{{forloop.counter0}}-image" class="drop-area-text" id="prod_var_{{ forloop.counter0 }}_lbl"><i class="far fa-image"></i> Variation {{ forloop.counter }} Image</label>
+                                        <input type="file" name="product-variation-{{forloop.counter0}}-image" class="form-control img_file" id="product-variation-{{forloop.counter0}}-image" accept="image/*" imgdisplay="prod_var_{{ forloop.counter0 }}_img" img_rmv="rmv_prod_var_{{ forloop.counter0 }}_img">
+                                        <img src="{{ v.variation_image_url_from_upload }}" class="drop-image" id="prod_var_{{ forloop.counter0 }}_img" />
+                                        <button class="btn btn-danger btn-circle trash_can" id="rmv_prod_var_{{ forloop.counter0 }}_img" rmv_img="prod_var_{{ forloop.counter0 }}_img"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
                             </div>
-
                             {% if forloop.counter0 < 6 %}
                             <div class="col-md-12">
                                 <button id="variation-add-button-{{forloop.counter}}" class="btn btn-primary"
@@ -221,6 +223,70 @@
                 {# End of With Variation Tab #}
             </div>
             {# End of Sales Info #}
+        </div>
+
+        <div class="row mx-3">
+            <div class="card shadow container-fluid p-0">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Media Management</h6>
+                </div>
+                <div class="card-body mx-5">
+
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="id_product-code" class="col-sm-3 col-form-label">Product Images</label>
+                        <div class="col-sm-12 d-flex justify-content-center">
+                            <div class="col-sm-2">
+                                <div class="img_container" id="drop-container">
+                                    <label for="product_cover_img" class="drop-area-text" id="cover_img_lbl"><i class="far fa-image"></i> Cover Image</label>
+                                    <input type="file" name="product-cover-img" class="form-control img_file" id="product_cover_img" accept="image/*" imgdisplay="cover_img" img_rmv="rmv_cover_img">
+                                    <img src="" class="drop-image" id="cover_img" />
+                                    <button class="btn btn-danger btn-circle trash_can" id="rmv_cover_img" rmv_img="cover_img"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="img_container" id="drop-container1">
+                                    <label for="product_img_1" class="drop-area-text" id="img_1_lbl"><i class="far fa-image"></i> Image 1</label>
+                                    <input type="file" name="product-img-1" class="form-control img_file" id="product_img_1" accept="image/*" imgdisplay="img_1" img_rmv="rmv_img_1">
+                                    <img src="" class="drop-image" id="img_1" />
+                                    <button class="btn btn-danger btn-circle trash_can" id="rmv_img_1" rmv_img="img_1"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="img_container" id="drop-container2">
+                                    <label for="product_img_2" class="drop-area-text" id="img_2_lbl"><i class="far fa-image"></i> Image 2</label>
+                                    <input type="file" name="product-img-2" class="form-control img_file" id="product_img_2" accept="image/*" imgdisplay="img_2" img_rmv="rmv_img_2">
+                                    <img src="" class="drop-image" id="img_2" />
+                                    <button class="btn btn-danger btn-circle trash_can" id="rmv_img_2" rmv_img="img_2"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="img_container" id="drop-container3">
+                                    <label for="product_img_3" class="drop-area-text" id="img_3_lbl"><i class="far fa-image"></i> Image 3</label>
+                                    <input type="file" name="product-img-3" class="form-control img_file" id="product_img_3" accept="image/*" imgdisplay="img_3" img_rmv="rmv_img_3">
+                                    <img src="" class="drop-image" id="img_3" />
+                                    <button class="btn btn-danger btn-circle trash_can" id="rmv_img_3" rmv_img="img_3"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="img_container" id="drop-container4">
+                                    <label for="product_img_4" class="drop-area-text" id="img_4_lbl"><i class="far fa-image"></i> Image 4</label>
+                                    <input type="file" name="product-img-4" class="form-control img_file" id="product_img_4" accept="image/*" imgdisplay="img_4" img_rmv="rmv_img_4">
+                                    <img src="" class="drop-image" id="img_4" />
+                                    <button class="btn btn-danger btn-circle trash_can" id="rmv_img_4" rmv_img="img_4"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="img_container" id="drop-container5">
+                                    <label for="product_img_5" class="drop-area-text" id="img_5_lbl"><i class="far fa-image"></i> Image 5</label>
+                                    <input type="file" name="product-img-5" class="form-control img_file" id="product_img_5" accept="image/*" imgdisplay="img_5" img_rmv="rmv_img_5">
+                                    <img src="" class="drop-image" id="img_5" />
+                                    <button class="btn btn-danger btn-circle trash_can" id="rmv_img_5" rmv_img="img_5"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         {# Shipping Info #}
