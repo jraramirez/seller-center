@@ -372,7 +372,6 @@ def product_edit(request, selected_category, product_id):
 
     variations = [{}]*7
     for index, v in enumerate(product['variations']):
-      print(v)
       tmp = {
         'variation_sku': v.sku,
         'variation_price': v.price,
