@@ -196,11 +196,14 @@
                                 <label for="product-variation-{{forloop.counter0}}-image"
                                        class="col-sm-3 col-form-label">Image</label>
                                 {{ form }}
-
-
-                                <input type="file" name="product-variation-{{forloop.counter0}}-image"
-                                       class="col-sm-9 form-control"
-                                       id="product-variation-{{forloop.counter0}}-image">
+                                <div class="col-sm-3">
+                                    <div class="img_container" id="var-drop-container" var_ctr="{{ forloop.counter0 }}">
+                                        <label for="product-variation-{{forloop.counter0}}-image" class="drop-area-text" id="prod_var_{{ forloop.counter0 }}_lbl"><i class="far fa-image"></i> Variation {{ forloop.counter }} Image</label>
+                                        <input type="file" name="product-variation-{{forloop.counter0}}-image" class="form-control img_file" id="product-variation-{{forloop.counter0}}-image" accept="image/*" imgdisplay="prod_var_{{ forloop.counter0 }}_img" img_rmv="rmv_prod_var_{{ forloop.counter0 }}_img">
+                                        <img src="{{ v.variation_image_url_from_upload }}" class="drop-image" id="prod_var_{{ forloop.counter0 }}_img" />
+                                        <button class="btn btn-danger btn-circle trash_can" id="rmv_prod_var_{{ forloop.counter0 }}_img" rmv_img="prod_var_{{ forloop.counter0 }}_img"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
                             </div>
 
                             {% if forloop.counter0 < 6 %}
