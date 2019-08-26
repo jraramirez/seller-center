@@ -56,6 +56,7 @@ class Product(ClusterableModel):
   order = models.ForeignKey(Order, models.DO_NOTHING, blank=True, null=True)
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   category = models.IntegerField(blank=True, null=True)
+  product_stock = models.IntegerField(blank=True, null=True, default=None)
   product_length = models.IntegerField(blank=True, null=True, default=None)
   product_width = models.IntegerField(blank=True, null=True, default=None)
   product_height = models.IntegerField(blank=True, null=True, default=None)
@@ -147,8 +148,6 @@ class Variations(Orderable, models.Model):
 class Errors(ClusterableModel):  
   name = models.CharField(null=True, blank=True, max_length=500)
   product = ParentalKey('Product', related_name='errors', null=True, blank=True)
-  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
-
 
 class ProductPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)

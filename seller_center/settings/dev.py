@@ -15,7 +15,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "seller_center",
         "USER": "postgres",
-        "PASSWORD": "admin",
+        "PASSWORD": "postgres",
         "HOST": "localhost",
         "PORT": "",
     }
@@ -37,14 +37,14 @@ STATIC_URL = '/static/'
 
 
 # Media files (AWS)
-AWS_STORAGE_BUCKET_NAME = 'lyka-seller-center'
+AWS_STORAGE_BUCKET_NAME = 'lyka-seller-center-dev'
 AWS_ACCESS_KEY_ID = 'AKIAYO6GTQEHMJXJRD3Y'
 AWS_SECRET_ACCESS_KEY = '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'
-AWS_S3_CUSTOM_DOMAIN = 'd3rdlm5j4gpnnq.cloudfront.net'
+AWS_S3_CUSTOM_DOMAIN = 'dhor4ba6a2l1k.cloudfront.net'
 AWS_S3_FILE_OVERWRITE = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = "https://d3rdlm5j4gpnnq.cloudfront.net/"
+MEDIA_URL = "https://dhor4ba6a2l1k.cloudfront.net/"
 MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 

@@ -24,8 +24,8 @@
 
     <!-- CATEGORIES -->
 
-    {% if selected_category == 'index' %}
-    <h1 class="h3 mr-auto mb-3 text-gray-800">Select Product Category</h1>
+    {% if selected_category == '0' %}
+    <h1 class="h3 mr-auto mb-3 text-gray-800">Select Product Category </h1>
     <form action="" enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         <div class="row">
@@ -66,9 +66,9 @@
                     <div class="tab-pane fade list-group" id="list-{{c2.unique_id}}" role="tabpanel tablist"
                          aria-labelledby="list-{{c2.unique_id}}-list">
                         {% for c3 in c2.children %}
-                        <a class="list-group-item list-group-item-action" id="list-{{c3.unique_id}}-list"
-                           name="category" href="/products/add-single-product/{{c3.unique_id}}" role="tab"
-                           aria-controls="{{c3.name}}">{{c3.name}}</a>
+                            <a class="list-group-item list-group-item-action" id="list-{{c3.unique_id}}-list"
+                                name="category" href="/products/add-single-product/{{c3.unique_id}}" role="tab"
+                                aria-controls="{{c3.name}}">{{c3.name}}</a>
                         {% endfor %}
                     </div>
                     {% endfor %}
