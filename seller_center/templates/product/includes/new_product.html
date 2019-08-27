@@ -53,7 +53,7 @@
                             <input type="hidden" name="product-category-id" class="form-control" id="id_product_category_id"
                                    value="{{product.product_category_id}}">
                             <input type="text" name="product-category" class="form-control" id="id_product_category"
-                                   value="{{product.category}}" disabled>
+                                   value="{{product.parentParentCategory}} → {{product.parentCategory}} → {{product.category}}" disabled>
                             <div class="input-group-append">
 
                           <a class="btn btn-outline-secondary" href="/products/add-single-product/0">

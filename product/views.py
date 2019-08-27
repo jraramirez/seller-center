@@ -135,6 +135,10 @@ def product_import(request, selected_category):
       return HttpResponseRedirect("/products/#all")
     else:
       product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
+      categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
+      product['parentCategory'] = Category.objects.filter(unique_id=categoryParentId)[0].name
+      categoryParentParentId = Category.objects.filter(unique_id=categoryParentId)[0].parent_id
+      product['parentParentCategory'] = Category.objects.filter(unique_id=categoryParentParentId)[0].name
       showVariations = ""
       showWithoutVariation = "active show"
       for i in range(0,7):
@@ -165,6 +169,10 @@ def product_import(request, selected_category):
     product = {}
     variations = [{}]*7
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
+    categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
+    product['parentCategory'] = Category.objects.filter(unique_id=categoryParentId)[0].name
+    categoryParentParentId = Category.objects.filter(unique_id=categoryParentId)[0].parent_id
+    product['parentParentCategory'] = Category.objects.filter(unique_id=categoryParentParentId)[0].name
     return render(request, 'product/product_import_page.html', {
       'product': product,
       'selected_category': selected_category,
@@ -196,6 +204,10 @@ def product_edit(request, selected_category, product_id):
     else:
       category = Category.objects.filter(unique_id=int(selected_category))
     product['category'] = category[0].name
+    categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
+    product['parentCategory'] = Category.objects.filter(unique_id=categoryParentId)[0].name
+    categoryParentParentId = Category.objects.filter(unique_id=categoryParentId)[0].parent_id
+    product['parentParentCategory'] = Category.objects.filter(unique_id=categoryParentParentId)[0].name
     
     product['product_name'] = request.POST.get('product-name')
     product['product_description'] = request.POST.get('product-description')
@@ -337,17 +349,25 @@ def product_edit(request, selected_category, product_id):
     product['product_code'] = selectedProduct.product_code
     product['product_stock'] = selectedProduct.stock_sum
     category = Category.objects.filter(unique_id=selectedProduct.category)
-    if len(category) == 0:
+    if(category.count()) == 0:
       product['category'] = "None"
     else:
       if(selected_category != selectedProduct.category):
         product['product_category_id'] = selected_category
         category = Category.objects.filter(unique_id=selected_category)
         product['category'] = category[0].name
+        categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
+        product['parentCategory'] = Category.objects.filter(unique_id=categoryParentId)[0].name
+        categoryParentParentId = Category.objects.filter(unique_id=categoryParentId)[0].parent_id
+        product['parentParentCategory'] = Category.objects.filter(unique_id=categoryParentParentId)[0].name
       else:
         product['product_category_id'] = selectedProduct.category
         category = Category.objects.filter(unique_id=selectedProduct.category)
         product['category'] = category[0].name
+        categoryParentId = Category.objects.filter(unique_id=selectedProduct.category)[0].parent_id
+        product['parentCategory'] = Category.objects.filter(unique_id=categoryParentId)[0].name
+        categoryParentParentId = Category.objects.filter(unique_id=categoryParentId)[0].parent_id
+        product['parentParentCategory'] = Category.objects.filter(unique_id=categoryParentParentId)[0].name
       
     product['product_name'] = selectedProduct.product_name
     product['product_description'] = selectedProduct.product_description
