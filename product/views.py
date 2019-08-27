@@ -65,6 +65,13 @@ def product_import(request, selected_category):
 
     request.session['product-condition'] = request.POST.get('product-condition')
     request.session['product-parent-sku'] = request.POST.get('product-parent-sku')
+    for i in range(0,8):
+      request.session['product-variation-'+str(i)+'-sku'] = request.POST.get('product-variation-'+str(i)+'-sku')
+      request.session['product-variation-'+str(i)+'-stock'] =  request.POST.get('product-variation-'+str(i)+'-stock')
+      request.session['product-variation-'+str(i)+'-price'] = request.POST.get('product-variation-'+str(i)+'-price')
+      request.session['product-variation-'+str(i)+'-name'] = request.POST.get('product-variation-'+str(i)+'-name')
+      if(request.FILES):
+        request.session['product-variation-'+str(i)+'-image'] = request.FILES['product-variation-'+str(i)+'-image']
     return render(request, 'product/product_import_page.html', {
       'categories': categories,
       'selected_category': selected_category
@@ -233,6 +240,24 @@ def product_import(request, selected_category):
       product['parent_sku_reference_no'] = request.session['product-parent-sku']
       del request.session['product-parent-sku']
 
+    for i in range(0,7):
+      variation_sku = variation_price = variation_stock = variation_name = variation_url = ''
+      if('product-variation-'+str(i)+'-sku' in request.session.keys()):
+        variation_sku = request.session['product-variation-'+str(i)+'-sku']
+      if('product-variation-'+str(i)+'-stock' in request.session.keys()):
+        variation_price = request.session['product-variation-'+str(i)+'-stock']
+      if('product-variation-'+str(i)+'-price' in request.session.keys()):
+        variation_stock = request.session['product-variation-'+str(i)+'-price']
+      if('product-variation-'+str(i)+'-name' in request.session.keys()):
+        variation_name = request.session['product-variation-'+str(i)+'-name']
+      tmp = {
+        'variation_sku': variation_sku,
+        'variation_price': variation_price,
+        'variation_stock': variation_stock,
+        'variation_name': variation_name,
+        'variation_url': variation_url
+      }
+      variations[i] = tmp
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
     product['parentCategory'] = Category.objects.filter(unique_id=categoryParentId)[0].name
