@@ -407,6 +407,7 @@ def products_import(request):
     if form.is_valid():
       inputFile = request.FILES['file']
       inputFileDF = pd.read_csv(inputFile, skip_blank_lines=True)
+      inputFileDF = inputFileDF.head(500)
 
       # Check if there are missing columns
       for column in CSV_COLUMNS: 
