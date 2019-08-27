@@ -8,7 +8,7 @@
            class="d-none d-sm-inline-block btn btn-xl shadow-sm mr-2">Cancel</a>
 
 
-        <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl">Save and
+        <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl" value="save" name="action">Save and
             Delist</button>
     </div>
     {% csrf_token %}
@@ -56,9 +56,9 @@
                                    value="{{product.parentParentCategory}} → {{product.parentCategory}} → {{product.category}}" disabled>
                             <div class="input-group-append">
 
-                          <a class="btn btn-outline-secondary" href="/products/add-single-product/0">
+                          <button type="submit" class="btn btn-outline-secondary" value="change" name="action">
                                 Change Category
-                          </a>
+                          </button>
                             </div>
                         </div>
                     </div>

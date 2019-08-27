@@ -43,7 +43,36 @@ def product_import(request, selected_category):
       'selected_category': selected_category
     })
 
-  elif(request.method == "POST"):
+  elif(request.method == "POST" and request.POST.get('action') == 'change'):
+    categories = {}
+    with open('seller_center/static/documents/categories-full.json', 'r') as f:
+      categories = json.load(f)
+    selected_category = '0'
+    product = {}
+    variations = [{}]*7
+    request.session['product-code'] = request.POST.get('product-code')
+    request.session['product-name'] = request.POST.get('product-name')
+    request.session['product-description'] = request.POST.get('product-description')
+
+    #Shipping Info
+    request.session['product-length'] = request.POST.get('product-length')
+    request.session['product-width'] = request.POST.get('product-width')
+    request.session['product-height'] = request.POST.get('product-height')
+    request.session['product-weight'] = request.POST.get('product-weight')
+
+    request.session['product-price'] = request.POST.get('product-price')
+    request.session['product-stock'] = request.POST.get('product-stock')
+
+    request.session['product-condition'] = request.POST.get('product-condition')
+    request.session['product-parent-sku'] = request.POST.get('product-parent-sku')
+    return render(request, 'product/product_import_page.html', {
+      'categories': categories,
+      'selected_category': selected_category
+    })
+
+  elif(request.method == "POST" and request.POST.get('action') == 'save'):
+    if(selected_category == '0'):
+      selected_category = request.POST.get('product-category-id')
     product = {}
     variations = [{}]*7
     product['product_code'] = request.POST.get('product-code')
@@ -165,9 +194,45 @@ def product_import(request, selected_category):
         'CONDITION_CHOICES': CONDITION_CHOICES
       })
 
-  else:
+  else:    
     product = {}
     variations = [{}]*7
+    if('product-code' in request.session.keys()):
+      product['product_code'] = request.session['product-code']
+      del request.session['product-code']
+    if('product-name' in request.session.keys()):
+      product['product_name'] = request.session['product-name']
+      del request.session['product-name']
+    if('product-description' in request.session.keys()):
+      product['product_description'] = request.session['product-description']
+      del request.session['product-description']
+
+      #Shipping Info
+    if('product-length' in request.session.keys()):
+      product['product_length'] = request.session['product-length']
+      del request.session['product-length']
+    if('product-width' in request.session.keys()):
+      product['product_width'] = request.session['product-width']
+      del request.session['product-width']
+    if('product-height' in request.session.keys()):
+      product['product_height'] = request.session['product-height']
+      del request.session['product-height']
+    if('product-weight' in request.session.keys()):
+      product['product_weight'] = request.session['product-weight']
+      del request.session['product-weight']
+    if('product-price' in request.session.keys()):
+      product['product_price'] = request.session['product-price']
+      del request.session['product-price']
+    if('product-stock' in request.session.keys()):
+      product['product_stock'] = request.session['product-stock']
+      del request.session['product-stock']
+    if('product-condition' in request.session.keys()):
+      product['product_condition'] = request.session['product-condition']
+      del request.session['product-condition']
+    if('product-parent-sku' in request.session.keys()):
+      product['parent_sku_reference_no'] = request.session['product-parent-sku']
+      del request.session['product-parent-sku']
+
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
     product['parentCategory'] = Category.objects.filter(unique_id=categoryParentId)[0].name
