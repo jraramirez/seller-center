@@ -188,7 +188,6 @@ def product_edit(request, selected_category, product_id):
   if (request.method == "POST"):
     product = {}
     variations = [{}] * 7
-    print("EDIT POST %s" % request.POST)
 
     product['product_code'] = request.POST.get('product-code')
     product['product-category-id'] = request.POST.get('product-category-id')
@@ -341,13 +340,11 @@ def product_edit(request, selected_category, product_id):
     if len(category) == 0:
       product['category'] = "None"
     else:
-      print(selected_category != selectedProduct.category)
       if(selected_category != selectedProduct.category):
         product['product_category_id'] = selected_category
         category = Category.objects.filter(unique_id=selected_category)
         product['category'] = category[0].name
       else:
-        print("!")
         product['product_category_id'] = selectedProduct.category
         category = Category.objects.filter(unique_id=selectedProduct.category)
         product['category'] = category[0].name
@@ -424,15 +421,14 @@ def products_import(request):
 
         # Insert/Update each product from file to database
         with transaction.atomic():
-          for index, row, in inputFileDF.head(500).iterrows():
+          for index, row, in inputFileDF.iterrows():
 
             unpublished = False
             productID = None
 
             product = Product.objects.filter(profile_id=request.user.id).filter(product_code=row['product_code'])
 
-            if(len(product)):
-              print("Updating product %s" % product)
+            if(product.count()):
 
               if row['product_code'] != row['product_code']:
                 missingRequiredFields = True
@@ -470,7 +466,6 @@ def products_import(request):
 
                   Errors.objects.filter(product_id=productID).delete()
             else:
-              print("Creating product %s" % row['product_code'])
 
               # check required fields is not NaN
 
@@ -513,9 +508,7 @@ def products_import(request):
 
             # Product name validation
 
-            print("Product name checking required")
             if(row['product_name'] != row['product_name']):
-              print("Product name is required")
               Product.objects.filter(id=productID).update(product_name=None)
               e = Errors(
                 product_id = productID,
@@ -650,7 +643,7 @@ def products_import(request):
                   e.save()
 
                 variation = Variations.objects.filter(product_id=productID).filter(sku=row['variation'+str(i+1)+'_id'])
-                if(len(variation)):
+                if(variation.count()):
                   variation.update(
                     product_id = productID,
                     image_url = image_url,
@@ -692,7 +685,7 @@ def products_import(request):
         errorMessage = errorMessage + column + ', '
       messages.error(request, errorMessage)
       return HttpResponseRedirect("/products/add-new-products/")
-    elif(len(Errors.objects.all())):
+    elif(Errors.objects.all().count()):
       messages.warning(request, 'Products added. Some products have data errors. Check out the unpublished tab to correct them.')
       return HttpResponseRedirect("/products/#unpublished")
     else:

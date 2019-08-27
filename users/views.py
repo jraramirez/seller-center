@@ -94,7 +94,7 @@ def profile_edit(request):
   
   addresses = [{}]*7
   profileAddresses = Address.objects.filter(profile_id=request.user.id)
-  if(len(profileAddresses)):
+  if(profileAddresses.count()):
     for i, a in zip(range(0, len(profileAddresses)), profileAddresses):
       addresses[i] = a
     for i in range(len(profileAddresses), 7):
@@ -103,7 +103,6 @@ def profile_edit(request):
     for i, a in zip(range(0,7), addresses):
       addresses[i] = {}
   
-  print(addresses)
   return render(request, 'users/profile_edit_page.html', {
     'profileData': profileData,
     'userData': userData,
