@@ -20,6 +20,8 @@ from product.models import Errors
 from seller_center.settings.dev import MEDIA_URL
 from seller_center.settings.base import CSV_COLUMNS
 
+import VariationsFunctions as vf
+
 media_url = MEDIA_URL 
 
 
@@ -603,10 +605,10 @@ def products_import(request):
                     product_name = None,
                     product_description = None,
                     product_weight = row['product_weight'] if row['product_weight'] else None,
-                    ship_out_in = row['ship_out_in'] if row['ship_out_in'] else None,
-                    parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] else None,
-                    other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] else None,
-                    other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] else None,
+                    ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
+                    parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,
+                    other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
+                    other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] == row['other_logistics_provider_fee'] else None,
                     live = False,
                     suspended = False,
                     unlisted = False,
@@ -685,6 +687,34 @@ def products_import(request):
               )
               e.save()
               unpublished = True
+
+            # Product price and stock validation
+            if(vf.hasVariations(row)):
+              Product.objects.filter(id=productID).update(product_price=None)
+              Product.objects.filter(id=productID).update(product_stock=None)
+            else:
+              if(row['product_price'] != row['product_price']):
+                Product.objects.filter(id=productID).update(product_price=None)
+                e = Errors(
+                  product_id = productID,
+                  name = 'Missing product price',
+
+                )
+                e.save()
+                unpublished = True
+              else:
+                Product.objects.filter(id=productID).update(product_price=row['product_price'])
+              if(row['product_stock'] != row['product_stock']):
+                Product.objects.filter(id=productID).update(product_stock=None)
+                e = Errors(
+                  product_id = productID,
+                  name = 'Missing product stock',
+
+                )
+                e.save()
+                unpublished = True
+              else:
+                Product.objects.filter(id=productID).update(product_stock=row['product_stock'])
 
             # Product image validation
             imageInS3 = False
