@@ -6,48 +6,67 @@
 {% block body_class %}template-productsimportpage{% endblock %}
 
 {% block content %}
-  {% include 'messages.html' %}
-  <div class="row cards-container">
-    <div class="col-md-4">
-      <div class="card">
-        <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
-        <div class="card-body">
-          <h3 class="card-title">Add Multiple Products</h3>
-          <div class="form-import">
-            <form action="" enctype="multipart/form-data"  method="post">
-              {% csrf_token %}
-              <label for="id_file">Choose a file:</label>
-              <input type="file" name="file" required="" id="id_file">
-              <input type="checkbox" name="auto-pair" class="form-check-input" id="id_autopair"> <span>Auto-pair products with available images</span>
-              <input class="btn btn-success button-submit" type="submit" value="Upload" name="upload" onclick="startProgressBar()">
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card">
-        <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
-        <div class="card-body">
-          <h3 class="card-title">Sample CSV Template</h3>
-          <a class="btn btn-success" href="/products/import/download_template" role="button">Download</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card">
-        <img class="card-img-top" src="{% static 'images/download.svg' %}" alt="Card image cap">
-        <div class="card-body">
-          <h3 class="card-title">Add Multiple Images</h3>
-          <a class="btn btn-success" href="/admin/images/multiple/add/" role="button">Upload</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-12 my-5">
-      <div class="card progress-bar-background">
-          <div id="progress-bar" class="card file-upload-progress-bar"></div>
-      </div>
-      <div id="progress-bar-subtitle" class="file-upload-progress-bar-subtitle"></div>
-    </div>
-  </div>
+	<div class="d-sm-flex align-items-center justify-content-between mb-4">
+		<h1 class="h3 mr-auto mb-0 text-gray-800" id="asd">Add Multiple Products</h1>
+	</div>
+	{% include 'messages.html' %}
+	<div class="row cards-container">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="card img-upload-box shadow-sm">
+					<div class="card-body center-upload-products center-text">
+						<h3 class="card-title">Import Products Images</h3>
+						<a class="btn btn-primary" href="/admin/images/multiple/add/" role="button" id="img_upload_btn">Upload</a>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="card csv-category-template-box shadow-sm">
+					<div class="card-body">
+						<h3 class="card-title">Products Category List</h3>
+						<p class="card-text">Download a full list of LYKA sub-categories and their IDs.</p>
+						<a class="btn btn-primary" href="#" role="button" id="category_download_btn">Download</a>
+					</div>
+				</div>
+				<div class="card csv-category-template-box shadow-sm">
+					<div class="card-body">
+						<h3 class="card-title">Products CSV Template</h3>
+						<p class="card-text">Download this template and complete it with your product information. You will be able to export and upload the completed product list later.</p>
+						<a class="btn btn-primary" href="/products/import/download_template" role="button" id="csv_download_btn">Download</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 csv-upload-col">
+			<div class="card csv-upload-box shadow-lg">
+				<div class="card-body center-upload-products">
+					<h3 class="card-title">Import Products CSV</h3>
+					<div class="form-import">
+						<form action="" enctype="multipart/form-data"  method="post">
+							{% csrf_token %}
+							<div class="form-group row">
+								<div class="custom-file">
+									<input type="file" name="file" required="" id="id_file" class="custom-file-input">
+									<label class="custom-file-label" for="id_file">Select a CSV file...</label>
+									
+								</div>
+								<input class="btn btn-primary button-submit" type="submit" value="Upload" name="upload" onclick="startProgressBar()" id="csv_upload_btn">
+							</div>
+							<div class="form-check row">
+								<p class="card-text">
+									<input type="checkbox" name="auto-pair" class="form-check-input" id="id_autopair"><label for="id_autopair">Auto-pair products with available images</label>
+								</p>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12 my-4">
+			<div class="card progress-bar-background">
+				<div id="progress-bar" class="card file-upload-progress-bar"></div>
+			</div>
+			<div id="progress-bar-subtitle" class="file-upload-progress-bar-subtitle"></div>
+		</div>
+	</div>
 {% endblock %}
