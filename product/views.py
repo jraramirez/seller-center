@@ -342,6 +342,7 @@ def product_edit(request, selected_category, product_id):
         product_description=request.POST.get('product-description'),
         # this may be empty strings so we replace it with None if empty string
         product_price=request.POST.get('product-price') if request.POST.get('product-price') else None,
+        product_stock=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
         # this is evaluates as tertiary operator
         stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
         product_length=request.POST.get('product-length') if request.POST.get('product-length') else None,
@@ -542,7 +543,6 @@ def products_import(request):
             product = Product.objects.filter(profile_id=request.user.id).filter(product_code=row['product_code'])
 
             if(product.count()):
-
               if row['product_code'] != row['product_code']:
                 missingRequiredFields = True
                 invalidRows.append(index + 2)
@@ -564,12 +564,12 @@ def products_import(request):
                     category = row['category_id'],
                     order_id = None,
                     product_name = None,
-                    product_description = None,
-                    product_weight = row['product_weight'] if row['product_weight'] else None,
-                    ship_out_in = row['ship_out_in'] if row['ship_out_in'] else None,
-                    parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] else None,
-                    other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] else None,
-                    other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] else None,
+                    product_description = row['product_description'] if row['product_description'] == row['product_description'] else None,
+                    product_weight = row['product_weight'] if row['product_weight'] == row['product_weight'] else None,
+                    ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
+                    parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,
+                    other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
+                    other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] == row['other_logistics_provider_fee'] else None,
                     live = False,
                     suspended = False,
                     unlisted = False,
@@ -603,8 +603,8 @@ def products_import(request):
                     category = row['category_id'],
                     order_id = None,
                     product_name = None,
-                    product_description = None,
-                    product_weight = row['product_weight'] if row['product_weight'] else None,
+                    product_description = row['product_description'] if row['product_description'] == row['product_description'] else None,
+                    product_weight = row['product_weight'] if row['product_weight'] == row['product_weight'] else None,
                     ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
                     parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,
                     other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
@@ -659,16 +659,7 @@ def products_import(request):
                 unpublished = True
 
             # Product description validation
-            if(row['product_description'] != row['product_description']):
-              Product.objects.filter(id=productID).update(product_description=None)
-              e = Errors(
-                product_id = productID,
-                name = 'Product description is required',
-
-              )
-              e.save()
-              unpublished = True
-            else:
+            if(row['product_description'] == row['product_description']):
               Product.objects.filter(id=productID).update(product_description=row['product_description'])
               if(len(row['product_description'])<100):
                 e = Errors(
@@ -677,10 +668,18 @@ def products_import(request):
                 )
                 e.save()
                 unpublished = True
+            else:
+              Product.objects.filter(id=productID).update(product_description=None)
+              e = Errors(
+                product_id = productID,
+                name = 'Product description is required',
+              )
+              e.save()
+              unpublished = True
 
             # Product weight validation
             if(row['product_weight'] != row['product_weight']):
-              Product.objects.filter(id=productID).update(product_description=None)
+              Product.objects.filter(id=productID).update(product_weight=None)
               e = Errors(
                 product_id = productID,
                 name = 'Product weight is required',
