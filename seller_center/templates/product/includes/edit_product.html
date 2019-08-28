@@ -2,14 +2,13 @@
 <form action="{{page.url}}" enctype="multipart/form-data" method="POST" novalidate>
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mr-auto mb-0 text-gray-800">Products</h1>
+        <h1 class="h3 mr-auto mb-0 text-gray-800">Editing Product</h1>
 
         <a href="/products/#all"
            class="d-none d-sm-inline-block btn btn-xl shadow-sm mr-2">Cancel</a>
 
 
-        <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl">Save and
-            Delist</button>
+        <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl">Save</button>
     </div>
     {% csrf_token %}
 
