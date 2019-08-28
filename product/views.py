@@ -365,7 +365,7 @@ def product_edit(request, selected_category, product_id):
         Variations.objects.filter(product_id=product_id).delete()
       else:
         stock_sum = 0
-        variations = Variations.objects.filter(product_id=product_id)
+        variations = Variations.objects.filter(product_id=product_id).order_by('-id')
         for i in range(0, 8):
           if (request.POST.get('product-variation-' + str(i) + '-sku')):
             variationStock = 0
@@ -478,7 +478,7 @@ def product_edit(request, selected_category, product_id):
     product['product_condition'] = selectedProduct.product_condition
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
 
-    product['variations'] = Variations.objects.filter(product_id=product_id)
+    product['variations'] = Variations.objects.filter(product_id=product_id).order_by('-id')
 
     variations = [{}]*7
     for index, v in enumerate(product['variations']):
