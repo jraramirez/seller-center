@@ -105,6 +105,7 @@ $(function(){
                 $('#rmv_prod_var_'+ctr+'_img').show();
                 break;
         }
+        $(found_img).prop('files', e.originalEvent.dataTransfer.files);
         var image=e.originalEvent.dataTransfer;
         var imgdisplay=$('#'+$(this).find(found_img).attr('imgdisplay'));
         read_img_file(image, imgdisplay);
