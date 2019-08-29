@@ -99,7 +99,7 @@ class Product(ClusterableModel):
       Errors.objects.filter(product_id=self.id).filter(name='Product description is required').delete()
       if(len(self.product_description)>=100):
         Errors.objects.filter(product_id=self.id).filter(name='Product description should have at least 100 characters').delete()
-    if(len(Errors.objects.filter(product_id=self.id)) == 0):
+    if(Errors.objects.filter(product_id=self.id).count() == 0):
       Product.objects.filter(id=self.id).update(unlisted=True)
       Product.objects.filter(id=self.id).update(unpublished=False)
     super(Product, self).save(*args, **kwargs)
@@ -139,7 +139,7 @@ class Variations(Orderable, models.Model):
   def save(self, *args, **kwargs):
     if(self.image_upload):
       Errors.objects.filter(product_id=self.product_id).filter(name='Product image is required').delete()
-    if(len(Errors.objects.filter(product_id=self.product_id)) == 0):
+    if(Errors.objects.filter(product_id=self.product_id).count() == 0):
       Product.objects.filter(id=self.product_id).update(unpublished=False)
     super(Variations, self).save(*args, **kwargs)
     return redirect('/products/#all')
@@ -231,27 +231,21 @@ class ProductsPage(BasePage):
       unpublishedList = paginatorUnpublished.page(uPageNumber).object_list
 
     subPages = self.get_children().live()
-    context['allProducts'] = allProducts
     context['allP'] = allP
     context['allPList'] = allPList
 
-    context['liveProducts'] = liveProducts
     context['live'] = live
     context['liveList'] = liveList
 
-    context['soldOutProducts'] = soldOutProducts
     context['sold'] = sold
     context['soldList'] = soldList
 
-    context['suspendedProducts'] = suspendedProducts
     context['suspended'] = suspended
     context['suspendedList'] = suspendedList
 
-    context['unlistedProducts'] = unlistedProducts
     context['unlisted'] = unlisted
     context['unlistedList'] = unlistedList
 
-    context['unpublishedProducts'] = unpublishedProducts
     context['unpublished'] = unpublished
     context['unpublishedList'] = unpublishedList
     

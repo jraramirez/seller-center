@@ -2,14 +2,13 @@
 <form action="{{page.url}}" enctype="multipart/form-data" method="POST" novalidate>
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mr-auto mb-0 text-gray-800">Products</h1>
+        <h1 class="h3 mr-auto mb-0 text-gray-800">New Product</h1>
 
         <a href="/products/#all"
            class="d-none d-sm-inline-block btn btn-xl shadow-sm mr-2">Cancel</a>
 
 
-        <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl">Save and
-            Delist</button>
+        <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl" value="save" name="action">Save</button>
     </div>
     {% csrf_token %}
 
@@ -53,12 +52,12 @@
                             <input type="hidden" name="product-category-id" class="form-control" id="id_product_category_id"
                                    value="{{product.product_category_id}}">
                             <input type="text" name="product-category" class="form-control" id="id_product_category"
-                                   value="{{product.category}}" disabled>
+                                   value="{{product.parentParentCategory}} → {{product.parentCategory}} → {{product.category}}" disabled>
                             <div class="input-group-append">
 
-                          <a class="btn btn-outline-secondary" href="/products/add-single-product/0">
+                          <button type="submit" class="btn btn-outline-secondary" value="change" name="action">
                                 Change Category
-                          </a>
+                          </button>
                             </div>
                         </div>
                     </div>
