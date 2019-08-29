@@ -12,6 +12,7 @@ from modelcluster.models import ClusterableModel
 from wagtail.core.models import Orderable
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
+from datetime import datetime
 
 from users.models import Profile
 
@@ -61,6 +62,11 @@ class Product(ClusterableModel):
   product_width = models.IntegerField(blank=True, null=True, default=None)
   product_height = models.IntegerField(blank=True, null=True, default=None)
   stock_sum = models.IntegerField(blank=True, null=True, default=None)
+  product_sale_price = models.IntegerField(blank=True, null=True, default=None)
+  product_sale_date_start = models.DateField(default=datetime.now)
+  product_sale_date_end = models.DateField(default=datetime.now)
+  product_sale_time_start = models.TimeField(default=datetime.now, blank=True)
+  product_sale_time_end = models.TimeField(default=datetime.now, blank=True)
   live = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   unlisted = models.BooleanField(default=False)
