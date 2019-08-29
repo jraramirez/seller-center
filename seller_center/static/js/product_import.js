@@ -43,7 +43,13 @@ $(function(){
     });
 
     $('.img_file').change(function(){
-        update_img($('#'+$(this).attr('id')), '#'+$(this).attr('imgdisplay'), '#'+$(this).attr('img_rmv'));
+        if($('#'+$(this).attr('id'))[0].files[0].size < 2000000){
+            update_img($('#'+$(this).attr('id')), '#'+$(this).attr('imgdisplay'), '#'+$(this).attr('img_rmv'));
+        } else{
+            $(this).val('');
+            remove_img('#'+$(this).attr('img_rmv'), '#'+$(this).attr('imgdisplay'));
+            alert('Image too large.');
+        }
     });
 
     $(".img_container").on('dragenter', function(e){
@@ -105,10 +111,17 @@ $(function(){
                 $('#rmv_prod_var_'+ctr+'_img').show();
                 break;
         }
-        $(found_img).prop('files', e.originalEvent.dataTransfer.files);
-        var image=e.originalEvent.dataTransfer;
-        var imgdisplay=$('#'+$(this).find(found_img).attr('imgdisplay'));
-        read_img_file(image, imgdisplay);
+        var img_input=$(this).find(found_img);
+        if(e.originalEvent.dataTransfer.files[0].size < 2000000){
+            $(found_img).prop('files', e.originalEvent.dataTransfer.files);
+            var image=e.originalEvent.dataTransfer;
+            var imgdisplay=$('#'+img_input.attr('imgdisplay'));
+            read_img_file(image, imgdisplay);
+        } else{
+            img_input.val('');
+            remove_img('#'+img_input.attr('img_rmv'), '#'+img_input.attr('imgdisplay'));
+            alert('Image too large.');
+        }
     });
 
     function remove_img(img_src, img_rmv){
