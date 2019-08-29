@@ -630,8 +630,10 @@ def products_import(request):
               e.save()
               unpublished = True
             else:
-              Product.objects.filter(id=productID).update(product_name=row['product_name'])
-              if(len(row['product_name'])<16):
+              prod_name=row['product_name']
+              formatted_prod_name=f'{prod_name}'
+              Product.objects.filter(id=productID).update(product_name=formatted_prod_name)
+              if(len(formatted_prod_name)<16):
                 e = Errors(
                   product_id = productID,
                   name = 'Product name should have at least 16 characters',
@@ -660,8 +662,10 @@ def products_import(request):
 
             # Product description validation
             if(row['product_description'] == row['product_description']):
-              Product.objects.filter(id=productID).update(product_description=row['product_description'])
-              if(len(row['product_description'])<100):
+              prod_desc=row['product_description']
+              formatted_prod_desc=f'{prod_desc}'
+              Product.objects.filter(id=productID).update(product_description=formatted_prod_desc)
+              if(len(formatted_prod_desc)<100):
                 e = Errors(
                   product_id = productID,
                   name = 'Product description should have at least 100 characters',
