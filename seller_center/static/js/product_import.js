@@ -48,13 +48,13 @@ $(function(){
 
     $(".img_container").on('dragenter', function(e){
         e.preventDefault();
-        $(this).css('border', '#39b311 2px dashed');
+        $(this).css('border', '#39b311 1px dashed');
         $(this).css('background', '#f1ffef');
     });
 
     $(".img_container").on('dragleave', function(e){
         e.preventDefault();
-        $(this).css('border', '#07c6f1 2px dashed');
+        $(this).css('border', '#07c6f1 1px dashed');
         $(this).css('background', '#FFF');
     });
 
@@ -64,7 +64,7 @@ $(function(){
 
     $(".img_container").on('drop', function(e){
         e.preventDefault();
-        $(this).css('border', '#07c6f1 2px dashed');
+        $(this).css('border', '#07c6f1 1px dashed');
         $(this).css('background', '#FFF');
         var found_img='';
         switch($(this).attr('id')){

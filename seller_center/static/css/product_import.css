@@ -116,11 +116,11 @@
 
 .img_container{
     background: #ffffff;
-    min-height: 250px;
-    margin: 10px;
+    width: 175px;
+    height: 250px;
+    margin-top: 10px;
     padding: 10px;
-    border: #07c6f1 2px dashed;
-    max-width: 200px;
+    border: #07c6f1 1px dashed;
     text-align: center;
 }
 
@@ -134,6 +134,6 @@
 }
 
 .drop-image{
-    width: 170px;
-    height: 120px;
+    width: 115px;
+    height: 115px;
 }
