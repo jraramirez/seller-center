@@ -104,6 +104,16 @@
                     </div>
 
                     <div class="form-group row mt-3 mb-4">
+                        <label for="id_product_stock" class="col-sm-3 col-form-label">Stock *</label>
+
+                        <div class="col-sm-9">
+                            <input type="number" name="product-stock" class="form-control" placeholder="Stock"
+                                   id="id_product_stock" value="{{product.product_stock}}"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-3 mb-4">
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale Price</label>
 
                         <div class="input-group col-sm-9">
@@ -145,16 +155,6 @@
 
                         <div class="input-group col-sm-9">
                             <input type="time" name="birthday" class="form-control" value="{{userData.birthday}}">
-                        </div>
-                    </div>
-
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="id_product_stock" class="col-sm-3 col-form-label">Stock *</label>
-
-                        <div class="col-sm-9">
-                            <input type="number" name="product-stock" class="form-control" placeholder="Stock"
-                                   id="id_product_stock" value="{{product.product_stock}}"
-                                   required>
                         </div>
                     </div>
                 </div>
@@ -233,6 +233,51 @@
                                            class="form-control" placeholder="Stock" value="{{v.variation_stock}}"
                                            id="product-variation-{{forloop.counter0}}-stock"
                                            required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-3 mb-4">
+                                <label for="id_product-price" class="col-sm-3 col-form-label">Sale Price</label>
+        
+                                <div class="input-group col-sm-9">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text" id="basic-addon1">₱</span>
+                                    </div>
+                                    <input type="number" name="product-price" class="form-control" placeholder="Price"
+                                           id="id_product-price" value="{{product.product_price}}"
+                                           required>
+                                </div>
+                            </div>
+        
+                            <div class="form-group row mt-3 mb-4">
+                                <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Date</label>
+        
+                                <div class="input-group col-sm-9">
+                                    <input type="date" name="birthday" class="form-control" value="{{userData.birthday}}">
+                                </div>
+                            </div>
+        
+                            <div class="form-group row mt-3 mb-4">
+                                <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Time</label>
+        
+                                <div class="input-group col-sm-9">
+                                    <input type="time" name="birthday" class="form-control" value="{{userData.birthday}}">
+                                </div>
+                            </div>
+        
+                            <div class="form-group row mt-3 mb-4">
+                                <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Date</label>
+        
+                                <div class="input-group col-sm-9">
+                                    <input type="date" name="birthday" class="form-control" value="{{userData.birthday}}">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row mt-3 mb-4">
+                                <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Time</label>
+        
+                                <div class="input-group col-sm-9">
+                                    <input type="time" name="birthday" class="form-control" value="{{userData.birthday}}">
                                 </div>
                             </div>
 
