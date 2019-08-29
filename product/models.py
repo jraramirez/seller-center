@@ -122,6 +122,11 @@ class Variations(Orderable, models.Model):
   sku = models.CharField(null=True, blank=True, max_length=500)
   price = models.CharField(null=True, blank=True, max_length=500)
   stock = models.IntegerField(null=True, blank=True)
+  sale_price = models.IntegerField(blank=True, null=True, default=None)
+  sale_date_start = models.DateField(default=datetime.now)
+  sale_date_end = models.DateField(default=datetime.now)
+  sale_time_start = models.TimeField(default=datetime.now, blank=True)
+  sale_time_end = models.TimeField(default=datetime.now, blank=True)
   image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Optional: If your image is already hosted')
   image_upload = models.ImageField(
     upload_to='original_images',
