@@ -98,7 +98,7 @@ def product_import(request, selected_category):
     product['product_price'] = request.POST.get('product-price')
     product['product_stock'] = request.POST.get('product-stock')
 
-    product['product_condition'] = request.POST.get('product-condition')
+    # product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
     errors = []
     if(not product['product_code']):
@@ -136,7 +136,7 @@ def product_import(request, selected_category):
         product_height = request.POST.get('product-height') if request.POST.get('product-height') else None,
         product_weight = request.POST.get('product-weight') if request.POST.get('product-weight') else None,
 
-        product_condition = request.POST.get('product-condition'),
+        # product_condition = request.POST.get('product-condition'),
         parent_sku_reference_no = request.POST.get('product-parent-sku'),
         live = False,
         suspended = False,
@@ -235,8 +235,8 @@ def product_import(request, selected_category):
     if('product-stock' in request.session.keys()):
       product['product_stock'] = request.session['product-stock']
       del request.session['product-stock']
-    if('product-condition' in request.session.keys()):
-      product['product_condition'] = request.session['product-condition']
+    # if('product-condition' in request.session.keys()):
+    #   product['product_condition'] = request.session['product-condition']
       del request.session['product-condition']
     if('product-parent-sku' in request.session.keys()):
       product['parent_sku_reference_no'] = request.session['product-parent-sku']
@@ -312,7 +312,7 @@ def product_edit(request, selected_category, product_id):
     product['product_price'] = request.POST.get('product-price')
 
     product['product_stock'] = request.POST.get('product-stock')
-    product['product_condition'] = request.POST.get('product-condition')
+    # product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
     errors = []
 
@@ -350,7 +350,7 @@ def product_edit(request, selected_category, product_id):
         product_height=request.POST.get('product-height') if request.POST.get('product-height') else None,
         product_weight=request.POST.get('product-weight') if request.POST.get('product-weight') else None,
 
-        product_condition=request.POST.get('product-condition'),
+        # product_condition=request.POST.get('product-condition'),
         parent_sku_reference_no=request.POST.get('product-parent-sku'),
 
         live=False,
@@ -475,7 +475,7 @@ def product_edit(request, selected_category, product_id):
     product['product_height'] = selectedProduct.product_height
     product['product_weight'] = selectedProduct.product_weight
 
-    product['product_condition'] = selectedProduct.product_condition
+    # product['product_condition'] = selectedProduct.product_condition
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
 
     product['variations'] = Variations.objects.filter(product_id=product_id).order_by('-id')
@@ -630,8 +630,10 @@ def products_import(request):
               e.save()
               unpublished = True
             else:
-              Product.objects.filter(id=productID).update(product_name=row['product_name'])
-              if(len(row['product_name'])<16):
+              prod_name=row['product_name']
+              formatted_prod_name=f'{prod_name}'
+              Product.objects.filter(id=productID).update(product_name=formatted_prod_name)
+              if(len(formatted_prod_name)<16):
                 e = Errors(
                   product_id = productID,
                   name = 'Product name should have at least 16 characters',
@@ -660,8 +662,10 @@ def products_import(request):
 
             # Product description validation
             if(row['product_description'] == row['product_description']):
-              Product.objects.filter(id=productID).update(product_description=row['product_description'])
-              if(len(row['product_description'])<100):
+              prod_desc=row['product_description']
+              formatted_prod_desc=f'{prod_desc}'
+              Product.objects.filter(id=productID).update(product_description=formatted_prod_desc)
+              if(len(formatted_prod_desc)<100):
                 e = Errors(
                   product_id = productID,
                   name = 'Product description should have at least 100 characters',
