@@ -13,7 +13,6 @@
     {% csrf_token %}
 
     {# Basic Info #}
-    {{product}}
     <div class="row mx-3">
         <div class="card shadow container-fluid p-0">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -130,8 +129,8 @@
                     <div class="form-group row mt-3 mb-4">
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Date</label>
 
-                        <div class="input-group col-sm-9">
-                            <input type="date" name="product-sale-date-start" class="form-control" value="{{product.product_sale_date_start}}">
+                        <div class="input-group col-sm-9"> 
+                            <input type="date" name="product-sale-date-start" class="form-control" value="{{product.product_sale_date_start|date:'Y-m-d'}}">
                         </div>
                     </div>
 
@@ -139,7 +138,7 @@
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Time</label>
 
                         <div class="input-group col-sm-9">
-                            <input type="time" name="product-sale-time-start" class="form-control" value="{{product.product_sale_time_start}}">
+                            <input type="time" name="product-sale-time-start" class="form-control" value="{{product.product_sale_time_start|date:'H:i'}}">
                         </div>
                     </div>
 
@@ -147,7 +146,7 @@
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Date</label>
 
                         <div class="input-group col-sm-9">
-                            <input type="date" name="product-sale-date-end" class="form-control" value="{{product.product_sale_date_end}}">
+                            <input type="date" name="product-sale-date-end" class="form-control" value="{{product.product_sale_date_end|date:'Y-m-d'}}">
                         </div>
                     </div>
                     
@@ -155,7 +154,7 @@
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Time</label>
 
                         <div class="input-group col-sm-9">
-                            <input type="time" name="product-sale-time-end" class="form-control" value="{{product.product_sale_time_end}}">
+                            <input type="time" name="product-sale-time-end" class="form-control" value="{{product.product_sale_time_end|date:'H:i'}}">
                         </div>
                     </div>
                 </div>
@@ -165,7 +164,6 @@
                 {# With Variation Tab #}
 
                 <div class="tab-pane fade {{showVariations}}" id="with_variations" role="tabpanel">
-                    {{variations}}
                     {% for v in variations %}
 
                     {% if forloop.counter0 == 0 or v.variation_sku %}
@@ -254,7 +252,7 @@
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Date</label>
 
                                 <div class="input-group col-sm-9">
-                                    <input type="date" name="product-variation-{{forloop.counter0}}-sale-date-start" class="form-control" value="{{v.sale_date_start}}">
+                                    <input type="date" name="product-variation-{{forloop.counter0}}-sale-date-start" class="form-control" value="{{v.sale_date_start|date:'Y-m-d'}}">
                                 </div>
                             </div>
 
