@@ -260,6 +260,11 @@ class ProductsPage(BasePage):
     context['unpublished'] = unpublished
     context['unpublishedList'] = unpublishedList
     
+    context['nAll'] = len(allProducts)
+    context['nLive'] = len(liveProducts)
+    context['nSoldOut'] = len(soldOutProducts)
+    context['nUnlisted'] = len(unlistedProducts)
+    context['nSuspended'] = len(suspendedProducts)
     context['nUnpublished'] = len(unpublishedProducts)
     context['subPages'] = subPages
     return context
