@@ -13,6 +13,7 @@
     {% csrf_token %}
 
     {# Basic Info #}
+    {{product}}
     <div class="row mx-3">
         <div class="card shadow container-fluid p-0">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -120,8 +121,8 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1">₱</span>
                             </div>
-                            <input type="number" name="product-price" class="form-control" placeholder="Price"
-                                   id="id_product-price" value="{{product.product_price}}"
+                            <input type="number" name="product-sale-price" class="form-control" placeholder="Price"
+                                   id="id_product-price" value="{{product.product_sale_price}}"
                                    required>
                         </div>
                     </div>
@@ -130,7 +131,7 @@
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Date</label>
 
                         <div class="input-group col-sm-9">
-                            <input type="date" name="birthday" class="form-control" value="{{userData.birthday}}">
+                            <input type="date" name="product-sale-date-start" class="form-control" value="{{product.product_sale_date_start}}">
                         </div>
                     </div>
 
@@ -138,7 +139,7 @@
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Time</label>
 
                         <div class="input-group col-sm-9">
-                            <input type="time" name="birthday" class="form-control" value="{{userData.birthday}}">
+                            <input type="time" name="product-sale-time-start" class="form-control" value="{{product.product_sale_time_start}}">
                         </div>
                     </div>
 
@@ -146,7 +147,7 @@
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Date</label>
 
                         <div class="input-group col-sm-9">
-                            <input type="date" name="birthday" class="form-control" value="{{userData.birthday}}">
+                            <input type="date" name="product-sale-date-end" class="form-control" value="{{product.product_sale_date_end}}">
                         </div>
                     </div>
                     
@@ -154,7 +155,7 @@
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Time</label>
 
                         <div class="input-group col-sm-9">
-                            <input type="time" name="birthday" class="form-control" value="{{userData.birthday}}">
+                            <input type="time" name="product-sale-time-end" class="form-control" value="{{product.product_sale_time_end}}">
                         </div>
                     </div>
                 </div>
@@ -164,7 +165,7 @@
                 {# With Variation Tab #}
 
                 <div class="tab-pane fade {{showVariations}}" id="with_variations" role="tabpanel">
-
+                    {{variations}}
                     {% for v in variations %}
 
                     {% if forloop.counter0 == 0 or v.variation_sku %}
@@ -243,8 +244,8 @@
                                     <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">₱</span>
                                     </div>
-                                    <input type="number" name="product-price" class="form-control" placeholder="Price"
-                                        id="id_product-price" value="{{product.product_price}}"
+                                    <input type="number" name="product-variation-{{forloop.counter0}}-sale-price" class="form-control" placeholder="Price"
+                                        id="id_product-price" value="{{v.variation_sale_price}}"
                                         required>
                                 </div>
                             </div>
@@ -253,7 +254,7 @@
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Date</label>
 
                                 <div class="input-group col-sm-9">
-                                    <input type="date" name="birthday" class="form-control" value="{{userData.birthday}}">
+                                    <input type="date" name="product-variation-{{forloop.counter0}}-sale-date-start" class="form-control" value="{{v.sale_date_start}}">
                                 </div>
                             </div>
 
@@ -261,7 +262,7 @@
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Time</label>
 
                                 <div class="input-group col-sm-9">
-                                    <input type="time" name="birthday" class="form-control" value="{{userData.birthday}}">
+                                    <input type="time" name="product-variation-{{forloop.counter0}}-sale-time-start" class="form-control" value="{{v.sale_time_start}}">
                                 </div>
                             </div>
 
@@ -269,7 +270,7 @@
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Date</label>
 
                                 <div class="input-group col-sm-9">
-                                    <input type="date" name="birthday" class="form-control" value="{{userData.birthday}}">
+                                    <input type="date" name="product-variation-{{forloop.counter0}}-sale-date-end" class="form-control" value="{{v.sale_date_end}}">
                                 </div>
                             </div>
                             
@@ -277,7 +278,7 @@
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Time</label>
 
                                 <div class="input-group col-sm-9">
-                                    <input type="time" name="birthday" class="form-control" value="{{userData.birthday}}">
+                                    <input type="time" name="product-variation-{{forloop.counter0}}-sale-time-end" class="form-control" value="{{v.sale_time_end}}">
                                 </div>
                             </div>
 
