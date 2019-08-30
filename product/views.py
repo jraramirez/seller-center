@@ -706,7 +706,7 @@ def products_import(request):
                 e.save()
                 unpublished = True
               else:
-                prod_price=row['product_price']
+                prod_price=str(row['product_price'])
                 if not prod_price.isdigit():
                   prod_price=None
                 Product.objects.filter(id=productID).update(product_price=prod_price)
