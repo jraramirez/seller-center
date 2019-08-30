@@ -706,7 +706,10 @@ def products_import(request):
                 e.save()
                 unpublished = True
               else:
-                Product.objects.filter(id=productID).update(product_price=row['product_price'])
+                prod_price=row['product_price']
+                if not prod_price.isdigit():
+                  prod_price=None
+                Product.objects.filter(id=productID).update(product_price=prod_price)
               if(row['product_stock'] != row['product_stock']):
                 Product.objects.filter(id=productID).update(product_stock=None)
                 e = Errors(
