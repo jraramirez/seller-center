@@ -12,6 +12,7 @@ from modelcluster.models import ClusterableModel
 from wagtail.core.models import Orderable
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
+from datetime import datetime
 
 from users.models import Profile
 
@@ -47,7 +48,7 @@ class Product(ClusterableModel):
   product_name = models.CharField(null=True, blank=True, max_length=500)
   product_description = models.TextField(null=True, blank=True)
   product_weight = models.CharField(null=True, blank=True, max_length=500)
-  product_condition = models.CharField(null=True, blank=True, choices=CONDITION_CHOICES, default=CONDITION_CHOICES[0], max_length=500)
+  # product_condition = models.CharField(null=True, blank=True, choices=CONDITION_CHOICES, default=CONDITION_CHOICES[0], max_length=500)
   product_price = models.IntegerField(blank=True, null=True, default=None)
   ship_out_in = models.CharField(null=True, blank=True, max_length=500)
   parent_sku_reference_no = models.CharField(null=True, blank=True, max_length=500)
@@ -61,6 +62,11 @@ class Product(ClusterableModel):
   product_width = models.IntegerField(blank=True, null=True, default=None)
   product_height = models.IntegerField(blank=True, null=True, default=None)
   stock_sum = models.IntegerField(blank=True, null=True, default=None)
+  product_sale_price = models.IntegerField(blank=True, null=True, default=None)
+  product_sale_date_start = models.DateField(default=datetime.now)
+  product_sale_date_end = models.DateField(default=datetime.now)
+  product_sale_time_start = models.TimeField(default=datetime.now, blank=True)
+  product_sale_time_end = models.TimeField(default=datetime.now, blank=True)
   live = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   unlisted = models.BooleanField(default=False)
@@ -116,6 +122,11 @@ class Variations(Orderable, models.Model):
   sku = models.CharField(null=True, blank=True, max_length=500)
   price = models.CharField(null=True, blank=True, max_length=500)
   stock = models.IntegerField(null=True, blank=True)
+  sale_price = models.IntegerField(blank=True, null=True, default=None)
+  sale_date_start = models.DateField(default=datetime.now)
+  sale_date_end = models.DateField(default=datetime.now)
+  sale_time_start = models.TimeField(default=datetime.now, blank=True)
+  sale_time_end = models.TimeField(default=datetime.now, blank=True)
   image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Optional: If your image is already hosted')
   image_upload = models.ImageField(
     upload_to='original_images',
