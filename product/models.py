@@ -71,6 +71,8 @@ class Product(ClusterableModel):
   suspended = models.BooleanField(default=False)
   unlisted = models.BooleanField(default=False)
   unpublished = models.BooleanField(default=False)
+  last_updated = models.DateTimeField(null=True, blank=True)
+  date_created = models.DateTimeField(default=datetime.now)
 
   panels = [
     FieldPanel('product_code'),
@@ -93,6 +95,7 @@ class Product(ClusterableModel):
     super().save_model(request, obj, form, change)
 
   def save(self, *args, **kwargs):
+    self.last_updated = datetime.now()
     if(self.product_name):
       Errors.objects.filter(product_id=self.id).filter(name='Product name is required').delete()
       if(len(self.product_name)>=16):
