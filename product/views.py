@@ -55,6 +55,7 @@ def product_import(request, selected_category):
     request.session['product-code'] = request.POST.get('product-code')
     request.session['product-name'] = request.POST.get('product-name')
     request.session['product-description'] = request.POST.get('product-description')
+    request.session['product-brand'] = request.POST.get('product-brand')
 
     #Shipping Info
     request.session['product-length'] = request.POST.get('product-length')
@@ -98,6 +99,7 @@ def product_import(request, selected_category):
     product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
     product['product_name'] = request.POST.get('product-name')
     product['product_description'] = request.POST.get('product-description')
+    product['product_brand'] = request.POST.get('product-brand')
 
     #Shipping Info
     product['product_length'] = request.POST.get('product-length')
@@ -129,7 +131,6 @@ def product_import(request, selected_category):
     if(request.POST.get('product-variation-0-sku') == '' and not product['product_stock']):
       errors.append('Product Stock is required; ')
     if(product['product_sale_price']):
-      print("!!s")
       if(not product['product_sale_date_start']):
         errors.append('Product Sale Start Date is required; ')
       if(not product['product_sale_time_start']):
@@ -164,6 +165,7 @@ def product_import(request, selected_category):
         category = selected_category,
         product_name = request.POST.get('product-name'),
         product_description = request.POST.get('product-description'),
+        product_brand = request.POST.get('product-brand'),
         # this may be empty strings so we replace it with None if empty string
         product_price = request.POST.get('product-price') if request.POST.get('product-price') else None, #this is evaluates as tertiary operator
         product_sale_price = request.POST.get('product-sale-price') if request.POST.get('product-sale-price') else None,
@@ -267,6 +269,9 @@ def product_import(request, selected_category):
     if('product-description' in request.session.keys()):
       product['product_description'] = request.session['product-description']
       del request.session['product-description']
+    if('product-brand' in request.session.keys()):
+      product['product_brand'] = request.session['product-brand']
+      del request.session['product-brand']
 
       #Shipping Info
     if('product-length' in request.session.keys()):
@@ -382,6 +387,7 @@ def product_edit(request, selected_category, product_id):
     
     product['product_name'] = request.POST.get('product-name')
     product['product_description'] = request.POST.get('product-description')
+    product['product_brand'] = request.POST.get('product-brand')
 
     product['product_length'] = request.POST.get('product-length')
     product['product_width'] = request.POST.get('product-width')
@@ -442,6 +448,7 @@ def product_edit(request, selected_category, product_id):
         category=request.POST.get('product-category-id'),
         product_name=request.POST.get('product-name'),
         product_description=request.POST.get('product-description'),
+        product_brand=request.POST.get('product-brand'),
         # this may be empty strings so we replace it with None if empty string
         product_price=request.POST.get('product-price') if request.POST.get('product-price') else None,
         product_stock=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
@@ -582,6 +589,7 @@ def product_edit(request, selected_category, product_id):
       
     product['product_name'] = selectedProduct.product_name
     product['product_description'] = selectedProduct.product_description
+    product['product_brand'] = selectedProduct.product_brand
 
     product['product_price'] = selectedProduct.product_price
     product['product_sale_price'] = selectedProduct.product_sale_price
@@ -691,6 +699,7 @@ def products_import(request):
                     order_id = None,
                     product_name = None,
                     product_description = row['product_description'] if row['product_description'] == row['product_description'] else None,
+                    product_brand = row['product_brand'] if row['product_brand'] == row['product_brand'] else None,
                     product_weight = row['product_weight'] if row['product_weight'] == row['product_weight'] else None,
                     ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
                     parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,
@@ -730,6 +739,7 @@ def products_import(request):
                     order_id = None,
                     product_name = None,
                     product_description = row['product_description'] if row['product_description'] == row['product_description'] else None,
+                    product_brand = row['product_brand'] if row['product_brand'] == row['product_brand'] else None,
                     product_weight = row['product_weight'] if row['product_weight'] == row['product_weight'] else None,
                     ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
                     parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,

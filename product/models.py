@@ -61,6 +61,7 @@ class Product(ClusterableModel):
   product_length = models.IntegerField(blank=True, null=True, default=None)
   product_width = models.IntegerField(blank=True, null=True, default=None)
   product_height = models.IntegerField(blank=True, null=True, default=None)
+  product_brand = models.CharField(null=True, blank=True, max_length=500)
   stock_sum = models.IntegerField(blank=True, null=True, default=None)
   product_sale_price = models.IntegerField(blank=True, null=True, default=None)
   product_sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
