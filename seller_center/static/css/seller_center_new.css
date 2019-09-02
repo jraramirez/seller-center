@@ -17,3 +17,39 @@
 }
 
 /*# sourceMappingURL=seller_center_new.css.map */
+
+#fixed_header{
+  position: fixed;
+  left: 12%;
+  top: 10%;
+}
+
+.content{
+  padding-top: 100px;
+}
+
+#new_header_btns{
+  position: relative;
+  margin-left: 1330px;
+}
+
+#edit_header_btns{
+  position: relative;
+  margin-left: 1300px;
+}
+
+#header_box{
+  margin-top: 5px;
+  padding: 0;
+}
+
+.sticky{
+  position: fixed;
+  top: -5;
+  left: 224;
+  background-color: #f8f9fc;
+}
+
+.sticky h1{
+  padding: 15px;
+}
