@@ -621,11 +621,13 @@ def product_edit(request, selected_category, product_id):
         'variation_sale_time_end': v.sale_time_end,
         'variation_stock': v.stock,
         'variation_name': v.name,
-        'variation_url': v.image_url
+        'variation_url': v.image_url,
+        'variation_image_url_from_upload': v.image_url_from_upload
       }
       variations[index] = tmp
       showVariations = "active show"
       showWithoutVariation = ""
+    
     return render(request, 'product/product_edit_page.html', {
       'product_id': product_id,
       'selected_category': product['product_category_id'],
