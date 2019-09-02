@@ -61,16 +61,19 @@ class Product(ClusterableModel):
   product_length = models.IntegerField(blank=True, null=True, default=None)
   product_width = models.IntegerField(blank=True, null=True, default=None)
   product_height = models.IntegerField(blank=True, null=True, default=None)
+  product_brand = models.CharField(null=True, blank=True, max_length=500)
   stock_sum = models.IntegerField(blank=True, null=True, default=None)
   product_sale_price = models.IntegerField(blank=True, null=True, default=None)
-  product_sale_date_start = models.DateField(default=datetime.now)
-  product_sale_date_end = models.DateField(default=datetime.now)
-  product_sale_time_start = models.TimeField(default=datetime.now, blank=True)
-  product_sale_time_end = models.TimeField(default=datetime.now, blank=True)
+  product_sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
+  product_sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)
   live = models.BooleanField(default=False)
   suspended = models.BooleanField(default=False)
   unlisted = models.BooleanField(default=False)
   unpublished = models.BooleanField(default=False)
+  last_updated = models.DateTimeField(null=True, blank=True)
+  date_created = models.DateTimeField(default=datetime.now)
 
   panels = [
     FieldPanel('product_code'),
@@ -93,6 +96,7 @@ class Product(ClusterableModel):
     super().save_model(request, obj, form, change)
 
   def save(self, *args, **kwargs):
+    self.last_updated = datetime.now()
     if(self.product_name):
       Errors.objects.filter(product_id=self.id).filter(name='Product name is required').delete()
       if(len(self.product_name)>=16):
@@ -123,10 +127,10 @@ class Variations(Orderable, models.Model):
   price = models.CharField(null=True, blank=True, max_length=500)
   stock = models.IntegerField(null=True, blank=True)
   sale_price = models.IntegerField(blank=True, null=True, default=None)
-  sale_date_start = models.DateField(default=datetime.now)
-  sale_date_end = models.DateField(default=datetime.now)
-  sale_time_start = models.TimeField(default=datetime.now, blank=True)
-  sale_time_end = models.TimeField(default=datetime.now, blank=True)
+  sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
+  sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
+  sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
+  sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)
   image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Optional: If your image is already hosted')
   image_upload = models.ImageField(
     upload_to='original_images',
@@ -260,6 +264,11 @@ class ProductsPage(BasePage):
     context['unpublished'] = unpublished
     context['unpublishedList'] = unpublishedList
     
+    context['nAll'] = len(allProducts)
+    context['nLive'] = len(liveProducts)
+    context['nSoldOut'] = len(soldOutProducts)
+    context['nUnlisted'] = len(unlistedProducts)
+    context['nSuspended'] = len(suspendedProducts)
     context['nUnpublished'] = len(unpublishedProducts)
     context['subPages'] = subPages
     return context
