@@ -61,6 +61,7 @@
                             <input type="hidden" name="product-category-id" class="form-control" id="id_product_category_id"
                                    value="{{product.product_category_id}}">
                             <input type="text" name="product-category" class="form-control" id="id_product_category"
+                                   value="{{product.parentParentCategory}} → {{product.parentCategory}} → {{product.category}}" disabled>
                             <div class="input-group-append">
 
                           <button type="submit" class="btn btn-outline-secondary" value="change" name="action">
