@@ -507,7 +507,7 @@ def product_edit(request, selected_category, product_id):
             v.image_url_from_sku=None
 
             v.save()
-            if (request.FILES):
+            if 'product-variation-' + str(i) + '-image' in request.FILES:
               image = request.FILES['product-variation-' + str(i) + '-image']
               # Image.objects.create(
               #   file=image,
