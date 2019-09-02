@@ -2,7 +2,9 @@
 {% load static %}
 
 {% load wagtailcore_tags wagtailimages_tags %}
-
+{% block extra_css %}
+	<link href="{% static 'css/product_import.css' %}" rel="stylesheet">
+{% endblock %}
 {% block body_class %}template-productsimportpage{% endblock %}
 
 {% block content %}
@@ -68,4 +70,7 @@
       </div>
     {% endif %}
 
+{% endblock %}
+{% block extra_js %}
+	<script type="text/javascript" src="{% static 'js/product_import.js' %}"></script>
 {% endblock %}
