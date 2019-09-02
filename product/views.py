@@ -480,7 +480,7 @@ def product_edit(request, selected_category, product_id):
         Variations.objects.filter(product_id=product_id).delete()
       else:
         stock_sum = 0
-        variations = Variations.objects.filter(product_id=product_id)
+        variations = Variations.objects.filter(product_id=product_id).order_by('-id')
         for i in range(0, 8):
           if (request.POST.get('product-variation-' + str(i) + '-sku')):
             variationStock = 0
@@ -607,7 +607,7 @@ def product_edit(request, selected_category, product_id):
     # product['product_condition'] = selectedProduct.product_condition
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
 
-    product['variations'] = Variations.objects.filter(product_id=product_id)
+    product['variations'] = Variations.objects.filter(product_id=product_id).order_by('-id')
 
     variations = [{}]*7
     for index, v in enumerate(product['variations']):
@@ -621,11 +621,13 @@ def product_edit(request, selected_category, product_id):
         'variation_sale_time_end': v.sale_time_end,
         'variation_stock': v.stock,
         'variation_name': v.name,
-        'variation_url': v.image_url
+        'variation_url': v.image_url,
+        'variation_image_url_from_upload': v.image_url_from_upload
       }
       variations[index] = tmp
       showVariations = "active show"
       showWithoutVariation = ""
+    
     return render(request, 'product/product_edit_page.html', {
       'product_id': product_id,
       'selected_category': product['product_category_id'],
@@ -1018,6 +1020,19 @@ def download_template(request):
     response['Content-Disposition'] = 'attachment; filename=' + outFileName + fileType
     return response
 
+# function for downloading product categories as Excel file
+def download_categories(request):
+  outFileName = 'lyka-categories-v1'
+  outFolderName = 'seller_center/static/documents/'
+  fileType = '.csv'
+  path = outFolderName + outFileName + fileType
+  if os.path.exists(path):
+    with open(path, "rb") as excel:
+      data = excel.read()
+    response = HttpResponse(data,content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=' + outFileName + fileType
+    return response
+
 def delete_all_products(request):
   Product.objects.all().delete()
   Variations.objects.all().delete()
@@ -1055,3 +1070,28 @@ def queryCategories():
           categories[i]['children'][j]['children'][k]['name'] = c3.name
           categories[i]['children'][j]['children'][k]['unique_id'] = c3.unique_id
           categories[i]['children'][j]['children'][k]['level'] = c3.level
+
+def generateCategoriesList():
+    categories = {}
+    with open('seller_center/static/documents/categories-full.json', 'r') as f:
+      categories = json.load(f)
+  
+    df = pd.DataFrame()
+    primaryCategories = []
+    secondaryCategories = []
+    level3Categories = []
+    categoryIDs = []
+    for c1 in categories:
+      for c2 in c1['children']:
+        for c3 in c2['children']:
+          primaryCategories.append(c1['name'])
+          secondaryCategories.append(c2['name'])
+          level3Categories.append(c3['name'])
+          categoryIDs.append(c3['unique_id'])
+    df['Primary Category'] = primaryCategories
+    df['Secondary Category'] = secondaryCategories
+    df['Level 3 Category'] = level3Categories
+    df['Category ID'] = categoryIDs
+    df.reset_index().to_csv('seller_center/static/documents/lyka-categories-v1.csv')
+    
+    return 

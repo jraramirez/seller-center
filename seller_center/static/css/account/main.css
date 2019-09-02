@@ -1,0 +1,64 @@
+body, html{
+    font-family: 'Lato', sans-serif;
+}
+
+.nav-border{
+    border-radius: 3px 0 0 0 !important;
+}
+
+.nav-border-alt{
+    border-radius: 0 3px 0 0 !important;
+}
+
+.text-primary-2{
+    color: #005782;
+}
+
+.bg-primary-2{
+    background-color: #005782;
+}
+
+.btn-primary-2  {
+    color: #fff;
+    background-color: #016fa7;
+    border-color: #016fa7;
+}
+
+.btn-primary-2:hover {
+    color: #fff;
+    background-color: #004a6e;
+    border-color: #003d5c;
+}
+
+.nav-pills-2 .nav-link.active, .nav-pills-2 .show > .nav-link {
+    color: #fff;
+    background-color: #005782;
+}
+
+.nav-pills-2 a{
+    color: #005782;
+}
+
+
+.loading {    
+    background-color: #ffffff;
+    background-image: url("http://loadinggif.com/images/image-selection/3.gif");
+    background-size: 15px 15px;
+    background-position:right center;
+    background-repeat: no-repeat;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+.disabled{
+    pointer-events: none;
+}

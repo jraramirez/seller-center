@@ -106,3 +106,34 @@
   border: 0;
   transition: all .2s ease;
 }
+
+.drop-area-text{
+    text-align: center;
+    color: #e0dfdf;
+    font-size: 1em;
+    padding-bottom: 20px;
+}
+
+.img_container{
+    background: #ffffff;
+    width: 175px;
+    height: 250px;
+    margin-top: 10px;
+    padding: 10px;
+    border: #07c6f1 1px dashed;
+    text-align: center;
+}
+
+.img_file, .drop-image, .trash_can{
+    display: none;
+}
+
+.trash_can{
+    position: relative;
+    top: 10;
+}
+
+.drop-image{
+    width: 115px;
+    height: 115px;
+}
