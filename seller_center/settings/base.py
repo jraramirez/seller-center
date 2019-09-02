@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'users',
     'sign_up',
     'search',
-
+    'account',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
