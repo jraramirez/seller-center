@@ -120,33 +120,74 @@
                 </div>
                 <div class="card-body mx-5">
                     <div class="form-group row mt-3 mb-4">
-                        <label for="dti" class="col-sm-3 col-form-label">DTI </label>
+                        <label for="dti" class="col-sm-3 col-form-label">DTI</label>
                         <div class="col-sm-9">
-                            <input type="file" name="dti" class="form-control" value="{{userData.first_name}}">
+                            <div class="custom-file">
+                                <div class="col-sm-9">
+                                    <input type="file" name="dti" class="form-control custom-file-input" id="dti" accept=".jpg, .png, .pdf, .doc, .docx">
+                                    <label class="custom-file-label" for="dti">Choose DTI file</label>
+                                    <label id="dti_lbl">
+                                        {% if dtiDocument %}
+                                            {{ dtiDocument }}
+                                        {% else %}
+                                            <small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small>
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body mx-5">
                     <div class="form-group row mt-3 mb-4">
-                        <label for="sec" class="col-sm-3 col-form-label">SEC </label>
+                        <label for="sec" class="col-sm-3 col-form-label">SEC</label>
                         <div class="col-sm-9">
-                            <input type="file" name="sec" class="form-control" value="{{userData.first_name}}">
+                            <div class="custom-file">
+                                <div class="col-sm-9">
+                                    <input type="file" name="sec" class="form-control custom-file-input" id="sec" accept=".jpg, .png, .pdf, .doc, .docx">
+                                    <label class="custom-file-label" for="sec">Choose SEC file</label>
+                                    <label id="sec_lbl">
+                                        {% if secDocument %}
+                                            {{ secDocument }}
+                                        {% else %}
+                                            <small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small>
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body mx-5">
                     <div class="form-group row mt-3 mb-4">
-                        <label for="permit" class="col-sm-3 col-form-label">PERMIT </label>
+                        <label for="permit" class="col-sm-3 col-form-label">PERMIT</label>
                         <div class="col-sm-9">
-                            <input type="file" name="permit" class="form-control" value="{{userData.first_name}}">
+                            <div class="custom-file">
+                                <div class="col-sm-9">
+                                    <input type="file" name="permit" class="form-control custom-file-input" id="permit" accept=".jpg, .png, .pdf, .doc, .docx">
+                                    <label class="custom-file-label" for="permit">Choose PERMIT file</label>
+                                    <label id="permit_lbl">
+                                        {% if permitDocument %}
+                                            {{ permitDocument }}
+                                        {% else %}
+                                            <small class="form-text text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small>
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body mx-5">
                     <div class="form-group row mt-3 mb-4">
-                        <label for="seller-agreement" class="col-sm-3 col-form-label">Seller Center Agreement </label>
+                        <label for="seller-agreement" class="col-sm-3 col-form-label">Seller Center Agreement</label>
                         <div class="col-sm-9">
-                            <input type="file" name="seller-agreement" class="form-control" value="">
+                            <div class="custom-file">
+                                <div class="col-sm-9">
+                                    <input type="file" name="seller-agreement" class="form-control custom-file-input" id="seller-agreement" accept=".jpg, .png, .pdf, .doc, .docx">
+                                    <label class="custom-file-label" for="seller-agreement">Choose file</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

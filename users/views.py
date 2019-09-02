@@ -91,7 +91,10 @@ def profile_edit(request):
 
   userData = User.objects.filter(id=request.user.id)[0]
   profileData = Profile.objects.filter(id=request.user.id)[0]
-  
+  Document = get_document_model()
+  dtiDocument = Document.objects.filter(id=profileData.dti_id)[0] if len(Document.objects.filter(id=profileData.dti_id)) else None
+  secDocument = Document.objects.filter(id=profileData.sec_id)[0] if len(Document.objects.filter(id=profileData.sec_id)) else None
+  permitDocument = Document.objects.filter(id=profileData.permit_id)[0] if len(Document.objects.filter(id=profileData.permit_id)) else None
   addresses = [{}]*7
   profileAddresses = Address.objects.filter(profile_id=request.user.id)
   if(profileAddresses.count()):
@@ -106,5 +109,8 @@ def profile_edit(request):
   return render(request, 'users/profile_edit_page.html', {
     'profileData': profileData,
     'userData': userData,
+    'dtiDocument': dtiDocument,
+    'secDocument': secDocument,
+    'permitDocument': permitDocument,
     'addresses': addresses
   })
