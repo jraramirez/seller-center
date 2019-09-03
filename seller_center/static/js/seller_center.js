@@ -34,33 +34,6 @@ function showVariation(event, i) {
   goToByScroll(id)
 }
 
-function hideVariation(i) {
-    var prevIndex = Math.max(0, i - 1);
-    var prevAddButton = 'variation-add-button-' + String(prevIndex);
-    var id = 'variation-container-' + String(i);
-    var prevContainerId = 'variation-container-' + String(prevIndex);
-    $("#"+id).hide();
-    $("#"+prevAddButton).show();
-    goToByScroll(prevContainerId);
-}
-
-function showAddress(event, i) {
-  event.target.style.display = 'none';
-  var nexAddress = document.getElementsByClassName("address-" + String(i))[0];
-  nexAddress.style.display = 'block';
-  var id = 'address-container-' + String(i);
-  goToByScroll(id)
-}
-
-function hideAddress(i) {
-    var prevIndex = Math.max(0, i - 1);
-    var prevAddButton = 'address-add-button-' + String(prevIndex);
-    var id = 'address-container-' + String(i);
-    var prevContainerId = 'address-container-' + String(prevIndex);
-    $("#"+id).hide();
-    $("#"+prevAddButton).show();
-    goToByScroll(prevContainerId);
-}
 
 function goToByScroll(id){
       // Reove "link" from the ID
@@ -106,46 +79,31 @@ function startProgressBar() {
 }
 
 $(function(){
-  var hash = window.location.hash;
-  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+    var hash = window.location.hash;
+    hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 
-  $('.nav a').click(function (e) {
-    $(this).tab('show');
-    var scrollmem = $('body').scrollTop();
-    window.location.hash = this.hash;
-    $('html,body').scrollTop(scrollmem);
+    $('.nav a').click(function (e) {
+      $(this).tab('show');
+      var scrollmem = $('body').scrollTop();
+      window.location.hash = this.hash;
+      $('html,body').scrollTop(scrollmem);
+    });
+
+
+  $('textarea').each(function () {
+    this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+  }).on('input', function () {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
   });
 
-	$(".custom-file-input").on("change", function(){
-		var fileName=$(this).val().split("\\").pop();
-		$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-	});
+    $('.nav-link').click(function(){
+        if($(this).attr('id') == 'to-ship-tab' || $(this).attr('id') == 'return-refund-tab'){
+            $('.btn-outline-primary').removeClass('active');
+            $('#all2').addClass('active');
+            $('#process').show();
+        } else{
+            $('#process').hide();
+        }
+    });
 });
-
-$('textarea').each(function () {
-  this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
-}).on('input', function () {
-  this.style.height = 'auto';
-  this.style.height = (this.scrollHeight) + 'px';
-});
-
-( function ($) {
-    var activenav,
-        matches = document.body.className.match(/(^|\s)page-(\w+)(\s|$)/); //
-    if (matches) {
-        activenav = matches[2];
-        $(".navbar-nav .nav-item").each( function () {
-            if( $(this).hasClass(activenav) ) {
-                $(this).addClass('active')
-                       .find(".nav-link").append(" <span class='sr-only'>(current)></span>");
-            }
-        });
-        $(".navbar-nav .dropdown-item").each( function () {
-            if( $(this).hasClass(activenav) ) {
-                $(this).addClass('active')
-                       .append(" <span class='sr-only'>(current)></span>");
-            }
-        });
-    }
-
-})(jQuery);
