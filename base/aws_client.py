@@ -82,4 +82,14 @@ class AuthClient:
 
         return requests.post(url, headers=self.apiGateway.headers, json=json)
 
-
+    def forgot_password(self, clientId):
+        '''
+        Send verification code to a registered client id
+        :param clientId: can either be unique cognito id, email or phone number
+        :return:
+        '''
+        url=self.apiGateway.rootUrl + "/password-forgot"
+        json={
+            'clientId': clientId
+        }
+        return requests.post(url, headers=self.apiGateway.headers, json=json)

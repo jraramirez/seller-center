@@ -1,10 +1,10 @@
-{% extends "wagtailadmin/login.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load wagtailcore_tags wagtailimages_tags %}
 {% block branding_favicon %}
 	<link rel="shortcut icon" href="{% static 'images/logo.ico' %}"/>
 {% endblock %}
-{% block css  %}
+{% block extra_css  %}
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,400i,700,700i,900&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/account/main.css' %}">
@@ -28,7 +28,7 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="tab-email" role="tabpanel" aria-labelledby="tab-nav-email">
                                 <div class="pt-2 pb-4 pl-4 pr-4">
-                                    <form action="" method="post" id="email-form">
+                                    <form action="/account/verify_email" method="post" id="email-form">
                                         {% csrf_token %}
                                         <div class="form-group">
                                             <label for="email-login">
@@ -37,10 +37,11 @@
                                                 </div>
                                             </label>
                                             <div class="row no-gutters align-content-center border rounded bg-white" id="email-container">
-                                                <input type="email" class="form-control border-0" id="email-login" aria-describedby="emailHelp" placeholder="Email">
+                                                <input name="username" type="email" class="form-control border-0" id="email-login" aria-describedby="emailHelp" placeholder="Email">
                                             </div>
                                             <p class="text-danger small mt-2" id="error-email-login"></p>
                                         </div>
+                                        <!-- <input type="submit" name="verify" id="verify" form="email-form" value="Send Verification Request" class="btn btn-primary-2 w-100 mt-3 disabled"> -->
                                         <button type="submit" class="btn btn-primary-2 w-100 mt-3 disabled" id="verify_user_btn" disabled>Send Verification Request</button>
                                     </form>
                                     <p class="small mt-3 text-center">Remembered your account? Click<a class="ml-1" href="/_util/login">here</a> to Sign In!</p>
