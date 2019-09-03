@@ -47,6 +47,7 @@
                     <th scope="col">Price</th>
                     <th scope="col">Stock</th>
                     <th scope="col">Sales</th>
+                    <th scope="col">Modified</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -107,6 +108,11 @@
                         0
                         <br>
                     {% endfor %}
+                    </td>
+                    <td>
+                      {{product.last_updated|date:'Y-m-d'}}
+                      <br>
+                      {{product.last_updated|date:'h:i A'}}
                     </td>
                     <td class="text-center">
                         <div class="dropdown show">
