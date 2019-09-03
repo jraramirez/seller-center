@@ -33,7 +33,7 @@ class Order(models.Model):
   ]
 
 class Category(models.Model):
-  unique_id = models.IntegerField(null=True, blank=True)
+  unique_id = models.IntegerField(null=False, blank=False, primary_key=True)
   parent_id = models.IntegerField(null=True, blank=True)
   level = models.IntegerField(null=True, blank=True)
   name = models.CharField(null=True, blank=True, max_length=500)
