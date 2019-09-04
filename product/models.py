@@ -16,6 +16,15 @@ from datetime import datetime
 
 from users.models import Profile
 
+PRODUCT_STATUS_CHOICES = [
+  ('UNPUBLISHED', 'Unpublished'),
+  ('LIVE_APPROVAL', 'For Approval'),
+  ('LIVE_APPROVED', 'Live'),
+  ('UNLISTED', 'Unlisted'),
+  ('SUSPENDED', 'Suspended'),
+]
+
+
 class Category(models.Model):
   unique_id = models.IntegerField(null=False, blank=False, primary_key=True)
   parent_id = models.IntegerField(null=True, blank=True)
@@ -25,55 +34,45 @@ class Category(models.Model):
 
 @register_snippet
 class Product(ClusterableModel):
-  CONDITION_CHOICES = [
-    ('N', 'New'),
-    ('U', 'Used'),
-  ]
+
   product_code = models.CharField(null=True, blank=True, max_length=500)
+  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
+  category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
   product_name = models.CharField(null=True, blank=True, max_length=500)
   product_description = models.TextField(null=True, blank=True)
-  product_weight = models.CharField(null=True, blank=True, max_length=500)
-  # product_condition = models.CharField(null=True, blank=True, choices=CONDITION_CHOICES, default=CONDITION_CHOICES[0], max_length=500)
-  product_price = models.IntegerField(blank=True, null=True, default=None)
-  ship_out_in = models.CharField(null=True, blank=True, max_length=500)
   parent_sku_reference_no = models.CharField(null=True, blank=True, max_length=500)
-  other_logistics_provider_setting = models.CharField(null=True, blank=True, max_length=500)
-  other_logistics_provider_fee = models.CharField(null=True, blank=True, max_length=500)
-  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
-  category = models.IntegerField(blank=True, null=True)
-  product_stock = models.IntegerField(blank=True, null=True, default=None)
-  product_length = models.IntegerField(blank=True, null=True, default=None)
-  product_width = models.IntegerField(blank=True, null=True, default=None)
-  product_height = models.IntegerField(blank=True, null=True, default=None)
-  product_brand = models.CharField(null=True, blank=True, max_length=500)
+
+  product_status = models.CharField(null=True, blank=True, max_length=500, choices=PRODUCT_STATUS_CHOICES, default=PRODUCT_STATUS_CHOICES[0])
+  status_changed_on = models.DateTimeField(default=datetime.now)
+  cover_image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Cover photo must have a white background')
   stock_sum = models.IntegerField(blank=True, null=True, default=None)
-  product_sale_price = models.IntegerField(blank=True, null=True, default=None)
-  product_sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
-  product_sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
-  product_sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
-  product_sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)
-  live = models.BooleanField(default=False)
-  suspended = models.BooleanField(default=False)
-  unlisted = models.BooleanField(default=False)
-  unpublished = models.BooleanField(default=False)
+  product_weight = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
+  product_length = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
+  product_width = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
+  product_height = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
+  product_price = models.DecimalField(max_digits=100, decimal_places=2, null=True, blank=True, max_length=500)
+  ship_out_in = models.IntegerField(null=True, blank=True)
+
+  product_brand = models.CharField(null=True, blank=True, max_length=500)
+
   last_updated = models.DateTimeField(null=True, blank=True)
   date_created = models.DateTimeField(default=datetime.now)
 
-  panels = [
-    FieldPanel('product_code'),
-    FieldPanel('product_name'),
-    FieldPanel('product_description'),
-    FieldPanel('product_weight'),
-    FieldPanel('product_condition'),
-    FieldPanel('ship_out_in'),
-    FieldPanel('parent_sku_reference_no'),
-    FieldPanel('other_logistics_provider_setting'),
-    FieldPanel('other_logistics_provider_fee'),
-    InlinePanel('variations', label='Variations'),
-    FieldPanel('live'),
-    FieldPanel('suspended'),
-    FieldPanel('unlisted'),
-  ]
+  # product_condition = models.CharField(null=True, blank=True, choices=CONDITION_CHOICES, default=CONDITION_CHOICES[0], max_length=500)
+
+  # product_brand = models.CharField(null=True, blank=True, max_length=500)
+  # product_sale_price = models.IntegerField(blank=True, null=True, default=None)
+  # product_sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
+  # product_sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
+  # product_sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
+  # product_sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)
+  # live = models.BooleanField(default=False)
+  # suspended = models.BooleanField(default=False)
+  # unlisted = models.BooleanField(default=False)
+  # unpublished = models.BooleanField(default=False)
+  # last_updated = models.DateTimeField(null=True, blank=True)
+  # date_created = models.DateTimeField(default=datetime.now)
+
 
   def save_model(self, request, obj, form, change):
     obj.user_id = request.user.id
@@ -187,12 +186,12 @@ class ProductsPage(BasePage):
   
   def get_context(self, request):
     context = super().get_context(request)
-    allProducts = Product.objects.filter(profile_id=request.user.id, unpublished=False)
-    liveProducts = Product.objects.filter(profile_id=request.user.id, live=True)
+    allProducts = Product.objects.filter(profile_id=request.user.id).exclude(product_status=PRODUCT_STATUS_CHOICES[0])
+    liveProducts = Product.objects.filter(profile_id=request.user.id, product_status=PRODUCT_STATUS_CHOICES[1])
     soldOutProducts = Product.objects.filter(profile_id=request.user.id, stock_sum=0)
-    suspendedProducts = Product.objects.filter(profile_id=request.user.id, suspended=True)
-    unlistedProducts = Product.objects.filter(profile_id=request.user.id, unlisted=True)
-    unpublishedProducts = Product.objects.filter(profile_id=request.user.id, unpublished=True)
+    suspendedProducts = Product.objects.filter(profile_id=request.user.id, product_status=PRODUCT_STATUS_CHOICES[3])
+    unlistedProducts = Product.objects.filter(profile_id=request.user.id, product_status=PRODUCT_STATUS_CHOICES[4])
+    unpublishedProducts = Product.objects.filter(profile_id=request.user.id, product_status=PRODUCT_STATUS_CHOICES[0])
 
     aPageNumber = request.GET.get('apage')
     lPageNumber = request.GET.get('lpage')
