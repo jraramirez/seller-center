@@ -2,11 +2,11 @@ from django.shortcuts import render
 from base.aws_client import AuthClient
 from base.aws_client import ApiGatewayClient
 
-def verify_email(request):
+def send_verification_code(request):
 	if request.method == 'POST':
 		username=request.POST['username']
 		if not validate_email(email=username):
-			return render(request, 'account/verify_email.html', {
+			return render(request, 'account/send_verification_code.html', {
 				'error': "Please enter a valid email address"
 			})
 		authClient=AuthClient(ApiGatewayClient())
@@ -18,7 +18,7 @@ def verify_email(request):
 				'success': 'Email verification link sent',
 				'error': ''
 			})
-	return render(request, 'account/verify_email.html', {})
+	return render(request, 'account/send_verification_code.html', {})
 
 def reset_password(request):
 	if request.method == 'POST':
@@ -26,7 +26,7 @@ def reset_password(request):
 		veri_code=request.POST['veri_code']
 		new_pw=request.POST['new_pw']
 		if not validate_email(email=username):
-			return render(request, 'account/verify_email.html', {
+			return render(request, 'account/send_verification_code.html', {
 				'error': "Please enter a valid email address"
 			})
 		authClient=AuthClient(ApiGatewayClient())
