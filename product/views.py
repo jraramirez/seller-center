@@ -16,6 +16,7 @@ from product.models import Product
 from product.models import Category
 from product.models import Variations
 from product.models import Errors
+from product.models import PRODUCT_STATUS_CHOICES
 
 from seller_center.settings.dev import MEDIA_URL
 from seller_center.settings.base import CSV_COLUMNS
@@ -108,7 +109,7 @@ def product_import(request, selected_category):
     product['product_weight'] = request.POST.get('product-weight')
 
     product['product_price'] = request.POST.get('product-price')
-    product['product_stock'] = request.POST.get('product-stock')
+    product['stock_sum'] = request.POST.get('product-stock')
     product['product_sale_price'] = request.POST.get('product-sale-price')
     product['product_sale_date_start'] = request.POST.get('product-sale-date-start')
     product['product_sale_time_start'] = request.POST.get('product-sale-time-start')
@@ -128,7 +129,7 @@ def product_import(request, selected_category):
       errors.append('Product Description is required; ')
     if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
       errors.append('Product Price is required; ')
-    if(request.POST.get('product-variation-0-sku') == '' and not product['product_stock']):
+    if(request.POST.get('product-variation-0-sku') == '' and not product['stock_sum']):
       errors.append('Product Stock is required; ')
     if(product['product_sale_price']):
       if(not product['product_sale_date_start']):
@@ -139,7 +140,7 @@ def product_import(request, selected_category):
         errors.append('Product Sale End Date is required; ')
       if(not product['product_sale_time_end']):
         errors.append('Product Sale End Time is required; ')      
-    if(request.POST.get('product-variation-0-sku') == '' and not product['product_stock']):
+    if(request.POST.get('product-variation-0-sku') == '' and not product['stock_sum']):
       errors.append('Product Stock is required; ')
     for i in range(0,7):
       if(request.POST.get('product-variation-'+str(i)+'-sku')):
@@ -395,7 +396,7 @@ def product_edit(request, selected_category, product_id):
     product['product_weight'] = request.POST.get('product-weight')
 
     product['product_price'] = request.POST.get('product-price')
-    product['product_stock'] = request.POST.get('product-stock')
+    product['stock_sum'] = request.POST.get('product-stock')
     product['product_sale_price'] = request.POST.get('product-sale-price')
     product['product_sale_date_start'] = request.POST.get('product-sale-date-start')
     product['product_sale_time_start'] = request.POST.get('product-sale-time-start')
@@ -451,7 +452,7 @@ def product_edit(request, selected_category, product_id):
         product_brand=request.POST.get('product-brand'),
         # this may be empty strings so we replace it with None if empty string
         product_price=request.POST.get('product-price') if request.POST.get('product-price') else None,
-        product_stock=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
+        # stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
         product_sale_price = request.POST.get('product-sale-price') if request.POST.get('product-sale-price') else None,
         product_sale_date_start = request.POST.get('product-sale-date-start') if request.POST.get('product-sale-date-start') else None,
         product_sale_date_end = request.POST.get('product-sale-date-end') if request.POST.get('product-sale-date-start') else None,
@@ -565,7 +566,7 @@ def product_edit(request, selected_category, product_id):
     product = {}
     selectedProduct = Product.objects.filter(id=product_id)[0]
     product['product_code'] = selectedProduct.product_code
-    product['product_stock'] = selectedProduct.stock_sum
+    product['stock_sum'] = selectedProduct.stock_sum
     category = Category.objects.filter(unique_id=selectedProduct.category)
     if(category.count()) == 0:
       product['category'] = "None"
@@ -705,12 +706,12 @@ def products_import(request):
                     product_weight = row['product_weight'] if row['product_weight'] == row['product_weight'] else None,
                     ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
                     parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,
-                    other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
-                    other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] == row['other_logistics_provider_fee'] else None,
-                    live = False,
-                    suspended = False,
-                    unlisted = False,
-                    unpublished = unpublished
+                    # other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
+                    # other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] == row['other_logistics_provider_fee'] else None,
+                    # live = False,
+                    # suspended = False,
+                    # unlisted = False,
+                    # unpublished = unpublished
                   )
                   productID = product[0].id
 
@@ -737,20 +738,19 @@ def products_import(request):
                   t = Product(
                     product_code = row['product_code'],
                     profile_id = request.user.id,
-                    category = row['category_id'],
-                    order_id = None,
+                    category = found_category[0],
                     product_name = None,
                     product_description = row['product_description'] if row['product_description'] == row['product_description'] else None,
                     product_brand = row['product_brand'] if row['product_brand'] == row['product_brand'] else None,
                     product_weight = row['product_weight'] if row['product_weight'] == row['product_weight'] else None,
                     ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
                     parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,
-                    other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
-                    other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] == row['other_logistics_provider_fee'] else None,
-                    live = False,
-                    suspended = False,
-                    unlisted = False,
-                    unpublished = unpublished
+                    # other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
+                    # other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] == row['other_logistics_provider_fee'] else None,
+                    # live = False,
+                    # suspended = False,
+                    # unlisted = False,
+                    # unpublished = unpublished
                   )
                   t.save()
                   productID = t.id
@@ -832,7 +832,7 @@ def products_import(request):
             # Product price and stock validation
             if(vf.hasVariations(row)):
               Product.objects.filter(id=productID).update(product_price=None)
-              Product.objects.filter(id=productID).update(product_stock=None)
+              Product.objects.filter(id=productID).update(stock_sum=None)
             else:
               if(row['product_price'] != row['product_price']):
                 Product.objects.filter(id=productID).update(product_price=None)
@@ -848,8 +848,8 @@ def products_import(request):
                 if not prod_price.isdigit():
                   prod_price=None
                 Product.objects.filter(id=productID).update(product_price=prod_price)
-              if(row['product_stock'] != row['product_stock']):
-                Product.objects.filter(id=productID).update(product_stock=None)
+              if(row['stock_sum'] != row['stock_sum']):
+                Product.objects.filter(id=productID).update(stock_sum=None)
                 e = Errors(
                   product_id = productID,
                   name = 'Missing product stock',
@@ -858,7 +858,7 @@ def products_import(request):
                 e.save()
                 unpublished = True
               else:
-                Product.objects.filter(id=productID).update(product_stock=row['product_stock'])
+                Product.objects.filter(id=productID).update(stock_sum=row['stock_sum'])
 
             # Product image validation
             imageInS3 = False
@@ -950,8 +950,8 @@ def products_import(request):
                   )
                   v.save()
             if(not unpublished):
-              Product.objects.filter(id=productID).update(unlisted=True)  
-            Product.objects.filter(id=productID).update(stock_sum=stock_sum, unpublished=unpublished)
+              Product.objects.filter(id=productID).update(product_status=PRODUCT_STATUS_CHOICES[3])
+            Product.objects.filter(id=productID).update(stock_sum=stock_sum, product_status=PRODUCT_STATUS_CHOICES[0])
 
     if (invalidCategory):
       errorMessage = 'Incorrect Category ID on Row/s: '
