@@ -178,8 +178,9 @@ CSV_COLUMNS = [
     'product_weight',
     'ship_out_in',
     'parent_sku_reference_no',
-    'other_logistics_provider_setting',
-    'other_logistics_provider_fee',
+    # 'other_logistics_provider_setting',
+    # 'other_logistics_provider_fee',
+
     'product_description',
     'variation1_id',
     'variation2_id',
