@@ -666,7 +666,7 @@ def products_import(request):
             productID = None
 
             product = Product.objects.filter(profile_id=request.user.id).filter(product_code=row['product_code'])
-
+            print("product row: %s " % row)
             if(product.count()):
               if row['product_code'] != row['product_code']:
                 missingRequiredFields = True
@@ -678,7 +678,7 @@ def products_import(request):
               else:
 
                 found_category = Category.objects.filter(unique_id=row['category_id'])
-
+                print("product found_category: %s " % found_category)
                 if (len(found_category) == 0):
                   invalidCategory = True
                   invalidRows.append(index + 2)
