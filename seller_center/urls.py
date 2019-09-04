@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^products/live/(?P<product_id>.*)/$', product_views.product_live, name='product_live'),
     url(r'^add-order/', sales_views.add_order, name='add_order'),
     url(r'^orders/', sales_views.orders, name='orders'),
-    url(r'^account/verify_email', account_views.verify_email, name='verify_email'),
+    url(r'^account/send_verification_code', account_views.send_verification_code, name='send_verification_code'),
     url(r'^account/reset_password', account_views.reset_password, name='reset_password'),
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
