@@ -30,10 +30,6 @@ class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
 
 def product_import(request, selected_category):
-  CONDITION_CHOICES = [
-    ('N', 'New'),
-    ('U', 'Used'),
-  ]
   showVariations = ""
   showWithoutVariation = "active show"
 
@@ -163,17 +159,17 @@ def product_import(request, selected_category):
       t = Product(
         product_code = request.POST.get('product-code'),
         profile_id = request.user.id,
-        category = selected_category,
+        category = Category.objects.filter(unique_id=selected_category)[0],
         product_name = request.POST.get('product-name'),
         product_description = request.POST.get('product-description'),
         product_brand = request.POST.get('product-brand'),
         # this may be empty strings so we replace it with None if empty string
         product_price = request.POST.get('product-price') if request.POST.get('product-price') else None, #this is evaluates as tertiary operator
-        product_sale_price = request.POST.get('product-sale-price') if request.POST.get('product-sale-price') else None,
-        product_sale_date_start = request.POST.get('product-sale-date-start') if request.POST.get('product-sale-date-start') else None,
-        product_sale_date_end = request.POST.get('product-sale-date-end') if request.POST.get('product-sale-date-end') else None,
-        product_sale_time_start = request.POST.get('product-sale-time-start') if request.POST.get('product-sale-time-start') else None,
-        product_sale_time_end = request.POST.get('product-sale-time-end') if request.POST.get('product-sale-time-end') else None,
+        # product_sale_price = request.POST.get('product-sale-price') if request.POST.get('product-sale-price') else None,
+        # product_sale_date_start = request.POST.get('product-sale-date-start') if request.POST.get('product-sale-date-start') else None,
+        # product_sale_date_end = request.POST.get('product-sale-date-end') if request.POST.get('product-sale-date-end') else None,
+        # product_sale_time_start = request.POST.get('product-sale-time-start') if request.POST.get('product-sale-time-start') else None,
+        # product_sale_time_end = request.POST.get('product-sale-time-end') if request.POST.get('product-sale-time-end') else None,
 
         stock_sum = request.POST.get('product-stock') if request.POST.get('product-stock') else None,
         product_length = request.POST.get('product-length') if request.POST.get('product-length') else None,
@@ -183,10 +179,6 @@ def product_import(request, selected_category):
 
         # product_condition = request.POST.get('product-condition'),
         parent_sku_reference_no = request.POST.get('product-parent-sku'),
-        live = False,
-        suspended = False,
-        unlisted = True,
-        unpublished = False
       )
       t.save()
       stock_sum = 0
@@ -255,7 +247,6 @@ def product_import(request, selected_category):
         'variations': variations,
         'showVariations': showVariations,
         'showWithoutVariation': showWithoutVariation,
-        'CONDITION_CHOICES': CONDITION_CHOICES
       })
 
   else:    
@@ -355,8 +346,7 @@ def product_import(request, selected_category):
       'selected_category': selected_category,
       'variations': variations,
       'showVariations': showVariations,
-      'showWithoutVariation': showWithoutVariation,
-      'CONDITION_CHOICES': CONDITION_CHOICES
+      'showWithoutVariation': showWithoutVariation
     })
 
 
@@ -551,7 +541,6 @@ def product_edit(request, selected_category, product_id):
         'variations': variations,
         'showVariations': showVariations,
         'showWithoutVariation': showWithoutVariation,
-        'CONDITION_CHOICES': CONDITION_CHOICES
       })
   elif(selected_category == '0'):
     categories = {}
@@ -632,7 +621,6 @@ def product_edit(request, selected_category, product_id):
     return render(request, 'product/product_edit_page.html', {
       'product_id': product_id,
       'selected_category': product['product_category_id'],
-      'CONDITION_CHOICES': CONDITION_CHOICES,
       'product': product,
       'variations': variations,
       'showVariations': showVariations,
