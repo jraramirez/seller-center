@@ -21,7 +21,22 @@ def verify_email(request):
 	return render(request, 'account/verify_email.html', {})
 
 def reset_password(request):
-	print('reset')
+	if request.method == 'POST':
+		username=request.POST['username']
+		veri_code=request.POST['veri_code']
+		new_pw=request.POST['new_pw']
+		if not validate_email(email=username):
+			return render(request, 'account/verify_email.html', {
+				'error': "Please enter a valid email address"
+			})
+		authClient=AuthClient(ApiGatewayClient())
+		response=authClient.reset_password(username, veri_code, new_pw)
+		json=response.json()
+		if response.status_code == 200:
+			return render(request, 'wagtailadmin/login.html', {
+				'success': 'Reset password was successful.',
+				'error': ''
+			})
 	return render(request, 'account/reset_password.html', {})
 
 def validate_email(email):
