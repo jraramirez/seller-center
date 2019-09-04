@@ -16,27 +16,12 @@ from datetime import datetime
 
 from users.models import Profile
 
-@register_snippet
-class Order(models.Model):
-  total = models.CharField(null=True, blank=True, max_length=500)
-  status = models.CharField(null=True, blank=True, max_length=500)
-  countdown = models.CharField(null=True, blank=True, max_length=500)
-  shipping_channel = models.CharField(null=True, blank=True, max_length=500)
-  creation_date = models.CharField(null=True, blank=True, max_length=500)
-  paid_date = models.CharField(null=True, blank=True, max_length=500)
-
-  panels = [
-    FieldPanel('status'),
-    FieldPanel('countdown'),
-    FieldPanel('shipping_channel'),
-    FieldPanel('creation_date'),
-  ]
-
 class Category(models.Model):
   unique_id = models.IntegerField(null=False, blank=False, primary_key=True)
   parent_id = models.IntegerField(null=True, blank=True)
   level = models.IntegerField(null=True, blank=True)
   name = models.CharField(null=True, blank=True, max_length=500)
+
 
 @register_snippet
 class Product(ClusterableModel):
@@ -54,7 +39,6 @@ class Product(ClusterableModel):
   parent_sku_reference_no = models.CharField(null=True, blank=True, max_length=500)
   other_logistics_provider_setting = models.CharField(null=True, blank=True, max_length=500)
   other_logistics_provider_fee = models.CharField(null=True, blank=True, max_length=500)
-  order = models.ForeignKey(Order, models.DO_NOTHING, blank=True, null=True)
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   category = models.IntegerField(blank=True, null=True)
   product_stock = models.IntegerField(blank=True, null=True, default=None)
@@ -158,6 +142,32 @@ class Variations(Orderable, models.Model):
       Product.objects.filter(id=self.product_id).update(unpublished=False)
     super(Variations, self).save(*args, **kwargs)
     return redirect('/products/#all')
+
+
+@register_snippet
+class Order(models.Model):
+  STATUS_CHOICES = [
+    ('U', 'Unpaid'),
+    ('S', 'To Ship'),
+    ('H', 'Shipping'),
+    ('C', 'Completed'),
+    ('L', 'Cancellation'),
+    ('R', 'Return/Refund'),
+  ]
+  total = models.CharField(null=True, blank=True, max_length=500)
+  status = models.CharField(null=True, blank=True, max_length=500, choices=STATUS_CHOICES, default=STATUS_CHOICES[0])
+  countdown = models.CharField(null=True, blank=True, max_length=500)
+  shipping_channel = models.CharField(null=True, blank=True, max_length=500)
+  creation_date = models.CharField(null=True, blank=True, max_length=500)
+  paid_date = models.CharField(null=True, blank=True, max_length=500)
+  products = models.ManyToManyField(Product)
+
+  panels = [
+    FieldPanel('status'),
+    FieldPanel('countdown'),
+    FieldPanel('shipping_channel'),
+    FieldPanel('creation_date'),
+  ]
 
 
 class Errors(ClusterableModel):  
