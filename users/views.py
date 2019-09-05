@@ -9,9 +9,10 @@ from wagtail.documents.forms import get_document_form
 
 def profile(request):
   userData = User.objects.filter(id=request.user.id)[0]
+
   profileData = Profile.objects.filter(id=request.user.id)[0]
+
   seller_details_data=profileData.seller_details
-  shop_details_data=seller_details_data.shop_details
   front_name=seller_details_data.upload_id_front_url
   front_name=front_name[front_name.rfind('/')+1:]
   seller_details_data.upload_id_front_url=front_name
@@ -19,7 +20,13 @@ def profile(request):
   back_name=back_name[back_name.rfind('/')+1:]
   seller_details_data.upload_id_back_url=back_name
   seller_details_data.has_agreed_to_terms='Agreed' if seller_details_data.has_agreed_to_terms else 'Not yet agreed'
+  shop_details_data=seller_details_data.shop_details
   shop_details_data.holiday_mode='On' if shop_details_data.holiday_mode else 'Off'
+
+  business_details_data=profileData.business_details
+  business_address_data=business_details_data.business_address
+  business_address=business_address_data.street_bldg + ' ' + business_address_data.brgy + ' ' + business_address_data.city + ' ' + business_address_data.region_state + ' ' + business_address_data.country + ' ' + str(business_address_data.postal_code)
+  # print(business_address)
   # addresses = Address.objects.filter(profile_id=request.user.id)
   # Document = get_document_model()
   # dtiDocument = Document.objects.filter(id=profileData.dti_id)[0] if len(Document.objects.filter(id=profileData.dti_id)) else None
@@ -30,6 +37,8 @@ def profile(request):
     'userData': userData,
     'seller_details_data': seller_details_data,
     'shop_details_data': shop_details_data,
+    'business_details_data': business_details_data,
+    'business_address': business_address,
     # 'dtiDocument': dtiDocument,
     # 'secDocument': secDocument,
     # 'permitDocument': permitDocument,
