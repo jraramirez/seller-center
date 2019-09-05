@@ -41,13 +41,20 @@ def create_user_profile(sender, instance, created, **kwargs):
   if created:
       Profile.objects.create(user=instance)
 
+class AddressContactDetails(models.Model):  
+  contact_person_name=models.TextField(null=True, blank=True)
+  contact_person_phone=models.TextField(null=True, blank=True)
+  contact_person_email=models.TextField(null=True, blank=True)
 
 class Address(Orderable, models.Model):  
   name = models.TextField(null=True, blank=True)
   index = models.IntegerField(null=True, blank=True)
   profile = ParentalKey('Profile', related_name='address', null=True, blank=True)
+  contact_details=models.ForeignKey(AddressContactDetails, models.DO_NOTHING, blank=True, null=True)
+  street_bldg=models.TextField(null=True, blank=True)
+  country=models.TextField(null=True, blank=True)
+  region_state=models.TextField(null=True, blank=True)
+  city=models.TextField(null=True, blank=True)
+  brgy=models.TextField(null=True, blank=True)
+  postal_code=models.IntegerField(null=True, blank=True)
 
-class AddressContactDetails(models.Model):  
-  contact_person_name=models.TextField(null=True, blank=True)
-  contact_person_phone=models.TextField(null=True, blank=True)
-  contact_person_email=models.TextField(null=True, blank=True)
