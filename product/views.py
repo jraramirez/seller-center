@@ -440,7 +440,7 @@ def product_edit(request, category_id, product_id):
         category=category,
         product_name=request.POST.get('product-name'),
         product_description=request.POST.get('product-description'),
-        product_brand=request.POST.get('product-brand'),
+        product_brand=request.POST.get('product-brand') if request.POST.get('product-brand') else None,
         # this may be empty strings so we replace it with None if empty string
         product_price=request.POST.get('product-price') if request.POST.get('product-price') else None,
         product_status=ProductStatus.UNLISTED.value,
@@ -577,7 +577,8 @@ def product_edit(request, category_id, product_id):
       
     product['product_name'] = selectedProduct.product_name
     product['product_description'] = selectedProduct.product_description
-    product['product_brand'] = selectedProduct.product_brand
+    if selectedProduct.product_brand is not None:
+      product['product_brand'] = selectedProduct.product_brand
 
     # product['product_price'] = selectedProduct.product_price
     # product['product_sale_price'] = selectedProduct.product_sale_price
