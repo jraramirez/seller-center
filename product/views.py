@@ -350,7 +350,7 @@ def product_import(request, selected_category):
     })
 
 
-def product_edit(request, selected_category, product_id):
+def product_edit(request, category_id, product_id):
   CONDITION_CHOICES = [
     ('N', 'New'),
     ('U', 'Used'),
@@ -366,12 +366,12 @@ def product_edit(request, selected_category, product_id):
 
     product['product_code'] = request.POST.get('product-code')
     product['product-category-id'] = request.POST.get('product-category-id')
-    if(selected_category == '0'):
+    if(category_id == '0'):
       category = Category.objects.filter(unique_id=int(product['product-category-id']))
     else:
-      category = Category.objects.filter(unique_id=int(selected_category))
+      category = Category.objects.filter(unique_id=category_id)
     product['category'] = category[0].name
-    categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
+    categoryParentId = Category.objects.filter(unique_id=category_id)[0].parent_id
     product['parentCategory'] = Category.objects.filter(unique_id=categoryParentId)[0].name
     categoryParentParentId = Category.objects.filter(unique_id=categoryParentId)[0].parent_id
     product['parentParentCategory'] = Category.objects.filter(unique_id=categoryParentParentId)[0].name
@@ -542,29 +542,29 @@ def product_edit(request, selected_category, product_id):
         'showVariations': showVariations,
         'showWithoutVariation': showWithoutVariation,
       })
-  elif(selected_category == '0'):
+  elif(category_id == '0'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
       categories = json.load(f)
     return render(request, 'product/product_edit_page.html', {
       'product_id': product_id,
       'categories': categories,
-      'selected_category': selected_category
+      'selected_category': category_id
     })
   else:
     product = {}
     selectedProduct = Product.objects.filter(id=product_id)[0]
     product['product_code'] = selectedProduct.product_code
     product['stock_sum'] = selectedProduct.stock_sum
-    category = Category.objects.filter(unique_id=selectedProduct.category)
-    if(category.count()) == 0:
+    category = selectedProduct.category
+    if(category != category):
       product['category'] = "None"
     else:
-      if(selected_category != selectedProduct.category):
-        product['product_category_id'] = selected_category
-        category = Category.objects.filter(unique_id=selected_category)
+      if(category_id != selectedProduct.category):
+        product['product_category_id'] = category_id
+        category = Category.objects.filter(unique_id=category_id)
         product['category'] = category[0].name
-        categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
+        categoryParentId = Category.objects.filter(unique_id=category_id)[0].parent_id
         product['parentCategory'] = Category.objects.filter(unique_id=categoryParentId)[0].name
         categoryParentParentId = Category.objects.filter(unique_id=categoryParentId)[0].parent_id
         product['parentParentCategory'] = Category.objects.filter(unique_id=categoryParentParentId)[0].name
@@ -581,12 +581,12 @@ def product_edit(request, selected_category, product_id):
     product['product_description'] = selectedProduct.product_description
     product['product_brand'] = selectedProduct.product_brand
 
-    product['product_price'] = selectedProduct.product_price
-    product['product_sale_price'] = selectedProduct.product_sale_price
-    product['product_sale_date_start'] = selectedProduct.product_sale_date_start
-    product['product_sale_date_end'] = selectedProduct.product_sale_date_end
-    product['product_sale_time_start'] = selectedProduct.product_sale_time_start
-    product['product_sale_time_end'] = selectedProduct.product_sale_time_end
+    # product['product_price'] = selectedProduct.product_price
+    # product['product_sale_price'] = selectedProduct.product_sale_price
+    # product['product_sale_date_start'] = selectedProduct.product_sale_date_start
+    # product['product_sale_date_end'] = selectedProduct.product_sale_date_end
+    # product['product_sale_time_start'] = selectedProduct.product_sale_time_start
+    # product['product_sale_time_end'] = selectedProduct.product_sale_time_end
     product['stock_sum'] = selectedProduct.stock_sum
 
     product['product_length'] = selectedProduct.product_length
@@ -612,7 +612,7 @@ def product_edit(request, selected_category, product_id):
         'variation_stock': v.stock,
         'variation_name': v.name,
         'variation_url': v.image_url,
-        'variation_image_url_from_upload': v.image_url_from_upload
+        'variation_image_url_from_upload': v.image_url_from_upload if v.image_url_from_upload == v.image_url_from_upload else ''
       }
       variations[index] = tmp
       showVariations = "active show"
