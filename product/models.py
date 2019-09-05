@@ -153,6 +153,7 @@ class Order(models.Model):
     ('L', 'Cancellation'),
     ('R', 'Return/Refund'),
   ]
+  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, choices=STATUS_CHOICES, default=STATUS_CHOICES[0])
   countdown = models.CharField(null=True, blank=True, max_length=500)
