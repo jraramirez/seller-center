@@ -138,7 +138,7 @@ class Variations(Orderable, models.Model):
     if(self.image_upload):
       Errors.objects.filter(product_id=self.product_id).filter(name='Product image is required').delete()
     if(Errors.objects.filter(product_id=self.product_id).count() == 0):
-      Product.objects.filter(id=self.product_id).update(product_status=ProductStatus.UNLISTED)
+      Product.objects.filter(id=self.product_id).update(product_status=ProductStatus.UNLISTED.value)
     super(Variations, self).save(*args, **kwargs)
     return redirect('/products/#all')
 
