@@ -16,13 +16,14 @@ from datetime import datetime
 
 from users.models import Profile
 
-PRODUCT_STATUS_CHOICES = [
-  ('UNPUBLISHED', 'Unpublished'),
-  ('LIVE_APPROVAL', 'For Approval'),
-  ('LIVE_APPROVED', 'Live'),
-  ('UNLISTED', 'Unlisted'),
-  ('SUSPENDED', 'Suspended'),
-]
+from enum import Enum
+
+class ProductStatus(Enum):   # A subclass of Enum
+    UNPUBLISHED = "UNPUBLISHED"
+    LIVE_APPROVAL = 'LIVE_APPROVAL'
+    LIVE_APPROVED = 'LIVE_APPROVED'
+    UNLISTED = 'UNLISTED'
+    SUSPENDED = 'SUSPENDED'
 
 
 class Category(models.Model):
@@ -42,7 +43,7 @@ class Product(ClusterableModel):
   product_description = models.TextField(null=True, blank=True)
   parent_sku_reference_no = models.CharField(null=True, blank=True, max_length=500)
 
-  product_status = models.CharField(null=True, blank=True, max_length=500, choices=PRODUCT_STATUS_CHOICES, default=PRODUCT_STATUS_CHOICES[0])
+  product_status = models.CharField(null=True, blank=True, max_length=500, default=ProductStatus.UNPUBLISHED.value)
   status_changed_on = models.DateTimeField(default=datetime.now)
   cover_image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Cover photo must have a white background')
   stock_sum = models.IntegerField(blank=True, null=True, default=None)
@@ -93,8 +94,7 @@ class Product(ClusterableModel):
       if(len(self.product_description)>=100):
         Errors.objects.filter(product_id=self.id).filter(name='Product description should have at least 100 characters').delete()
     if(Errors.objects.filter(product_id=self.id).count() == 0):
-      Product.objects.filter(id=self.id).update(unlisted=True)
-      Product.objects.filter(id=self.id).update(unpublished=False)
+      Product.objects.filter(id=self.id).update(product_status=ProductStatus.UNLISTED.value)
     super(Product, self).save(*args, **kwargs)
     return HttpResponseRedirect("/products/#all")
 
@@ -138,7 +138,7 @@ class Variations(Orderable, models.Model):
     if(self.image_upload):
       Errors.objects.filter(product_id=self.product_id).filter(name='Product image is required').delete()
     if(Errors.objects.filter(product_id=self.product_id).count() == 0):
-      Product.objects.filter(id=self.product_id).update(unpublished=False)
+      Product.objects.filter(id=self.product_id).update(product_status=ProductStatus.UNLISTED)
     super(Variations, self).save(*args, **kwargs)
     return redirect('/products/#all')
 
@@ -187,12 +187,12 @@ class ProductsPage(BasePage):
   
   def get_context(self, request):
     context = super().get_context(request)
-    allProducts = Product.objects.filter(profile_id=request.user.id).exclude(product_status=PRODUCT_STATUS_CHOICES[0])
-    liveProducts = Product.objects.filter(profile_id=request.user.id, product_status=PRODUCT_STATUS_CHOICES[1])
-    soldOutProducts = Product.objects.filter(profile_id=request.user.id, stock_sum=0)
-    suspendedProducts = Product.objects.filter(profile_id=request.user.id, product_status=PRODUCT_STATUS_CHOICES[3])
-    unlistedProducts = Product.objects.filter(profile_id=request.user.id, product_status=PRODUCT_STATUS_CHOICES[4])
-    unpublishedProducts = Product.objects.filter(profile_id=request.user.id, product_status=PRODUCT_STATUS_CHOICES[0])
+    allProducts = Product.objects.filter(profile_id=request.user.id).exclude(product_status=ProductStatus.UNPUBLISHED.value)
+    liveProducts = Product.objects.filter(profile_id=request.user.id, product_status=ProductStatus.LIVE_APPROVED.value)
+    soldOutProducts = Product.objects.filter(profile_id=request.user.id, stock_sum=0).exclude(product_status=ProductStatus.UNPUBLISHED.value)
+    suspendedProducts = Product.objects.filter(profile_id=request.user.id, product_status=ProductStatus.SUSPENDED.value)
+    unlistedProducts = Product.objects.filter(profile_id=request.user.id, product_status=ProductStatus.UNLISTED.value)
+    unpublishedProducts = Product.objects.filter(profile_id=request.user.id, product_status=ProductStatus.UNPUBLISHED.value)
 
     aPageNumber = request.GET.get('apage')
     lPageNumber = request.GET.get('lpage')

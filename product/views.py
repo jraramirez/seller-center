@@ -16,7 +16,7 @@ from product.models import Product
 from product.models import Category
 from product.models import Variations
 from product.models import Errors
-from product.models import PRODUCT_STATUS_CHOICES
+from product.models import ProductStatus
 
 from seller_center.settings.dev import MEDIA_URL
 from seller_center.settings.base import CSV_COLUMNS
@@ -433,21 +433,23 @@ def product_edit(request, category_id, product_id):
             errors.append('Variation ' + str(i+1) + ' Sale End Time is required; ')
     if (not errors):
 
+      category = Category.objects.filter(unique_id=int(product['product-category-id']))[0]
       t = Product(id=product_id,
         product_code=request.POST.get('product-code'),
         profile_id=request.user.id,
-        category=request.POST.get('product-category-id'),
+        category=category,
         product_name=request.POST.get('product-name'),
         product_description=request.POST.get('product-description'),
         product_brand=request.POST.get('product-brand'),
         # this may be empty strings so we replace it with None if empty string
         product_price=request.POST.get('product-price') if request.POST.get('product-price') else None,
+        product_status=ProductStatus.UNLISTED.value,
         # stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
-        product_sale_price = request.POST.get('product-sale-price') if request.POST.get('product-sale-price') else None,
-        product_sale_date_start = request.POST.get('product-sale-date-start') if request.POST.get('product-sale-date-start') else None,
-        product_sale_date_end = request.POST.get('product-sale-date-end') if request.POST.get('product-sale-date-start') else None,
-        product_sale_time_start = request.POST.get('product-sale-time-start') if request.POST.get('product-sale-date-start') else None,
-        product_sale_time_end = request.POST.get('product-sale-time-end') if request.POST.get('product-sale-date-start') else None,
+        # product_sale_price = request.POST.get('product-sale-price') if request.POST.get('product-sale-price') else None,
+        # product_sale_date_start = request.POST.get('product-sale-date-start') if request.POST.get('product-sale-date-start') else None,
+        # product_sale_date_end = request.POST.get('product-sale-date-end') if request.POST.get('product-sale-date-start') else None,
+        # product_sale_time_start = request.POST.get('product-sale-time-start') if request.POST.get('product-sale-date-start') else None,
+        # product_sale_time_end = request.POST.get('product-sale-time-end') if request.POST.get('product-sale-date-start') else None,
 
         # this is evaluates as tertiary operator
         stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
@@ -459,10 +461,6 @@ def product_edit(request, category_id, product_id):
         # product_condition=request.POST.get('product-condition'),
         parent_sku_reference_no=request.POST.get('product-parent-sku'),
 
-        live=False,
-        suspended=False,
-        unlisted=True,
-        unpublished=False
       )
       t.save()
 
@@ -490,11 +488,11 @@ def product_edit(request, category_id, product_id):
             v.sku=request.POST.get('product-variation-' + str(i) + '-sku')
             v.stock=variationStock
             v.name=request.POST.get('product-variation-' + str(i) + '-name')
-            v.sale_price=request.POST.get('product-variation-' + str(i) + '-sale-price')
-            v.sale_date_start=request.POST.get('product-variation-' + str(i) + '-sale-date-start')
-            v.sale_date_end=request.POST.get('product-variation-' + str(i) + '-sale-date-end')
-            v.sale_time_start=request.POST.get('product-variation-' + str(i) + '-sale-time-start')
-            v.sale_time_end=request.POST.get('product-variation-' + str(i) + '-sale-time-end')
+            # v.sale_price=request.POST.get('product-variation-' + str(i) + '-sale-price')
+            # v.sale_date_start=request.POST.get('product-variation-' + str(i) + '-sale-date-start')
+            # v.sale_date_end=request.POST.get('product-variation-' + str(i) + '-sale-date-end')
+            # v.sale_time_start=request.POST.get('product-variation-' + str(i) + '-sale-time-start')
+            # v.sale_time_end=request.POST.get('product-variation-' + str(i) + '-sale-time-end')
             v.image_url_from_sku=None
 
             v.save()
