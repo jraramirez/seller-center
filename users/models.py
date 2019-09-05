@@ -58,6 +58,11 @@ class Address(Orderable, models.Model):
   brgy=models.TextField(null=True, blank=True)
   postal_code=models.IntegerField(null=True, blank=True)
 
+class BusinessDetails(models.Model):  
+  company_name=models.TextField(null=True, blank=True)
+  business_address=models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True)
+  business_tin=models.TextField(null=True, blank=True)
+  business_registration_number=models.TextField(null=True, blank=True)
 
 class Documents(models.Model):  
   profile=ParentalKey('Profile', related_name='document', null=True, blank=True)
