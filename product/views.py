@@ -687,7 +687,6 @@ def products_import(request):
                     product_code = row['product_code'],
                     profile_id = request.user.id,
                     category = row['category_id'],
-                    order_id = None,
                     product_name = None,
                     product_description = row['product_description'] if row['product_description'] == row['product_description'] else None,
                     product_brand = row['product_brand'] if row['product_brand'] == row['product_brand'] else None,
