@@ -52,27 +52,27 @@ class SellerDetails(models.Model):
 class Profile(ClusterableModel):
   birthday = models.DateField(default=datetime.now)
   user = models.OneToOneField(User, on_delete=models.CASCADE)
-  dti = models.ForeignKey(
-    'wagtaildocs.Document',
-    null=True,
-    blank=True,
-    on_delete=models.SET_NULL,
-    related_name='+'
-  )
-  sec = models.ForeignKey(
-    'wagtaildocs.Document',
-    null=True,
-    blank=True,
-    on_delete=models.SET_NULL,
-    related_name='+'
-  )
-  permit = models.ForeignKey(
-    'wagtaildocs.Document',
-    null=True,
-    blank=True,
-    on_delete=models.SET_NULL,
-    related_name='+'
-  )
+  # dti = models.ForeignKey(
+  #   'wagtaildocs.Document',
+  #   null=True,
+  #   blank=True,
+  #   on_delete=models.SET_NULL,
+  #   related_name='+'
+  # )
+  # sec = models.ForeignKey(
+  #   'wagtaildocs.Document',
+  #   null=True,
+  #   blank=True,
+  #   on_delete=models.SET_NULL,
+  #   related_name='+'
+  # )
+  # permit = models.ForeignKey(
+  #   'wagtaildocs.Document',
+  #   null=True,
+  #   blank=True,
+  #   on_delete=models.SET_NULL,
+  #   related_name='+'
+  # )
   seller_details=models.OneToOneField(SellerDetails, on_delete=models.CASCADE, null=True)
   business_details=models.ForeignKey(BusinessDetails, models.DO_NOTHING, blank=True, null=True)
   pickup_address=models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True, related_name='pickup_address')
