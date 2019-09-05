@@ -68,3 +68,11 @@ class Documents(models.Model):
   profile=ParentalKey('Profile', related_name='document', null=True, blank=True)
   document_type=models.TextField(null=True, blank=True)
   document_url=models.TextField(null=True, blank=True)
+
+class ShopDetails(models.Model):  
+  shop_name=models.TextField(null=True, blank=True)
+  holiday_mode=models.BooleanField(default=False)
+  start_date=models.DateField(default=datetime.now, blank=True, null=True)
+  start_time=models.DateField(default=datetime.now, blank=True, null=True)
+  end_date=models.TimeField(default=datetime.now, blank=True, null=True)
+  end_time=models.TimeField(default=datetime.now, blank=True, null=True)
