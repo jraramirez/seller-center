@@ -58,3 +58,8 @@ class Address(Orderable, models.Model):
   brgy=models.TextField(null=True, blank=True)
   postal_code=models.IntegerField(null=True, blank=True)
 
+
+class Documents(models.Model):  
+  profile=ParentalKey('Profile', related_name='document', null=True, blank=True)
+  document_type=models.TextField(null=True, blank=True)
+  document_url=models.TextField(null=True, blank=True)
