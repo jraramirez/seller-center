@@ -46,3 +46,8 @@ class Address(Orderable, models.Model):
   name = models.TextField(null=True, blank=True)
   index = models.IntegerField(null=True, blank=True)
   profile = ParentalKey('Profile', related_name='address', null=True, blank=True)
+
+class AddressContactDetails(models.Model):  
+  contact_person_name=models.TextField(null=True, blank=True)
+  contact_person_phone=models.TextField(null=True, blank=True)
+  contact_person_email=models.TextField(null=True, blank=True)
