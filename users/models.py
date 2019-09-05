@@ -9,14 +9,14 @@ from datetime import datetime
 
 class AddressContactDetails(models.Model):  
   contact_person_name=models.TextField(null=True, blank=True)
-  contact_person_phone=models.TextField(null=True, blank=True)
+  contact_person_phone=models.CharField(null=True, blank=True, max_length=500)
   contact_person_email=models.EmailField(null=True, blank=True)
 
 class Address(Orderable, models.Model):  
   name = models.TextField(null=True, blank=True)
   index = models.IntegerField(null=True, blank=True)
   profile = ParentalKey('Profile', related_name='address', null=True, blank=True)
-  contact_details=models.ForeignKey(AddressContactDetails, models.DO_NOTHING, blank=True, null=True)
+  contact_details=models.OneToOneField(AddressContactDetails, on_delete=models.CASCADE)
   street_bldg=models.TextField(null=True, blank=True)
   country=models.TextField(null=True, blank=True)
   region_state=models.TextField(null=True, blank=True)
@@ -26,7 +26,7 @@ class Address(Orderable, models.Model):
 
 class BusinessDetails(models.Model):  
   company_name=models.TextField(null=True, blank=True)
-  business_address=models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True)
+  business_address=models.OneToOneField(Address, on_delete=models.CASCADE)
   business_tin=models.TextField(null=True, blank=True)
   business_registration_number=models.TextField(null=True, blank=True)
 
@@ -39,8 +39,8 @@ class ShopDetails(models.Model):
   end_time=models.TimeField(default=datetime.now, blank=True, null=True)
 
 class SellerDetails(models.Model):  
-  seller_id=models.IntegerField(null=True, blank=True)
-  seller_status=models.TextField(null=True, blank=True)
+  seller_id=models.CharField(null=False, blank=False, max_length=500, unique=True)
+  seller_status=models.CharField(null=True, blank=True, max_length=500)
   name_on_id=models.TextField(null=True, blank=True)
   id_type=models.TextField(null=True, blank=True)
   upload_id_front_url=models.TextField(null=True, blank=True)
@@ -48,7 +48,7 @@ class SellerDetails(models.Model):
   email=models.EmailField(null=True, blank=True)
   phone=models.TextField(null=True, blank=True)
   has_agreed_to_terms=models.BooleanField(default=False)
-  shop_details=models.ForeignKey(ShopDetails, models.DO_NOTHING, blank=True, null=True)
+  shop_details=models.OneToOneField(ShopDetails, on_delete=models.CASCADE)
 
 class Profile(ClusterableModel):
   birthday = models.DateField(default=datetime.now)
@@ -74,7 +74,7 @@ class Profile(ClusterableModel):
     on_delete=models.SET_NULL,
     related_name='+'
   )
-  seller_details=models.ForeignKey(SellerDetails, models.DO_NOTHING, blank=True, null=True)
+  seller_details=models.OneToOneField(SellerDetails, on_delete=models.CASCADE)
   business_details=models.ForeignKey(BusinessDetails, models.DO_NOTHING, blank=True, null=True)
   pickup_address=models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True, related_name='pickup_address')
   return_address=models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True, related_name='return_address')
