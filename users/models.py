@@ -76,3 +76,15 @@ class ShopDetails(models.Model):
   start_time=models.DateField(default=datetime.now, blank=True, null=True)
   end_date=models.TimeField(default=datetime.now, blank=True, null=True)
   end_time=models.TimeField(default=datetime.now, blank=True, null=True)
+
+class SellerDetails(models.Model):  
+  seller_id=models.IntegerField(null=True, blank=True)
+  seller_status=models.TextField(null=True, blank=True)
+  name_on_id=models.TextField(null=True, blank=True)
+  id_type=models.TextField(null=True, blank=True)
+  upload_id_front_url=models.TextField(null=True, blank=True)
+  upload_id_back_url=models.TextField(null=True, blank=True)
+  email=models.TextField(null=True, blank=True)
+  phone=models.TextField(null=True, blank=True)
+  has_agreed_to_terms=models.BooleanField(default=False)
+  shop_details_id=models.ForeignKey(ShopDetails, models.DO_NOTHING, blank=True, null=True)
