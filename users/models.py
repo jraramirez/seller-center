@@ -10,7 +10,7 @@ from datetime import datetime
 class AddressContactDetails(models.Model):  
   contact_person_name=models.TextField(null=True, blank=True)
   contact_person_phone=models.TextField(null=True, blank=True)
-  contact_person_email=models.TextField(null=True, blank=True)
+  contact_person_email=models.EmailField(null=True, blank=True)
 
 class Address(Orderable, models.Model):  
   name = models.TextField(null=True, blank=True)
@@ -45,7 +45,7 @@ class SellerDetails(models.Model):
   id_type=models.TextField(null=True, blank=True)
   upload_id_front_url=models.TextField(null=True, blank=True)
   upload_id_back_url=models.TextField(null=True, blank=True)
-  email=models.TextField(null=True, blank=True)
+  email=models.EmailField(null=True, blank=True)
   phone=models.TextField(null=True, blank=True)
   has_agreed_to_terms=models.BooleanField(default=False)
   shop_details=models.ForeignKey(ShopDetails, models.DO_NOTHING, blank=True, null=True)
