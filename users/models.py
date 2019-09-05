@@ -14,7 +14,6 @@ class AddressContactDetails(models.Model):
 
 class Address(Orderable, models.Model):  
   name = models.TextField(null=True, blank=True)
-  index = models.IntegerField(null=True, blank=True)
   profile = ParentalKey('Profile', related_name='address', null=True, blank=True)
   contact_details=models.OneToOneField(AddressContactDetails, on_delete=models.CASCADE, null=True)
   street_bldg=models.TextField(null=True, blank=True)
