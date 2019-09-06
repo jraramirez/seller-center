@@ -258,7 +258,7 @@
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Date</label>
 
                                 <div class="input-group col-sm-9">
-                                    <input type="date" name="product-variation-{{forloop.counter0}}-sale-date-start" class="form-control" value="{{v.sale_date_start|date:'Y-m-d'}}">
+                                    <input type="date" name="product-variation-{{forloop.counter0}}-sale-date-start" class="form-control" value="{{v.variation_sale_date_start|date:'Y-m-d'}}">
                                 </div>
                             </div>
 
@@ -266,7 +266,7 @@
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Time</label>
 
                                 <div class="input-group col-sm-9">
-                                    <input type="time" name="product-variation-{{forloop.counter0}}-sale-time-start" class="form-control" value="{{v.sale_time_start}}">
+                                    <input type="time" name="product-variation-{{forloop.counter0}}-sale-time-start" class="form-control" value="{{v.variation_sale_time_start|time:'h:i:s'}}">
                                 </div>
                             </div>
 
@@ -274,7 +274,7 @@
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Date</label>
 
                                 <div class="input-group col-sm-9">
-                                    <input type="date" name="product-variation-{{forloop.counter0}}-sale-date-end" class="form-control" value="{{v.sale_date_end}}">
+                                    <input type="date" name="product-variation-{{forloop.counter0}}-sale-date-end" class="form-control" value="{{v.variation_sale_date_end|date:'Y-m-d'}}">
                                 </div>
                             </div>
                             
@@ -282,7 +282,7 @@
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Time</label>
 
                                 <div class="input-group col-sm-9">
-                                    <input type="time" name="product-variation-{{forloop.counter0}}-sale-time-end" class="form-control" value="{{v.sale_time_end}}">
+                                    <input type="time" name="product-variation-{{forloop.counter0}}-sale-time-end" class="form-control" value="{{v.variation_sale_time_end|time:'h:i:s'}}">
                                 </div>
                             </div>
 
