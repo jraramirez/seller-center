@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from django.contrib.auth.models import User
 from users.models import Profile
-from users.models import Address
+from users.models import Documents
 
 from wagtail.documents.models import get_document_model
 from wagtail.documents.forms import get_document_form
@@ -13,12 +13,8 @@ def profile(request):
   profileData = Profile.objects.filter(id=request.user.id)[0]
 
   seller_details_data=profileData.seller_details
-  front_name=seller_details_data.upload_id_front_url
-  front_name=front_name[front_name.rfind('/')+1:]
-  seller_details_data.upload_id_front_url=front_name
-  back_name=seller_details_data.upload_id_back_url
-  back_name=back_name[back_name.rfind('/')+1:]
-  seller_details_data.upload_id_back_url=back_name
+  seller_details_data.upload_id_front_url=get_filename_from_url(seller_details_data.upload_id_front_url)
+  seller_details_data.upload_id_back_url=get_filename_from_url(seller_details_data.upload_id_back_url)
   seller_details_data.has_agreed_to_terms='Agreed' if seller_details_data.has_agreed_to_terms else 'Not yet agreed'
   shop_details_data=seller_details_data.shop_details
   shop_details_data.holiday_mode='On' if shop_details_data.holiday_mode else 'Off'
@@ -26,12 +22,16 @@ def profile(request):
   business_details_data=profileData.business_details
   business_address_data=business_details_data.business_address
   business_address=business_address_data.street_bldg + ' ' + business_address_data.brgy + ' ' + business_address_data.city + ' ' + business_address_data.region_state + ' ' + business_address_data.country + ' ' + str(business_address_data.postal_code)
-  # print(business_address)
-  # addresses = Address.objects.filter(profile_id=request.user.id)
-  # Document = get_document_model()
-  # dtiDocument = Document.objects.filter(id=profileData.dti_id)[0] if len(Document.objects.filter(id=profileData.dti_id)) else None
-  # secDocument = Document.objects.filter(id=profileData.sec_id)[0] if len(Document.objects.filter(id=profileData.sec_id)) else None
-  # permitDocument = Document.objects.filter(id=profileData.permit_id)[0] if len(Document.objects.filter(id=profileData.permit_id)) else None
+
+  bir_documents_data=Documents.objects.filter(profile_id=request.user.id, document_type='bir')[0]
+  bir=get_filename_from_url(bir_documents_data.document_url)
+  dti_documents_data=Documents.objects.filter(profile_id=request.user.id, document_type='dti')[0]
+  dti=get_filename_from_url(dti_documents_data.document_url)
+  sec_documents_data=Documents.objects.filter(profile_id=request.user.id, document_type='sec')[0]
+  sec=get_filename_from_url(sec_documents_data.document_url)
+  permit_documents_data=Documents.objects.filter(profile_id=request.user.id, document_type='permit')[0]
+  permit=get_filename_from_url(permit_documents_data.document_url)
+
   return render(request, 'users/profile_page.html', {
     'profileData': profileData,
     'userData': userData,
@@ -39,10 +39,14 @@ def profile(request):
     'shop_details_data': shop_details_data,
     'business_details_data': business_details_data,
     'business_address': business_address,
-    # 'dtiDocument': dtiDocument,
-    # 'secDocument': secDocument,
-    # 'permitDocument': permitDocument,
-    # 'addresses': addresses
+    'bir_documents_data': bir_documents_data,
+    'bir': bir,
+    'dti_documents_data': dti_documents_data,
+    'dti': dti,
+    'sec_documents_data': sec_documents_data,
+    'sec': sec,
+    'permit_documents_data': permit_documents_data,
+    'permit': permit,
   })
 
 def profile_edit(request):
@@ -129,3 +133,7 @@ def profile_edit(request):
     'userData': userData,
     'addresses': addresses
   })
+
+def get_filename_from_url(url):
+  url=url[url.rfind('/')+1:]
+  return url

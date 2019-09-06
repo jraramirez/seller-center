@@ -210,16 +210,20 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="bir" class="col-sm-3 col-form-label">BIR</label>
 								<div class="col-sm-9">
-
+									{% if bir_documents_data %}
+										<a href="{{ bir_documents_data.document_url }}" class="btn btn-sm btn-link">{{ bir }}</a>
+									{% else %}
+										<a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
+									{% endif %}
 								</div>
 							</div>
 						</div>
 						<div class="card-body mx-5">
 							<div class="form-group row mt-3 mb-4">
-								<label for="dti" class="col-sm-3 col-form-label">DTI </label>
+								<label for="dti" class="col-sm-3 col-form-label">DTI</label>
 								<div class="col-sm-9">
-								  {% if dtiDocument%}
-									<a href="{{dtiDocument.url}}" class="btn btn-sm btn-link">{{dtiDocument}}</a>
+								  {% if dti_documents_data %}
+									<a href="{{ dti_documents_data.document_url }}" class="btn btn-sm btn-link">{{ dti }}</a>
 								  {% else %}
 								  <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
 								  {% endif %}
@@ -228,10 +232,10 @@
 						</div>
 						<div class="card-body mx-5">
 							<div class="form-group row mt-3 mb-4">
-								<label for="dti" class="col-sm-3 col-form-label">SEC </label>
+								<label for="sec" class="col-sm-3 col-form-label">SEC</label>
 								<div class="col-sm-9">
-								  {% if secDocument%}
-									<a href="{{secDocument.url}}" class="btn btn-sm btn-link">{{secDocument}}</a>
+								  {% if sec_documents_data %}
+									<a href="{{ sec_documents_data.document_url }}" class="btn btn-sm btn-link">{{ sec }}</a>
 								  {% else %}
 									<a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
 								  {% endif %}
@@ -240,10 +244,10 @@
 						</div>
 						<div class="card-body mx-5">
 							<div class="form-group row mt-3 mb-4">
-								<label for="dti" class="col-sm-3 col-form-label">PERMIT </label>
+								<label for="permit" class="col-sm-3 col-form-label">PERMIT</label>
 								<div class="col-sm-9">
-								  {% if permitDocument%}
-									<a href="{{permitDocument.url}}" class="btn btn-sm btn-link">{{permitDocument}}</a>
+								  {% if permit_documents_data %}
+									<a href="{{ permit_documents_data.document_url }}" class="btn btn-sm btn-link">{{ permit }}</a>
 								  {% else %}
 								  <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
 								  {% endif %}
