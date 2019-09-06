@@ -266,28 +266,10 @@
 							<h6 class="m-0 font-weight-bold text-primary">Pickup Address</h6>
 						</div>
 						<div class="card-body mx-5">
-						  {% if addresses %}
-						  {% for a in addresses %}
-							<div class="form-group row mt-3 mb-4">
-								<label for="first-name" class="col-sm-3 col-form-label">Address {{forloop.counter}}</label>
-								<div class="col-sm-9">
-									<span class="col-form-label">{{a.name}}</span>
-								</div>
-							</div>
-						  {% endfor %}
-						  {% else %}
-						  <div class="form-group row mt-3 mb-4">
-								<div class="col-sm-9">
-									<span class="col-form-label">No addesses yet</span>
-								</div>
-						  </div>
-						  {% endif %}
-						</div>
-						<div class="card-body mx-5">
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_contact_data.contact_person_name }}</span>
 								</div>
 							</div>
 						</div>
@@ -295,7 +277,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_contact_data.contact_person_phone }}</span>
 								</div>
 							</div>
 						</div>
@@ -303,7 +285,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person Email</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_contact_data.contact_person_email }}</span>
 								</div>
 							</div>
 						</div>
@@ -311,7 +293,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Address Street, Building</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.street_bldg }}</span>
 								</div>
 							</div>
 						</div>
@@ -319,7 +301,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Country</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.country }}</span>
 								</div>
 							</div>
 						</div>
@@ -327,7 +309,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Region / State</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.region_state }}</span>
 								</div>
 							</div>
 						</div>
@@ -335,7 +317,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">City</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.city }}</span>
 								</div>
 							</div>
 						</div>
@@ -343,7 +325,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Barangay</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.brgy }}</span>
 								</div>
 							</div>
 						</div>
@@ -351,7 +333,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Postal Code</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.postal_code }}</span>
 								</div>
 							</div>
 						</div>
@@ -364,7 +346,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_contact_data.contact_person_name }}</span>
 								</div>
 							</div>
 						</div>
@@ -372,7 +354,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_contact_data.contact_person_phone }}</span>
 								</div>
 							</div>
 						</div>
@@ -380,7 +362,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person Email</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_contact_data.contact_person_email }}</span>
 								</div>
 							</div>
 						</div>
@@ -388,7 +370,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Address Street, Building</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.street_bldg }}</span>
 								</div>
 							</div>
 						</div>
@@ -396,7 +378,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Country</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.country }}</span>
 								</div>
 							</div>
 						</div>
@@ -404,7 +386,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Region / State</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.region_state }}</span>
 								</div>
 							</div>
 						</div>
@@ -412,7 +394,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">City</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.city }}</span>
 								</div>
 							</div>
 						</div>
@@ -420,7 +402,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Barangay</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.brgy }}</span>
 								</div>
 							</div>
 						</div>
@@ -428,7 +410,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Postal Code</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.postal_code }}</span>
 								</div>
 							</div>
 						</div>

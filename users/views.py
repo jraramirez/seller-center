@@ -32,6 +32,12 @@ def profile(request):
   permit_documents_data=Documents.objects.filter(profile_id=request.user.id, document_type='permit')[0]
   permit=get_filename_from_url(permit_documents_data.document_url)
 
+  pickup_address_data=profileData.pickup_address
+  pickup_contact_data=pickup_address_data.contact_details
+
+  return_address_data=profileData.return_address
+  return_contact_data=return_address_data.contact_details
+
   return render(request, 'users/profile_page.html', {
     'profileData': profileData,
     'userData': userData,
@@ -47,6 +53,10 @@ def profile(request):
     'sec': sec,
     'permit_documents_data': permit_documents_data,
     'permit': permit,
+    'pickup_address_data': pickup_address_data,
+    'pickup_contact_data': pickup_contact_data,
+    'return_address_data': return_address_data,
+    'return_contact_data': return_contact_data,
   })
 
 def profile_edit(request):
