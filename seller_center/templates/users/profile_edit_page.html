@@ -428,119 +428,83 @@
 					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 						<h6 class="m-0 font-weight-bold text-primary">Pickup Address</h6>
 					</div>
-					{% for a in addresses %}
-					{% if forloop.counter0 == 0 or a.name %}
-						<div id="address-container-{{forloop.counter}}" class="form-group card-body mx-5 address-{{forloop.counter0}}">
-					{% else %}
-						<div id="address-container-{{forloop.counter}}" class="form-group card-body mx-5 address-{{forloop.counter0}}" style="display: none;">
-					{% endif %}
-					{% if forloop.counter0 > 0 %}
-						<hr class="sidebar-divider mb-4"/>
-					{% endif %}
-					<div class="d-flex">
-					<h5 class="mr-auto text-primary">Address {{forloop.counter}}</h5>
-					{% if forloop.counter0 > 0 %}
-						<a class="ml-3 mt-1 text-danger" onclick="hideAddress({{forloop.counter}})"><i class="fas fa-trash"></i></a>
-					{% endif %}
-					</div>
-					<div class="form-group row mt-3 mb-4">
-						<label for="address-{{forloop.counter0}}-name" class="col-sm-3 col-form-label">Address </label>
-						<div class="col-sm-9">
-							<input type="text" name="address-{{forloop.counter0}}-name" required class="form-control" placeholder="Address" id="address-{{forloop.counter0}}-name" value="{{a.name}}">
-						</div>
-					</div>
-					{% if forloop.counter0 < 6 %}
-						<div class="col-md-12">
-							<button id="address-add-button-{{forloop.counter}}" class="btn btn-primary" type="button" onclick="showAddress(event, '{{forloop.counter}}')"> + Add Another Address</button>
-						</div>
-					{% endif %}
-					</div>
-					{% endfor %}
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Contact Person</label>
+							<label for="pickup_contact_person_name" class="col-sm-3 col-form-label">Contact Person</label>
 							<div class="col-sm-9">
-								<input type="text" name="contact_person_p" class="form-control">
+								<input type="text" name="pickup_contact_person_name" class="form-control" value="{{ pickup_contact_data.contact_person_name }}" id="pickup_contact_person_name">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
+							<label for="pickup_contact_person_phone" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
 							<div class="col-sm-9">
-								<input type="text" name="contact_person_number_p" class="form-control">
+								<input type="text" name="pickup_contact_person_phone" class="form-control" value="{{ pickup_contact_data.contact_person_phone }}" id="pickup_contact_person_phone">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Contact Person Email</label>
+							<label for="pickup_contact_person_email" class="col-sm-3 col-form-label">Contact Person Email</label>
 							<div class="col-sm-9">
-								<input type="text" name="contact_person_email_p" class="form-control">
+								<input type="text" name="pickup_contact_person_email" class="form-control" value="{{ pickup_contact_data.contact_person_email }}" id="pickup_contact_person_email">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Address Street, Building</label>
+							<label for="pickup_street_bldg" class="col-sm-3 col-form-label">Address Street, Building</label>
 							<div class="col-sm-9">
-								<input type="text" name="address_str_bldg_p" class="form-control">
+								<input type="text" name="pickup_street_bldg" class="form-control" value="{{ pickup_address_data.street_bldg }}" id="pickup_street_bldg">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Country</label>
+							<label for="pickup_country" class="col-sm-3 col-form-label">Country</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Country</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="pickup_country">
+									<option value="{{ pickup_address_data.country }}">{{ pickup_address_data.country }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Region / State</label>
+							<label for="pickup_region_state" class="col-sm-3 col-form-label">Region / State</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Region / State</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="pickup_region_state">
+									<option value="{{ pickup_address_data.region_state }}">{{ pickup_address_data.region_state }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">City</label>
+							<label for="pickup_city" class="col-sm-3 col-form-label">City</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose City</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="pickup_city">
+									<option value="{{ pickup_address_data.city }}">{{ pickup_address_data.city }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Barangay</label>
+							<label for="pickup_brgy" class="col-sm-3 col-form-label">Barangay</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Barangay</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="pickup_brgy">
+									<option value="{{ pickup_address_data.brgy }}">{{ pickup_address_data.brgy }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Postal Code</label>
+							<label for="pickup_postal_code" class="col-sm-3 col-form-label">Postal Code</label>
 							<div class="col-sm-9">
-								<input type="number" name="postal_code_p" class="form-control">
+								<input type="text" name="pickup_postal_code" class="form-control" value="{{ pickup_address_data.postal_code }}" id="pickup_postal_code">
 							</div>
 						</div>
 					</div>
@@ -551,89 +515,81 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Contact Person</label>
+							<label for="return_contact_person_name" class="col-sm-3 col-form-label">Contact Person</label>
 							<div class="col-sm-9">
-								<input type="text" name="contact_person_r" class="form-control">
+								<input type="text" name="return_contact_person_name" class="form-control" value="{{ return_contact_data.contact_person_name }}" id="return_contact_person_name">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
+							<label for="return_contact_person_phone" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
 							<div class="col-sm-9">
-								<input type="text" name="contact_person_number_r" class="form-control">
+								<input type="text" name="return_contact_person_phone" class="form-control" value="{{ return_contact_data.contact_person_phone }}" id="return_contact_person_phone">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Contact Person Email</label>
+							<label for="return_contact_person_email" class="col-sm-3 col-form-label">Contact Person Email</label>
 							<div class="col-sm-9">
-								<input type="text" name="contact_person_email_r" class="form-control">
+								<input type="text" name="return_contact_person_email" class="form-control" value="{{ return_contact_data.contact_person_email }}" id="return_contact_person_email">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Address Street, Building</label>
+							<label for="return_street_bldg" class="col-sm-3 col-form-label">Address Street, Building</label>
 							<div class="col-sm-9">
-								<input type="text" name="address_str_bldg_r" class="form-control">
+								<input type="text" name="return_street_bldg" class="form-control" value="{{ return_address_data.street_bldg }}" id="return_street_bldg">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Country</label>
+							<label for="return_country" class="col-sm-3 col-form-label">Country</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Country</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="return_country">
+									<option value="{{ return_address_data.country }}">{{ return_address_data.country }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Region / State</label>
+							<label for="return_region_state" class="col-sm-3 col-form-label">Region / State</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Region / State</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="return_region_state">
+									<option value="{{ return_address_data.region_state }}">{{ return_address_data.region_state }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">City</label>
+							<label for="return_city" class="col-sm-3 col-form-label">City</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose City</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="return_city">
+									<option value="{{ return_address_data.city }}">{{ return_address_data.city }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Barangay</label>
+							<label for="return_brgy" class="col-sm-3 col-form-label">Barangay</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Barangay</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="return_brgy">
+									<option value="{{ return_address_data.brgy }}">{{ return_address_data.brgy }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="id_product-code" class="col-sm-3 col-form-label">Postal Code</label>
+							<label for="return_postal_code" class="col-sm-3 col-form-label">Postal Code</label>
 							<div class="col-sm-9">
-								<input type="number" name="postal_code_r" class="form-control">
+								<input type="text" name="return_postal_code" class="form-control" value="{{ return_address_data.postal_code }}" id="return_postal_code">
 							</div>
 						</div>
 					</div>
