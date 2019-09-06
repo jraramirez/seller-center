@@ -16,4 +16,14 @@
   display: none;
 }
 
+.template-salespage .tr-top td {
+  border-bottom: none;
+}
+.template-salespage .tr-middle td {
+  border: none;
+}
+.template-salespage .tr-bottom td {
+  border-top: none;
+}
+
 /*# sourceMappingURL=seller_center_new.css.map */

@@ -82,4 +82,30 @@ class AuthClient:
 
         return requests.post(url, headers=self.apiGateway.headers, json=json)
 
+    def forgot_password(self, clientId):
+        '''
+        Send verification code to a registered client id
+        :param clientId: can either be unique cognito id, email or phone number
+        :return:
+        '''
+        url=self.apiGateway.rootUrl + "/password-forgot"
+        json={
+            'clientId': clientId
+        }
+        return requests.post(url, headers=self.apiGateway.headers, json=json)
 
+    def reset_password(self, clientId, passwordResetCode, newPassword):
+        '''
+        Reset password for registered user
+        :param clientId: can either be unique cognito id, email or phone number
+        :param passwordResetCode: a code that been sent to the user email or phone number
+        :param newPassword: user new password
+        :return:
+        '''
+        url=self.apiGateway.rootUrl + "/password-reset"
+        json={
+            'clientId': clientId,
+            'passwordResetCode': passwordResetCode,
+            'newPassword': newPassword
+        }
+        return requests.post(url, headers=self.apiGateway.headers, json=json)
