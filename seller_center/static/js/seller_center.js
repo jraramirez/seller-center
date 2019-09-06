@@ -107,6 +107,14 @@ $(function(){
         }
     });
 
+    $('#id_front').change(function(){
+      $('#id_front_lbl').text($(this)[0].files[0].name);
+    });
+
+    $('#id_back').change(function(){
+      $('#id_back_lbl').text($(this)[0].files[0].name);
+    });
+    
     $('#bir').change(function(){
       $('#bir_lbl').text($(this)[0].files[0].name);
     });
@@ -122,7 +130,7 @@ $(function(){
     $('#permit').change(function(){
       $('#permit_lbl').text($(this)[0].files[0].name);
     });
-    
+
     $('#holiday').change(function(){
       if($(this).is(':checked')){
         $('.holiday_date_time').removeAttr('disabled');

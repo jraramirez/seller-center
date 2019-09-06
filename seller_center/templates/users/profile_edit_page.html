@@ -58,7 +58,7 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Seller ID</label>
+							<label class="col-sm-3 col-form-label">Seller ID</label>
 							<div class="col-sm-9">
 								<span class="col-form-label">{{ seller_details_data.seller_id }}</span>
 							</div>
@@ -66,7 +66,7 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Seller Status</label>
+							<label class="col-sm-3 col-form-label">Seller Status</label>
 							<div class="col-sm-9">
 								<span class="col-form-label">{{ seller_details_data.seller_status }}</span>
 							</div>
@@ -76,7 +76,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="first-name" class="col-sm-3 col-form-label">First Name</label>
 							<div class="col-sm-9">
-								<input type="text" name="first-name" class="form-control" value="{{userData.first_name}}">
+								<input type="text" name="first-name" class="form-control" value="{{userData.first_name}}" id="first-name">
 							</div>
 						</div>
 					</div>
@@ -84,7 +84,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="last-name" class="col-sm-3 col-form-label">Last Name</label>
 							<div class="col-sm-9">
-								<input type="text" name="last-name" class="form-control" value="{{userData.last_name}}">
+								<input type="text" name="last-name" class="form-control" value="{{userData.last_name}}" id="last-name">
 							</div>
 						</div>
 					</div>
@@ -108,16 +108,14 @@
 							<div class="col-sm-9">
 								<div class="custom-file">
 									<input type="file" name="id_front" class="form-control custom-file-input" id="id_front" accept=".jpg, .png, .pdf, .doc, .docx">
-									<label class="custom-file-label" for="id_front">
+									<label class="custom-file-label" for="id_front" id="id_front_lbl">
 										{% if seller_details_data.upload_id_front_url %}
 											{{ seller_details_data.upload_id_front_url }}
 										{% else %}
 											Choose ID Front file
 										{% endif %}
 									</label>
-									<label id="id_front_lbl">
-										<small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small>
-									</label>
+									<label><small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small></label>
 								</div>
 							</div>
 						</div>
@@ -128,33 +126,31 @@
 							<div class="col-sm-9">
 								<div class="custom-file">
 									<input type="file" name="id_back" class="form-control custom-file-input" id="id_back" accept=".jpg, .png, .pdf, .doc, .docx">
-									<label class="custom-file-label" for="id_back">
+									<label class="custom-file-label" for="id_back" id="id_back_lbl">
 										{% if seller_details_data.upload_id_back_url %}
 											{{ seller_details_data.upload_id_back_url }}
 										{% else %}
 											Choose ID Back file
 										{% endif %}
 									</label>
-									<label id="id_back_lbl">
-										<small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small>
-									</label>
+									<label><small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small></label>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Email Address</label>
+							<label for="email" class="col-sm-3 col-form-label">Email Address</label>
 							<div class="col-sm-9">
-								<input type="email" name="email" class="form-control" value="{{ seller_details_data.email }}">
+								<input type="email" name="email" class="form-control" value="{{ seller_details_data.email }}" id="email">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Phone Number</label>
+							<label for="phone" class="col-sm-3 col-form-label">Phone Number</label>
 							<div class="col-sm-9">
-								<input type="text" name="phone" class="form-control" value="{{ seller_details_data.phone }}">
+								<input type="text" name="phone" class="form-control" value="{{ seller_details_data.phone }}" id="phone">
 							</div>
 						</div>
 					</div>
@@ -162,13 +158,13 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="birthday" class="col-sm-3 col-form-label">Birthday</label>
 							<div class="col-sm-9">
-								<input type="date" name="birthday" class="form-control" value="{{ profileData.birthday|date:'Y-m-d' }}">
+								<input type="date" name="birthday" class="form-control" value="{{ profileData.birthday|date:'Y-m-d' }}" id="birthday">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Seller Center Terms and Conditions Agreement</label>
+							<label for="terms_conditions" class="col-sm-3 col-form-label">Seller Center Terms and Conditions Agreement</label>
 							<div class="col-sm-9">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="terms_conditions"
@@ -188,15 +184,15 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Shop / Display Name</label>
+							<label for="shop_name" class="col-sm-3 col-form-label">Shop / Display Name</label>
 							<div class="col-sm-9">
-								<input type="text" name="shop_name" class="form-control" value="{{ shop_details_data.shop_name }}">
+								<input type="text" name="shop_name" class="form-control" value="{{ shop_details_data.shop_name }}" id="shop_name">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Holiday Mode</label>
+							<label for="holiday" class="col-sm-3 col-form-label">Holiday Mode</label>
 							<div class="col-sm-9">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" value="" id="holiday"
@@ -210,18 +206,18 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Holiday Start Date And Time</label>
+							<label for="holiday_start_date" class="col-sm-3 col-form-label">Holiday Start Date And Time</label>
 							<div class="col-sm-9">
 								<div class="row">
 									<div class="col-sm-6">
-										<input type="date" name="holiday_start_date" class="form-control holiday_date_time" value="{{ shop_details_data.start_date|date:'Y-m-d' }}"
+										<input type="date" name="holiday_start_date" class="form-control holiday_date_time" value="{{ shop_details_data.start_date|date:'Y-m-d' }}" id="holiday_start_date"
 											{% if shop_details_data.holiday_mode == 'Off' %}
 												disabled
 											{% endif %}
 										>
 									</div>
 									<div class="col-sm-6">
-										<input type="time" name="holiday_start_time" class="form-control holiday_date_time" value="{{ shop_details_data.start_time|date:'H:i' }}"
+										<input type="time" name="holiday_start_time" class="form-control holiday_date_time" value="{{ shop_details_data.start_time|date:'H:i' }}" id="holiday_start_time"
 											{% if shop_details_data.holiday_mode == 'Off' %}
 												disabled
 											{% endif %}
@@ -233,18 +229,18 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Holiday End Date And Time</label>
+							<label for="holiday_end_date" class="col-sm-3 col-form-label">Holiday End Date And Time</label>
 							<div class="col-sm-9">
 								<div class="row">
 									<div class="col-sm-6">
-										<input type="date" name="holiday_end_date" class="form-control holiday_date_time" value="{{ shop_details_data.end_date|date:'Y-m-d' }}"
+										<input type="date" name="holiday_end_date" class="form-control holiday_date_time" value="{{ shop_details_data.end_date|date:'Y-m-d' }}" id="holiday_end_date"
 											{% if shop_details_data.holiday_mode == 'Off' %}
 												disabled
 											{% endif %}
 										>
 									</div>
 									<div class="col-sm-6">
-										<input type="time" name="holiday_end_time" class="form-control holiday_date_time" value="{{ shop_details_data.end_time|date:'H:i' }}"
+										<input type="time" name="holiday_end_time" class="form-control holiday_date_time" value="{{ shop_details_data.end_time|date:'H:i' }}" id="holiday_end_time"
 											{% if shop_details_data.holiday_mode == 'Off' %}
 												disabled
 											{% endif %}
@@ -267,7 +263,7 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="company_name" class="col-sm-3 col-form-label">Legal / Comapny Name</label>
+							<label for="company_name" class="col-sm-3 col-form-label">Legal / Company Name</label>
 							<div class="col-sm-9">
 								<input type="text" name="company_name" class="form-control" value="{{ business_details_data.company_name }}" id="company_name">
 							</div>
@@ -275,17 +271,17 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="address_str_bldg" class="col-sm-3 col-form-label">Address Street, Building</label>
+							<label for="business_street_bldg" class="col-sm-3 col-form-label">Address Street, Building</label>
 							<div class="col-sm-9">
-								<input type="text" name="address_str_bldg" class="form-control" value="{{ business_address_data.street_bldg }}" id="address_str_bldg">
+								<input type="text" name="business_street_bldg" class="form-control" value="{{ business_address_data.street_bldg }}" id="business_street_bldg">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="country" class="col-sm-3 col-form-label">Country</label>
+							<label for="business_country" class="col-sm-3 col-form-label">Country</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="country">
+								<select class="form-control" id="business_country">
 									<option value="{{ business_address_data.country }}">{{ business_address_data.country }}</option>
 								</select>
 							</div>
@@ -293,9 +289,9 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="region_state" class="col-sm-3 col-form-label">Region / State</label>
+							<label for="business_region_state" class="col-sm-3 col-form-label">Region / State</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="region_state">
+								<select class="form-control" id="business_region_state">
 									<option value="{{ business_address_data.region_state }}">{{ business_address_data.region_state }}</option>
 								</select>
 							</div>
@@ -303,9 +299,9 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="city" class="col-sm-3 col-form-label">City</label>
+							<label for="business_city" class="col-sm-3 col-form-label">City</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="city">
+								<select class="form-control" id="business_city">
 									<option value="{{ business_address_data.city }}">{{ business_address_data.city }}</option>
 								</select>
 							</div>
@@ -313,9 +309,9 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="brgy" class="col-sm-3 col-form-label">Barangay</label>
+							<label for="business_brgy" class="col-sm-3 col-form-label">Barangay</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="brgy">
+								<select class="form-control" id="business_brgy">
 									<option value="{{ business_address_data.brgy }}">{{ business_address_data.brgy }}</option>
 								</select>
 							</div>
@@ -323,9 +319,9 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="postal_code" class="col-sm-3 col-form-label">Postal Code</label>
+							<label for="business_postal_code" class="col-sm-3 col-form-label">Postal Code</label>
 							<div class="col-sm-9">
-								<input type="number" name="postal_code" class="form-control" value="{{ business_address_data.postal_code }}" id="postal_code">
+								<input type="number" name="business_postal_code" class="form-control" value="{{ business_address_data.postal_code }}" id="business_postal_code">
 							</div>
 						</div>
 					</div>
