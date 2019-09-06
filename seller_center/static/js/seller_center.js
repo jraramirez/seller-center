@@ -106,4 +106,12 @@ $(function(){
             $('#process').hide();
         }
     });
+
+    $('#holiday').change(function(){
+      if($(this).is(':checked')){
+        $('.holiday_date_time').removeAttr('disabled');
+      } else{
+        $('.holiday_date_time').attr('disabled', 'disabled');
+      }
+    })
 });
