@@ -655,7 +655,7 @@ def products_import(request):
     missingColumns = []
     if form.is_valid():
       inputFile = request.FILES['file']
-      inputFileDF = pd.read_csv(inputFile, skip_blank_lines=True)
+      inputFileDF = pd.read_csv(inputFile, skip_blank_lines=True, encoding="cp1252")
       inputFileDF = inputFileDF.head(500)
 
       # Check if there are missing columns
