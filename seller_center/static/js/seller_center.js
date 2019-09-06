@@ -107,6 +107,17 @@ $(function(){
         }
     });
 
+    $('#dti').change(function(){
+      $('#dti_lbl').text($(this)[0].files[0].name);
+    });
+
+    $('#sec').change(function(){
+      $('#sec_lbl').text($(this)[0].files[0].name);
+    });
+
+    $('#permit').change(function(){
+      $('#permit_lbl').text($(this)[0].files[0].name);
+    });
     $('#holiday').change(function(){
       if($(this).is(':checked')){
         $('.holiday_date_time').removeAttr('disabled');

@@ -146,3 +146,4 @@ def set_user_profile_data(user_id):
 		'return_address_data': return_address_data,
 		'return_contact_data': return_contact_data,
 	}
+	}
