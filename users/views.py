@@ -132,6 +132,7 @@ def set_user_profile_data(user_id):
 		'seller_details_data': seller_details_data,
 		'shop_details_data': shop_details_data,
 		'business_details_data': business_details_data,
+		'business_address_data': business_address_data,
 		'business_address': business_address,
 		'bir_documents_data': bir_documents_data,
 		'bir': bir,
@@ -145,5 +146,4 @@ def set_user_profile_data(user_id):
 		'pickup_contact_data': pickup_contact_data,
 		'return_address_data': return_address_data,
 		'return_contact_data': return_contact_data,
-	}
 	}

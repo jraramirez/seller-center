@@ -263,85 +263,85 @@
 			<div class="row mx-3 my-5">
 				<div class="card shadow container-fluid p-0">
 					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-						<h6 class="m-0 font-weight-bold text-primary">Business Permits Documents</h6>
+						<h6 class="m-0 font-weight-bold text-primary">Business Information</h6>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Address Street, Building</label>
+							<label for="company_name" class="col-sm-3 col-form-label">Legal / Comapny Name</label>
 							<div class="col-sm-9">
-								<input type="text" name="address_str_bldg" class="form-control">
+								<input type="text" name="company_name" class="form-control" value="{{ business_details_data.company_name }}" id="company_name">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Country</label>
+							<label for="address_str_bldg" class="col-sm-3 col-form-label">Address Street, Building</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Country</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<input type="text" name="address_str_bldg" class="form-control" value="{{ business_address_data.street_bldg }}" id="address_str_bldg">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Region / State</label>
+							<label for="country" class="col-sm-3 col-form-label">Country</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Region / State</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="country">
+									<option value="{{ business_address_data.country }}">{{ business_address_data.country }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">City</label>
+							<label for="region_state" class="col-sm-3 col-form-label">Region / State</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose City</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="region_state">
+									<option value="{{ business_address_data.region_state }}">{{ business_address_data.region_state }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Barangay</label>
+							<label for="city" class="col-sm-3 col-form-label">City</label>
 							<div class="col-sm-9">
-								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Barangay</button>
-								<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-								  <a class="dropdown-item" href="#">Sample</a>
-								  <a class="dropdown-item" href="#">Items</a>
-								</div>
+								<select class="form-control" id="city">
+									<option value="{{ business_address_data.city }}">{{ business_address_data.city }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Postal Code</label>
+							<label for="brgy" class="col-sm-3 col-form-label">Barangay</label>
 							<div class="col-sm-9">
-								<input type="number" name="postal_code" class="form-control">
+								<select class="form-control" id="brgy">
+									<option value="{{ business_address_data.brgy }}">{{ business_address_data.brgy }}</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Business TIN</label>
+							<label for="postal_code" class="col-sm-3 col-form-label">Postal Code</label>
 							<div class="col-sm-9">
-								<input type="text" name="business_tin" class="form-control">
+								<input type="number" name="postal_code" class="form-control" value="{{ business_address_data.postal_code }}" id="postal_code">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="" class="col-sm-3 col-form-label">Business Registration Number</label>
+							<label for="business_tin" class="col-sm-3 col-form-label">Business TIN</label>
 							<div class="col-sm-9">
-								<input type="text" name="business_reg_num" class="form-control">
+								<input type="text" name="business_tin" class="form-control" value="{{ business_details_data.business_tin }}" id="business_tin">
+							</div>
+						</div>
+					</div>
+					<div class="card-body mx-5">
+						<div class="form-group row mt-3 mb-4">
+							<label for="business_registration_number" class="col-sm-3 col-form-label">Business Registration Number</label>
+							<div class="col-sm-9">
+								<input type="text" name="business_registration_number" class="form-control" value="{{ business_details_data.business_registration_number }}" id="business_registration_number">
 							</div>
 						</div>
 					</div>
@@ -349,39 +349,71 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="bir" class="col-sm-3 col-form-label">BIR</label>
 							<div class="col-sm-9">
-								<input type="file" name="bir" class="form-control">
+								<div class="custom-file">
+									<input type="file" name="bir" class="form-control custom-file-input" id="bir" accept=".jpg, .png, .pdf, .doc, .docx">
+									<label class="custom-file-label" for="bir" id="bir_lbl">
+										{% if bir_documents_data %}
+											{{ bir }}
+										{% else %}
+											Choose BIR file
+										{% endif %}
+									</label>
+									<label><small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small></label>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="dti" class="col-sm-3 col-form-label">DTI </label>
+							<label for="dti" class="col-sm-3 col-form-label">DTI</label>
 							<div class="col-sm-9">
-								<input type="file" name="dti" class="form-control" value="{{userData.first_name}}">
+								<div class="custom-file">
+									<input type="file" name="dti" class="form-control custom-file-input" id="dti" accept=".jpg, .png, .pdf, .doc, .docx">
+									<label class="custom-file-label" for="dti" id="dti_lbl">
+										{% if dti_documents_data %}
+											{{ dti }}
+										{% else %}
+											Choose DTI file
+										{% endif %}
+									</label>
+									<label><small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small></label>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="sec" class="col-sm-3 col-form-label">SEC </label>
+							<label for="sec" class="col-sm-3 col-form-label">SEC</label>
 							<div class="col-sm-9">
-								<input type="file" name="sec" class="form-control" value="{{userData.first_name}}">
+								<div class="custom-file">
+									<input type="file" name="sec" class="form-control custom-file-input" id="sec" accept=".jpg, .png, .pdf, .doc, .docx">
+									<label class="custom-file-label" for="sec" id="sec_lbl">
+										{% if sec_documents_data %}
+											{{ sec }}
+										{% else %}
+											Choose SEC file
+										{% endif %}
+									</label>
+									<label><small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small></label>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="permit" class="col-sm-3 col-form-label">PERMIT </label>
+							<label for="permit" class="col-sm-3 col-form-label">PERMIT</label>
 							<div class="col-sm-9">
-								<input type="file" name="permit" class="form-control" value="{{userData.first_name}}">
-							</div>
-						</div>
-					</div>
-					<div class="card-body mx-5">
-						<div class="form-group row mt-3 mb-4">
-							<label for="seller-agreement" class="col-sm-3 col-form-label">Seller Center Agreement </label>
-							<div class="col-sm-9">
-								<input type="file" name="seller-agreement" class="form-control" value="">
+								<div class="custom-file">
+									<input type="file" name="permit" class="form-control custom-file-input" id="permit" accept=".jpg, .png, .pdf, .doc, .docx">
+									<label class="custom-file-label" for="permit" id="permit_lbl">
+										{% if permit_documents_data %}
+											{{ permit }}
+										{% else %}
+											Choose PERMIT file
+										{% endif %}
+									</label>
+									<label><small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small></label>
+								</div>
 							</div>
 						</div>
 					</div>
