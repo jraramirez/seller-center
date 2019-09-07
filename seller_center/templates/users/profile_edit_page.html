@@ -33,127 +33,575 @@
         <button type="submit" class="d-none d-sm-inline-block btn btn-xl btn-primary shadow-xl">Publish</button>
     </div>
         {% csrf_token %}
-
-        {# Basic Info #}
-        <div class="row mx-3 my-5">
-            <div class="card shadow container-fluid p-0">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Basic Information</h6>
-                </div>
-                <div class="card-body mx-5">
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="first-name" class="col-sm-3 col-form-label">First Name </label>
-                        <div class="col-sm-9">
-                            <input type="text" name="first-name" class="form-control" value="{{userData.first_name}}">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="last-name" class="col-sm-3 col-form-label">Last Name </label>
-                        <div class="col-sm-9">
-                            <input type="text" name="last-name" class="form-control" value="{{userData.last_name}}">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="birthday" class="col-sm-3 col-form-label">Birthday </label>
-                        <div class="col-sm-9">
-                            <input type="date" name="birthday" class="form-control" value="{{userData.birthday}}">
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="row">
+        <div class="card container-fluid mb-3">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item ml-2 p-1">
+                    <a class="nav-link active" id="all-tab" data-toggle="tab" href="#sa" role="tab">Seller Account</a>
+                </li>
+                <li class="nav-item ml-2 p-1">
+                    <a class="nav-link" id="unpaid-tab" data-toggle="tab" href="#bi" role="tab">Business Information</a>
+                </li>
+                <li class="nav-item ml-2 p-1">
+                    <a class="nav-link" id="to-ship-tab" data-toggle="tab" href="#para" role="tab">Pickup and Return Address</a>
+                </li>
+            </ul>
         </div>
-        {# End of Basic Info #}
-
-        {# Addresses #}
-        <div class="row mx-3 my-5">
-          <div class="card shadow container-fluid p-0">
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Addresses</h6>
+    </div>
+    <div class="tab-content">
+        <div id="sa" class="tab-pane fade show active">
+            {# Basic Info #}
+            <div class="row mx-3 my-5">
+                <div class="card shadow container-fluid p-0">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Account Owner Details</h6>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Seller ID</label>
+                            <div class="col-sm-9">
+                                <span class="col-form-label"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Seller Status</label>
+                            <div class="col-sm-9">
+                                <span class="col-form-label"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="first-name" class="col-sm-3 col-form-label">First Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="first-name" class="form-control" value="{{userData.first_name}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="last-name" class="col-sm-3 col-form-label">Last Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="last-name" class="form-control" value="{{userData.last_name}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">ID Type</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose ID Type</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">TIN ID</a>
+                                  <a class="dropdown-item" href="#">SSS ID</a>
+                                  <a class="dropdown-item" href="#">Passport</a>
+                                  <a class="dropdown-item" href="#">Driver's License</a>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_front" class="col-sm-3 col-form-label">Upload ID Front</label>
+                            <div class="col-sm-9">
+                                <div class="custom-file">
+                                    <input type="file" name="id_front" class="form-control custom-file-input" id="id_front" accept=".jpg, .png, .pdf, .doc, .docx">
+                                    <label class="custom-file-label" for="id_front">Choose ID Front file</label>
+                                    <label id="id_front_lbl">
+                                        <small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_back" class="col-sm-3 col-form-label">Upload ID Back</label>
+                            <div class="col-sm-9">
+                                <div class="custom-file">
+                                    <input type="file" name="id_back" class="form-control custom-file-input" id="id_back" accept=".jpg, .png, .pdf, .doc, .docx">
+                                    <label class="custom-file-label" for="id_back">Choose ID Back file</label>
+                                    <label id="id_back_lbl">
+                                        <small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Email Address</label>
+                            <div class="col-sm-9">
+                                <input type="email" name="email" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Phone Number</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="phone" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="birthday" class="col-sm-3 col-form-label">Birthday</label>
+                            <div class="col-sm-9">
+                                <input type="date" name="birthday" class="form-control" value="{{userData.birthday}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Seller Center Terms and Conditions Agreement</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="terms_conditions">
+                                    <label class="form-check-label" for="terms_conditions">I agree with Lyka’s Seller Terms and Conditions</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow container-fluid p-0">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Shop Details</h6>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Shop / Display Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="shop_name" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Holiday Mode</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="holiday">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            {% for a in addresses %}
-              {% if forloop.counter0 == 0 or a.name %}
-              <div id="address-container-{{forloop.counter}}"
-                  class="form-group card-body mx-5 address-{{forloop.counter0}}">
-              {% else %}
-              <div id="address-container-{{forloop.counter}}"
-                  class="form-group card-body mx-5 address-{{forloop.counter0}}" style="display: none;">
-              {% endif %}
-                {% if forloop.counter0 > 0 %}
-                <hr class="sidebar-divider mb-4"/>
-                {% endif %}
-                <div class="d-flex">
+            {# End of Basic Info #}
+        </div>
+        <div id="bi" class="tab-pane fade">
+            {# Business Permits Documents #}
+            <div class="row mx-3 my-5">
+                <div class="card shadow container-fluid p-0">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Business Permits Documents</h6>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Address Street, Building</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="address_str_bldg" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Country</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Country</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Region / State</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Region / State</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">City</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose City</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Barangay</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Barangay</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Postal Code</label>
+                            <div class="col-sm-9">
+                                <input type="number" name="postal_code" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Business TIN</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="business_tin" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="" class="col-sm-3 col-form-label">Business Registration Number</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="business_reg_num" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="bir" class="col-sm-3 col-form-label">BIR</label>
+                            <div class="col-sm-9">
+                                <input type="file" name="bir" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="dti" class="col-sm-3 col-form-label">DTI </label>
+                            <div class="col-sm-9">
+                                <input type="file" name="dti" class="form-control" value="{{userData.first_name}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="sec" class="col-sm-3 col-form-label">SEC </label>
+                            <div class="col-sm-9">
+                                <input type="file" name="sec" class="form-control" value="{{userData.first_name}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="permit" class="col-sm-3 col-form-label">PERMIT </label>
+                            <div class="col-sm-9">
+                                <input type="file" name="permit" class="form-control" value="{{userData.first_name}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="seller-agreement" class="col-sm-3 col-form-label">Seller Center Agreement </label>
+                            <div class="col-sm-9">
+                                <input type="file" name="seller-agreement" class="form-control" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {# End of Business Permits Documents #}
+        </div>
+        <div id="para" class="tab-pane fade">
+            {# Addresses #}
+            <div class="row mx-3 my-5">
+                <div class="card shadow container-fluid p-0">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Pickup Address</h6>
+                    </div>
+                    {% for a in addresses %}
+                    {% if forloop.counter0 == 0 or a.name %}
+                        <div id="address-container-{{forloop.counter}}" class="form-group card-body mx-5 address-{{forloop.counter0}}">
+                    {% else %}
+                        <div id="address-container-{{forloop.counter}}" class="form-group card-body mx-5 address-{{forloop.counter0}}" style="display: none;">
+                    {% endif %}
+                    {% if forloop.counter0 > 0 %}
+                        <hr class="sidebar-divider mb-4"/>
+                    {% endif %}
+                    <div class="d-flex">
                     <h5 class="mr-auto text-primary">Address {{forloop.counter}}</h5>
                     {% if forloop.counter0 > 0 %}
-                    <a class="ml-3 mt-1 text-danger" onclick="hideAddress({{forloop.counter}})">
-                        <i class="fas fa-trash"></i>
-                    </a>
+                        <a class="ml-3 mt-1 text-danger" onclick="hideAddress({{forloop.counter}})"><i class="fas fa-trash"></i></a>
                     {% endif %}
-                </div>
-                <div class="form-group row mt-3 mb-4">
-                    <label for="address-{{forloop.counter0}}-name" class="col-sm-3 col-form-label">Address </label>
-                    <div class="col-sm-9">
-                        <input type="text" name="address-{{forloop.counter0}}-name" required
-                              class="form-control" placeholder="Address"
-                              id="address-{{forloop.counter0}}-name"
-                              value="{{a.name}}">
                     </div>
-                </div>
-                {% if forloop.counter0 < 6 %}
-                <div class="col-md-12">
-                    <button id="address-add-button-{{forloop.counter}}" class="btn btn-primary"
-                            type="button"
-                            onclick="showAddress(event, '{{forloop.counter}}')"> + Add Another Address
-                    </button>
-                </div>
-                {% endif %}
-              </div>
-              {% endfor %}
-          </div>
-        </div>
-        {# End of Address #}
-        
-        {# Business Permits Documents #}
-        <div class="row mx-3 my-5">
-            <div class="card shadow container-fluid p-0">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Business Permits Documents</h6>
-                </div>
-                <div class="card-body mx-5">
                     <div class="form-group row mt-3 mb-4">
-                        <label for="dti" class="col-sm-3 col-form-label">DTI </label>
+                        <label for="dti" class="col-sm-3 col-form-label">DTI</label>
                         <div class="col-sm-9">
-                            <input type="file" name="dti" class="form-control" value="{{userData.first_name}}">
+                            <div class="custom-file">
+                                <div class="col-sm-9">
+                                    <input type="file" name="dti" class="form-control custom-file-input" id="dti" accept=".jpg, .png, .pdf, .doc, .docx">
+                                    <label class="custom-file-label" for="dti">Choose DTI file</label>
+                                    <label id="dti_lbl">
+                                        {% if dtiDocument %}
+                                            {{ dtiDocument }}
+                                        {% else %}
+                                            <small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small>
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body mx-5">
                     <div class="form-group row mt-3 mb-4">
-                        <label for="sec" class="col-sm-3 col-form-label">SEC </label>
+                        <label for="sec" class="col-sm-3 col-form-label">SEC</label>
                         <div class="col-sm-9">
-                            <input type="file" name="sec" class="form-control" value="{{userData.first_name}}">
+                            <div class="custom-file">
+                                <div class="col-sm-9">
+                                    <input type="file" name="sec" class="form-control custom-file-input" id="sec" accept=".jpg, .png, .pdf, .doc, .docx">
+                                    <label class="custom-file-label" for="sec">Choose SEC file</label>
+                                    <label id="sec_lbl">
+                                        {% if secDocument %}
+                                            {{ secDocument }}
+                                        {% else %}
+                                            <small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small>
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="card-body mx-5">
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="permit" class="col-sm-3 col-form-label">PERMIT</label>
+                        <div class="col-sm-9">
+                            <div class="custom-file">
+                                <div class="col-sm-9">
+                                    <input type="file" name="permit" class="form-control custom-file-input" id="permit" accept=".jpg, .png, .pdf, .doc, .docx">
+                                    <label class="custom-file-label" for="permit">Choose PERMIT file</label>
+                                    <label id="permit_lbl">
+                                        {% if permitDocument %}
+                                            {{ permitDocument }}
+                                        {% else %}
+                                            <small class="form-text text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small>
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body mx-5">
                     <div class="form-group row mt-3 mb-4">
-                        <label for="permit" class="col-sm-3 col-form-label">PERMIT </label>
+                        <label for="seller-agreement" class="col-sm-3 col-form-label">Seller Center Agreement</label>
                         <div class="col-sm-9">
-                            <input type="file" name="permit" class="form-control" value="{{userData.first_name}}">
+                            <div class="custom-file">
+                                <div class="col-sm-9">
+                                    <input type="file" name="seller-agreement" class="form-control custom-file-input" id="seller-agreement" accept=".jpg, .png, .pdf, .doc, .docx">
+                                    <label class="custom-file-label" for="seller-agreement">Choose file</label>
+                                </div>
+                            </div>
+                    {% endfor %}
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Contact Person</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="contact_person_p" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="contact_person_number_p" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Contact Person Email</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="contact_person_email_p" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Address Street, Building</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="address_str_bldg_p" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Country</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Country</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Region / State</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Region / State</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">City</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose City</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Barangay</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Barangay</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Postal Code</label>
+                            <div class="col-sm-9">
+                                <input type="number" name="postal_code_p" class="form-control">
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-body mx-5">
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="seller-agreement" class="col-sm-3 col-form-label">Seller Center Agreement </label>
-                        <div class="col-sm-9">
-                            <input type="file" name="seller-agreement" class="form-control" value="">
+                <div class="card shadow container-fluid p-0">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Return Address</h6>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Contact Person</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="contact_person_r" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="contact_person_number_r" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Contact Person Email</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="contact_person_email_r" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Address Street, Building</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="address_str_bldg_r" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Country</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Country</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Region / State</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Region / State</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">City</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose City</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Barangay</label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Barangay</button>
+                                <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                  <a class="dropdown-item" href="#">Sample</a>
+                                  <a class="dropdown-item" href="#">Items</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mx-5">
+                        <div class="form-group row mt-3 mb-4">
+                            <label for="id_product-code" class="col-sm-3 col-form-label">Postal Code</label>
+                            <div class="col-sm-9">
+                                <input type="number" name="postal_code_r" class="form-control">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {# End of Address #}
         </div>
-        {# End of Business Permits Documents #}
-
+    </div>
     </form>
 </div>
 
