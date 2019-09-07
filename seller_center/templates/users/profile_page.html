@@ -13,109 +13,413 @@
 {% block content %}
 
 <div class="form-wrap">
-    <form action="{{page.url}}" enctype="multipart/form-data" method="POST" novalidate>
-
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mr-auto mb-0 text-gray-800">Profile</h1>
-        <a href="/profile/edit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i
-                class="fas text-white-50 mr-2"></i>Edit Profile</a>
-    </div>
-        {% csrf_token %}
-
-        {# Basic Info #}
-        <div class="row mx-3 my-5">
-            <div class="card shadow container-fluid p-0">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Basic Information</h6>
-                </div>
-                <div class="card-body mx-5">
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="id_product-code" class="col-sm-3 col-form-label">Full Name </label>
-                        <span class="col-form-label">{{userData.first_name}} {{userData.last_name}}</span>
-                    </div>
-                </div>
-                <div class="card-body mx-5">
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="id_product-code" class="col-sm-3 col-form-label">Birthday </label>
-                        <span class="col-form-label">{{profileData.birthday}}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {# End of Basic Info #}
-
-        {# Address #}
-        <div class="row mx-3 my-5">
-            <div class="card shadow container-fluid p-0">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Addresses</h6>
-                </div>
-                <div class="card-body mx-5">
-                  {% if addresses %}
-                  {% for a in addresses %}
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="first-name" class="col-sm-3 col-form-label">Address {{forloop.counter}}</label>
-                        <span class="col-form-label">{{a.name}}</span>
-                    </div>
-                  {% endfor %}
-                  {% else %}
-                  <div class="form-group row mt-3 mb-4">
-                      <span class="col-form-label">No addesses yet</span>
-                  </div>
-                  {% endif %}
-                </div>
-            </div>
-        </div>
-        {# End of Address #}
-
-        {# Business Permits Documents #}
-        <div class="row mx-3 my-5">
-            <div class="card shadow container-fluid p-0">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Business Permits Documents</h6>
-                </div>
-                <div class="card-body mx-5">
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="dti" class="col-sm-3 col-form-label">DTI </label>
-                        <div class="col-sm-9">
-                          {% if dtiDocument%}
-                            <a href="{{dtiDocument.url}}" class="btn btn-sm btn-link">{{dtiDocument}}</a>
-                          {% else %}
-                          <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
-                          {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body mx-5">
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="dti" class="col-sm-3 col-form-label">SEC </label>
-                        <div class="col-sm-9">
-                          {% if secDocument%}
-                            <a href="{{secDocument.url}}" class="btn btn-sm btn-link">{{secDocument}}</a>
-                          {% else %}
-                            <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
-                          {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body mx-5">
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="dti" class="col-sm-3 col-form-label">PERMIT </label>
-                        <div class="col-sm-9">
-                          {% if permitDocument%}
-                            <a href="{{permitDocument.url}}" class="btn btn-sm btn-link">{{permitDocument}}</a>
-                          {% else %}
-                          <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
-                          {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {# End of Business Permits Documents #}
-
-    </form>
+	<form action="{{page.url}}" enctype="multipart/form-data" method="POST" novalidate>
+		<!-- Page Heading -->
+		<div class="d-sm-flex align-items-center justify-content-between mb-4">
+			<h1 class="h3 mr-auto mb-0 text-gray-800">Profile</h1>
+			<a href="/profile/edit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i
+					class="fas text-white-50 mr-2"></i>Edit Profile</a>
+		</div>
+			{% csrf_token %}
+		<div class="row">
+			<div class="card container-fluid mb-3">
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link active" id="all-tab" data-toggle="tab" href="#sa" role="tab">Seller Account</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="unpaid-tab" data-toggle="tab" href="#bi" role="tab">Business Information</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="to-ship-tab" data-toggle="tab" href="#para" role="tab">Pickup and Return Address</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+			{# Basic Info #}
+		<div class="tab-content">
+			<div id="sa" class="tab-pane fade show active">
+				<div class="row mx-3 my-5">
+					<div class="card shadow container-fluid p-0">
+						<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+							<h6 class="m-0 font-weight-bold text-primary">Account Owner Details</h6>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Seller ID</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ seller_details_data.seller_id }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Seller Status</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ seller_details_data.seller_status }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Name on ID</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{userData.first_name}} {{userData.last_name}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">ID Type</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ seller_details_data.id_type }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Upload ID Front</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ seller_details_data.upload_id_front_url }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Upload ID Back</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ seller_details_data.upload_id_back_url }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Email Address</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ seller_details_data.email }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Phone Number</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ seller_details_data.phone }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Birthday</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{profileData.birthday}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Seller Center Terms and Conditions Agreement</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ seller_details_data.has_agreed_to_terms }}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card shadow container-fluid p-0">
+						<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+							<h6 class="m-0 font-weight-bold text-primary">Shop Details</h6>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Shop / Display Name</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ shop_details_data.shop_name }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Holiday Mode</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ shop_details_data.holiday_mode }}</span>
+								</div>
+							</div>
+						</div>
+						{% if shop_details_data.holiday_mode == 'On' %}
+							<div class="card-body mx-5">
+								<div class="form-group row mt-3 mb-4">
+									<label for="" class="col-sm-3 col-form-label">Holiday Start Date And Time</label>
+									<div class="col-sm-9">
+										<span class="col-form-label">{{ shop_details_data.start_date }} {{ shop_details_data.start_time }}</span>
+									</div>
+								</div>
+							</div>
+							<div class="card-body mx-5">
+								<div class="form-group row mt-3 mb-4">
+									<label for="" class="col-sm-3 col-form-label">Holiday End Date And Time</label>
+									<div class="col-sm-9">
+										<span class="col-form-label">{{ shop_details_data.end_date }} {{ shop_details_data.end_time }}</span>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+				{# End of Basic Info #}
+			</div>
+			<div id="bi" class="tab-pane fade">
+				{# Business Permits Documents #}
+				<div class="row mx-3 my-5">
+					<div class="card shadow container-fluid p-0">
+						<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+							<h6 class="m-0 font-weight-bold text-primary">Business Information</h6>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Legal / Company Name</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ business_details_data.company_name }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Company Address</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ business_address }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Business TIN</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ business_details_data.business_tin }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Business Registration Number</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ business_details_data.business_registration_number }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="bir" class="col-sm-3 col-form-label">BIR</label>
+								<div class="col-sm-9">
+									{% if bir_documents_data %}
+										<a href="{{ bir_documents_data.document_url }}" class="btn btn-sm btn-link">{{ bir }}</a>
+									{% else %}
+										<a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="dti" class="col-sm-3 col-form-label">DTI</label>
+								<div class="col-sm-9">
+								  {% if dti_documents_data %}
+									<a href="{{ dti_documents_data.document_url }}" class="btn btn-sm btn-link">{{ dti }}</a>
+								  {% else %}
+								  <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
+								  {% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="sec" class="col-sm-3 col-form-label">SEC</label>
+								<div class="col-sm-9">
+								  {% if sec_documents_data %}
+									<a href="{{ sec_documents_data.document_url }}" class="btn btn-sm btn-link">{{ sec }}</a>
+								  {% else %}
+									<a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
+								  {% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="permit" class="col-sm-3 col-form-label">PERMIT</label>
+								<div class="col-sm-9">
+								  {% if permit_documents_data %}
+									<a href="{{ permit_documents_data.document_url }}" class="btn btn-sm btn-link">{{ permit }}</a>
+								  {% else %}
+								  <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
+								  {% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{# End of Business Permits Documents #}
+			</div>
+			<div id="para" class="tab-pane fade">
+				{# Address #}
+				<div class="row mx-3 my-5">
+					<div class="card shadow container-fluid p-0">
+						<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+							<h6 class="m-0 font-weight-bold text-primary">Pickup Address</h6>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Contact Person</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ pickup_contact_data.contact_person_name }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ pickup_contact_data.contact_person_phone }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Contact Person Email</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ pickup_contact_data.contact_person_email }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Address Street, Building</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ pickup_address_data.street_bldg }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Country</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ pickup_address_data.country }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Region / State</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ pickup_address_data.region_state }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">City</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ pickup_address_data.city }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Barangay</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ pickup_address_data.brgy }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Postal Code</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ pickup_address_data.postal_code }}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card shadow container-fluid p-0">
+						<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+							<h6 class="m-0 font-weight-bold text-primary">Return Address</h6>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Contact Person</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ return_contact_data.contact_person_name }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ return_contact_data.contact_person_phone }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Contact Person Email</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ return_contact_data.contact_person_email }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Address Street, Building</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ return_address_data.street_bldg }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Country</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ return_address_data.country }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Region / State</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ return_address_data.region_state }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">City</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ return_address_data.city }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Barangay</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ return_address_data.brgy }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body mx-5">
+							<div class="form-group row mt-3 mb-4">
+								<label for="" class="col-sm-3 col-form-label">Postal Code</label>
+								<div class="col-sm-9">
+									<span class="col-form-label">{{ return_address_data.postal_code }}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{# End of Address #}
+			</div>
+		</div>
+	</form>
 </div>
 
 {% endblock %}
