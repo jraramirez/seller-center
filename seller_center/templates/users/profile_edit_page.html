@@ -107,7 +107,7 @@
 							<label for="id_front" class="col-sm-3 col-form-label">Upload ID Front</label>
 							<div class="col-sm-9">
 								<div class="custom-file">
-									<input type="file" name="id_front" class="form-control custom-file-input" id="id_front" accept=".jpg, .png, .pdf, .doc, .docx">
+									<input type="file" name="id_front" class="form-control custom-file-input" id="id_front" accept=".jpg, .png, .pdf, .doc, .docx" file_lbl="id_front_lbl">
 									<label class="custom-file-label" for="id_front" id="id_front_lbl">
 										{% if seller_details_data.upload_id_front_url %}
 											{{ seller_details_data.upload_id_front_url }}
@@ -125,7 +125,7 @@
 							<label for="id_back" class="col-sm-3 col-form-label">Upload ID Back</label>
 							<div class="col-sm-9">
 								<div class="custom-file">
-									<input type="file" name="id_back" class="form-control custom-file-input" id="id_back" accept=".jpg, .png, .pdf, .doc, .docx">
+									<input type="file" name="id_back" class="form-control custom-file-input" id="id_back" accept=".jpg, .png, .pdf, .doc, .docx" file_lbl="id_back_lbl">
 									<label class="custom-file-label" for="id_back" id="id_back_lbl">
 										{% if seller_details_data.upload_id_back_url %}
 											{{ seller_details_data.upload_id_back_url }}
@@ -346,7 +346,7 @@
 							<label for="bir" class="col-sm-3 col-form-label">BIR</label>
 							<div class="col-sm-9">
 								<div class="custom-file">
-									<input type="file" name="bir" class="form-control custom-file-input" id="bir" accept=".jpg, .png, .pdf, .doc, .docx">
+									<input type="file" name="bir" class="form-control custom-file-input" id="bir" accept=".jpg, .png, .pdf, .doc, .docx" file_lbl="bir_lbl">
 									<label class="custom-file-label" for="bir" id="bir_lbl">
 										{% if bir_documents_data %}
 											{{ bir }}
@@ -364,7 +364,7 @@
 							<label for="dti" class="col-sm-3 col-form-label">DTI</label>
 							<div class="col-sm-9">
 								<div class="custom-file">
-									<input type="file" name="dti" class="form-control custom-file-input" id="dti" accept=".jpg, .png, .pdf, .doc, .docx">
+									<input type="file" name="dti" class="form-control custom-file-input" id="dti" accept=".jpg, .png, .pdf, .doc, .docx" file_lbl="dti_lbl">
 									<label class="custom-file-label" for="dti" id="dti_lbl">
 										{% if dti_documents_data %}
 											{{ dti }}
@@ -382,7 +382,7 @@
 							<label for="sec" class="col-sm-3 col-form-label">SEC</label>
 							<div class="col-sm-9">
 								<div class="custom-file">
-									<input type="file" name="sec" class="form-control custom-file-input" id="sec" accept=".jpg, .png, .pdf, .doc, .docx">
+									<input type="file" name="sec" class="form-control custom-file-input" id="sec" accept=".jpg, .png, .pdf, .doc, .docx" file_lbl="sec_lbl">
 									<label class="custom-file-label" for="sec" id="sec_lbl">
 										{% if sec_documents_data %}
 											{{ sec }}
@@ -400,7 +400,7 @@
 							<label for="permit" class="col-sm-3 col-form-label">PERMIT</label>
 							<div class="col-sm-9">
 								<div class="custom-file">
-									<input type="file" name="permit" class="form-control custom-file-input" id="permit" accept=".jpg, .png, .pdf, .doc, .docx">
+									<input type="file" name="permit" class="form-control custom-file-input" id="permit" accept=".jpg, .png, .pdf, .doc, .docx" file_lbl="permit_lbl">
 									<label class="custom-file-label" for="permit" id="permit_lbl">
 										{% if permit_documents_data %}
 											{{ permit }}

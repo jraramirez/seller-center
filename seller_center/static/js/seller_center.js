@@ -107,29 +107,9 @@ $(function(){
         }
     });
 
-    $('#id_front').change(function(){
-      $('#id_front_lbl').text($(this)[0].files[0].name);
-    });
-
-    $('#id_back').change(function(){
-      $('#id_back_lbl').text($(this)[0].files[0].name);
-    });
-    
-    $('#bir').change(function(){
-      $('#bir_lbl').text($(this)[0].files[0].name);
-    });
-
-    $('#dti').change(function(){
-      $('#dti_lbl').text($(this)[0].files[0].name);
-    });
-
-    $('#sec').change(function(){
-      $('#sec_lbl').text($(this)[0].files[0].name);
-    });
-
-    $('#permit').change(function(){
-      $('#permit_lbl').text($(this)[0].files[0].name);
-    });
+    $('.custom-file-input').change(function(){
+      $('#'+$(this).attr('file_lbl')).text($(this)[0].files[0].name);
+    })
 
     $('#holiday').change(function(){
       if($(this).is(':checked')){

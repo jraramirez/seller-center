@@ -1,27 +1,24 @@
 from django.shortcuts import render
-
+from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from users.models import Profile
 from users.models import Documents
-
-from wagtail.documents.models import get_document_model
-from wagtail.documents.forms import get_document_form
-
 from seller_center.settings.dev import MEDIA_URL
 
 def profile(request):
 	return render(request, 'users/profile_page.html', set_user_profile_data(request.user.id))
 
 def profile_edit(request):
+	user_id=request.user.id
 	if request.method == 'POST':
-		user_id=request.user.id
-		print(request.POST.get('company_name'))
 		User.objects.filter(id=user_id).update(
 			first_name=request.POST.get('first-name'),
 			last_name=request.POST.get('last-name')
 		)
 
 		profile=Profile.objects.filter(id=user_id)[0]
+		profile.birthday=request.POST.get('birthday')
+		profile.save()
 
 		seller_details=profile.seller_details
 		seller_details.name_on_id=request.POST.get('last-name') + ', ' + request.POST.get('first-name')
@@ -86,68 +83,47 @@ def profile_edit(request):
 		if 'permit' in request.FILES:
 			Documents.objects.filter(profile_id=user_id, document_type='permit').update(document_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + request.FILES['permit'].name)
 
-		print(request.POST.get('business_street_bldg'))
-		# p.user_id = user_id
-		# p.dti_id = profileData.dti_id
-		# p.sec_id = profileData.sec_id
-		# p.permit_id = profileData.permit_id
-		
-		#   p.dti_id = dtiDocument.id
+		pickup_address_details=profile.pickup_address
+		pickup_address_details.street_bldg=request.POST.get('pickup_street_bldg')
+		pickup_address_details.country=request.POST.get('pickup_country')
+		pickup_address_details.region_state=request.POST.get('pickup_region_state')
+		pickup_address_details.city=request.POST.get('pickup_city')
+		pickup_address_details.brgy=request.POST.get('pickup_brgy')
+		pickup_address_details.postal_code=request.POST.get('pickup_postal_code')
+		pickup_address_details.save()
 
-		# if('sec' in request.FILES.keys()):
-		#   secDocument = Document.objects.create(
-		#     file=request.FILES['sec'],
-		#     title=request.FILES['sec'].name
-		#   )
-		#   p.sec_id = secDocument.id
+		pickup_contact_details=pickup_address_details.contact_details
+		pickup_contact_details.contact_person_name=request.POST.get('pickup_contact_person_name')
+		pickup_contact_details.contact_person_phone=request.POST.get('pickup_contact_person_phone')
+		pickup_contact_details.contact_person_email=request.POST.get('pickup_contact_person_email')
+		pickup_contact_details.save()
 
-		# if('permit' in request.FILES.keys()):
-		#   permitDocument = Document.objects.create(
-		#     file=request.FILES['permit'],
-		#     title=request.FILES['permit'].name
-		#   )
-		#   p.permit_id = permitDocument.id
-		# p.save()
-		
-		# for i in range(0,8):
-		#   if(request.POST.get('address-'+str(i)+'-name')):
-		#     if(Address.objects.filter(profile_id=user_id).filter(index=i)):
-		#       Address.objects.filter(profile_id=user_id).filter(index=i).update(
-		#         name = request.POST.get('address-'+str(i)+'-name'),
-		#       )
-		#     else:
-		#       a = Address(
-		#         profile_id = user_id,
-		#         name = request.POST.get('address-'+str(i)+'-name'),
-		#         index = i
-		#       )
-		#       a.save()
+		return_address_details=profile.return_address
+		return_address_details.street_bldg=request.POST.get('return_street_bldg')
+		return_address_details.country=request.POST.get('return_country')
+		return_address_details.region_state=request.POST.get('return_region_state')
+		return_address_details.city=request.POST.get('return_city')
+		return_address_details.brgy=request.POST.get('return_brgy')
+		return_address_details.postal_code=request.POST.get('return_postal_code')
+		return_address_details.save()
 
-		userData = User.objects.filter(id=user_id)[0]
-		profileData = Profile.objects.filter(id=user_id)[0]
-		# addresses = Address.objects.filter(profile_id=request.user.id)
-		# Document = get_document_model()
-		# dtiDocument = Document.objects.filter(id=profileData.dti_id)[0] if len(Document.objects.filter(id=profileData.dti_id)) else None
-		# secDocument = Document.objects.filter(id=profileData.sec_id)[0] if len(Document.objects.filter(id=profileData.sec_id)) else None
-		# permitDocument = Document.objects.filter(id=profileData.permit_id)[0] if len(Document.objects.filter(id=profileData.permit_id)) else None
-		return render(request, 'users/profile_page.html', {
-			'profileData': profileData,
-			'userData': userData,
-			# 'dtiDocument': dtiDocument,
-			# 'secDocument': secDocument,
-			# 'permitDocument': permitDocument,
-			# 'addresses': addresses
-		})
-	return render(request, 'users/profile_edit_page.html', set_user_profile_data(request.user.id))
+		return_contact_details=return_address_details.contact_details
+		return_contact_details.contact_person_name=request.POST.get('return_contact_person_name')
+		return_contact_details.contact_person_phone=request.POST.get('return_contact_person_phone')
+		return_contact_details.contact_person_email=request.POST.get('return_contact_person_email')
+		return_contact_details.save()
+
+		return HttpResponseRedirect("/profile")
+	return render(request, 'users/profile_edit_page.html', set_user_profile_data(user_id))
 
 def get_filename_from_url(url):
 	url=url[url.rfind('/')+1:]
 	return url
 
 def set_user_profile_data(user_id):
-	userData = User.objects.filter(id=user_id)[0]
+	userData=User.objects.filter(id=user_id)[0]
 
-	profileData = Profile.objects.filter(id=user_id)[0]
+	profileData=Profile.objects.filter(id=user_id)[0]
 
 	seller_details_data=profileData.seller_details
 	seller_details_data.upload_id_front_url=get_filename_from_url(seller_details_data.upload_id_front_url)
@@ -194,5 +170,5 @@ def set_user_profile_data(user_id):
 		'pickup_address_data': pickup_address_data,
 		'pickup_contact_data': pickup_contact_data,
 		'return_address_data': return_address_data,
-		'return_contact_data': return_contact_data,
+		'return_contact_data': return_contact_data
 	}
