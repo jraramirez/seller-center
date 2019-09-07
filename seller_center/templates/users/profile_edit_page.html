@@ -92,7 +92,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="id_type" class="col-sm-3 col-form-label">ID Type</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="id_type">
+								<select name="id_type" class="form-control" id="id_type">
 									<option value="{{ seller_details_data.id_type }}">{{ seller_details_data.id_type }}</option>
 									<option value="TIN ID">TIN ID</option>
 									<option value="SSS ID">SSS ID</option>
@@ -115,7 +115,7 @@
 											Choose ID Front file
 										{% endif %}
 									</label>
-									<label><small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small></label>
+									<label><small class="text-muted">Only accepts PNG and JPG.</small></label>
 								</div>
 							</div>
 						</div>
@@ -133,7 +133,7 @@
 											Choose ID Back file
 										{% endif %}
 									</label>
-									<label><small class="text-muted">Only accepts PDF, PNG, JPG, DOCX, and DOC.</small></label>
+									<label><small class="text-muted">Only accepts PNG and JPG.</small></label>
 								</div>
 							</div>
 						</div>
@@ -167,7 +167,7 @@
 							<label for="terms_conditions" class="col-sm-3 col-form-label">Seller Center Terms and Conditions Agreement</label>
 							<div class="col-sm-9">
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="terms_conditions"
+									<input name="terms_conditions" class="form-check-input" type="checkbox" id="terms_conditions"
 										{% if seller_details_data.has_agreed_to_terms == 'Agreed' %}
 											checked
 										{% endif %}
@@ -195,7 +195,7 @@
 							<label for="holiday" class="col-sm-3 col-form-label">Holiday Mode</label>
 							<div class="col-sm-9">
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" value="" id="holiday"
+									<input name="holiday" class="form-check-input" type="checkbox" value="" id="holiday"
 										{% if shop_details_data.holiday_mode == 'On' %}
 											checked
 										{% endif %}
@@ -281,7 +281,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="business_country" class="col-sm-3 col-form-label">Country</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="business_country">
+								<select name="business_country" class="form-control" id="business_country">
 									<option value="{{ business_address_data.country }}">{{ business_address_data.country }}</option>
 								</select>
 							</div>
@@ -291,7 +291,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="business_region_state" class="col-sm-3 col-form-label">Region / State</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="business_region_state">
+								<select name="business_region_state" class="form-control" id="business_region_state">
 									<option value="{{ business_address_data.region_state }}">{{ business_address_data.region_state }}</option>
 								</select>
 							</div>
@@ -301,7 +301,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="business_city" class="col-sm-3 col-form-label">City</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="business_city">
+								<select name="business_city" class="form-control" id="business_city">
 									<option value="{{ business_address_data.city }}">{{ business_address_data.city }}</option>
 								</select>
 							</div>
@@ -311,7 +311,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="business_brgy" class="col-sm-3 col-form-label">Barangay</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="business_brgy">
+								<select name="business_brgy" class="form-control" id="business_brgy">
 									<option value="{{ business_address_data.brgy }}">{{ business_address_data.brgy }}</option>
 								</select>
 							</div>
