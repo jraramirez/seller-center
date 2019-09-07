@@ -106,4 +106,16 @@ $(function(){
             $('#process').hide();
         }
     });
+
+    $('.custom-file-input').change(function(){
+      $('#'+$(this).attr('file_lbl')).text($(this)[0].files[0].name);
+    })
+
+    $('#holiday').change(function(){
+      if($(this).is(':checked')){
+        $('.holiday_date_time').removeAttr('disabled');
+      } else{
+        $('.holiday_date_time').attr('disabled', 'disabled');
+      }
+    });
 });
