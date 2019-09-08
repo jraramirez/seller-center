@@ -48,7 +48,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Seller ID</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ seller_details_data.seller_id }}</span>
 								</div>
 							</div>
 						</div>
@@ -56,7 +56,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Seller Status</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ seller_details_data.seller_status }}</span>
 								</div>
 							</div>
 						</div>
@@ -72,7 +72,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">ID Type</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ seller_details_data.id_type }}</span>
 								</div>
 							</div>
 						</div>
@@ -80,7 +80,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Upload ID Front</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ seller_details_data.upload_id_front_url }}</span>
 								</div>
 							</div>
 						</div>
@@ -88,7 +88,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Upload ID Back</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ seller_details_data.upload_id_back_url }}</span>
 								</div>
 							</div>
 						</div>
@@ -96,7 +96,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Email Address</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ seller_details_data.email }}</span>
 								</div>
 							</div>
 						</div>
@@ -104,7 +104,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Phone Number</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ seller_details_data.phone }}</span>
 								</div>
 							</div>
 						</div>
@@ -120,7 +120,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Seller Center Terms and Conditions Agreement</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ seller_details_data.has_agreed_to_terms }}</span>
 								</div>
 							</div>
 						</div>
@@ -133,7 +133,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Shop / Display Name</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ shop_details_data.shop_name }}</span>
 								</div>
 							</div>
 						</div>
@@ -141,10 +141,28 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Holiday Mode</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ shop_details_data.holiday_mode }}</span>
 								</div>
 							</div>
 						</div>
+						{% if shop_details_data.holiday_mode == 'On' %}
+							<div class="card-body mx-5">
+								<div class="form-group row mt-3 mb-4">
+									<label for="" class="col-sm-3 col-form-label">Holiday Start Date And Time</label>
+									<div class="col-sm-9">
+										<span class="col-form-label">{{ shop_details_data.start_date }} {{ shop_details_data.start_time }}</span>
+									</div>
+								</div>
+							</div>
+							<div class="card-body mx-5">
+								<div class="form-group row mt-3 mb-4">
+									<label for="" class="col-sm-3 col-form-label">Holiday End Date And Time</label>
+									<div class="col-sm-9">
+										<span class="col-form-label">{{ shop_details_data.end_date }} {{ shop_details_data.end_time }}</span>
+									</div>
+								</div>
+							</div>
+						{% endif %}
 					</div>
 				</div>
 				{# End of Basic Info #}
@@ -160,7 +178,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Legal / Company Name</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ business_details_data.company_name }}</span>
 								</div>
 							</div>
 						</div>
@@ -168,7 +186,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Company Address</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ business_address }}</span>
 								</div>
 							</div>
 						</div>
@@ -176,7 +194,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Business TIN</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ business_details_data.business_tin }}</span>
 								</div>
 							</div>
 						</div>
@@ -184,7 +202,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Business Registration Number</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ business_details_data.business_registration_number }}</span>
 								</div>
 							</div>
 						</div>
@@ -192,16 +210,20 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="bir" class="col-sm-3 col-form-label">BIR</label>
 								<div class="col-sm-9">
-
+									{% if bir_documents_data %}
+										<a href="{{ bir_documents_data.document_url }}" class="btn btn-sm btn-link">{{ bir }}</a>
+									{% else %}
+										<a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
+									{% endif %}
 								</div>
 							</div>
 						</div>
 						<div class="card-body mx-5">
 							<div class="form-group row mt-3 mb-4">
-								<label for="dti" class="col-sm-3 col-form-label">DTI </label>
+								<label for="dti" class="col-sm-3 col-form-label">DTI</label>
 								<div class="col-sm-9">
-								  {% if dtiDocument%}
-									<a href="{{dtiDocument.url}}" class="btn btn-sm btn-link">{{dtiDocument}}</a>
+								  {% if dti_documents_data %}
+									<a href="{{ dti_documents_data.document_url }}" class="btn btn-sm btn-link">{{ dti }}</a>
 								  {% else %}
 								  <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
 								  {% endif %}
@@ -210,10 +232,10 @@
 						</div>
 						<div class="card-body mx-5">
 							<div class="form-group row mt-3 mb-4">
-								<label for="dti" class="col-sm-3 col-form-label">SEC </label>
+								<label for="sec" class="col-sm-3 col-form-label">SEC</label>
 								<div class="col-sm-9">
-								  {% if secDocument%}
-									<a href="{{secDocument.url}}" class="btn btn-sm btn-link">{{secDocument}}</a>
+								  {% if sec_documents_data %}
+									<a href="{{ sec_documents_data.document_url }}" class="btn btn-sm btn-link">{{ sec }}</a>
 								  {% else %}
 									<a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
 								  {% endif %}
@@ -222,10 +244,10 @@
 						</div>
 						<div class="card-body mx-5">
 							<div class="form-group row mt-3 mb-4">
-								<label for="dti" class="col-sm-3 col-form-label">PERMIT </label>
+								<label for="permit" class="col-sm-3 col-form-label">PERMIT</label>
 								<div class="col-sm-9">
-								  {% if permitDocument%}
-									<a href="{{permitDocument.url}}" class="btn btn-sm btn-link">{{permitDocument}}</a>
+								  {% if permit_documents_data %}
+									<a href="{{ permit_documents_data.document_url }}" class="btn btn-sm btn-link">{{ permit }}</a>
 								  {% else %}
 								  <a href="/profile/edit" class="btn btn-sm btn-link">None Uploaded</a>
 								  {% endif %}
@@ -244,28 +266,10 @@
 							<h6 class="m-0 font-weight-bold text-primary">Pickup Address</h6>
 						</div>
 						<div class="card-body mx-5">
-						  {% if addresses %}
-						  {% for a in addresses %}
-							<div class="form-group row mt-3 mb-4">
-								<label for="first-name" class="col-sm-3 col-form-label">Address {{forloop.counter}}</label>
-								<div class="col-sm-9">
-									<span class="col-form-label">{{a.name}}</span>
-								</div>
-							</div>
-						  {% endfor %}
-						  {% else %}
-						  <div class="form-group row mt-3 mb-4">
-								<div class="col-sm-9">
-									<span class="col-form-label">No addesses yet</span>
-								</div>
-						  </div>
-						  {% endif %}
-						</div>
-						<div class="card-body mx-5">
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_contact_data.contact_person_name }}</span>
 								</div>
 							</div>
 						</div>
@@ -273,7 +277,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_contact_data.contact_person_phone }}</span>
 								</div>
 							</div>
 						</div>
@@ -281,7 +285,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person Email</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_contact_data.contact_person_email }}</span>
 								</div>
 							</div>
 						</div>
@@ -289,7 +293,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Address Street, Building</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.street_bldg }}</span>
 								</div>
 							</div>
 						</div>
@@ -297,7 +301,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Country</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.country }}</span>
 								</div>
 							</div>
 						</div>
@@ -305,7 +309,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Region / State</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.region_state }}</span>
 								</div>
 							</div>
 						</div>
@@ -313,7 +317,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">City</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.city }}</span>
 								</div>
 							</div>
 						</div>
@@ -321,7 +325,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Barangay</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.brgy }}</span>
 								</div>
 							</div>
 						</div>
@@ -329,7 +333,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Postal Code</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ pickup_address_data.postal_code }}</span>
 								</div>
 							</div>
 						</div>
@@ -342,7 +346,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_contact_data.contact_person_name }}</span>
 								</div>
 							</div>
 						</div>
@@ -350,7 +354,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person Phone Number</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_contact_data.contact_person_phone }}</span>
 								</div>
 							</div>
 						</div>
@@ -358,7 +362,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Contact Person Email</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_contact_data.contact_person_email }}</span>
 								</div>
 							</div>
 						</div>
@@ -366,7 +370,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Address Street, Building</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.street_bldg }}</span>
 								</div>
 							</div>
 						</div>
@@ -374,7 +378,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Country</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.country }}</span>
 								</div>
 							</div>
 						</div>
@@ -382,7 +386,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Region / State</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.region_state }}</span>
 								</div>
 							</div>
 						</div>
@@ -390,7 +394,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">City</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.city }}</span>
 								</div>
 							</div>
 						</div>
@@ -398,7 +402,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Barangay</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.brgy }}</span>
 								</div>
 							</div>
 						</div>
@@ -406,7 +410,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Postal Code</label>
 								<div class="col-sm-9">
-									<span class="col-form-label"></span>
+									<span class="col-form-label">{{ return_address_data.postal_code }}</span>
 								</div>
 							</div>
 						</div>
