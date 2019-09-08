@@ -118,4 +118,20 @@ $(function(){
         $('.holiday_date_time').attr('disabled', 'disabled');
       }
     });
+    
+    window.onscroll=function(){
+      stick_header();
+    };
+    var header=$('#header_box')[0];
+    var sticky=header.offsetTop;
+
+    function stick_header(){
+      if(window.pageYOffset > sticky){
+        $(header).addClass('sticky');
+        $('#fixed_header').css({'top': '0'});
+      } else{
+        $(header).removeClass('sticky');
+        $('#fixed_header').css({'top': '10%'});
+      }
+    }
 });
