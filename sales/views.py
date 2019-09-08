@@ -56,7 +56,7 @@ def orders(request):
 	})
 
 def add_order(request):
-	liveProducts = list(Product.objects.filter(live=True))
+	liveProducts = list(Product.objects.filter(product_status="LIVE_APPROVED"))
 	orderedProducts = random.sample(liveProducts, k=5)
 	o = Order(profile_id=request.user.id, status=STATUS_CHOICES[0][1])
 	o.save()
