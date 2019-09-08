@@ -496,7 +496,7 @@ def product_edit(request, category_id, product_id):
             v.image_url_from_sku=None
 
             v.save()
-            if (request.FILES):
+            if 'product-variation-' + str(i) + '-image' in request.FILES:
               image = request.FILES['product-variation-' + str(i) + '-image']
               # Image.objects.create(
               #   file=image,
@@ -643,7 +643,7 @@ def products_import(request):
     missingColumns = []
     if form.is_valid():
       inputFile = request.FILES['file']
-      inputFileDF = pd.read_csv(inputFile, skip_blank_lines=True)
+      inputFileDF = pd.read_csv(inputFile, skip_blank_lines=True, encoding="cp1252")
       inputFileDF = inputFileDF.head(500)
 
       # Check if there are missing columns
