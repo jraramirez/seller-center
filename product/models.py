@@ -32,6 +32,10 @@ class Category(models.Model):
   level = models.IntegerField(null=True, blank=True)
   name = models.CharField(null=True, blank=True, max_length=500)
 
+class ProductImage(models.Model):
+  product = models.ForeignKey(Profile, models.CASCADE, blank=True, null=True)
+  url = models.CharField(null=True, blank=True, max_length=2000, help_text='images must have a white background')
+
 
 @register_snippet
 class Product(ClusterableModel):
