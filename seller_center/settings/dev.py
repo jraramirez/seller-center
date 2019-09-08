@@ -13,9 +13,9 @@ SECRET_KEY = '^+3s)n@s!d2fdsqm=v-1oc*y+ekr8zs3!*pn6-fzk!j5^6)k0h'
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "seller_center",
+        "NAME": "ebdb",
         "USER": "postgres",
-        "PASSWORD": "postgres",
+        "PASSWORD": "admin",
         "HOST": "localhost",
         "PORT": "",
     }
