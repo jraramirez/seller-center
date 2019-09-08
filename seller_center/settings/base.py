@@ -159,6 +159,8 @@ WAGTAIL_SITE_NAME = "seller_center"
 BASE_URL = 'http://example.com'
 
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'wagtailadmin/login.html'
+
+AWS_AUTH_URL = os.environ.get('AWS_AUTH_URL')
 AUTHENTICATION_BACKENDS = [
                             'django.contrib.auth.backends.ModelBackend',
                             'base.aws_backend.AwsBackend'
