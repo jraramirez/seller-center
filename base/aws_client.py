@@ -1,5 +1,5 @@
 import requests
-
+from seller_center.settings.base import AWS_AUTH_URL
 
 # Class that handles all endpoints for AWS
 class ApiGatewayClient:
@@ -7,10 +7,11 @@ class ApiGatewayClient:
     EMAIL = "email",
     MOBILE = "phone_number"
 
+
     HOST = "https://ktqc7jhi81.execute-api.ap-southeast-1.amazonaws.com/prod"
     VERSION = "v1"
     ORIGIN = "seller-center"
-    rootUrl = HOST + "/api/" + VERSION
+    rootUrl = AWS_AUTH_URL
     headers = {'Request-Origin-App': ORIGIN}
 
 
