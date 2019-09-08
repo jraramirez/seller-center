@@ -21,6 +21,7 @@ from product.models import ProductStatus
 from seller_center.settings.dev import MEDIA_URL
 from seller_center.settings.base import CSV_COLUMNS
 
+
 import VariationsFunctions as vf
 
 media_url = MEDIA_URL 
@@ -643,7 +644,7 @@ def products_import(request):
     missingColumns = []
     if form.is_valid():
       inputFile = request.FILES['file']
-      inputFileDF = pd.read_csv(inputFile, skip_blank_lines=True, encoding="cp1252")
+      inputFileDF = pd.read_csv(inputFile, skip_blank_lines=True)
       inputFileDF = inputFileDF.head(500)
 
       # Check if there are missing columns
@@ -936,8 +937,8 @@ def products_import(request):
                   )
                   v.save()
             if(not unpublished):
-              Product.objects.filter(id=productID).update(product_status=PRODUCT_STATUS_CHOICES[3])
-            Product.objects.filter(id=productID).update(stock_sum=stock_sum, product_status=PRODUCT_STATUS_CHOICES[0])
+              Product.objects.filter(id=productID).update(product_status=ProductStatus.UNLISTED.value)
+            Product.objects.filter(id=productID).update(stock_sum=stock_sum, product_status=ProductStatus.UNPUBLISHED.value)
 
     if (invalidCategory):
       errorMessage = 'Incorrect Category ID on Row/s: '
