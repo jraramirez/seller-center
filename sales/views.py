@@ -18,25 +18,19 @@ def orders(request):
 	allOrders = Order.objects.all()
 	allUsers = []
 	allUnpaidUsers = allToShipUsers = allShippingUsers = allCompletedUsers = allCancellationUsers = allReturnUsers = []
-	for order in allOrders:
-		allUsers.append(User.objects.filter(id=order.profile_id)[0].username)
 	allUnpaidOrders = Order.objects.filter(status='Unpaid')
-	for order in allOrders:
-		allUnpaidUsers.append(User.objects.filter(id=order.profile_id)[0].username)
 	allToShipOrders = Order.objects.filter(status='To Ship')
-	for order in allOrders:
-		allToShipUsers.append(User.objects.filter(id=order.profile_id)[0].username)
 	allShippingOrders = Order.objects.filter(status='Shipping')
-	for order in allOrders:
-		allShippingUsers.append(User.objects.filter(id=order.profile_id)[0].username)
 	allCompletedOrders = Order.objects.filter(status='Completed')
-	for order in allOrders:
-		allCompletedUsers.append(User.objects.filter(id=order.profile_id)[0].username)
 	allCancellationOrders = Order.objects.filter(status='Cancellation')
-	for order in allOrders:
-		allCancellationUsers.append(User.objects.filter(id=order.profile_id)[0].username)
 	allReturnOrders = Order.objects.filter(status='Return/Refund')
 	for order in allOrders:
+		allUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+		allUnpaidUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+		allToShipUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+		allShippingUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+		allCompletedUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+		allCancellationUsers.append(User.objects.filter(id=order.profile_id)[0].username)
 		allReturnUsers.append(User.objects.filter(id=order.profile_id)[0].username)
 	return render(request, 'sales/sales_page.html', {
 		'allUsersOrders': zip(allUsers, allOrders),
