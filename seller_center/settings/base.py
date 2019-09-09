@@ -159,6 +159,8 @@ WAGTAIL_SITE_NAME = "seller_center"
 BASE_URL = 'http://example.com'
 
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'wagtailadmin/login.html'
+
+AWS_AUTH_URL = os.environ.get('AWS_AUTH_URL')
 AUTHENTICATION_BACKENDS = [
                             'django.contrib.auth.backends.ModelBackend',
                             'base.aws_backend.AwsBackend'
@@ -178,8 +180,9 @@ CSV_COLUMNS = [
     'product_weight',
     'ship_out_in',
     'parent_sku_reference_no',
-    'other_logistics_provider_setting',
-    'other_logistics_provider_fee',
+    # 'other_logistics_provider_setting',
+    # 'other_logistics_provider_fee',
+
     'product_description',
     'variation1_id',
     'variation2_id',

@@ -8,7 +8,9 @@
         <tr>
           <th scope="col">Product(s)</th>
           <th scope="col"></th>
+          <th scope="col">Variation(s)</th>
           <th scope="col">Order Total</th>
+          <th scope="col">Date Ordered</th>
           <th scope="col">Status</th>
           <th scope="col">Countdown</th>
           <th scope="col">
@@ -21,18 +23,19 @@
               <li class="dropdown-item">Hi!</li>
             </ul>
           </th>
+          <th scope="col">Delivery Address</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody id="orders">
         {% for user, order in allUsersOrders %}
           <tr class="tr-top">
-            <td colspan="7">
+            <td colspan="9">
               Order ID: {{order.id}}
             </td>
           </tr>
           <tr class="tr-middle">
-            <td colspan="7">
+            <td colspan="9">
               User: {{user}}
             </td>
           </tr>
@@ -54,6 +57,15 @@
               <td class="text-center">
                 {% if product.product_name %}
                 {{product.product_name}}
+                {% else %} -
+                {% endif %}
+              </td>
+              <td class="text-center">
+                {% if product.variations.all %}
+                {% for variation in product.variations.all%}
+                  {{ variation.name }}
+                  <br>
+                {% endfor %}
                 {% else %} -
                 {% endif %}
               </td>
@@ -83,16 +95,23 @@
                     {% endif %}
                 </td>
                 <td class="text-center">
+                    {% if order.delivery_address %}
+                    {{order.delivery_address}}
+                    {% else %} -
+                    {% endif %}
+                </td>
+                <td class="text-center">
                     <div class="dropdown show">
                         <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                           <a class="dropdown-item" href="#">Arrange Pickup</a>
+                          <a class="dropdown-item" href="#">Deny order</a>
                         </div>
                     </div>
                 </td>
               {% else %}
-                <td colspan="6"></td>
+                <td colspan="8"></td>
               {% endif %}
           </tr>
           {% endfor %}
