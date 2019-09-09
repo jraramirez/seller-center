@@ -42,7 +42,19 @@ class SellerDetails(models.Model):
   seller_status=models.CharField(null=True, blank=True, max_length=500)
   name_on_id=models.TextField(null=True, blank=True)
   id_type=models.TextField(null=True, blank=True)
+  upload_id_front=models.ImageField(
+    upload_to='documents',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
   upload_id_front_url=models.TextField(null=True, blank=True)
+  upload_id_back=models.ImageField(
+    upload_to='documents',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
   upload_id_back_url=models.TextField(null=True, blank=True)
   email=models.EmailField(null=True, blank=True)
   phone=models.TextField(null=True, blank=True)
@@ -52,27 +64,6 @@ class SellerDetails(models.Model):
 class Profile(ClusterableModel):
   birthday = models.DateField(default=datetime.now)
   user = models.OneToOneField(User, on_delete=models.CASCADE)
-  # dti = models.ForeignKey(
-  #   'wagtaildocs.Document',
-  #   null=True,
-  #   blank=True,
-  #   on_delete=models.SET_NULL,
-  #   related_name='+'
-  # )
-  # sec = models.ForeignKey(
-  #   'wagtaildocs.Document',
-  #   null=True,
-  #   blank=True,
-  #   on_delete=models.SET_NULL,
-  #   related_name='+'
-  # )
-  # permit = models.ForeignKey(
-  #   'wagtaildocs.Document',
-  #   null=True,
-  #   blank=True,
-  #   on_delete=models.SET_NULL,
-  #   related_name='+'
-  # )
   seller_details=models.OneToOneField(SellerDetails, on_delete=models.CASCADE, null=True)
   business_details=models.ForeignKey(BusinessDetails, models.DO_NOTHING, blank=True, null=True)
   pickup_address=models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True, related_name='pickup_address')
@@ -85,6 +76,12 @@ class Documents(models.Model):
   profile=ParentalKey('Profile', related_name='document', null=True, blank=True)
   document_type=models.TextField(null=True, blank=True)
   document_url=models.TextField(null=True, blank=True)
+  document=models.ImageField(
+    upload_to='documents',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

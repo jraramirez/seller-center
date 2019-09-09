@@ -23,9 +23,13 @@ def profile_edit(request):
 		seller_details.name_on_id=request.POST.get('last-name') + ', ' + request.POST.get('first-name')
 		seller_details.id_type=request.POST.get('id_type')
 		if 'id_front' in request.FILES:
-			seller_details.upload_id_front_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + request.FILES['id_front'].name
+			fn=trim_file_upload(request.FILES['id_front'].name)
+			seller_details.upload_id_front.save(str(profile.id) + '/' + str(user_id) + '/'  + fn, request.FILES['id_front'])
+			seller_details.upload_id_front_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + fn
 		if 'id_back' in request.FILES:
-			seller_details.upload_id_back_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + request.FILES['id_back'].name
+			fn=trim_file_upload(request.FILES['id_back'].name)
+			seller_details.upload_id_back.save(str(profile.id) + '/' + str(user_id) + '/'  + fn, request.FILES['id_back'])
+			seller_details.upload_id_back_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + fn
 		seller_details.email=request.POST.get('email') if request.POST.get('email') == None else ''
 		seller_details.phone=request.POST.get('phone') if request.POST.get('phone') == None else ''
 		if request.POST.get('terms_conditions') is None:
@@ -78,13 +82,25 @@ def profile_edit(request):
 		business_address_details.save()
 
 		if 'bir' in request.FILES:
-			Documents.objects.filter(profile_id=user_id, document_type='bir').update(document_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + request.FILES['bir'].name)
+			docu=Documents.objects.filter(profile_id=user_id, document_type='bir')[0]
+			fn=trim_file_upload(request.FILES['bir'].name)
+			docu.document.save(str(profile.id) + '/' + str(user_id) + '/'  + fn, request.FILES['bir'])
+			Documents.objects.filter(profile_id=user_id, document_type='bir').update(document_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + fn)
 		if 'dti' in request.FILES:
-			Documents.objects.filter(profile_id=user_id, document_type='dti').update(document_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + request.FILES['dti'].name)
+			docu=Documents.objects.filter(profile_id=user_id, document_type='dti')[0]
+			fn=trim_file_upload(request.FILES['dti'].name)
+			docu.document.save(str(profile.id) + '/' + str(user_id) + '/'  + fn, request.FILES['dti'])
+			Documents.objects.filter(profile_id=user_id, document_type='dti').update(document_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + fn)
 		if 'sec' in request.FILES:
-			Documents.objects.filter(profile_id=user_id, document_type='sec').update(document_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + request.FILES['sec'].name)
+			docu=Documents.objects.filter(profile_id=user_id, document_type='sec')[0]
+			fn=trim_file_upload(request.FILES['sec'].name)
+			docu.document.save(str(profile.id) + '/' + str(user_id) + '/'  + fn, request.FILES['sec'])
+			Documents.objects.filter(profile_id=user_id, document_type='sec').update(document_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + fn)
 		if 'permit' in request.FILES:
-			Documents.objects.filter(profile_id=user_id, document_type='permit').update(document_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + request.FILES['permit'].name)
+			docu=Documents.objects.filter(profile_id=user_id, document_type='permit')[0]
+			fn=trim_file_upload(request.FILES['permit'].name)
+			docu.document.save(str(profile.id) + '/' + str(user_id) + '/'  + fn, request.FILES['permit'])
+			Documents.objects.filter(profile_id=user_id, document_type='permit').update(document_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + fn)
 
 		pickup_address_details=profile.pickup_address
 		pickup_address_details.street_bldg=request.POST.get('pickup_street_bldg') if request.POST.get('pickup_street_bldg') == None else ''
@@ -146,8 +162,10 @@ def set_user_profile_data(user_id):
 		profileData.save()
 	else:
 		seller_details_data=profileData.seller_details
-	seller_details_data.upload_id_front_url=get_filename_from_url(seller_details_data.upload_id_front_url) if seller_details_data.upload_id_front_url else None
-	seller_details_data.upload_id_back_url=get_filename_from_url(seller_details_data.upload_id_back_url) if seller_details_data.upload_id_back_url else None
+	seller_details_data.upload_id_front_url=seller_details_data.upload_id_front_url if seller_details_data.upload_id_front_url else None
+	upload_id_front_name=get_filename_from_url(seller_details_data.upload_id_front_url) if seller_details_data.upload_id_front_url else None
+	seller_details_data.upload_id_back_url=seller_details_data.upload_id_back_url if seller_details_data.upload_id_back_url else None
+	upload_id_back_name=get_filename_from_url(seller_details_data.upload_id_back_url) if seller_details_data.upload_id_back_url else None
 	seller_details_data.has_agreed_to_terms='Agreed' if seller_details_data.has_agreed_to_terms else 'Not yet agreed'
 
 	shop_details_data=seller_details_data.shop_details
@@ -169,7 +187,7 @@ def set_user_profile_data(user_id):
 		business_address=None
 
 	bir_documents_data=Documents.objects.filter(profile_id=user_id, document_type='bir')
-	print(bir_documents_data)
+
 	if len(bir_documents_data) == 0:
 		bir_documents_data=Documents()
 		bir_documents_data.document_type='bir'
@@ -234,6 +252,8 @@ def set_user_profile_data(user_id):
 		'profileData': profileData,
 		'userData': userData,
 		'seller_details_data': seller_details_data,
+		'upload_id_front_name': upload_id_front_name,
+		'upload_id_back_name': upload_id_back_name,
 		'shop_details_data': shop_details_data,
 		'business_details_data': business_details_data,
 		'business_address_data': business_address_data,
@@ -251,3 +271,9 @@ def set_user_profile_data(user_id):
 		'return_address_data': return_address_data,
 		'return_contact_data': return_contact_data
 	}
+
+def trim_file_upload(file):
+	file=file.replace(' ', '_')
+	file=file.replace('(', '')
+	file=file.replace(')', '')
+	return file
