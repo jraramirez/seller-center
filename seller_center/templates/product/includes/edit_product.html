@@ -136,7 +136,7 @@
                     <div class="form-group row mt-3 mb-4">
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale Start Date</label>
 
-                        <div class="input-group col-sm-9"> 
+                        <div class="input-group col-sm-9">
                             <input type="date" name="product-sale-date-start" class="form-control" value="{{product.product_sale_date_start|date:'Y-m-d'}}">
                         </div>
                     </div>
@@ -156,7 +156,7 @@
                             <input type="date" name="product-sale-date-end" class="form-control" value="{{product.product_sale_date_end|date:'Y-m-d'}}">
                         </div>
                     </div>
-                    
+
                     <div class="form-group row mt-3 mb-4">
                         <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Time</label>
 
@@ -240,7 +240,7 @@
                                            required>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group row mt-3 mb-4">
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale Price</label>
 
@@ -277,7 +277,7 @@
                                     <input type="date" name="product-variation-{{forloop.counter0}}-sale-date-end" class="form-control" value="{{v.variation_sale_date_end|date:'Y-m-d'}}">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group row mt-3 mb-4">
                                 <label for="id_product-price" class="col-sm-3 col-form-label">Sale End Time</label>
 
@@ -295,6 +295,7 @@
                                         <label for="product-variation-{{forloop.counter0}}-image" class="drop-area-text" id="prod_var_{{ forloop.counter0 }}_lbl"><i class="far fa-image"></i> Variation {{ forloop.counter }} Image</label>
                                         <input type="file" name="product-variation-{{forloop.counter0}}-image" class="form-control img_file" id="product-variation-{{forloop.counter0}}-image" accept=".jpg, .png" imgdisplay="prod_var_{{ forloop.counter0 }}_img" img_rmv="rmv_prod_var_{{ forloop.counter0 }}_img">
                                         <label for="product-variation-{{forloop.counter0}}-image">
+
                                             <img src="{{ v.variation_image_url_from_upload }}" class="drop-image" id="prod_var_{{ forloop.counter0 }}_img" />
                                         </label>
                                         <button class="btn btn-danger btn-circle trash_can" id="rmv_prod_var_{{ forloop.counter0 }}_img" rmv_img="prod_var_{{ forloop.counter0 }}_img"><i class="fas fa-trash"></i></button>

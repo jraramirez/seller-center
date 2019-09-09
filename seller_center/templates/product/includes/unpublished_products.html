@@ -54,7 +54,7 @@
                 {% for product in unpublishedList %}
                 <tr>
                     <td scope="row">
-                        <a href="/products/edit/{{product.category}}/{{product.id}}/">
+                        <a href="{% url 'product_edit' category_id=product.category.unique_id product_id=product.id %}">
                             {% if product.variations.all.0.image_url %}
                                 <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
                             {% elif product.variations.all.0.image_upload %}
@@ -113,7 +113,7 @@
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                              <a class="dropdown-item" href="/products/edit/{{product.category}}/{{product.id}}/">Edit</a>
+                              <a class="dropdown-item" href="{% url 'product_edit' category_id=product.category.unique_id product_id=product.id %}">Edit</a>
                               <a class="dropdown-item" href="/products/delete/{{product.id}}/">Delete</a>
                             </div>
                         </div>

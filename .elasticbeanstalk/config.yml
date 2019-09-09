@@ -1,6 +1,6 @@
 branch-defaults:
   develop:
-    environment: seller-center-dev
+    environment: sellercenter-dev
   master:
     environment: production
 environment-defaults:
