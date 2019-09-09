@@ -160,10 +160,11 @@ BASE_URL = 'http://example.com'
 
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'wagtailadmin/login.html'
 
-AWS_AUTH_URL = os.environ.get('AWS_AUTH_URL')
+# AWS_AUTH_URL = os.environ.get('AWS_AUTH_URL')
+AWS_AUTH_URL = 'https://9mzqmu4r3g.execute-api.ap-southeast-1.amazonaws.com/staging/api/v1'
+
 AUTHENTICATION_BACKENDS = [
                             'django.contrib.auth.backends.ModelBackend',
-                            'base.aws_backend.AwsBackend'
                             ]
 
 MESSAGE_TAGS = {
