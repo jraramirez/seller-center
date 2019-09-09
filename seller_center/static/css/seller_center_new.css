@@ -63,3 +63,8 @@
 .sticky h1{
   padding: 15px;
 }
+
+.user_upload_id{
+  width: 250px;
+  height: 250px;
+}
