@@ -9,6 +9,11 @@ def profile(request):
 
 def profile_edit(request):
 	user_id=request.user.id
+	data=set_user_profile_data(user_id)
+
+	if not data['enable_fields']:
+		return HttpResponseRedirect("/profile")
+
 	if request.method == 'POST':
 		User.objects.filter(id=user_id).update(
 			first_name=request.POST.get('first-name'),
@@ -30,8 +35,8 @@ def profile_edit(request):
 			fn=trim_file_upload(request.FILES['id_back'].name)
 			seller_details.upload_id_back.save(str(profile.id) + '/' + str(user_id) + '/'  + fn, request.FILES['id_back'])
 			seller_details.upload_id_back_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + fn
-		seller_details.email=request.POST.get('email') if request.POST.get('email') == None else ''
-		seller_details.phone=request.POST.get('phone') if request.POST.get('phone') == None else ''
+		seller_details.email=request.POST.get('email') if request.POST.get('email') != None else ''
+		seller_details.phone=request.POST.get('phone') if request.POST.get('phone') != None else ''
 		if request.POST.get('terms_conditions') is None:
 			seller_details.has_agreed_to_terms=False
 		else:
@@ -39,7 +44,7 @@ def profile_edit(request):
 		seller_details.save()
 
 		shop_details=seller_details.shop_details
-		shop_details.shop_name=request.POST.get('shop_name') if request.POST.get('shop_name') == None else ''
+		shop_details.shop_name=request.POST.get('shop_name') if request.POST.get('shop_name') != None else ''
 		if request.POST.get('holiday') is None:
 			shop_details.holiday_mode=False
 		else:
@@ -63,13 +68,13 @@ def profile_edit(request):
 		shop_details.save()
 
 		business_details=profile.business_details
-		business_details.company_name=request.POST.get('company_name') if request.POST.get('company_name') == None else ''
-		business_details.business_tin=request.POST.get('business_tin') if request.POST.get('business_tin') == None else ''
-		business_details.business_registration_number=request.POST.get('business_registration_number') if request.POST.get('business_registration_number') == None else ''
+		business_details.company_name=request.POST.get('company_name') if request.POST.get('company_name') != None else ''
+		business_details.business_tin=request.POST.get('business_tin') if request.POST.get('business_tin') != None else ''
+		business_details.business_registration_number=request.POST.get('business_registration_number') if request.POST.get('business_registration_number') != None else ''
 		business_details.save()
 
 		business_address_details=business_details.business_address
-		business_address_details.street_bldg=request.POST.get('business_street_bldg') if request.POST.get('business_registration_number') == None else ''
+		business_address_details.street_bldg=request.POST.get('business_street_bldg') if request.POST.get('business_registration_number') != None else ''
 		business_address_details.country=request.POST.get('business_country')
 		business_address_details.region_state=request.POST.get('business_region_state')
 		business_address_details.city=request.POST.get('business_city')
@@ -103,7 +108,7 @@ def profile_edit(request):
 			Documents.objects.filter(profile_id=user_id, document_type='permit').update(document_url=MEDIA_URL + 'documents/' + str(profile.id) + '/' + str(user_id) + '/'  + fn)
 
 		pickup_address_details=profile.pickup_address
-		pickup_address_details.street_bldg=request.POST.get('pickup_street_bldg') if request.POST.get('pickup_street_bldg') == None else ''
+		pickup_address_details.street_bldg=request.POST.get('pickup_street_bldg') if request.POST.get('pickup_street_bldg') != None else ''
 		pickup_address_details.country=request.POST.get('pickup_country')
 		pickup_address_details.region_state=request.POST.get('pickup_region_state')
 		pickup_address_details.city=request.POST.get('pickup_city')
@@ -116,13 +121,13 @@ def profile_edit(request):
 		pickup_address_details.save()
 
 		pickup_contact_details=pickup_address_details.contact_details
-		pickup_contact_details.contact_person_name=request.POST.get('pickup_contact_person_name') if request.POST.get('pickup_contact_person_name') == None else ''
-		pickup_contact_details.contact_person_phone=request.POST.get('pickup_contact_person_phone') if request.POST.get('pickup_contact_person_phone') == None else ''
-		pickup_contact_details.contact_person_email=request.POST.get('pickup_contact_person_email') if request.POST.get('pickup_contact_person_email') == None else ''
+		pickup_contact_details.contact_person_name=request.POST.get('pickup_contact_person_name') if request.POST.get('pickup_contact_person_name') != None else ''
+		pickup_contact_details.contact_person_phone=request.POST.get('pickup_contact_person_phone') if request.POST.get('pickup_contact_person_phone') != None else ''
+		pickup_contact_details.contact_person_email=request.POST.get('pickup_contact_person_email') if request.POST.get('pickup_contact_person_email') != None else ''
 		pickup_contact_details.save()
 
 		return_address_details=profile.return_address
-		return_address_details.street_bldg=request.POST.get('return_street_bldg') if request.POST.get('return_street_bldg') == None else ''
+		return_address_details.street_bldg=request.POST.get('return_street_bldg') if request.POST.get('return_street_bldg') != None else ''
 		return_address_details.country=request.POST.get('return_country')
 		return_address_details.region_state=request.POST.get('return_region_state')
 		return_address_details.city=request.POST.get('return_city')
@@ -135,13 +140,14 @@ def profile_edit(request):
 		return_address_details.save()
 
 		return_contact_details=return_address_details.contact_details
-		return_contact_details.contact_person_name=request.POST.get('return_contact_person_name') if request.POST.get('return_contact_person_name') == None else ''
-		return_contact_details.contact_person_phone=request.POST.get('return_contact_person_phone') if request.POST.get('return_contact_person_phone') == None else ''
-		return_contact_details.contact_person_email=request.POST.get('return_contact_person_email') if request.POST.get('return_contact_person_email') == None else ''
+		return_contact_details.contact_person_name=request.POST.get('return_contact_person_name') if request.POST.get('return_contact_person_name') != None else ''
+		return_contact_details.contact_person_phone=request.POST.get('return_contact_person_phone') if request.POST.get('return_contact_person_phone') != None else ''
+		return_contact_details.contact_person_email=request.POST.get('return_contact_person_email') if request.POST.get('return_contact_person_email') != None else ''
 		return_contact_details.save()
 
 		return HttpResponseRedirect("/profile")
-	return render(request, 'users/profile_edit_page.html', set_user_profile_data(user_id))
+
+	return render(request, 'users/profile_edit_page.html', data)
 
 def get_filename_from_url(url):
 	url=url[url.rfind('/')+1:]
@@ -248,6 +254,47 @@ def set_user_profile_data(user_id):
 		return_address_data=profileData.return_address
 	return_contact_data=return_address_data.contact_details
 
+	ctr=0
+	enable_fields=True
+	if seller_details_data.name_on_id:
+		ctr+=1
+	if seller_details_data.id_type:
+		ctr+=1
+	if seller_details_data.upload_id_front_url:
+		ctr+=1
+	if seller_details_data.upload_id_back_url:
+		ctr+=1
+	if seller_details_data.has_agreed_to_terms == 'Agreed':
+		ctr+=1
+	if shop_details_data.shop_name:
+		ctr+=1
+	if pickup_address_data.street_bldg:
+		ctr+=1
+	if pickup_address_data.country:
+		ctr+=1
+	if pickup_address_data.region_state:
+		ctr+=1
+	if pickup_address_data.city:
+		ctr+=1
+	if pickup_address_data.brgy:
+		ctr+=1
+	if pickup_address_data.postal_code:
+		ctr+=1
+	if return_address_data.street_bldg:
+		ctr+=1
+	if return_address_data.country:
+		ctr+=1
+	if return_address_data.region_state:
+		ctr+=1
+	if return_address_data.city:
+		ctr+=1
+	if return_address_data.brgy:
+		ctr+=1
+	if return_address_data.postal_code:
+		ctr+=1
+	if seller_details_data.seller_status == 'Pending for Review' and ctr == 18:
+		enable_fields=False
+
 	return {
 		'profileData': profileData,
 		'userData': userData,
@@ -269,7 +316,8 @@ def set_user_profile_data(user_id):
 		'pickup_address_data': pickup_address_data,
 		'pickup_contact_data': pickup_contact_data,
 		'return_address_data': return_address_data,
-		'return_contact_data': return_contact_data
+		'return_contact_data': return_contact_data,
+		'enable_fields': enable_fields
 	}
 
 def trim_file_upload(file):
