@@ -396,6 +396,8 @@ def product_edit(request, category_id, product_id):
 
     # product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
+
+    product['product_cover_img']=request.FILES['product-cover-img']
     errors = []
 
     if (not product['product_code']):
@@ -462,8 +464,11 @@ def product_edit(request, category_id, product_id):
         # product_condition=request.POST.get('product-condition'),
         parent_sku_reference_no=request.POST.get('product-parent-sku'),
 
+        cover_image_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_cover_img'].name,
       )
       t.save()
+
+      t.cover_image.save(str(request.user.id) + '/' + product['product_cover_img'].name, product['product_cover_img'])
 
       # this means that product has no variation so we delete any existing variation
       if request.POST.get('product-price'):
@@ -596,6 +601,8 @@ def product_edit(request, category_id, product_id):
 
     # product['product_condition'] = selectedProduct.product_condition
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
+
+    product['cover_image_url']=selectedProduct.cover_image_url
 
     product['variations'] = Variations.objects.filter(product_id=product_id).order_by('-id')
 

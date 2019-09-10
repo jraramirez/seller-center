@@ -50,6 +50,12 @@ class Product(ClusterableModel):
   product_status = models.CharField(null=True, blank=True, max_length=500, default=ProductStatus.UNPUBLISHED.value)
   status_changed_on = models.DateTimeField(default=datetime.now)
   cover_image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Cover photo must have a white background')
+  cover_image=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
   stock_sum = models.IntegerField(blank=True, null=True, default=None)
   product_weight = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
   product_length = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
