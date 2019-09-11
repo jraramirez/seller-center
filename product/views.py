@@ -396,6 +396,19 @@ def product_edit(request, category_id, product_id):
 
     # product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
+
+    if 'product-cover-img' in request.FILES:
+      product['product_cover_img']=request.FILES['product-cover-img']
+    if 'product-img-1' in request.FILES:
+      product['product_img1']=request.FILES['product-img-1']
+    if 'product-img-2' in request.FILES:
+      product['product_img2']=request.FILES['product-img-2']
+    if 'product-img-3' in request.FILES:
+      product['product_img3']=request.FILES['product-img-3']
+    if 'product-img-4' in request.FILES:
+      product['product_img4']=request.FILES['product-img-4']
+    if 'product-img-5' in request.FILES:
+      product['product_img5']=request.FILES['product-img-5']
     errors = []
 
     if (not product['product_code']):
@@ -433,7 +446,7 @@ def product_edit(request, category_id, product_id):
           if(not request.POST.get('product-variation-'+str(i)+'-sale-time-end')):
             errors.append('Variation ' + str(i+1) + ' Sale End Time is required; ')
     if (not errors):
-
+      p=Product.objects.filter(id=product_id)[0]
       category = Category.objects.filter(unique_id=int(product['product-category-id']))[0]
       t = Product(id=product_id,
         product_code=request.POST.get('product-code'),
@@ -462,8 +475,39 @@ def product_edit(request, category_id, product_id):
         # product_condition=request.POST.get('product-condition'),
         parent_sku_reference_no=request.POST.get('product-parent-sku'),
 
+        cover_image_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_cover_img'].name if 'product_cover_img' in product else p.cover_image_url,
+        image1_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_img1'].name if 'product_img1' in product else p.image1_url,
+        image2_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_img2'].name if 'product_img2' in product else p.image2_url,
+        image3_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_img3'].name if 'product_img3' in product else p.image3_url,
+        image4_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_img4'].name if 'product_img4' in product else p.image4_url,
+        image5_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_img5'].name if 'product_img5' in product else p.image5_url
       )
       t.save()
+
+      if 'product_cover_img' in product:
+        t.cover_image.save(str(request.user.id) + '/' + product['product_cover_img'].name, product['product_cover_img'])
+      else:
+        t.cover_image=p.cover_image
+      if 'product_img1' in product:
+        t.image1.save(str(request.user.id) + '/' + product['product_img1'].name, product['product_img1'])
+      else:
+        t.image1=p.image1
+      if 'product_img2' in product:
+        t.image2.save(str(request.user.id) + '/' + product['product_img2'].name, product['product_img2'])
+      else:
+        t.image2=p.image2
+      if 'product_img3' in product:
+        t.image3.save(str(request.user.id) + '/' + product['product_img3'].name, product['product_img3'])
+      else:
+        t.image3=p.image3
+      if 'product_img4' in product:
+        t.image4.save(str(request.user.id) + '/' + product['product_img4'].name, product['product_img4'])
+      else:
+        t.image4=p.image4
+      if 'product_img5' in product:
+        t.image5.save(str(request.user.id) + '/' + product['product_img5'].name, product['product_img5'])
+      else:
+        t.image5=p.image5
 
       # this means that product has no variation so we delete any existing variation
       if request.POST.get('product-price'):
@@ -596,6 +640,13 @@ def product_edit(request, category_id, product_id):
 
     # product['product_condition'] = selectedProduct.product_condition
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
+
+    product['cover_image_url']=selectedProduct.cover_image_url
+    product['image1_url']=selectedProduct.image1_url
+    product['image2_url']=selectedProduct.image2_url
+    product['image3_url']=selectedProduct.image3_url
+    product['image4_url']=selectedProduct.image4_url
+    product['image5_url']=selectedProduct.image5_url
 
     product['variations'] = Variations.objects.filter(product_id=product_id).order_by('-id')
 
@@ -744,13 +795,50 @@ def products_import(request):
 
                   Errors.objects.filter(product_id = productID).delete()
 
-            # Product name validation
+            # Product code validation
+            if(row['product_code'] != row['product_code']):
+              Product.objects.filter(id=productID).update(product_code=None)
+              e = Errors(
+                product_id = productID,
+                name = 'Product Code is required',
+              )
+              e.save()
+              unpublished = True
+            else:
+              Product.objects.filter(id=productID).update(product_code=row['product_code'])
+              if(len(str(row['product_code']))>100):
+                e = Errors(
+                  product_id = productID,
+                  name = 'Product Code exceeds maximum lenght of 100',
+                )
+                e.save()
+                unpublished = True
+                
+            # Product category validation
+            if(row['category'] != row['category']):
+              Product.objects.filter(id=productID).update(category=None)
+              e = Errors(
+                product_id = productID,
+                name = 'Product Category is required',
+              )
+              e.save()
+              unpublished = True
+            else:
+              Product.objects.filter(id=productID).update(product_code=row['product_code'])
+              if(len(str(row['product_code']))>100):
+                e = Errors(
+                  product_id = productID,
+                  name = 'Product Code exceeds maximum lenght of 100',
+                )
+                e.save()
+                unpublished = True
 
+            # Product name validation
             if(row['product_name'] != row['product_name']):
               Product.objects.filter(id=productID).update(product_name=None)
               e = Errors(
                 product_id = productID,
-                name = 'Product name is required',
+                name = 'Product Name is required',
               )
               e.save()
               unpublished = True
@@ -761,26 +849,7 @@ def products_import(request):
               if(len(formatted_prod_name)<16):
                 e = Errors(
                   product_id = productID,
-                  name = 'Product name should have at least 16 characters',
-                )
-                e.save()
-                unpublished = True
-
-            # Product code validation
-            if(row['product_code'] != row['product_code']):
-              Product.objects.filter(id=productID).update(product_code=None)
-              e = Errors(
-                product_id = productID,
-                name = 'Product code is required',
-              )
-              e.save()
-              unpublished = True
-            else:
-              Product.objects.filter(id=productID).update(product_code=row['product_code'])
-              if(len(str(row['product_code']))>100):
-                e = Errors(
-                  product_id = productID,
-                  name = 'Product code exceeds maximum lenght of 100',
+                  name = 'Product Name should have at least 16 characters',
                 )
                 e.save()
                 unpublished = True
@@ -793,7 +862,7 @@ def products_import(request):
               if(len(formatted_prod_desc)<100):
                 e = Errors(
                   product_id = productID,
-                  name = 'Product description should have at least 100 characters',
+                  name = 'Product Description should have at least 100 characters',
                 )
                 e.save()
                 unpublished = True
@@ -801,17 +870,7 @@ def products_import(request):
               Product.objects.filter(id=productID).update(product_description=None)
               e = Errors(
                 product_id = productID,
-                name = 'Product description is required',
-              )
-              e.save()
-              unpublished = True
-
-            # Product weight validation
-            if(row['product_weight'] != row['product_weight']):
-              Product.objects.filter(id=productID).update(product_weight=None)
-              e = Errors(
-                product_id = productID,
-                name = 'Product weight is required',
+                name = 'Product Description is required',
               )
               e.save()
               unpublished = True
@@ -825,7 +884,7 @@ def products_import(request):
                 Product.objects.filter(id=productID).update(product_price=None)
                 e = Errors(
                   product_id = productID,
-                  name = 'Missing product price',
+                  name = 'Missing Product Price',
 
                 )
                 e.save()
@@ -835,17 +894,17 @@ def products_import(request):
                 if not prod_price.isdigit():
                   prod_price=None
                 Product.objects.filter(id=productID).update(product_price=prod_price)
-              if(row['stock_sum'] != row['stock_sum']):
-                Product.objects.filter(id=productID).update(stock_sum=None)
+              if(row['product_stock'] != row['product_stock']):
+                Product.objects.filter(id=productID).update(product_stock=None)
                 e = Errors(
                   product_id = productID,
-                  name = 'Missing product stock',
+                  name = 'Missing Product Stock',
 
                 )
                 e.save()
                 unpublished = True
               else:
-                Product.objects.filter(id=productID).update(stock_sum=row['stock_sum'])
+                Product.objects.filter(id=productID).update(product_stock=row['product_stock'])
 
             # Product image validation
             imageInS3 = False
@@ -860,7 +919,7 @@ def products_import(request):
                     unpublished = True
                     e = Errors(
                       product_id = productID,
-                      name = 'Product image is required',
+                      name = 'Product Image is required',
                     )
                     e.save()
             else:
@@ -868,77 +927,78 @@ def products_import(request):
                 unpublished = True
                 e = Errors(
                   product_id = productID,
-                  name = 'Product image is required',
+                  name = 'Product Image is required',
                 )
                 e.save()
             
             # Insert/Update each product variation from file to database
-            stock_sum = 0
-            for i in range(0,7):
-              if(row['variation'+str(i+1)+'_id'] == row['variation'+str(i+1)+'_id']):
-                variationID = row['variation'+str(i+1)+'_id']
-                variationStock = row['variation'+str(i+1)+'_stock']
-                variationPrice = row['variation'+str(i+1)+'_price']
-                variationName = row['variation'+str(i+1)+'_name']
+            if(vf.hasVariations(row)):
+              stock_sum = 0
+              for i in range(0,7):
+                if(row['variation'+str(i+1)+'_id'] == row['variation'+str(i+1)+'_id']):
+                  variationID = row['variation'+str(i+1)+'_id']
+                  variationStock = row['variation'+str(i+1)+'_stock']
+                  variationPrice = row['variation'+str(i+1)+'_price']
+                  variationName = row['variation'+str(i+1)+'_name']
 
-                # Product variation stock validation
-                if(variationStock != variationStock):
-                  variationStock = 0
-                else:
-                  stock_sum = stock_sum + int(variationStock)
+                  # Product variation stock validation
+                  if(variationStock != variationStock):
+                    variationStock = 0
+                  else:
+                    stock_sum = stock_sum + int(variationStock)
 
-                # Product variation image1 validation
-                if(i == 0 and not imageInS3 and not autoPair):
-                  image_url_from_sku = None
-                image_url = row['image1']
-                if(row['image1'] != row['image1']):
-                  image_url = None
-                
-                # Product variation name validation
-                if(variationName != variationName):
-                  variationName = None
-                  unpublished = True
-                  e = Errors(
-                    product_id = productID,
-                    name = 'Variation '+str(i+1)+' name is required',
-                  )
-                  e.save()
+                  # Product variation image1 validation
+                  if(i == 0 and not imageInS3 and not autoPair):
+                    image_url_from_sku = None
+                  image_url = row['image1']
+                  if(row['image1'] != row['image1']):
+                    image_url = None
+                  
+                  # Product variation name validation
+                  if(variationName != variationName):
+                    variationName = None
+                    unpublished = True
+                    e = Errors(
+                      product_id = productID,
+                      name = 'Variation '+str(i+1)+' Name is required',
+                    )
+                    e.save()
 
-                # Product variation price validation
-                if(variationPrice != variationPrice):
-                  variationPrice = None
-                  unpublished = True
-                  e = Errors(
-                    product_id = productID,
-                    name = 'Variation '+str(i+1)+' price is required',
-                  )
-                  e.save()
+                  # Product variation price validation
+                  if(variationPrice != variationPrice):
+                    variationPrice = None
+                    unpublished = True
+                    e = Errors(
+                      product_id = productID,
+                      name = 'Variation '+str(i+1)+' Price is required',
+                    )
+                    e.save()
 
-                variation = Variations.objects.filter(product_id=productID).filter(sku=row['variation'+str(i+1)+'_id'])
-                if(variation.count()):
-                  variation.update(
-                    product_id = productID,
-                    image_url = image_url,
-                    price = variationPrice,
-                    sku = variationID,
-                    stock = variationStock,
-                    name = variationName,
-                    image_url_from_sku = image_url_from_sku
-                  )
-                else:
-                  v = Variations(
-                    product_id = productID,
-                    image_url = image_url,
-                    price = variationPrice,
-                    sku = variationID,
-                    stock = variationStock,
-                    name = variationName,
-                    image_url_from_sku = image_url_from_sku
-                  )
-                  v.save()
-            if(not unpublished):
-              Product.objects.filter(id=productID).update(product_status=ProductStatus.UNLISTED.value)
-            Product.objects.filter(id=productID).update(stock_sum=stock_sum, product_status=ProductStatus.UNPUBLISHED.value)
+                  variation = Variations.objects.filter(product_id=productID).filter(sku=row['variation'+str(i+1)+'_id'])
+                  if(variation.count()):
+                    variation.update(
+                      product_id = productID,
+                      image_url = image_url,
+                      price = variationPrice,
+                      sku = variationID,
+                      stock = variationStock,
+                      name = variationName,
+                      image_url_from_sku = image_url_from_sku
+                    )
+                  else:
+                    v = Variations(
+                      product_id = productID,
+                      image_url = image_url,
+                      price = variationPrice,
+                      sku = variationID,
+                      stock = variationStock,
+                      name = variationName,
+                      image_url_from_sku = image_url_from_sku
+                    )
+                    v.save()
+              if(not unpublished):
+                Product.objects.filter(id=productID).update(product_status=ProductStatus.UNLISTED.value)
+              Product.objects.filter(id=productID).update(stock_sum=stock_sum, product_status=ProductStatus.UNPUBLISHED.value)
 
     if (invalidCategory):
       errorMessage = 'Incorrect Category ID on Row/s: '

@@ -135,3 +135,33 @@ $(function(){
       }
     }
 });
+
+$('.number_only').keypress(function(e){
+  validate_input(e, 1);
+});
+
+$('.number_n_spec_char_only').keypress(function(e){
+  validate_input(e, 2);
+});
+
+function validate_input(e, type){
+  var theEvent=e||window.event;
+  if(theEvent.type === 'paste'){
+      key=event.clipboardData.getData('text/plain');
+  } else{
+      var key=theEvent.keyCode||theEvent.which;
+      key=String.fromCharCode(key);
+  }
+  var regex=/[*]/;
+  if(type == 1){
+    regex=/[0-9]/;
+  } else if(type == 2){
+    regex=/[0-9]|\W|_/;
+  }
+  if(!regex.test(key)){
+    theEvent.returnValue=false;
+    if(theEvent.preventDefault){
+      theEvent.preventDefault();
+    }
+  }
+}

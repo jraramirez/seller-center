@@ -17,8 +17,11 @@
 		<!-- Page Heading -->
 		<div class="d-sm-flex align-items-center justify-content-between mb-4">
 			<h1 class="h3 mr-auto mb-0 text-gray-800">Profile</h1>
-			<a href="/profile/edit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i
-					class="fas text-white-50 mr-2"></i>Edit Profile</a>
+			{% if enable_fields %}
+				<a href="/profile/edit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas text-white-50 mr-2"></i>Edit Profile</a>
+			{% else %}
+				<label>Your account is currently in review.</label>
+			{% endif %}
 		</div>
 			{% csrf_token %}
 		<div class="row">
@@ -68,7 +71,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Upload ID Front</label>
 								<div class="col-sm-9">
-									<span class="col-form-label">{{ seller_details_data.upload_id_front_url }}</span>
+									<img src="{{ seller_details_data.upload_id_front_url }}" class="user_upload_id">
 								</div>
 							</div>
 						</div>
@@ -76,7 +79,7 @@
 							<div class="form-group row mt-3 mb-4">
 								<label for="" class="col-sm-3 col-form-label">Upload ID Back</label>
 								<div class="col-sm-9">
-									<span class="col-form-label">{{ seller_details_data.upload_id_back_url }}</span>
+									<img src="{{ seller_details_data.upload_id_back_url }}" class="user_upload_id">
 								</div>
 							</div>
 						</div>

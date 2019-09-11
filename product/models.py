@@ -26,6 +26,15 @@ class ProductStatus(Enum):   # A subclass of Enum
     SUSPENDED = 'SUSPENDED'
 
 
+class OrderStatus(Enum):   # A subclass of Enum
+    UNPAID = 'UNPAID'
+    TO_SHIP = 'TO_SHIP'
+    SHIPPING = 'SHIPPING'
+    COMPLETED = 'COMPLETED'
+    CANCELLATION = 'CANCELLATION'
+    RETURN_REFUND = 'RETURN_REFUND'
+
+
 class Category(models.Model):
   unique_id = models.IntegerField(null=False, blank=False, primary_key=True)
   parent_id = models.IntegerField(null=True, blank=True)
@@ -49,7 +58,48 @@ class Product(ClusterableModel):
 
   product_status = models.CharField(null=True, blank=True, max_length=500, default=ProductStatus.UNPUBLISHED.value)
   status_changed_on = models.DateTimeField(default=datetime.now)
-  cover_image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Cover photo must have a white background')
+  cover_image_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Cover photo must have a white background')
+  cover_image=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image1_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image1=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image2_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image2=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image3_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image3=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image4_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image4=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image5_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image5=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
   stock_sum = models.IntegerField(blank=True, null=True, default=None)
   product_weight = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
   product_length = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
@@ -85,18 +135,38 @@ class Product(ClusterableModel):
 
   def save(self, *args, **kwargs):
     self.last_updated = datetime.now()
-    if(self.product_name):
-      Errors.objects.filter(product_id=self.id).filter(name='Product name is required').delete()
-      if(len(self.product_name)>=16):
-        Errors.objects.filter(product_id=self.id).filter(name='Product name should have at least 16 characters').delete()
+
+    # Remove product code errors
     if(self.product_code):
-      Errors.objects.filter(product_id=self.id).filter(name='Product code is required').delete()
+      Errors.objects.filter(product_id=self.id).filter(name='Product Code is required').delete()
       if(len(str(self.product_code))<=100):
-        Errors.objects.filter(product_id=self.id).filter(name='Product code exceeds maximum lenght of 100').delete()
+        Errors.objects.filter(product_id=self.id).filter(name='Product Code exceeds maximum lenght of 100').delete()
+
+    # Remove product category errors
+    if(self.category):
+      Errors.objects.filter(product_id=self.id).filter(name='Product Category is required').delete()
+
+    # Remove product name errors
+    if(self.product_name):
+      Errors.objects.filter(product_id=self.id).filter(name='Product Name is required').delete()
+      if(len(self.product_name)>=16):
+        Errors.objects.filter(product_id=self.id).filter(name='Product Name should have at least 16 characters').delete()
+
+    # Remove Product description errors
     if(self.product_description):
-      Errors.objects.filter(product_id=self.id).filter(name='Product description is required').delete()
+      Errors.objects.filter(product_id=self.id).filter(name='Product Description is required').delete()
       if(len(self.product_description)>=100):
-        Errors.objects.filter(product_id=self.id).filter(name='Product description should have at least 100 characters').delete()
+        Errors.objects.filter(product_id=self.id).filter(name='Product Description should have at least 100 characters').delete()
+
+    # Remove product price errors
+    if(self.product_price):
+      Errors.objects.filter(product_id=self.id).filter(name='Missing Product Price').delete()
+
+    # Remove product stock errors
+    if(self.product_stock):
+      Errors.objects.filter(product_id=self.id).filter(name='Missing Product Stock').delete()
+
+    # Remove product status errors
     if(Errors.objects.filter(product_id=self.id).count() == 0):
       Product.objects.filter(id=self.id).update(product_status=ProductStatus.UNLISTED.value)
     super(Product, self).save(*args, **kwargs)
@@ -149,17 +219,9 @@ class Variations(Orderable, models.Model):
 
 @register_snippet
 class Order(models.Model):
-  STATUS_CHOICES = [
-    ('U', 'Unpaid'),
-    ('S', 'To Ship'),
-    ('H', 'Shipping'),
-    ('C', 'Completed'),
-    ('L', 'Cancellation'),
-    ('R', 'Return/Refund'),
-  ]
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
-  status = models.CharField(null=True, blank=True, max_length=500, choices=STATUS_CHOICES, default=STATUS_CHOICES[0])
+  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
   countdown = models.CharField(null=True, blank=True, max_length=500)
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)

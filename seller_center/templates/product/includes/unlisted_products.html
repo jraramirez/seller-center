@@ -55,12 +55,8 @@
                 <tr>
                     <td scope="row">
                         <a href="{% url 'product_edit' category_id=product.category.unique_id product_id=product.id %}">
-                            {% if product.variations.all.0.image_url %}
-                                <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
-                            {% elif product.variations.all.0.image_upload %}
-                                <img src="{{product.variations.all.0.image_url_from_upload}}" alt="" width="80"/>
-                            {% elif product.variations.all.0.image_url_from_sku %}
-                                <img src="{{product.variations.all.0.image_url_from_sku}}" alt="" width="80"/>
+                            {% if product.cover_image_url %}
+                                <img src="{{ product.cover_image_url }}" alt="" width="80"/>
                             {% else %}
                                 <img src="{% static 'images/download.svg' %}" alt="" width="80"/>
                             {% endif %}

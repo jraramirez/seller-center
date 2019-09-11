@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'^products/suspend/(?P<product_id>.*)/$', product_views.product_suspend, name='product_suspend'),
     url(r'^products/live/(?P<product_id>.*)/$', product_views.product_live, name='product_live'),
     url(r'^add-order/', sales_views.add_order, name='add_order'),
+    url(r'^orders/set_status/(?P<order_id>.*)/(?P<status>.*)/$', sales_views.set_status, name='set_status'),
     url(r'^orders/', sales_views.orders, name='orders'),
     url(r'^account/send_verification_code', account_views.send_verification_code, name='send_verification_code'),
     url(r'^account/reset_password', account_views.reset_password, name='reset_password'),
