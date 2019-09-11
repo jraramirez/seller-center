@@ -397,7 +397,18 @@ def product_edit(request, category_id, product_id):
     # product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
 
-    product['product_cover_img']=request.FILES['product-cover-img']
+    if 'product-cover-img' in request.FILES:
+      product['product_cover_img']=request.FILES['product-cover-img']
+    if 'product-img-1' in request.FILES:
+      product['product_img1']=request.FILES['product-img-1']
+    if 'product-img-2' in request.FILES:
+      product['product_img2']=request.FILES['product-img-2']
+    if 'product-img-3' in request.FILES:
+      product['product_img3']=request.FILES['product-img-3']
+    if 'product-img-4' in request.FILES:
+      product['product_img4']=request.FILES['product-img-4']
+    if 'product-img-5' in request.FILES:
+      product['product_img5']=request.FILES['product-img-5']
     errors = []
 
     if (not product['product_code']):
@@ -435,7 +446,7 @@ def product_edit(request, category_id, product_id):
           if(not request.POST.get('product-variation-'+str(i)+'-sale-time-end')):
             errors.append('Variation ' + str(i+1) + ' Sale End Time is required; ')
     if (not errors):
-
+      p=Product.objects.filter(id=product_id)[0]
       category = Category.objects.filter(unique_id=int(product['product-category-id']))[0]
       t = Product(id=product_id,
         product_code=request.POST.get('product-code'),
@@ -464,11 +475,39 @@ def product_edit(request, category_id, product_id):
         # product_condition=request.POST.get('product-condition'),
         parent_sku_reference_no=request.POST.get('product-parent-sku'),
 
-        cover_image_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_cover_img'].name,
+        cover_image_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_cover_img'].name if 'product_cover_img' in product else p.cover_image_url,
+        image1_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_img1'].name if 'product_img1' in product else p.image1_url,
+        image2_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_img2'].name if 'product_img2' in product else p.image2_url,
+        image3_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_img3'].name if 'product_img3' in product else p.image3_url,
+        image4_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_img4'].name if 'product_img4' in product else p.image4_url,
+        image5_url=MEDIA_URL + 'original_images/' + str(request.user.id) + '/' + product['product_img5'].name if 'product_img5' in product else p.image5_url
       )
       t.save()
 
-      t.cover_image.save(str(request.user.id) + '/' + product['product_cover_img'].name, product['product_cover_img'])
+      if 'product_cover_img' in product:
+        t.cover_image.save(str(request.user.id) + '/' + product['product_cover_img'].name, product['product_cover_img'])
+      else:
+        t.cover_image=p.cover_image
+      if 'product_img1' in product:
+        t.image1.save(str(request.user.id) + '/' + product['product_img1'].name, product['product_img1'])
+      else:
+        t.image1=p.image1
+      if 'product_img2' in product:
+        t.image2.save(str(request.user.id) + '/' + product['product_img2'].name, product['product_img2'])
+      else:
+        t.image2=p.image2
+      if 'product_img3' in product:
+        t.image3.save(str(request.user.id) + '/' + product['product_img3'].name, product['product_img3'])
+      else:
+        t.image3=p.image3
+      if 'product_img4' in product:
+        t.image4.save(str(request.user.id) + '/' + product['product_img4'].name, product['product_img4'])
+      else:
+        t.image4=p.image4
+      if 'product_img5' in product:
+        t.image5.save(str(request.user.id) + '/' + product['product_img5'].name, product['product_img5'])
+      else:
+        t.image5=p.image5
 
       # this means that product has no variation so we delete any existing variation
       if request.POST.get('product-price'):
@@ -603,6 +642,11 @@ def product_edit(request, category_id, product_id):
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
 
     product['cover_image_url']=selectedProduct.cover_image_url
+    product['image1_url']=selectedProduct.image1_url
+    product['image2_url']=selectedProduct.image2_url
+    product['image3_url']=selectedProduct.image3_url
+    product['image4_url']=selectedProduct.image4_url
+    product['image5_url']=selectedProduct.image5_url
 
     product['variations'] = Variations.objects.filter(product_id=product_id).order_by('-id')
 

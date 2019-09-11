@@ -58,8 +58,43 @@ class Product(ClusterableModel):
 
   product_status = models.CharField(null=True, blank=True, max_length=500, default=ProductStatus.UNPUBLISHED.value)
   status_changed_on = models.DateTimeField(default=datetime.now)
-  cover_image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Cover photo must have a white background')
+  cover_image_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Cover photo must have a white background')
   cover_image=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image1_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image1=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image2_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image2=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image3_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image3=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image4_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image4=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image5_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image5=models.ImageField(
     upload_to='original_images',
     null=True,
     blank=True,
