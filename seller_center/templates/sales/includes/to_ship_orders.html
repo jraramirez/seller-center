@@ -1,14 +1,16 @@
 {% load static %}
 
 {% if allToShipUsersOrders %}
-<div class="tab-pane fade" id="toship" role="tabpanel" aria-labelledby="toship-tab">
+<div class="tab-pane" id="toship" role="tabpanel" aria-labelledby="toship-tab">
   <div class="body-content table-responsive">
     <table class="table">
       <thead>
         <tr>
           <th scope="col">Product(s)</th>
           <th scope="col"></th>
+          <th scope="col">Variation(s)</th>
           <th scope="col">Order Total</th>
+          <th scope="col">Date Ordered</th>
           <th scope="col">Status</th>
           <th scope="col">Countdown</th>
           <th scope="col">
@@ -21,18 +23,19 @@
               <li class="dropdown-item">Hi!</li>
             </ul>
           </th>
+          <th scope="col">Delivery Address</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody id="orders">
         {% for user, order in allToShipUsersOrders %}
           <tr class="tr-top">
-            <td colspan="7">
+            <td colspan="10">
               Order ID: {{order.id}}
             </td>
           </tr>
           <tr class="tr-middle">
-            <td colspan="7">
+            <td colspan="10">
               User: {{user}}
             </td>
           </tr>
@@ -57,12 +60,27 @@
                 {% else %} -
                 {% endif %}
               </td>
+              <td class="text-center">
+                {% if product.variations.all %}
+                {% for variation in product.variations.all%}
+                  {{ variation.name }}
+                  <br>
+                {% endfor %}
+                {% else %} -
+                {% endif %}
+              </td>
               {% if forloop.counter0 == 0 %}
                 <td class="text-center">
                   {% if order.total %}
                   {{order.total}}
                   {% else %} -
                   {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if order.creation_date %}
+                    {{order.creation_date}}
+                    {% else %} -
+                    {% endif %}
                 </td>
                 <td class="text-center">
                     {% if order.status %}
@@ -83,16 +101,22 @@
                     {% endif %}
                 </td>
                 <td class="text-center">
-                    <div class="dropdown show">
-                        <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item" href="#">Arrange Pickup</a>
-                        </div>
+                    {% if order.delivery_address %}
+                    {{order.delivery_address}}
+                    {% else %} -
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                  <div class="dropdown show">
+                    <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">▼</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <a class="dropdown-item" href="/orders/set_status/{{order.id}}/SHIPPING/">Arrange Pickup</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.id}}/CANCELLATION/">Deny order</a>
                     </div>
+                  </div>
                 </td>
               {% else %}
-                <td colspan="6"></td>
+                <td colspan="8"></td>
               {% endif %}
           </tr>
           {% endfor %}

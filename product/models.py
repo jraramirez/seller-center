@@ -26,6 +26,15 @@ class ProductStatus(Enum):   # A subclass of Enum
     SUSPENDED = 'SUSPENDED'
 
 
+class OrderStatus(Enum):   # A subclass of Enum
+    UNPAID = 'UNPAID'
+    TO_SHIP = 'TO_SHIP'
+    SHIPPING = 'SHIPPING'
+    COMPLETED = 'COMPLETED'
+    CANCELLATION = 'CANCELLATION'
+    RETURN_REFUND = 'RETURN_REFUND'
+
+
 class Category(models.Model):
   unique_id = models.IntegerField(null=False, blank=False, primary_key=True)
   parent_id = models.IntegerField(null=True, blank=True)
@@ -155,17 +164,9 @@ class Variations(Orderable, models.Model):
 
 @register_snippet
 class Order(models.Model):
-  STATUS_CHOICES = [
-    ('U', 'Unpaid'),
-    ('S', 'To Ship'),
-    ('H', 'Shipping'),
-    ('C', 'Completed'),
-    ('L', 'Cancellation'),
-    ('R', 'Return/Refund'),
-  ]
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
-  status = models.CharField(null=True, blank=True, max_length=500, choices=STATUS_CHOICES, default=STATUS_CHOICES[0])
+  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
   countdown = models.CharField(null=True, blank=True, max_length=500)
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)

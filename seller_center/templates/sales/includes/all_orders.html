@@ -30,12 +30,12 @@
       <tbody id="orders">
         {% for user, order in allUsersOrders %}
           <tr class="tr-top">
-            <td colspan="9">
+            <td colspan="10">
               Order ID: {{order.id}}
             </td>
           </tr>
           <tr class="tr-middle">
-            <td colspan="9">
+            <td colspan="10">
               User: {{user}}
             </td>
           </tr>
@@ -77,6 +77,12 @@
                   {% endif %}
                 </td>
                 <td class="text-center">
+                    {% if order.creation_date %}
+                    {{order.creation_date}}
+                    {% else %} -
+                    {% endif %}
+                </td>
+                <td class="text-center">
                     {% if order.status %}
                     {{order.status}}
                     {% else %} -
@@ -101,14 +107,13 @@
                     {% endif %}
                 </td>
                 <td class="text-center">
-                    <div class="dropdown show">
-                        <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item" href="#">Arrange Pickup</a>
-                          <a class="dropdown-item" href="#">Deny order</a>
-                        </div>
+                  <div class="dropdown show">
+                    <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">▼</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <a class="dropdown-item" href="/orders/set_status/{{order.id}}/SHIPPING/">Arrange Pickup</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.id}}/CANCELLATION/">Deny order</a>
                     </div>
+                  </div>
                 </td>
               {% else %}
                 <td colspan="8"></td>
