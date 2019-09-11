@@ -135,18 +135,38 @@ class Product(ClusterableModel):
 
   def save(self, *args, **kwargs):
     self.last_updated = datetime.now()
-    if(self.product_name):
-      Errors.objects.filter(product_id=self.id).filter(name='Product name is required').delete()
-      if(len(self.product_name)>=16):
-        Errors.objects.filter(product_id=self.id).filter(name='Product name should have at least 16 characters').delete()
+
+    # Remove product code errors
     if(self.product_code):
-      Errors.objects.filter(product_id=self.id).filter(name='Product code is required').delete()
+      Errors.objects.filter(product_id=self.id).filter(name='Product Code is required').delete()
       if(len(str(self.product_code))<=100):
-        Errors.objects.filter(product_id=self.id).filter(name='Product code exceeds maximum lenght of 100').delete()
+        Errors.objects.filter(product_id=self.id).filter(name='Product Code exceeds maximum lenght of 100').delete()
+
+    # Remove product category errors
+    if(self.category):
+      Errors.objects.filter(product_id=self.id).filter(name='Product Category is required').delete()
+
+    # Remove product name errors
+    if(self.product_name):
+      Errors.objects.filter(product_id=self.id).filter(name='Product Name is required').delete()
+      if(len(self.product_name)>=16):
+        Errors.objects.filter(product_id=self.id).filter(name='Product Name should have at least 16 characters').delete()
+
+    # Remove Product description errors
     if(self.product_description):
-      Errors.objects.filter(product_id=self.id).filter(name='Product description is required').delete()
+      Errors.objects.filter(product_id=self.id).filter(name='Product Description is required').delete()
       if(len(self.product_description)>=100):
-        Errors.objects.filter(product_id=self.id).filter(name='Product description should have at least 100 characters').delete()
+        Errors.objects.filter(product_id=self.id).filter(name='Product Description should have at least 100 characters').delete()
+
+    # Remove product price errors
+    if(self.product_price):
+      Errors.objects.filter(product_id=self.id).filter(name='Missing Product Price').delete()
+
+    # Remove product stock errors
+    if(self.product_stock):
+      Errors.objects.filter(product_id=self.id).filter(name='Missing Product Stock').delete()
+
+    # Remove product status errors
     if(Errors.objects.filter(product_id=self.id).count() == 0):
       Product.objects.filter(id=self.id).update(product_status=ProductStatus.UNLISTED.value)
     super(Product, self).save(*args, **kwargs)

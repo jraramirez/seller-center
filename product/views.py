@@ -795,13 +795,50 @@ def products_import(request):
 
                   Errors.objects.filter(product_id = productID).delete()
 
-            # Product name validation
+            # Product code validation
+            if(row['product_code'] != row['product_code']):
+              Product.objects.filter(id=productID).update(product_code=None)
+              e = Errors(
+                product_id = productID,
+                name = 'Product Code is required',
+              )
+              e.save()
+              unpublished = True
+            else:
+              Product.objects.filter(id=productID).update(product_code=row['product_code'])
+              if(len(str(row['product_code']))>100):
+                e = Errors(
+                  product_id = productID,
+                  name = 'Product Code exceeds maximum lenght of 100',
+                )
+                e.save()
+                unpublished = True
+                
+            # Product category validation
+            if(row['category'] != row['category']):
+              Product.objects.filter(id=productID).update(category=None)
+              e = Errors(
+                product_id = productID,
+                name = 'Product Category is required',
+              )
+              e.save()
+              unpublished = True
+            else:
+              Product.objects.filter(id=productID).update(product_code=row['product_code'])
+              if(len(str(row['product_code']))>100):
+                e = Errors(
+                  product_id = productID,
+                  name = 'Product Code exceeds maximum lenght of 100',
+                )
+                e.save()
+                unpublished = True
 
+            # Product name validation
             if(row['product_name'] != row['product_name']):
               Product.objects.filter(id=productID).update(product_name=None)
               e = Errors(
                 product_id = productID,
-                name = 'Product name is required',
+                name = 'Product Name is required',
               )
               e.save()
               unpublished = True
@@ -812,26 +849,7 @@ def products_import(request):
               if(len(formatted_prod_name)<16):
                 e = Errors(
                   product_id = productID,
-                  name = 'Product name should have at least 16 characters',
-                )
-                e.save()
-                unpublished = True
-
-            # Product code validation
-            if(row['product_code'] != row['product_code']):
-              Product.objects.filter(id=productID).update(product_code=None)
-              e = Errors(
-                product_id = productID,
-                name = 'Product code is required',
-              )
-              e.save()
-              unpublished = True
-            else:
-              Product.objects.filter(id=productID).update(product_code=row['product_code'])
-              if(len(str(row['product_code']))>100):
-                e = Errors(
-                  product_id = productID,
-                  name = 'Product code exceeds maximum lenght of 100',
+                  name = 'Product Name should have at least 16 characters',
                 )
                 e.save()
                 unpublished = True
@@ -844,7 +862,7 @@ def products_import(request):
               if(len(formatted_prod_desc)<100):
                 e = Errors(
                   product_id = productID,
-                  name = 'Product description should have at least 100 characters',
+                  name = 'Product Description should have at least 100 characters',
                 )
                 e.save()
                 unpublished = True
@@ -852,17 +870,7 @@ def products_import(request):
               Product.objects.filter(id=productID).update(product_description=None)
               e = Errors(
                 product_id = productID,
-                name = 'Product description is required',
-              )
-              e.save()
-              unpublished = True
-
-            # Product weight validation
-            if(row['product_weight'] != row['product_weight']):
-              Product.objects.filter(id=productID).update(product_weight=None)
-              e = Errors(
-                product_id = productID,
-                name = 'Product weight is required',
+                name = 'Product Description is required',
               )
               e.save()
               unpublished = True
@@ -876,7 +884,7 @@ def products_import(request):
                 Product.objects.filter(id=productID).update(product_price=None)
                 e = Errors(
                   product_id = productID,
-                  name = 'Missing product price',
+                  name = 'Missing Product Price',
 
                 )
                 e.save()
@@ -886,17 +894,17 @@ def products_import(request):
                 if not prod_price.isdigit():
                   prod_price=None
                 Product.objects.filter(id=productID).update(product_price=prod_price)
-              if(row['stock_sum'] != row['stock_sum']):
-                Product.objects.filter(id=productID).update(stock_sum=None)
+              if(row['product_stock'] != row['product_stock']):
+                Product.objects.filter(id=productID).update(product_stock=None)
                 e = Errors(
                   product_id = productID,
-                  name = 'Missing product stock',
+                  name = 'Missing Product Stock',
 
                 )
                 e.save()
                 unpublished = True
               else:
-                Product.objects.filter(id=productID).update(stock_sum=row['stock_sum'])
+                Product.objects.filter(id=productID).update(product_stock=row['product_stock'])
 
             # Product image validation
             imageInS3 = False
@@ -911,7 +919,7 @@ def products_import(request):
                     unpublished = True
                     e = Errors(
                       product_id = productID,
-                      name = 'Product image is required',
+                      name = 'Product Image is required',
                     )
                     e.save()
             else:
@@ -919,7 +927,7 @@ def products_import(request):
                 unpublished = True
                 e = Errors(
                   product_id = productID,
-                  name = 'Product image is required',
+                  name = 'Product Image is required',
                 )
                 e.save()
             
@@ -952,7 +960,7 @@ def products_import(request):
                     unpublished = True
                     e = Errors(
                       product_id = productID,
-                      name = 'Variation '+str(i+1)+' name is required',
+                      name = 'Variation '+str(i+1)+' Name is required',
                     )
                     e.save()
 
@@ -962,7 +970,7 @@ def products_import(request):
                     unpublished = True
                     e = Errors(
                       product_id = productID,
-                      name = 'Variation '+str(i+1)+' price is required',
+                      name = 'Variation '+str(i+1)+' Price is required',
                     )
                     e.save()
 
