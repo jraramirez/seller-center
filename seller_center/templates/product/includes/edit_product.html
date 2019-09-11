@@ -336,9 +336,17 @@
                                 <label for="product_cover_img" class="drop-area-text" id="cover_img_lbl"><i class="far fa-image"></i> Cover Image</label>
                                 <input type="file" name="product-cover-img" class="form-control img_file" id="product_cover_img" accept=".jpg, .png" imgdisplay="cover_img" img_rmv="rmv_cover_img">
                                 <label for="product_cover_img">
-                                    <img src="" class="drop-image" id="cover_img" />
+                                    <img src="{{ product.cover_image_url }}" class="drop-image" id="cover_img"
+                                        {% if product.cover_image_url %}
+                                            style="display: inline;"
+                                        {% endif %}
+                                     />
                                 </label>
-                                <button class="btn btn-danger btn-circle trash_can" id="rmv_cover_img" rmv_img="cover_img"><i class="fas fa-trash"></i></button>
+                                <button class="btn btn-danger btn-circle trash_can" id="rmv_cover_img" rmv_img="cover_img"
+                                    {% if product.cover_image_url %}
+                                        style="display: inline;"
+                                    {% endif %}
+                                ><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                         <div class="col-sm-2">
