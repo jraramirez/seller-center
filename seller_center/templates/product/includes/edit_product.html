@@ -1,5 +1,5 @@
 {% load static %}
-<form action="{{page.url}}" enctype="multipart/form-data" method="POST" novalidate>
+<form action="{{page.url}}" enctype="multipart/form-data" method="POST" autocomplete="off" novalidate>
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mr-auto mb-0 text-gray-800">Editing Product</h1>
@@ -114,7 +114,7 @@
                         <label for="id_product_stock" class="col-sm-3 col-form-label">Stock *</label>
 
                         <div class="col-sm-9">
-                            <input type="number" name="product-stock" class="form-control" placeholder="Stock"
+                            <input type="text" name="product-stock" class="form-control number_only" placeholder="Stock"
                                    id="id_product_stock" value="{{product.product_stock}}"
                                    required>
                         </div>
@@ -234,8 +234,8 @@
                                        class="col-sm-3 col-form-label">Stock</label>
 
                                 <div class="col-sm-9">
-                                    <input type="number" name="product-variation-{{forloop.counter0}}-stock" required
-                                           class="form-control" placeholder="Stock" value="{{v.variation_stock}}"
+                                    <input type="text" name="product-variation-{{forloop.counter0}}-stock" required
+                                           class="form-control number_only" placeholder="Stock" value="{{v.variation_stock}}"
                                            id="product-variation-{{forloop.counter0}}-stock"
                                            required>
                                 </div>
