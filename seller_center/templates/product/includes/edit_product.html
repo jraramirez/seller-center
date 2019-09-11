@@ -104,7 +104,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1">₱</span>
                             </div>
-                            <input type="number" name="product-price" class="form-control" placeholder="Price"
+                            <input type="text" name="product-price" class="form-control number_only" placeholder="Price"
                                    id="id_product-price" value="{{product.product_price}}"
                                    required>
                         </div>
@@ -127,7 +127,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1">₱</span>
                             </div>
-                            <input type="number" name="product-sale-price" class="form-control" placeholder="Price"
+                            <input type="text" name="product-sale-price" class="form-control number_only" placeholder="Price"
                                    id="id_product-price" value="{{product.product_sale_price}}"
                                    required>
                         </div>
@@ -221,8 +221,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="basic-addon1">₱</span>
                                     </div>
-                                    <input type="number" name="product-variation-{{forloop.counter0}}-price" required
-                                           class="form-control" placeholder="Price" value="{{v.variation_price}}"
+                                    <input type="text" name="product-variation-{{forloop.counter0}}-price" required
+                                           class="form-control number_only" placeholder="Price" value="{{v.variation_price}}"
                                            id="product-variation-{{forloop.counter0}}-price"
                                            required>
                                 </div>
@@ -248,7 +248,7 @@
                                     <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">₱</span>
                                     </div>
-                                    <input type="number" name="product-variation-{{forloop.counter0}}-sale-price" class="form-control" placeholder="Price"
+                                    <input type="text" name="product-variation-{{forloop.counter0}}-sale-price" class="form-control number_only" placeholder="Price"
                                         id="id_product-price" value="{{v.variation_sale_price}}"
                                         required>
                                 </div>
