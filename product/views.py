@@ -733,6 +733,9 @@ def products_import(request):
         # Insert/Update each product from file to database
         with transaction.atomic():
           for index, row, in inputFileDF.iterrows():
+            cat_id=str(row['category_id'])
+            if not cat_id.isdigit():
+              row['category_id']=None
 
             unpublished = False
             productID = None
@@ -835,9 +838,9 @@ def products_import(request):
                 e.save()
                 unpublished = True
                 
-            # Product category validation
-            if(row['category'] != row['category']):
-              Product.objects.filter(id=productID).update(category=None)
+            # Product category_id validation
+            if(row['category_id'] != row['category_id']):
+              Product.objects.filter(id=productID).update(category_id=None)
               e = Errors(
                 product_id = productID,
                 name = 'Product Category is required',
@@ -853,7 +856,6 @@ def products_import(request):
                 )
                 e.save()
                 unpublished = True
-
             # Product name validation
             if(row['product_name'] != row['product_name']):
               Product.objects.filter(id=productID).update(product_name=None)
