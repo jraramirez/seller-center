@@ -358,8 +358,8 @@ class ProductsImportPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)
 
 class Sale(models.Model):
-  product_id=models.ForeignKey(Product, models.DO_NOTHING, blank=True, null=True)
-  variation_id=models.ForeignKey(Variations, models.DO_NOTHING, blank=True, null=True)
+  product=models.ForeignKey(Product, models.DO_NOTHING, blank=True, null=True)
+  variation=models.ForeignKey(Variations, models.DO_NOTHING, blank=True, null=True)
   product_sale_price = models.IntegerField(blank=True, null=True, default=None)
   product_sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
   product_sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
