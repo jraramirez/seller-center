@@ -892,8 +892,8 @@ def products_import(request):
                 if not prod_price.isdigit():
                   prod_price=None
                 Product.objects.filter(id=productID).update(product_price=prod_price)
-              if(row['product_stock'] != row['product_stock']):
-                Product.objects.filter(id=productID).update(product_stock=None)
+              if(row['stock_sum'] != row['stock_sum']):
+                Product.objects.filter(id=productID).update(stock_sum=None)
                 e = Errors(
                   product_id = productID,
                   name = 'Missing Product Stock',
@@ -902,7 +902,7 @@ def products_import(request):
                 e.save()
                 unpublished = True
               else:
-                Product.objects.filter(id=productID).update(product_stock=row['product_stock'])
+                Product.objects.filter(id=productID).update(stock_sum=row['stock_sum'])
 
             # Product image validation
             imageInS3 = False

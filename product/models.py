@@ -163,7 +163,7 @@ class Product(ClusterableModel):
       Errors.objects.filter(product_id=self.id).filter(name='Missing Product Price').delete()
 
     # Remove product stock errors
-    if(self.product_stock):
+    if(self.stock_sum):
       Errors.objects.filter(product_id=self.id).filter(name='Missing Product Stock').delete()
 
     # Remove product status errors
