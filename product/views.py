@@ -639,7 +639,7 @@ def product_edit(request, category_id, product_id):
     if selectedProduct.product_brand is not None:
       product['product_brand'] = selectedProduct.product_brand
 
-    # product['product_price'] = selectedProduct.product_price
+    product['product_price'] = selectedProduct.product_price
     # product['product_sale_price'] = selectedProduct.product_sale_price
     # product['product_sale_date_start'] = selectedProduct.product_sale_date_start
     # product['product_sale_date_end'] = selectedProduct.product_sale_date_end
