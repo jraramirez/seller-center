@@ -15,9 +15,12 @@
 
 {% if errors %}
 <div class="alert alert-danger" role="alert">
-{% for e in errors %}
-    {{e}}
-{% endfor %}        
+    <legend>Please fill up the required fields properly</legend>
+    <ul>
+    {% for e in errors %}
+        <li>{{e}}</li>
+    {% endfor %}        
+    </ul>
 </div>
 {% endif %}
 <div class="form-wrap">

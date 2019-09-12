@@ -117,45 +117,43 @@ def product_import(request, selected_category):
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
     errors = []
     if(not product['product_code']):
-      errors.append('Product Code is required; ')
+      errors.append('Product Code is required.')
     if(not product['category']):
-      errors.append('Product Category is required; ')
+      errors.append('Product Category is required.')
     if(not product['product_name']):
-      errors.append('Product Name is required; ')
+      errors.append('Product Name is required.')
     if(not product['product_description']):
-      errors.append('Product Description is required; ')
+      errors.append('Product Description is required.')
     if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
-      errors.append('Product Price is required; ')
+      errors.append('Product Price is required.')
     if(request.POST.get('product-variation-0-sku') == '' and not product['stock_sum']):
-      errors.append('Product Stock is required; ')
+      errors.append('Product Stock is required.')
     if(product['product_sale_price']):
       if(not product['product_sale_date_start']):
-        errors.append('Product Sale Start Date is required; ')
+        errors.append('Product Sale Start Date is required.')
       if(not product['product_sale_time_start']):
-        errors.append('Product Sale Start Time is required; ')
+        errors.append('Product Sale Start Time is required.')
       if(not product['product_sale_date_end']):
-        errors.append('Product Sale End Date is required; ')
+        errors.append('Product Sale End Date is required.')
       if(not product['product_sale_time_end']):
-        errors.append('Product Sale End Time is required; ')      
-    if(request.POST.get('product-variation-0-sku') == '' and not product['stock_sum']):
-      errors.append('Product Stock is required; ')
+        errors.append('Product Sale End Time is required.')      
     for i in range(0,7):
       if(request.POST.get('product-variation-'+str(i)+'-sku')):
         if(not request.POST.get('product-variation-'+str(i)+'-name')):
-          errors.append('Variation ' + str(i+1) +': name is required; ')
+          errors.append('Variation ' + str(i+1) +': name is required.')
         if(not request.POST.get('product-variation-'+str(i)+'-stock')):
-          errors.append('Variation ' + str(i+1) +': stock is required; ')
+          errors.append('Variation ' + str(i+1) +': stock is required.')
         if(not request.POST.get('product-variation-'+str(i)+'-price')):
-          errors.append('Variation ' + str(i+1) +': price is required; ')
+          errors.append('Variation ' + str(i+1) +': price is required.')
         if(request.POST.get('product-variation-'+str(i)+'-sale-price')):
           if(not request.POST.get('product-variation-'+str(i)+'-sale-date-start')):
-            errors.append('Variation ' + str(i+1) + ' Sale Start Date is required; ')
+            errors.append('Variation ' + str(i+1) + ' Sale Start Date is required.')
           if(not request.POST.get('product-variation-'+str(i)+'-sale-date-end')):
-            errors.append('Variation ' + str(i+1) + ' Sale End Date is required; ')
+            errors.append('Variation ' + str(i+1) + ' Sale End Date is required.')
           if(not request.POST.get('product-variation-'+str(i)+'-sale-time-start')):
-            errors.append('Variation ' + str(i+1) + ' Sale Start Time is required; ')
+            errors.append('Variation ' + str(i+1) + ' Sale Start Time is required.')
           if(not request.POST.get('product-variation-'+str(i)+'-sale-time-end')):
-            errors.append('Variation ' + str(i+1) + ' Sale End Time is required; ')
+            errors.append('Variation ' + str(i+1) + ' Sale End Time is required.')
     if(not errors):
       t = Product(
         product_code = request.POST.get('product-code'),
@@ -412,39 +410,39 @@ def product_edit(request, category_id, product_id):
     errors = []
 
     if (not product['product_code']):
-      errors.append('Product Code is required; ')
+      errors.append('Product Code is required.')
     if (not product['product-category-id'] or request.POST.get('product-category-id') == "None"):
-      errors.append('Product Category is required; ')
+      errors.append('Product Category is required.')
     if (not product['product_name']):
-      errors.append('Product Name is required; ')
+      errors.append('Product Name is required.')
     if (not product['product_description']):
-      errors.append('Product Description is required; ')
+      errors.append('Product Description is required.')
     if(product['product_sale_price']):
       if(not product['product_sale_date_start']):
-        errors.append('Product Sale Start Date is required; ')
+        errors.append('Product Sale Start Date is required.')
       if(not product['product_sale_time_start']):
-        errors.append('Product Sale Start Time is required; ')
+        errors.append('Product Sale Start Time is required.')
       if(not product['product_sale_date_end']):
-        errors.append('Product Sale End Date is required; ')
+        errors.append('Product Sale End Date is required.')
       if(not product['product_sale_time_end']):
-        errors.append('Product Sale End Time is required; ')
+        errors.append('Product Sale End Time is required.')
     for i in range(0, 7):
       if (request.POST.get('product-variation-' + str(i) + '-sku')):
         if (not request.POST.get('product-variation-' + str(i) + '-name')):
-          errors.append('Variation ' + str(i + 1) + ': name is required; ')
+          errors.append('Variation ' + str(i + 1) + ': name is required.')
         if (not request.POST.get('product-variation-' + str(i) + '-stock')):
-          errors.append('Variation ' + str(i + 1) + ': stock is required; ')
+          errors.append('Variation ' + str(i + 1) + ': stock is required.')
         if (not request.POST.get('product-variation-' + str(i) + '-price')):
-          errors.append('Variation ' + str(i + 1) + ': price is required; ')
+          errors.append('Variation ' + str(i + 1) + ': price is required.')
         if(request.POST.get('product-variation-'+str(i)+'-sale-price')):
           if(not request.POST.get('product-variation-'+str(i)+'-sale-date-start')):
-            errors.append('Variation ' + str(i+1) + ' Sale Start Date is required; ')
+            errors.append('Variation ' + str(i+1) + ' Sale Start Date is required.')
           if(not request.POST.get('product-variation-'+str(i)+'-sale-date-end')):
-            errors.append('Variation ' + str(i+1) + ' Sale End Date is required; ')
+            errors.append('Variation ' + str(i+1) + ' Sale End Date is required.')
           if(not request.POST.get('product-variation-'+str(i)+'-sale-time-start')):
-            errors.append('Variation ' + str(i+1) + ' Sale Start Time is required; ')
+            errors.append('Variation ' + str(i+1) + ' Sale Start Time is required.')
           if(not request.POST.get('product-variation-'+str(i)+'-sale-time-end')):
-            errors.append('Variation ' + str(i+1) + ' Sale End Time is required; ')
+            errors.append('Variation ' + str(i+1) + ' Sale End Time is required.')
     if (not errors):
       p=Product.objects.filter(id=product_id)[0]
       category = Category.objects.filter(unique_id=int(product['product-category-id']))[0]
