@@ -179,11 +179,11 @@ def product_import(request, selected_category):
 
       if request.POST.get('product-price'):
         s=Sale(
-            product_sale_price=product['product_sale_price'] if 'product_sale_price' in product else None,
-            product_sale_date_start=product['product_sale_date_start'] if 'product_sale_date_start' in product else None,
-            product_sale_date_end=product['product_sale_date_end'] if 'product_sale_date_end' in product else None,
-            product_sale_time_start=product['product_sale_time_start'] if 'product_sale_time_start' in product else None,
-            product_sale_time_end=product['product_sale_time_end'] if 'product_sale_time_end' in product else None,
+            product_sale_price=product['product_sale_price'] if product['product_sale_price'] != '' else 0,
+            product_sale_date_start=product['product_sale_date_start'] if product['product_sale_date_start'] != '' else None,
+            product_sale_date_end=product['product_sale_date_end'] if product['product_sale_date_end'] != '' else None,
+            product_sale_time_start=product['product_sale_time_start'] if product['product_sale_time_start'] != '' else None,
+            product_sale_time_end=product['product_sale_time_end'] if product['product_sale_time_end'] != '' else None,
             product_id=t.id
           )
         s.save()
@@ -427,7 +427,7 @@ def product_edit(request, category_id, product_id):
     if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
       errors.append('Product Price is required.')
     else:
-      if(product['product_sale_price']):
+      if product['product_sale_price'] and int(product['product_sale_price']) > 0:
         if(not product['product_sale_date_start']):
           errors.append('Product Sale Start Date is required.')
         if(not product['product_sale_time_start']):
