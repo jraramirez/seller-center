@@ -647,10 +647,10 @@ def product_edit(request, category_id, product_id):
     # product['product_sale_time_end'] = selectedProduct.product_sale_time_end
     product['stock_sum'] = selectedProduct.stock_sum
 
-    product['product_length'] = selectedProduct.product_length
-    product['product_width'] = selectedProduct.product_width
-    product['product_height'] = selectedProduct.product_height
-    product['product_weight'] = selectedProduct.product_weight
+    product['product_length'] = selectedProduct.product_length if selectedProduct.product_length is not None else ''
+    product['product_width'] = selectedProduct.product_width if selectedProduct.product_width is not None else ''
+    product['product_height'] = selectedProduct.product_height if selectedProduct.product_height is not None else ''
+    product['product_weight'] = selectedProduct.product_weight if selectedProduct.product_weight is not None else ''
 
     # product['product_condition'] = selectedProduct.product_condition
     product['parent_sku_reference_no'] = selectedProduct.parent_sku_reference_no
