@@ -3,8 +3,6 @@ from wagtail.core.fields import StreamField
 from base.models import BasePage, GeneralStreamBlock
 import json
 
-from product.models import Product
-from product.models import Category
 
 class HomePage(BasePage):
     body = StreamField(GeneralStreamBlock, blank=True)

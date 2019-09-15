@@ -14,7 +14,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from datetime import datetime
 
+
 from users.models import Profile
+from users.models import Address
 
 from enum import Enum
 
@@ -222,11 +224,16 @@ class Order(models.Model):
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
+  status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
   countdown = models.CharField(null=True, blank=True, max_length=500)
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
   products = models.ManyToManyField(Product)
+  shipping_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
+  pickup_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
+  user_id = models.CharField(null=True, blank=True, max_length=500)
+  username = models.CharField(null=True, blank=True, max_length=500)
 
   panels = [
     FieldPanel('status'),
