@@ -219,6 +219,7 @@ class Variations(Orderable, models.Model):
     return redirect('/products/#all')
 
 
+
 @register_snippet
 class Order(models.Model):
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
@@ -229,7 +230,7 @@ class Order(models.Model):
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
-  products = models.ManyToManyField(Product)
+  products = models.ManyToManyField(Product, through='OrderedProduct')
   shipping_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
   pickup_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
   user_id = models.CharField(null=True, blank=True, max_length=500)
@@ -242,6 +243,10 @@ class Order(models.Model):
     FieldPanel('creation_date'),
   ]
 
+class OrderedProduct(models.Model):
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  order = models.ForeignKey(Order, on_delete=models.CASCADE)
+  quantity = models.IntegerField(null=True, blank=True)
 
 class Errors(ClusterableModel):  
   name = models.CharField(null=True, blank=True, max_length=500)
