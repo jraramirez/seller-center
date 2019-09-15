@@ -230,10 +230,10 @@ class Order(models.Model):
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
   products = models.ManyToManyField(Product)
-  # shipping_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
-  # pickup_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
-  # user_id = models.CharField(null=True, blank=True, max_length=500)
-  # username = models.CharField(null=True, blank=True, max_length=500)
+  shipping_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
+  pickup_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
+  user_id = models.CharField(null=True, blank=True, max_length=500)
+  username = models.CharField(null=True, blank=True, max_length=500)
 
   panels = [
     FieldPanel('status'),
