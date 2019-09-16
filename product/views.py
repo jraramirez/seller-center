@@ -777,6 +777,14 @@ def products_import(request):
                   )
                   productID = product[0].id
 
+                  s=Sale.objects.filter(product_id=productID)[0]
+                  s.product_sale_price=product['product_sale_price'] if row['product_sale_price'] == row['product_sale_price'] else s.product_sale_price
+                  s.product_sale_date_start=product['product_sale_date_start'] if row['product_sale_date_start'] == row['product_sale_date_start'] else s.product_sale_date_start
+                  s.product_sale_date_end=product['product_sale_date_end'] if row['product_sale_date_end'] == row['product_sale_date_end'] else s.product_sale_date_end
+                  s.product_sale_time_start=product['product_sale_time_start'] if row['product_sale_time_start'] == row['product_sale_time_start'] else s.product_sale_time_start
+                  s.product_sale_time_end=product['product_sale_time_end'] if row['product_sale_time_end'] == row['product_sale_time_end'] else s.product_sale_time_end
+                  s.save()
+
                   Errors.objects.filter(product_id=productID).delete()
             else:
 
@@ -816,6 +824,16 @@ def products_import(request):
                   )
                   t.save()
                   productID = t.id
+
+                  s=Sale(
+                      product_sale_price=row['product_sale_price'] if row['product_sale_price'] == row['product_sale_price'] else 0,
+                      product_sale_date_start=row['product_sale_date_start'] if row['product_sale_date_start'] == row['product_sale_date_start'] else None,
+                      product_sale_date_end=row['product_sale_date_end'] if row['product_sale_date_end'] == row['product_sale_date_end'] else None,
+                      product_sale_time_start=row['product_sale_time_start'] if row['product_sale_time_start'] == row['product_sale_time_start'] else None,
+                      product_sale_time_end=row['product_sale_time_end'] if row['product_sale_time_end'] == row['product_sale_time_end'] else None,
+                      product_id=productID
+                    )
+                  s.save()
 
                   Errors.objects.filter(product_id = productID).delete()
 
