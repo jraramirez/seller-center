@@ -85,6 +85,24 @@ $('#id_file').change(function() {
 });
 
 $(function(){
+    $(".img_file").change(function(){
+        var filename=$("#product_cover_img").val();
+        var extension=filename.replace(/^.*\./, '');
+        if (extension == filename){
+            extension='';
+        } else{
+            extension=extension.toLowerCase();
+        }
+        switch(extension){
+            case 'jpg':
+            case 'png':
+                break;
+            default:
+                alert('Invalid file type.');
+                break;
+        }
+    });
+
     // validate date
     var dateToday = new Date();
     var prod_dates = $("#product_start_date, #product_end_date").datepicker({
