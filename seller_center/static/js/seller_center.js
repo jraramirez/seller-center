@@ -1,4 +1,5 @@
 function toggleL2(event) {
+
   var btnID = event.target.className;
   var divID = event.target.getAttribute("aria-controls");
   var level2Buttons = document.getElementsByClassName("btn-level-2");
