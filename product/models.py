@@ -14,7 +14,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from datetime import datetime
 
+
 from users.models import Profile
+from users.models import Address
 
 from enum import Enum
 
@@ -163,7 +165,7 @@ class Product(ClusterableModel):
       Errors.objects.filter(product_id=self.id).filter(name='Missing Product Price').delete()
 
     # Remove product stock errors
-    if(self.product_stock):
+    if(self.stock_sum):
       Errors.objects.filter(product_id=self.id).filter(name='Missing Product Stock').delete()
 
     # Remove product status errors
@@ -222,11 +224,16 @@ class Order(models.Model):
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
+  status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
   countdown = models.CharField(null=True, blank=True, max_length=500)
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
   products = models.ManyToManyField(Product)
+  shipping_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
+  pickup_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
+  user_id = models.CharField(null=True, blank=True, max_length=500)
+  username = models.CharField(null=True, blank=True, max_length=500)
 
   panels = [
     FieldPanel('status'),
@@ -356,3 +363,12 @@ class ProductImportPage(BasePage):
 
 class ProductsImportPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)
+
+class Sale(models.Model):
+  product=models.ForeignKey(Product, models.DO_NOTHING, blank=True, null=True)
+  variation=models.ForeignKey(Variations, models.DO_NOTHING, blank=True, null=True)
+  product_sale_price = models.IntegerField(blank=True, null=True, default=None)
+  product_sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
+  product_sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)

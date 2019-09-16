@@ -7,21 +7,31 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime
 
-class AddressContactDetails(models.Model):  
+class AddressContactDetails(models.Model):
   contact_person_name=models.TextField(null=True, blank=True)
   contact_person_phone=models.CharField(null=True, blank=True, max_length=500)
   contact_person_email=models.EmailField(null=True, blank=True)
+
 
 class Address(Orderable, models.Model):  
   name = models.TextField(null=True, blank=True)
   profile = ParentalKey('Profile', related_name='address', null=True, blank=True)
   contact_details=models.OneToOneField(AddressContactDetails, on_delete=models.CASCADE, null=True)
   street_bldg=models.TextField(null=True, blank=True)
-  country=models.TextField(null=True, blank=True)
-  region_state=models.TextField(null=True, blank=True)
+  barangay=models.TextField(null=True, blank=True)
   city=models.TextField(null=True, blank=True)
-  brgy=models.TextField(null=True, blank=True)
+  province = models.TextField(null=True, blank=True)
+  region_state=models.TextField(null=True, blank=True)
+  country=models.TextField(null=True, blank=True)
   postal_code=models.IntegerField(null=True, blank=True)
+
+class ShippingInformation(models.Model):
+  userId = models.CharField(null=True, blank=True, max_length=500)
+  username = models.CharField(null=True, blank=True, max_length=500)
+  contact_person_phone=models.CharField(null=True, blank=True, max_length=500)
+  contact_person_email=models.EmailField(null=True, blank=True)
+  label = models.CharField(null=True, blank=True, max_length=500)
+  address = models.OneToOneField(Address, on_delete=models.CASCADE, null=True)
 
 class BusinessDetails(models.Model):  
   company_name=models.TextField(null=True, blank=True)
