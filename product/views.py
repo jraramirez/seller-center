@@ -982,12 +982,11 @@ def products_import(request):
                   name = 'Product Image is required',
                 )
                 e.save()
-            
             # Insert/Update each product variation from file to database
             if(vf.hasVariations(row)):
               stock_sum = 0
               for i in range(0,7):
-                if(row['variation'+str(i+1)+'_id'] == row['variation'+str(i+1)+'_id']):
+                if 'variation'+str(i+1)+'_id' in row:
                   variationID = row['variation'+str(i+1)+'_id']
                   variationStock = row['variation'+str(i+1)+'_stock']
                   variationPrice = row['variation'+str(i+1)+'_price']
