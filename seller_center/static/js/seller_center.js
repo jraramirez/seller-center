@@ -85,6 +85,34 @@ $('#id_file').change(function() {
 });
 
 $(function(){
+    // validate date
+    var dateToday = new Date();
+    var prod_dates = $("#product_start_date, #product_end_date").datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        minDate: dateToday,
+        onSelect: function(selectedDate) {
+            var option = this.id == "product_start_date" ? "minDate" : "maxDate",
+                instance = $(this).data("datepicker"),
+                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+            prod_dates.not(this).datepicker("option", option, date);
+        }
+    });
+
+    var var_dates = $("#variation_start_date, #variation_end_date").datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        minDate: dateToday,
+        onSelect: function(selectedDate) {
+            var option = this.id == "variation_start_date" ? "minDate" : "maxDate",
+                instance = $(this).data("datepicker"),
+                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+            var_dates.not(this).datepicker("option", option, date);
+        }
+    });
+
     var hash = window.location.hash;
     hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 
