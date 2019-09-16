@@ -42,6 +42,7 @@ class Category(models.Model):
   parent_id = models.IntegerField(null=True, blank=True)
   level = models.IntegerField(null=True, blank=True)
   name = models.CharField(null=True, blank=True, max_length=500)
+  image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='images must have a white background')
 
 class Image(models.Model):
   product = models.ForeignKey(Profile, models.CASCADE, blank=True, null=True)
