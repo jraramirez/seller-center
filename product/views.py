@@ -10,6 +10,7 @@ import numpy as np
 import os
 import requests
 import json
+from datetime import datetime
 
 from product.models import ProductsImportPage, Product, Category, Variations, Errors, ProductStatus, Sale
 
@@ -25,10 +26,17 @@ media_url = MEDIA_URL
 class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
 
+
 def product_import(request, selected_category):
+  '''
+  View for adding a singe product
+  :param request:
+  :return:
+  '''
   showVariations = ""
   showWithoutVariation = "active show"
 
+  # View when selecting a category
   if(selected_category == '0'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
@@ -38,6 +46,7 @@ def product_import(request, selected_category):
       'selected_category': selected_category
     })
 
+  # View when user decided to change the category. The current product data are stored in sessions
   elif(request.method == "POST" and request.POST.get('action') == 'change'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
@@ -83,6 +92,7 @@ def product_import(request, selected_category):
       'selected_category': selected_category
     })
 
+  # View when the product data is submitted. Form is validated.
   elif(request.method == "POST" and request.POST.get('action') == 'save'):
     if(selected_category == '0'):
       selected_category = request.POST.get('product-category-id')
@@ -256,6 +266,7 @@ def product_import(request, selected_category):
         'showWithoutVariation': showWithoutVariation,
       })
 
+  # View after a category is selected. The product form is prepared. If session data exist, they are inputted to the form.
   else:    
     product = {}
     variations = [{}]*7
@@ -353,19 +364,19 @@ def product_import(request, selected_category):
       'selected_category': selected_category,
       'variations': variations,
       'showVariations': showVariations,
-      'showWithoutVariation': showWithoutVariation
+      'showWithoutVariation': showWithoutVariation,
+      'min_date' : datetime.now,
     })
 
 
 def product_edit(request, category_id, product_id):
-  CONDITION_CHOICES = [
-    ('N', 'New'),
-    ('U', 'Used'),
-  ]
-
+  '''
+  View for editing a product
+  :param request:
+  :return:
+  '''
   showVariations = ""
   showWithoutVariation = "active show"
-
 
   if (request.method == "POST"):
     product = {}
