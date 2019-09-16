@@ -152,8 +152,8 @@ class Product(ClusterableModel):
     # Remove product name errors
     if(self.product_name):
       Errors.objects.filter(product_id=self.id).filter(name='Product Name is required').delete()
-      if(len(self.product_name)>=16):
-        Errors.objects.filter(product_id=self.id).filter(name='Product Name should have at least 16 characters').delete()
+      if(len(self.product_name)>=3):
+        Errors.objects.filter(product_id=self.id).filter(name='Product Name should have at least 3 characters').delete()
 
     # Remove Product description errors
     if(self.product_description):

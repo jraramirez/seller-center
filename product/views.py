@@ -898,10 +898,10 @@ def products_import(request):
               prod_name=row['product_name']
               formatted_prod_name=f'{prod_name}'
               Product.objects.filter(id=productID).update(product_name=formatted_prod_name)
-              if(len(formatted_prod_name)<16):
+              if(len(formatted_prod_name)<3):
                 e = Errors(
                   product_id = productID,
-                  name = 'Product Name should have at least 16 characters',
+                  name = 'Product Name should have at least 3 characters',
                 )
                 e.save()
                 unpublished = True
