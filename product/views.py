@@ -512,6 +512,21 @@ def product_edit(request, category_id, product_id):
       # this means that product has no variation so we delete any existing variation
       if request.POST.get('product-price'):
         Variations.objects.filter(product_id=product_id).delete()
+        s=Sale.objects.filter(product_id=product_id)[0]
+        s.product_sale_price=product['product_sale_price'] if 'product_sale_price' in product else s.product_sale_price
+        s.product_sale_date_start=product['product_sale_date_start'] if 'product_sale_date_start' in product else s.product_sale_date_start
+        if not s.product_sale_date_start:
+          s.product_sale_date_start=None
+        s.product_sale_date_end=product['product_sale_date_end'] if 'product_sale_date_end' in product else s.product_sale_date_end
+        if not s.product_sale_date_end:
+          s.product_sale_date_end=None
+        s.product_sale_time_start=product['product_sale_time_start'] if 'product_sale_time_start' in product else s.product_sale_time_start
+        if not s.product_sale_time_start:
+          s.product_sale_time_start=None
+        s.product_sale_time_end=product['product_sale_time_end'] if 'product_sale_time_end' in product else s.product_sale_time_end
+        if not s.product_sale_time_end:
+          s.product_sale_time_end=None
+        s.save()
       else:
         stock_sum = 0
         variations = Variations.objects.filter(product_id=product_id).order_by('-id')
