@@ -224,7 +224,7 @@ class Variations(Orderable, models.Model):
 
 @register_snippet
 class Order(models.Model):
-  orderReferenceNumber = models.CharField(null=True, blank=True, max_length=500)
+  orderReferenceNumber = models.CharField(blank=True, max_length=500, primary_key=True)
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
