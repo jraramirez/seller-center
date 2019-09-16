@@ -136,6 +136,7 @@ class Product(ClusterableModel):
     super().save_model(request, obj, form, change)
 
   def save(self, *args, **kwargs):
+    super(Product, self).save(*args, **kwargs)
     self.last_updated = datetime.now()
 
     # Remove product code errors
@@ -171,7 +172,6 @@ class Product(ClusterableModel):
     # Remove product status errors
     if(Errors.objects.filter(product_id=self.id).count() == 0):
       Product.objects.filter(id=self.id).update(product_status=ProductStatus.UNLISTED.value)
-    super(Product, self).save(*args, **kwargs)
     return HttpResponseRedirect("/products/#all")
 
 
@@ -211,11 +211,13 @@ class Variations(Orderable, models.Model):
   ]
 
   def save(self, *args, **kwargs):
+    super(Variations, self).save(*args, **kwargs)
+    
+    # Remove variation image error
     if(self.image_upload):
       Errors.objects.filter(product_id=self.product_id).filter(name='Product image is required').delete()
     if(Errors.objects.filter(product_id=self.product_id).count() == 0):
       Product.objects.filter(id=self.product_id).update(product_status=ProductStatus.UNLISTED.value)
-    super(Variations, self).save(*args, **kwargs)
     return redirect('/products/#all')
 
 

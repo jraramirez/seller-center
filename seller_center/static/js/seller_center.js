@@ -78,6 +78,12 @@ function startProgressBar() {
   });
 }
 
+$('#id_file').change(function() {
+  var file = $('#id_file')[0].files[0].name;
+  console.log(file);
+  $('#id_file_label').text(file);
+});
+
 $(function(){
     var hash = window.location.hash;
     hash && $('ul.nav a[href="' + hash + '"]').tab('show');
