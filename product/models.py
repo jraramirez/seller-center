@@ -254,6 +254,7 @@ class Order(models.Model):
 
 class OrderedProduct(models.Model):
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  variation = models.ForeignKey(Variations, on_delete=models.CASCADE, null=True)
   order = models.ForeignKey(Order, on_delete=models.CASCADE)
   quantity = models.IntegerField(null=True, blank=True)
 
