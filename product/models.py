@@ -225,7 +225,7 @@ class Variations(Orderable, models.Model):
 
 class Order(models.Model):
 
-  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
+  # profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
   status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
@@ -239,7 +239,7 @@ class Order(models.Model):
   user_id = models.CharField(null=True, blank=True, max_length=500)
   username = models.CharField(null=True, blank=True, max_length=500)
   additional_info = models.TextField(null=True, blank=True)
-  orderReferenceNumber = models.CharField(blank=True, max_length=500, primary_key=True)
+  # orderReferenceNumber = models.CharField(blank=True, max_length=500, primary_key=True)
   order_reference_number = models.CharField(blank=True, max_length=500)
 
   class Meta:
