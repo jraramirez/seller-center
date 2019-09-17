@@ -223,7 +223,6 @@ class Variations(Orderable, models.Model):
 
 
 
-@register_snippet
 class Order(models.Model):
 
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
