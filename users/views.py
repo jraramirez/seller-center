@@ -78,7 +78,7 @@ def profile_edit(request):
 		business_address_details.country=request.POST.get('business_country')
 		business_address_details.region_state=request.POST.get('business_region_state')
 		business_address_details.city=request.POST.get('business_city')
-		business_address_details.brgy=request.POST.get('business_brgy')
+		business_address_details.barangay=request.POST.get('business_brgy')
 		pc=str(request.POST.get('business_postal_code'))
 		if pc.isdigit():
 			business_address_details.postal_code=pc
@@ -112,7 +112,7 @@ def profile_edit(request):
 		pickup_address_details.country=request.POST.get('pickup_country')
 		pickup_address_details.region_state=request.POST.get('pickup_region_state')
 		pickup_address_details.city=request.POST.get('pickup_city')
-		pickup_address_details.brgy=request.POST.get('pickup_brgy')
+		pickup_address_details.barangay=request.POST.get('pickup_brgy')
 		pc=str(request.POST.get('pickup_postal_code'))
 		if pc.isdigit():
 			pickup_address_details.postal_code=pc
@@ -131,7 +131,7 @@ def profile_edit(request):
 		return_address_details.country=request.POST.get('return_country')
 		return_address_details.region_state=request.POST.get('return_region_state')
 		return_address_details.city=request.POST.get('return_city')
-		return_address_details.brgy=request.POST.get('return_brgy')
+		return_address_details.barangay=request.POST.get('return_brgy')
 		pc=str(request.POST.get('return_postal_code'))
 		if pc.isdigit():
 			return_address_details.postal_code=pc
@@ -188,7 +188,7 @@ def set_user_profile_data(user_id):
 	else:
 		business_details_data=profileData.business_details
 	business_address_data=business_details_data.business_address
-	business_address=business_address_data.street_bldg if business_address_data.street_bldg else '' + ' ' + business_address_data.brgy if business_address_data.brgy else '' + ' ' + business_address_data.city if business_address_data.city else '' + ' ' + business_address_data.region_state if business_address_data.region_state else '' + ' ' + business_address_data.country if business_address_data.country else '' + ' ' + str(business_address_data.postal_code) if business_address_data.postal_code else ''
+	business_address=business_address_data.street_bldg if business_address_data.street_bldg else '' + ' ' + business_address_data.barangay if business_address_data.barangay else '' + ' ' + business_address_data.city if business_address_data.city else '' + ' ' + business_address_data.region_state if business_address_data.region_state else '' + ' ' + business_address_data.country if business_address_data.country else '' + ' ' + str(business_address_data.postal_code) if business_address_data.postal_code else ''
 	if business_address == '':
 		business_address=None
 
@@ -276,7 +276,7 @@ def set_user_profile_data(user_id):
 		ctr+=1
 	if pickup_address_data.city:
 		ctr+=1
-	if pickup_address_data.brgy:
+	if pickup_address_data.barangay:
 		ctr+=1
 	if pickup_address_data.postal_code:
 		ctr+=1
@@ -288,7 +288,7 @@ def set_user_profile_data(user_id):
 		ctr+=1
 	if return_address_data.city:
 		ctr+=1
-	if return_address_data.brgy:
+	if return_address_data.barangay:
 		ctr+=1
 	if return_address_data.postal_code:
 		ctr+=1
