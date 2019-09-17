@@ -34,14 +34,16 @@ urlpatterns = [
     url(r'^products/import/download_categories', product_views.download_categories, name='download_categories'),
     url(r'^products/add-new-products', product_views.products_import, name='products_import'),
     url(r'^products/add-single-product/(?P<selected_category>.*)/$', product_views.product_import, name='product_import'),
-    url(r'^products/edit/(?P<selected_category>.*)/(?P<product_id>.*)/$', product_views.product_edit, name='product_edit'),
+    url(r'^products/edit/(?P<category_id>.*)/(?P<product_id>.*)', product_views.product_edit, name='product_edit'),
     url(r'^products/delete-all', product_views.delete_all_products, name='delete_all_products'),
     url(r'^products/delete/(?P<product_id>.*)/$', product_views.product_delete, name='product_delete'),
     url(r'^products/unlist/(?P<product_id>.*)/$', product_views.product_unlist, name='product_unlist'),
     url(r'^products/suspend/(?P<product_id>.*)/$', product_views.product_suspend, name='product_suspend'),
     url(r'^products/live/(?P<product_id>.*)/$', product_views.product_live, name='product_live'),
+    url(r'^add-order/', sales_views.add_order, name='add_order'),
+    url(r'^orders/set_status/(?P<order_id>.*)/(?P<status>.*)/$', sales_views.set_status, name='set_status'),
     url(r'^orders/', sales_views.orders, name='orders'),
-    url(r'^account/verify_email', account_views.verify_email, name='verify_email'),
+    url(r'^account/send_verification_code', account_views.send_verification_code, name='send_verification_code'),
     url(r'^account/reset_password', account_views.reset_password, name='reset_password'),
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in

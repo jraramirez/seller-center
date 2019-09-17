@@ -1,4 +1,5 @@
 function toggleL2(event) {
+
   var btnID = event.target.className;
   var divID = event.target.getAttribute("aria-controls");
   var level2Buttons = document.getElementsByClassName("btn-level-2");
@@ -78,7 +79,41 @@ function startProgressBar() {
   });
 }
 
+$('#id_file').change(function() {
+  var file = $('#id_file')[0].files[0].name;
+  console.log(file);
+  $('#id_file_label').text(file);
+});
+
 $(function(){
+    // validate date
+    var dateToday = new Date();
+    var prod_dates = $("#product_start_date, #product_end_date").datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        minDate: dateToday,
+        onSelect: function(selectedDate) {
+            var option = this.id == "product_start_date" ? "minDate" : "maxDate",
+                instance = $(this).data("datepicker"),
+                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+            prod_dates.not(this).datepicker("option", option, date);
+        }
+    });
+
+    var var_dates = $("#variation_start_date, #variation_end_date").datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        minDate: dateToday,
+        onSelect: function(selectedDate) {
+            var option = this.id == "variation_start_date" ? "minDate" : "maxDate",
+                instance = $(this).data("datepicker"),
+                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+            var_dates.not(this).datepicker("option", option, date);
+        }
+    });
+
     var hash = window.location.hash;
     hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 
@@ -106,4 +141,62 @@ $(function(){
             $('#process').hide();
         }
     });
+
+    $('.custom-file-input').change(function(){
+      $('#'+$(this).attr('file_lbl')).text($(this)[0].files[0].name);
+    })
+
+    $('#holiday').change(function(){
+      if($(this).is(':checked')){
+        $('.holiday_date_time').removeAttr('disabled');
+      } else{
+        $('.holiday_date_time').attr('disabled', 'disabled');
+      }
+    });
+    
+    window.onscroll=function(){
+      stick_header();
+    };
+    var header=$('#header_box')[0];
+    var sticky=header.offsetTop;
+
+    function stick_header(){
+      if(window.pageYOffset > sticky){
+        $(header).addClass('sticky');
+        $('#fixed_header').css({'top': '0'});
+      } else{
+        $(header).removeClass('sticky');
+        $('#fixed_header').css({'top': '10%'});
+      }
+    }
 });
+
+$('.number_only').keypress(function(e){
+  validate_input(e, 1);
+});
+
+$('.number_n_spec_char_only').keypress(function(e){
+  validate_input(e, 2);
+});
+
+function validate_input(e, type){
+  var theEvent=e||window.event;
+  if(theEvent.type === 'paste'){
+      key=event.clipboardData.getData('text/plain');
+  } else{
+      var key=theEvent.keyCode||theEvent.which;
+      key=String.fromCharCode(key);
+  }
+  var regex=/[*]/;
+  if(type == 1){
+    regex=/[0-9]/;
+  } else if(type == 2){
+    regex=/[0-9]|\W|_/;
+  }
+  if(!regex.test(key)){
+    theEvent.returnValue=false;
+    if(theEvent.preventDefault){
+      theEvent.preventDefault();
+    }
+  }
+}

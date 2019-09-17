@@ -1,5 +1,5 @@
 import requests
-
+from seller_center.settings.base import AWS_AUTH_URL
 
 # Class that handles all endpoints for AWS
 class ApiGatewayClient:
@@ -7,10 +7,11 @@ class ApiGatewayClient:
     EMAIL = "email",
     MOBILE = "phone_number"
 
+
     HOST = "https://ktqc7jhi81.execute-api.ap-southeast-1.amazonaws.com/prod"
     VERSION = "v1"
     ORIGIN = "seller-center"
-    rootUrl = HOST + "/api/" + VERSION
+    rootUrl = AWS_AUTH_URL
     headers = {'Request-Origin-App': ORIGIN}
 
 
@@ -82,4 +83,30 @@ class AuthClient:
 
         return requests.post(url, headers=self.apiGateway.headers, json=json)
 
+    def forgot_password(self, clientId):
+        '''
+        Send verification code to a registered client id
+        :param clientId: can either be unique cognito id, email or phone number
+        :return:
+        '''
+        url=self.apiGateway.rootUrl + "/password-forgot"
+        json={
+            'clientId': clientId
+        }
+        return requests.post(url, headers=self.apiGateway.headers, json=json)
 
+    def reset_password(self, clientId, passwordResetCode, newPassword):
+        '''
+        Reset password for registered user
+        :param clientId: can either be unique cognito id, email or phone number
+        :param passwordResetCode: a code that been sent to the user email or phone number
+        :param newPassword: user new password
+        :return:
+        '''
+        url=self.apiGateway.rootUrl + "/password-reset"
+        json={
+            'clientId': clientId,
+            'passwordResetCode': passwordResetCode,
+            'newPassword': newPassword
+        }
+        return requests.post(url, headers=self.apiGateway.headers, json=json)
