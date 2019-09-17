@@ -223,7 +223,7 @@ class Variations(Orderable, models.Model):
 
 
 
-class ProductOrder(models.Model):
+class Order(models.Model):
 
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
@@ -239,7 +239,7 @@ class ProductOrder(models.Model):
   user_id = models.CharField(null=True, blank=True, max_length=500)
   username = models.CharField(null=True, blank=True, max_length=500)
   additional_info = models.TextField(null=True, blank=True)
-  order_reference_number = models.CharField(blank=True, max_length=500, primary_key=True)
+  # order_reference_number = models.CharField(blank=True, max_length=500, primary_key=True)
 
   class Meta:
       indexes = [
