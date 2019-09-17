@@ -225,7 +225,7 @@ class Variations(Orderable, models.Model):
 
 @register_snippet
 class Order(models.Model):
-  order_reference_number = models.CharField(blank=True, max_length=500, primary_key=True)
+
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
@@ -240,6 +240,7 @@ class Order(models.Model):
   user_id = models.CharField(null=True, blank=True, max_length=500)
   username = models.CharField(null=True, blank=True, max_length=500)
   additional_info = models.TextField(null=True, blank=True)
+  order_reference_number = models.CharField(blank=True, max_length=500, primary_key=True)
 
   class Meta:
       indexes = [
