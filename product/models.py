@@ -239,7 +239,8 @@ class Order(models.Model):
   user_id = models.CharField(null=True, blank=True, max_length=500)
   username = models.CharField(null=True, blank=True, max_length=500)
   additional_info = models.TextField(null=True, blank=True)
-  # order_reference_number = models.CharField(blank=True, max_length=500, primary_key=True)
+  orderReferenceNumber = models.CharField(blank=True, max_length=500, primary_key=True)
+  order_reference_number = models.CharField(blank=True, max_length=500)
 
   class Meta:
       indexes = [
