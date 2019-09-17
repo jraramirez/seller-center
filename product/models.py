@@ -223,7 +223,7 @@ class Variations(Orderable, models.Model):
 
 
 
-class Order(models.Model):
+class ProductOrder(models.Model):
 
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
