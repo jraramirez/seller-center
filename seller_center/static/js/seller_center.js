@@ -133,6 +133,7 @@ $(function(){
     // validate date
     var dateToday = new Date();
     var prod_dates = $("#product_start_date, #product_end_date").datepicker({
+        dateFormat: 'yy-mm-dd',
         defaultDate: "+1w",
         changeMonth: true,
         numberOfMonths: 1,
@@ -146,6 +147,7 @@ $(function(){
     });
 
     var var_dates = $("#variation_start_date, #variation_end_date").datepicker({
+        dateFormat: 'yy-mm-dd',
         defaultDate: "+1w",
         changeMonth: true,
         numberOfMonths: 1,
