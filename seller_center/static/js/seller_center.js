@@ -102,6 +102,7 @@ $(function(){
                 alert('Invalid file type.');
                 break;
         }
+    });
     $('#birthday').datepicker({
       dateFormat: 'yy-mm-dd',
       onSelect: function(birthday){
