@@ -1,4 +1,5 @@
 function toggleL2(event) {
+
   var btnID = event.target.className;
   var divID = event.target.getAttribute("aria-controls");
   var level2Buttons = document.getElementsByClassName("btn-level-2");
@@ -101,6 +102,31 @@ $(function(){
                 alert('Invalid file type.');
                 break;
         }
+    $('#birthday').datepicker({
+      dateFormat: 'yy-mm-dd',
+      onSelect: function(birthday){
+        var bday_split=birthday.split('-');
+        var bday_obj=new Date(bday_split[0] + '-' + bday_split[1] + '-' + bday_split[2]);
+        var date_today=new Date();
+        var checker=true;
+        if((date_today.getFullYear() - bday_obj.getFullYear()) < 18){
+          checker=false;
+        }
+        if(date_today.getFullYear() - bday_obj.getFullYear() == 18){
+          if(date_today.getMonth() < bday_obj.getMonth()){
+            checker=false;
+          }
+          if(date_today.getMonth() == bday_obj.getMonth()){
+            if(date_today.getDate() < bday_obj.getDate()){
+              checker=false;
+            }
+          }
+        }
+        if(!checker){
+          $(this).val('');
+          alert('Invalid birthday. 18 years old and above only.');
+        }
+      }
     });
 
     // validate date

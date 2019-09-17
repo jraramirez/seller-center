@@ -42,6 +42,7 @@ class Category(models.Model):
   parent_id = models.IntegerField(null=True, blank=True)
   level = models.IntegerField(null=True, blank=True)
   name = models.CharField(null=True, blank=True, max_length=500)
+  image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='images must have a white background')
 
 class Image(models.Model):
   product = models.ForeignKey(Profile, models.CASCADE, blank=True, null=True)
@@ -224,6 +225,7 @@ class Variations(Orderable, models.Model):
 
 @register_snippet
 class Order(models.Model):
+  orderReferenceNumber = models.CharField(blank=True, max_length=500, primary_key=True)
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
@@ -237,6 +239,12 @@ class Order(models.Model):
   pickup_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
   user_id = models.CharField(null=True, blank=True, max_length=500)
   username = models.CharField(null=True, blank=True, max_length=500)
+  additionalInfo = models.TextField(null=True, blank=True)
+
+  class Meta:
+      indexes = [
+          models.Index(fields=['orderReferenceNumber'])
+      ]
 
   panels = [
     FieldPanel('status'),
@@ -247,6 +255,7 @@ class Order(models.Model):
 
 class OrderedProduct(models.Model):
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  variation = models.ForeignKey(Variations, on_delete=models.CASCADE, null=True)
   order = models.ForeignKey(Order, on_delete=models.CASCADE)
   quantity = models.IntegerField(null=True, blank=True)
 

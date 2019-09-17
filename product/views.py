@@ -439,6 +439,10 @@ def product_edit(request, category_id, product_id):
       errors.append('Product Price is required.')
     else:
       if product['product_sale_price'] and int(product['product_sale_price']) > 0:
+        price=product['product_price']
+        price=price[:price.rfind('.')]
+        if int(product['product_sale_price']) > int(price):
+          errors.append('Product Sale Price can\'t be greater than Product Price.')
         if(not product['product_sale_date_start']):
           errors.append('Product Sale Start Date is required.')
         if(not product['product_sale_time_start']):
