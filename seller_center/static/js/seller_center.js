@@ -86,6 +86,23 @@ $('#id_file').change(function() {
 });
 
 $(function(){
+    $(".img_file").change(function(){
+        var filename=$("#product_cover_img").val();
+        var extension=filename.replace(/^.*\./, '');
+        if (extension == filename){
+            extension='';
+        } else{
+            extension=extension.toLowerCase();
+        }
+        switch(extension){
+            case 'jpg':
+            case 'png':
+                break;
+            default:
+                alert('Invalid file type.');
+                break;
+        }
+    });
     $('#birthday').datepicker({
       dateFormat: 'yy-mm-dd',
       onSelect: function(birthday){
