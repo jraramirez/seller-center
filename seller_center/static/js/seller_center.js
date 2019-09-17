@@ -86,6 +86,33 @@ $('#id_file').change(function() {
 });
 
 $(function(){
+    $('#birthday').datepicker({
+      dateFormat: 'yy-mm-dd',
+      onSelect: function(birthday){
+        var bday_split=birthday.split('-');
+        var bday_obj=new Date(bday_split[0] + '-' + bday_split[1] + '-' + bday_split[2]);
+        var date_today=new Date();
+        var checker=true;
+        if((date_today.getFullYear() - bday_obj.getFullYear()) < 18){
+          checker=false;
+        }
+        if(date_today.getFullYear() - bday_obj.getFullYear() == 18){
+          if(date_today.getMonth() < bday_obj.getMonth()){
+            checker=false;
+          }
+          if(date_today.getMonth() == bday_obj.getMonth()){
+            if(date_today.getDate() < bday_obj.getDate()){
+              checker=false;
+            }
+          }
+        }
+        if(!checker){
+          $(this).val('');
+          alert('Invalid birthday. 18 years old and above only.');
+        }
+      }
+    });
+
     // validate date
     var dateToday = new Date();
     var prod_dates = $("#product_start_date, #product_end_date").datepicker({
