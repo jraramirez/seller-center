@@ -662,7 +662,7 @@ def product_edit(request, category_id, product_id):
     if selectedProduct.product_brand is not None:
       product['product_brand'] = selectedProduct.product_brand
 
-    product['product_price'] = selectedProduct.product_price
+    product['product_price'] = get_wholenumber(str(selectedProduct.product_price))
     # product['product_sale_price'] = selectedProduct.product_sale_price
     # product['product_sale_date_start'] = selectedProduct.product_sale_date_start
     # product['product_sale_date_end'] = selectedProduct.product_sale_date_end
@@ -686,7 +686,7 @@ def product_edit(request, category_id, product_id):
     product['image5_url']=selectedProduct.image5_url
 
     s=Sale.objects.filter(product_id=product_id)[0]
-    product['product_sale_price']=s.product_sale_price
+    product['product_sale_price']=get_wholenumber(str(s.product_sale_price))
     product['product_sale_date_start']=s.product_sale_date_start
     product['product_sale_date_end']=s.product_sale_date_end
     product['product_sale_time_start']=s.product_sale_time_start
@@ -1205,3 +1205,7 @@ def generateCategoriesList():
     df.reset_index().to_csv('seller_center/static/documents/lyka-categories-v1.csv')
     
     return 
+
+def get_wholenumber(number):
+  number=number[:number.rfind('.')]
+  return number
