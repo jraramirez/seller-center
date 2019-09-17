@@ -14,7 +14,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from datetime import datetime
 
+
 from users.models import Profile
+from users.models import Address
 
 from enum import Enum
 
@@ -40,6 +42,7 @@ class Category(models.Model):
   parent_id = models.IntegerField(null=True, blank=True)
   level = models.IntegerField(null=True, blank=True)
   name = models.CharField(null=True, blank=True, max_length=500)
+  image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='images must have a white background')
 
 class Image(models.Model):
   product = models.ForeignKey(Profile, models.CASCADE, blank=True, null=True)
@@ -134,6 +137,7 @@ class Product(ClusterableModel):
     super().save_model(request, obj, form, change)
 
   def save(self, *args, **kwargs):
+    super(Product, self).save(*args, **kwargs)
     self.last_updated = datetime.now()
 
     # Remove product code errors
@@ -149,8 +153,8 @@ class Product(ClusterableModel):
     # Remove product name errors
     if(self.product_name):
       Errors.objects.filter(product_id=self.id).filter(name='Product Name is required').delete()
-      if(len(self.product_name)>=16):
-        Errors.objects.filter(product_id=self.id).filter(name='Product Name should have at least 16 characters').delete()
+      if(len(self.product_name)>=3):
+        Errors.objects.filter(product_id=self.id).filter(name='Product Name should have at least 3 characters').delete()
 
     # Remove Product description errors
     if(self.product_description):
@@ -169,7 +173,6 @@ class Product(ClusterableModel):
     # Remove product status errors
     if(Errors.objects.filter(product_id=self.id).count() == 0):
       Product.objects.filter(id=self.id).update(product_status=ProductStatus.UNLISTED.value)
-    super(Product, self).save(*args, **kwargs)
     return HttpResponseRedirect("/products/#all")
 
 
@@ -209,24 +212,39 @@ class Variations(Orderable, models.Model):
   ]
 
   def save(self, *args, **kwargs):
+    super(Variations, self).save(*args, **kwargs)
+    
+    # Remove variation image error
     if(self.image_upload):
       Errors.objects.filter(product_id=self.product_id).filter(name='Product image is required').delete()
     if(Errors.objects.filter(product_id=self.product_id).count() == 0):
       Product.objects.filter(id=self.product_id).update(product_status=ProductStatus.UNLISTED.value)
-    super(Variations, self).save(*args, **kwargs)
     return redirect('/products/#all')
+
 
 
 @register_snippet
 class Order(models.Model):
+  orderReferenceNumber = models.CharField(blank=True, max_length=500, primary_key=True)
   profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
+  status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
   countdown = models.CharField(null=True, blank=True, max_length=500)
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
-  products = models.ManyToManyField(Product)
+  products = models.ManyToManyField(Product, through='OrderedProduct')
+  shipping_address = models.TextField(null=True, blank=True)
+  pickup_address = models.TextField(null=True, blank=True)
+  user_id = models.CharField(null=True, blank=True, max_length=500)
+  username = models.CharField(null=True, blank=True, max_length=500)
+  additionalInfo = models.TextField(null=True, blank=True)
+
+  class Meta:
+      indexes = [
+          models.Index(fields=['orderReferenceNumber'])
+      ]
 
   panels = [
     FieldPanel('status'),
@@ -235,6 +253,11 @@ class Order(models.Model):
     FieldPanel('creation_date'),
   ]
 
+class OrderedProduct(models.Model):
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  variation = models.ForeignKey(Variations, on_delete=models.CASCADE, null=True)
+  order = models.ForeignKey(Order, on_delete=models.CASCADE)
+  quantity = models.IntegerField(null=True, blank=True)
 
 class Errors(ClusterableModel):  
   name = models.CharField(null=True, blank=True, max_length=500)
@@ -360,8 +383,8 @@ class ProductsImportPage(BasePage):
 class Sale(models.Model):
   product=models.ForeignKey(Product, models.DO_NOTHING, blank=True, null=True)
   variation=models.ForeignKey(Variations, models.DO_NOTHING, blank=True, null=True)
-  product_sale_price = models.IntegerField(blank=True, null=True, default=None)
-  product_sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
-  product_sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
-  product_sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
-  product_sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)
+  product_sale_price=models.DecimalField(max_digits=100, decimal_places=2, blank=True, null=True)
+  product_sale_date_start=models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_date_end=models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_time_start=models.TimeField(default=datetime.now, blank=True, null=True)
+  product_sale_time_end=models.TimeField(default=datetime.now, blank=True, null=True)

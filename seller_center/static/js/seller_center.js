@@ -1,4 +1,5 @@
 function toggleL2(event) {
+
   var btnID = event.target.className;
   var divID = event.target.getAttribute("aria-controls");
   var level2Buttons = document.getElementsByClassName("btn-level-2");
@@ -78,7 +79,87 @@ function startProgressBar() {
   });
 }
 
+$('#id_file').change(function() {
+  var file = $('#id_file')[0].files[0].name;
+  console.log(file);
+  $('#id_file_label').text(file);
+});
+
 $(function(){
+    $(".img_file").change(function(){
+        var filename=$("#product_cover_img").val();
+        var extension=filename.replace(/^.*\./, '');
+        if (extension == filename){
+            extension='';
+        } else{
+            extension=extension.toLowerCase();
+        }
+        switch(extension){
+            case 'jpg':
+            case 'png':
+                break;
+            default:
+                alert('Invalid file type.');
+                break;
+        }
+    });
+    $('#birthday').datepicker({
+      dateFormat: 'yy-mm-dd',
+      onSelect: function(birthday){
+        var bday_split=birthday.split('-');
+        var bday_obj=new Date(bday_split[0] + '-' + bday_split[1] + '-' + bday_split[2]);
+        var date_today=new Date();
+        var checker=true;
+        if((date_today.getFullYear() - bday_obj.getFullYear()) < 18){
+          checker=false;
+        }
+        if(date_today.getFullYear() - bday_obj.getFullYear() == 18){
+          if(date_today.getMonth() < bday_obj.getMonth()){
+            checker=false;
+          }
+          if(date_today.getMonth() == bday_obj.getMonth()){
+            if(date_today.getDate() < bday_obj.getDate()){
+              checker=false;
+            }
+          }
+        }
+        if(!checker){
+          $(this).val('');
+          alert('Invalid birthday. 18 years old and above only.');
+        }
+      }
+    });
+
+    // validate date
+    var dateToday = new Date();
+    var prod_dates = $("#product_start_date, #product_end_date").datepicker({
+        dateFormat: 'yy-mm-dd',
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        minDate: dateToday,
+        onSelect: function(selectedDate) {
+            var option = this.id == "product_start_date" ? "minDate" : "maxDate",
+                instance = $(this).data("datepicker"),
+                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+            prod_dates.not(this).datepicker("option", option, date);
+        }
+    });
+
+    var var_dates = $("#variation_start_date, #variation_end_date").datepicker({
+        dateFormat: 'yy-mm-dd',
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        minDate: dateToday,
+        onSelect: function(selectedDate) {
+            var option = this.id == "variation_start_date" ? "minDate" : "maxDate",
+                instance = $(this).data("datepicker"),
+                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+            var_dates.not(this).datepicker("option", option, date);
+        }
+    });
+
     var hash = window.location.hash;
     hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 

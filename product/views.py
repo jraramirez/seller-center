@@ -10,6 +10,7 @@ import numpy as np
 import os
 import requests
 import json
+from datetime import datetime
 
 from product.models import ProductsImportPage, Product, Category, Variations, Errors, ProductStatus, Sale
 
@@ -25,10 +26,17 @@ media_url = MEDIA_URL
 class UploadFileForm(forms.Form):
   file = forms.FileField(label="Choose a file")
 
+
 def product_import(request, selected_category):
+  '''
+  View for adding a singe product
+  :param request:
+  :return:
+  '''
   showVariations = ""
   showWithoutVariation = "active show"
 
+  # View when selecting a category
   if(selected_category == '0'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
@@ -38,6 +46,7 @@ def product_import(request, selected_category):
       'selected_category': selected_category
     })
 
+  # View when user decided to change the category. The current product data are stored in sessions
   elif(request.method == "POST" and request.POST.get('action') == 'change'):
     categories = {}
     with open('seller_center/static/documents/categories-full.json', 'r') as f:
@@ -83,6 +92,7 @@ def product_import(request, selected_category):
       'selected_category': selected_category
     })
 
+  # View when the product data is submitted. Form is validated.
   elif(request.method == "POST" and request.POST.get('action') == 'save'):
     if(selected_category == '0'):
       selected_category = request.POST.get('product-category-id')
@@ -256,6 +266,7 @@ def product_import(request, selected_category):
         'showWithoutVariation': showWithoutVariation,
       })
 
+  # View after a category is selected. The product form is prepared. If session data exist, they are inputted to the form.
   else:    
     product = {}
     variations = [{}]*7
@@ -353,19 +364,19 @@ def product_import(request, selected_category):
       'selected_category': selected_category,
       'variations': variations,
       'showVariations': showVariations,
-      'showWithoutVariation': showWithoutVariation
+      'showWithoutVariation': showWithoutVariation,
+      'min_date' : datetime.now,
     })
 
 
 def product_edit(request, category_id, product_id):
-  CONDITION_CHOICES = [
-    ('N', 'New'),
-    ('U', 'Used'),
-  ]
-
+  '''
+  View for editing a product
+  :param request:
+  :return:
+  '''
   showVariations = ""
   showWithoutVariation = "active show"
-
 
   if (request.method == "POST"):
     product = {}
@@ -428,6 +439,10 @@ def product_edit(request, category_id, product_id):
       errors.append('Product Price is required.')
     else:
       if product['product_sale_price'] and int(product['product_sale_price']) > 0:
+        price=product['product_price']
+        price=price[:price.rfind('.')]
+        if int(product['product_sale_price']) > int(price):
+          errors.append('Product Sale Price can\'t be greater than Product Price.')
         if(not product['product_sale_date_start']):
           errors.append('Product Sale Start Date is required.')
         if(not product['product_sale_time_start']):
@@ -523,9 +538,17 @@ def product_edit(request, category_id, product_id):
         s=Sale.objects.filter(product_id=product_id)[0]
         s.product_sale_price=product['product_sale_price'] if 'product_sale_price' in product else s.product_sale_price
         s.product_sale_date_start=product['product_sale_date_start'] if 'product_sale_date_start' in product else s.product_sale_date_start
+        if not s.product_sale_date_start:
+          s.product_sale_date_start=None
         s.product_sale_date_end=product['product_sale_date_end'] if 'product_sale_date_end' in product else s.product_sale_date_end
+        if not s.product_sale_date_end:
+          s.product_sale_date_end=None
         s.product_sale_time_start=product['product_sale_time_start'] if 'product_sale_time_start' in product else s.product_sale_time_start
+        if not s.product_sale_time_start:
+          s.product_sale_time_start=None
         s.product_sale_time_end=product['product_sale_time_end'] if 'product_sale_time_end' in product else s.product_sale_time_end
+        if not s.product_sale_time_end:
+          s.product_sale_time_end=None
         s.save()
       else:
         stock_sum = 0
@@ -639,7 +662,7 @@ def product_edit(request, category_id, product_id):
     if selectedProduct.product_brand is not None:
       product['product_brand'] = selectedProduct.product_brand
 
-    product['product_price'] = selectedProduct.product_price
+    product['product_price'] = get_wholenumber(str(selectedProduct.product_price))
     # product['product_sale_price'] = selectedProduct.product_sale_price
     # product['product_sale_date_start'] = selectedProduct.product_sale_date_start
     # product['product_sale_date_end'] = selectedProduct.product_sale_date_end
@@ -663,7 +686,7 @@ def product_edit(request, category_id, product_id):
     product['image5_url']=selectedProduct.image5_url
 
     s=Sale.objects.filter(product_id=product_id)[0]
-    product['product_sale_price']=s.product_sale_price
+    product['product_sale_price']=get_wholenumber(str(s.product_sale_price))
     product['product_sale_date_start']=s.product_sale_date_start
     product['product_sale_date_end']=s.product_sale_date_end
     product['product_sale_time_start']=s.product_sale_time_start
@@ -777,6 +800,14 @@ def products_import(request):
                   )
                   productID = product[0].id
 
+                  s=Sale.objects.filter(product_id=productID)[0]
+                  s.product_sale_price=product['product_sale_price'] if row['product_sale_price'] == row['product_sale_price'] else s.product_sale_price
+                  s.product_sale_date_start=product['product_sale_date_start'] if row['product_sale_date_start'] == row['product_sale_date_start'] else s.product_sale_date_start
+                  s.product_sale_date_end=product['product_sale_date_end'] if row['product_sale_date_end'] == row['product_sale_date_end'] else s.product_sale_date_end
+                  s.product_sale_time_start=product['product_sale_time_start'] if row['product_sale_time_start'] == row['product_sale_time_start'] else s.product_sale_time_start
+                  s.product_sale_time_end=product['product_sale_time_end'] if row['product_sale_time_end'] == row['product_sale_time_end'] else s.product_sale_time_end
+                  s.save()
+
                   Errors.objects.filter(product_id=productID).delete()
             else:
 
@@ -816,6 +847,16 @@ def products_import(request):
                   )
                   t.save()
                   productID = t.id
+
+                  s=Sale(
+                      product_sale_price=row['product_sale_price'] if row['product_sale_price'] == row['product_sale_price'] else 0,
+                      product_sale_date_start=row['product_sale_date_start'] if row['product_sale_date_start'] == row['product_sale_date_start'] else None,
+                      product_sale_date_end=row['product_sale_date_end'] if row['product_sale_date_end'] == row['product_sale_date_end'] else None,
+                      product_sale_time_start=row['product_sale_time_start'] if row['product_sale_time_start'] == row['product_sale_time_start'] else None,
+                      product_sale_time_end=row['product_sale_time_end'] if row['product_sale_time_end'] == row['product_sale_time_end'] else None,
+                      product_id=productID
+                    )
+                  s.save()
 
                   Errors.objects.filter(product_id = productID).delete()
 
@@ -869,10 +910,10 @@ def products_import(request):
               prod_name=row['product_name']
               formatted_prod_name=f'{prod_name}'
               Product.objects.filter(id=productID).update(product_name=formatted_prod_name)
-              if(len(formatted_prod_name)<16):
+              if(len(formatted_prod_name)<3):
                 e = Errors(
                   product_id = productID,
-                  name = 'Product Name should have at least 16 characters',
+                  name = 'Product Name should have at least 3 characters',
                 )
                 e.save()
                 unpublished = True
@@ -953,12 +994,11 @@ def products_import(request):
                   name = 'Product Image is required',
                 )
                 e.save()
-            
             # Insert/Update each product variation from file to database
             if(vf.hasVariations(row)):
               stock_sum = 0
               for i in range(0,7):
-                if(row['variation'+str(i+1)+'_id'] == row['variation'+str(i+1)+'_id']):
+                if 'variation'+str(i+1)+'_id' in row:
                   variationID = row['variation'+str(i+1)+'_id']
                   variationStock = row['variation'+str(i+1)+'_stock']
                   variationPrice = row['variation'+str(i+1)+'_price']
@@ -1165,3 +1205,7 @@ def generateCategoriesList():
     df.reset_index().to_csv('seller_center/static/documents/lyka-categories-v1.csv')
     
     return 
+
+def get_wholenumber(number):
+  number=number[:number.rfind('.')]
+  return number
