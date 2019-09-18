@@ -61,7 +61,7 @@ class Product(ClusterableModel):
 
   product_status = models.CharField(null=True, blank=True, max_length=500, default=ProductStatus.UNPUBLISHED.value)
   status_changed_on = models.DateTimeField(default=datetime.now)
-  cover_image_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Cover photo must have a white background')
+  cover_image_url= models.TextField(null=True, blank=True)
   cover_image=models.ImageField(
     upload_to='original_images',
     null=True,
