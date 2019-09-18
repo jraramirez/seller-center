@@ -44,7 +44,24 @@ $(function(){
 
     $('.img_file').change(function(){
         if($('#'+$(this).attr('id'))[0].files[0].size < 2000000){
-            update_img($('#'+$(this).attr('id')), '#'+$(this).attr('imgdisplay'), '#'+$(this).attr('img_rmv'));
+            var filename=$(this).val();
+            var extension=filename.replace(/^.*\./, '');
+            if (extension == filename){
+                extension='';
+            } else{
+                extension=extension.toLowerCase();
+            }
+            switch(extension){
+                case 'jpg':
+                case 'png':
+                    update_img($('#'+$(this).attr('id')), '#'+$(this).attr('imgdisplay'), '#'+$(this).attr('img_rmv'));
+                    break;
+                default:
+                    img=$('#'+$(this).attr('imgdisplay'))[0];
+                    img.src='';
+                    alert('Invalid file type.');
+                    break;
+            }
         } else{
             $(this).val('');
             remove_img('#'+$(this).attr('img_rmv'), '#'+$(this).attr('imgdisplay'));
