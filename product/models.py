@@ -225,8 +225,7 @@ class Variations(Orderable, models.Model):
 
 @register_snippet
 class Order(models.Model):
-  orderReferenceNumber = models.CharField(blank=True, max_length=500, primary_key=True)
-  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
+  order_reference_number = models.CharField(blank=True, max_length=500)
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
   status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
@@ -235,23 +234,16 @@ class Order(models.Model):
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
   products = models.ManyToManyField(Product, through='OrderedProduct')
-  shipping_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
-  pickup_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
+  shipping_address = models.TextField(null=True, blank=True)
+  pickup_address = models.TextField(null=True, blank=True)
   user_id = models.CharField(null=True, blank=True, max_length=500)
   username = models.CharField(null=True, blank=True, max_length=500)
-  additionalInfo = models.TextField(null=True, blank=True)
+  additional_info = models.TextField(null=True, blank=True)
 
   class Meta:
       indexes = [
-          models.Index(fields=['orderReferenceNumber'])
+          models.Index(fields=['order_reference_number'])
       ]
-
-  panels = [
-    FieldPanel('status'),
-    FieldPanel('countdown'),
-    FieldPanel('shipping_channel'),
-    FieldPanel('creation_date'),
-  ]
 
 class OrderedProduct(models.Model):
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -383,8 +375,8 @@ class ProductsImportPage(BasePage):
 class Sale(models.Model):
   product=models.ForeignKey(Product, models.DO_NOTHING, blank=True, null=True)
   variation=models.ForeignKey(Variations, models.DO_NOTHING, blank=True, null=True)
-  product_sale_price = models.IntegerField(blank=True, null=True, default=None)
-  product_sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
-  product_sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
-  product_sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
-  product_sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)
+  product_sale_price=models.DecimalField(max_digits=100, decimal_places=2, blank=True, null=True)
+  product_sale_date_start=models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_date_end=models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_time_start=models.TimeField(default=datetime.now, blank=True, null=True)
+  product_sale_time_end=models.TimeField(default=datetime.now, blank=True, null=True)
