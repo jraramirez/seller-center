@@ -124,7 +124,7 @@ class Product(ClusterableModel):
   # product_sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
   # product_sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
   # product_sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)
-  live = models.BooleanField(default=False)
+  # live = models.BooleanField(default=False)
   # suspended = models.BooleanField(default=False)
   # unlisted = models.BooleanField(default=False)
   # unpublished = models.BooleanField(default=False)
