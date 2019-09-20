@@ -3,7 +3,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 import random
 
 from django.contrib.auth.models import User
-from product.models import Product
+from django.db.models import Sum, Count
+from product.models import Product, OrderedProduct
 from product.models import Order
 
 STATUS_CHOICES = [
@@ -16,8 +17,10 @@ STATUS_CHOICES = [
 ]
 
 def orders(request):
-	allOrders = Order.objects.all()
-	allUsers = []
+	liveProducts = Product.objects.filter(product_status="LIVE_APPROVED", profile_id=request.user.id)
+	allOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id).distinct()
+
+	# for order in allOrders:
 	allUnpaidUsers = allToShipUsers = allShippingUsers = allCompletedUsers = allCancellationUsers = allReturnUsers = []
 	allUnpaidOrders = Order.objects.filter(status='UNPAID')
 	allToShipOrders = Order.objects.filter(status='TO_SHIP')
@@ -25,22 +28,22 @@ def orders(request):
 	allCompletedOrders = Order.objects.filter(status='COMPLETED')
 	allCancellationOrders = Order.objects.filter(status='CANCELLATION')
 	allReturnOrders = Order.objects.filter(status='RETURN_REFUND')
-	for order in allOrders:
-		allUsers.append(User.objects.filter(id=order.profile_id)[0].username)
-		allUnpaidUsers.append(User.objects.filter(id=order.profile_id)[0].username)
-		allToShipUsers.append(User.objects.filter(id=order.profile_id)[0].username)
-		allShippingUsers.append(User.objects.filter(id=order.profile_id)[0].username)
-		allCompletedUsers.append(User.objects.filter(id=order.profile_id)[0].username)
-		allCancellationUsers.append(User.objects.filter(id=order.profile_id)[0].username)
-		allReturnUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+	# for order in allOrders:
+	# 	allUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+	# 	allUnpaidUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+	# 	allToShipUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+	# 	allShippingUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+	# 	allCompletedUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+	# 	allCancellationUsers.append(User.objects.filter(id=order.profile_id)[0].username)
+	# 	allReturnUsers.append(User.objects.filter(id=order.profile_id)[0].username)
 	return render(request, 'sales/sales_page.html', {
-		'allUsersOrders': zip(allUsers, allOrders),
-		'allUnpaidUsersOrders': zip(allUnpaidUsers, allUnpaidOrders),
-		'allToShipUsersOrders': zip(allToShipUsers, allToShipOrders),
-		'allShippingUsersOrders': zip(allShippingUsers, allShippingOrders),
-		'allCompletedUsersOrders': zip(allCompletedUsers, allCompletedOrders),
-		'allCancellationUsersOrders': zip(allCancellationUsers, allCancellationOrders),
-		'allReturnUsersOrders': zip(allReturnUsers, allReturnOrders),
+		'allUsersOrders': zip(allOrders),
+		'allUnpaidUsersOrders': zip(allUnpaidOrders),
+		'allToShipUsersOrders': zip( allToShipOrders),
+		'allShippingUsersOrders': zip(allShippingOrders),
+		'allCompletedUsersOrders': zip(allCompletedOrders),
+		'allCancellationUsersOrders': zip(allCancellationOrders),
+		'allReturnUsersOrders': zip(allReturnOrders),
 		'nAll': len(allOrders),
 		'nUnpaid': len(allUnpaidOrders),
 		'nToShip': len(allToShipOrders),
@@ -51,13 +54,13 @@ def orders(request):
 	})
 
 def add_order(request):
-	liveProducts = list(Product.objects.filter(product_status="LIVE_APPROVED"))
+	liveProducts = list(Product.objects.filter(product_status="LIVE_APPROVED", profile_id=request.user.id))
 	orderedProducts = random.sample(liveProducts, k=5)
-	o = Order(profile_id=request.user.id, status='UNPAID')
+	o = Order(status='UNPAID')
 	o.save()
 
 	for orderedProduct in orderedProducts:
-		o.products.add(orderedProduct)
+		OrderedProduct.objects.create(product = orderedProduct, order=o, quantity=5)
 
 	return render(request, 'sales/sales_page.html', {
 		'orderedProducts': orderedProducts
