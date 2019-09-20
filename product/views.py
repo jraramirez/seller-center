@@ -1117,7 +1117,7 @@ def product_suspend(request, product_id):
 
 
 def product_live(request, product_id):
-  Product.objects.filter(id=product_id).update(live=True)
+  Product.objects.filter(id=product_id).update(product_status=ProductStatus.LIVE_APPROVAL.value)
   return HttpResponseRedirect("/products/#all")
 
 
