@@ -83,20 +83,28 @@
                     {% endfor %}
                     </td>
                     <td>
-                    {% for v in product.variations.all %}
-                        {% if v.price %}₱ {{v.price}}
-                        {% else %} -
-                        {% endif %}
-                        <br>
-                    {% endfor %}
+                    {% if product.product_price %}   
+                        {{ product.product_price }}
+                    {% else %}
+                        {% for v in product.variations.all %}
+                            {% if v.price %}₱ {{v.price}}
+                            {% else %} -
+                            {% endif %}
+                            <br>
+                        {% endfor %}
+                    {% endif %}
                     </td>
                     <td class="text-center">
-                    {% for v in product.variations.all %}
-                        {% if v.stock %} {{v.stock}}
-                        {% else %} -
-                        {% endif %}
-                        <br>
-                    {% endfor %}
+                    {% if product.stock_sum %}   
+                        {{ product.stock_sum }}
+                    {% else %}
+                        {% for v in product.variations.all %}
+                            {% if v.stock %} {{v.stock}}
+                            {% else %} -
+                            {% endif %}
+                            <br>
+                        {% endfor %}
+                    {% endif %}
                     </td>
                     <td class="text-center">
                     {% for v in product.variations.all %}

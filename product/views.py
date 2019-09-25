@@ -793,6 +793,7 @@ def products_import(request):
                     product_weight = row['product_weight'] if row['product_weight'] == row['product_weight'] else None,
                     ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
                     parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,
+                    cover_image_url = row['cover_image_url'] if row['cover_image_url'] else None
                     # other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
                     # other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] == row['other_logistics_provider_fee'] else None,
                     # live = False,
@@ -840,6 +841,7 @@ def products_import(request):
                     product_weight = row['product_weight'] if row['product_weight'] == row['product_weight'] else None,
                     ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
                     parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,
+                    cover_image_url = row['cover_image_url'] if row['cover_image_url'] else None
                     # other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
                     # other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] == row['other_logistics_provider_fee'] else None,
                     # live = False,
@@ -1115,7 +1117,7 @@ def product_suspend(request, product_id):
 
 
 def product_live(request, product_id):
-  Product.objects.filter(id=product_id).update(live=True)
+  Product.objects.filter(id=product_id).update(product_status=ProductStatus.LIVE_APPROVAL.value)
   return HttpResponseRedirect("/products/#all")
 
 

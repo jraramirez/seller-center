@@ -3,6 +3,8 @@ branch-defaults:
     environment: sellercenter-dev
   master:
     environment: production
+  staging:
+    environment: staging
 environment-defaults:
   seller-center-dev:
     branch: null
