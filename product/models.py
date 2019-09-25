@@ -42,6 +42,7 @@ class Category(models.Model):
   parent_id = models.IntegerField(null=True, blank=True)
   level = models.IntegerField(null=True, blank=True)
   name = models.CharField(null=True, blank=True, max_length=500)
+  image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='images must have a white background')
 
 class Image(models.Model):
   product = models.ForeignKey(Profile, models.CASCADE, blank=True, null=True)
@@ -60,7 +61,7 @@ class Product(ClusterableModel):
 
   product_status = models.CharField(null=True, blank=True, max_length=500, default=ProductStatus.UNPUBLISHED.value)
   status_changed_on = models.DateTimeField(default=datetime.now)
-  cover_image_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Cover photo must have a white background')
+  cover_image_url= models.TextField(null=True, blank=True)
   cover_image=models.ImageField(
     upload_to='original_images',
     null=True,
@@ -221,9 +222,10 @@ class Variations(Orderable, models.Model):
     return redirect('/products/#all')
 
 
+
 @register_snippet
 class Order(models.Model):
-  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
+  order_reference_number = models.CharField(blank=True, max_length=500)
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
   status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
@@ -231,19 +233,23 @@ class Order(models.Model):
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
-  products = models.ManyToManyField(Product)
-  shipping_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
-  pickup_address = models.OneToOneField(Address, on_delete=models.DO_NOTHING, null=True, related_name="+")
+  products = models.ManyToManyField(Product, through='OrderedProduct')
+  shipping_address = models.TextField(null=True, blank=True)
+  pickup_address = models.TextField(null=True, blank=True)
   user_id = models.CharField(null=True, blank=True, max_length=500)
   username = models.CharField(null=True, blank=True, max_length=500)
+  additional_info = models.TextField(null=True, blank=True)
 
-  panels = [
-    FieldPanel('status'),
-    FieldPanel('countdown'),
-    FieldPanel('shipping_channel'),
-    FieldPanel('creation_date'),
-  ]
+  class Meta:
+      indexes = [
+          models.Index(fields=['order_reference_number'])
+      ]
 
+class OrderedProduct(models.Model):
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  variation = models.ForeignKey(Variations, on_delete=models.CASCADE, null=True)
+  order = models.ForeignKey(Order, on_delete=models.CASCADE)
+  quantity = models.IntegerField(null=True, blank=True)
 
 class Errors(ClusterableModel):  
   name = models.CharField(null=True, blank=True, max_length=500)
@@ -369,8 +375,8 @@ class ProductsImportPage(BasePage):
 class Sale(models.Model):
   product=models.ForeignKey(Product, models.DO_NOTHING, blank=True, null=True)
   variation=models.ForeignKey(Variations, models.DO_NOTHING, blank=True, null=True)
-  product_sale_price = models.IntegerField(blank=True, null=True, default=None)
-  product_sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
-  product_sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
-  product_sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
-  product_sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)
+  product_sale_price=models.DecimalField(max_digits=100, decimal_places=2, blank=True, null=True)
+  product_sale_date_start=models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_date_end=models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_time_start=models.TimeField(default=datetime.now, blank=True, null=True)
+  product_sale_time_end=models.TimeField(default=datetime.now, blank=True, null=True)
