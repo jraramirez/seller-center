@@ -60,7 +60,6 @@ $(function(){
                     img=$('#'+$(this).attr('imgdisplay'))[0];
                     img.src='';
                     alert('Invalid file type.');
-                    break;
             }
         } else{
             $(this).val('');
@@ -130,10 +129,26 @@ $(function(){
         }
         var img_input=$(this).find(found_img);
         if(e.originalEvent.dataTransfer.files[0].size < 2000000){
-            $(found_img).prop('files', e.originalEvent.dataTransfer.files);
-            var image=e.originalEvent.dataTransfer;
-            var imgdisplay=$('#'+img_input.attr('imgdisplay'));
-            read_img_file(image, imgdisplay);
+            var filename=e.originalEvent.dataTransfer.files[0].name;
+            var extension=filename.replace(/^.*\./, '');
+            if (extension == filename){
+                extension='';
+            } else{
+                extension=extension.toLowerCase();
+            }
+            switch(extension){
+                case 'jpg':
+                case 'png':
+                    $(found_img).prop('files', e.originalEvent.dataTransfer.files);
+                    var image=e.originalEvent.dataTransfer;
+                    var imgdisplay=$('#'+img_input.attr('imgdisplay'));
+                    read_img_file(image, imgdisplay);
+                    break;
+                default:
+                    img=$('#'+$(found_img).attr('imgdisplay'))[0];
+                    img.src='';
+                    alert('Invalid file type.');
+            }
         } else{
             img_input.val('');
             remove_img('#'+img_input.attr('img_rmv'), '#'+img_input.attr('imgdisplay'));
