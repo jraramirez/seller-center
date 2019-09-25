@@ -271,6 +271,9 @@
 							<div class="col-sm-9">
 								<select name="business_country" class="form-control" id="business_country">
 									<option value="{{ business_address_data.country }}">{{ business_address_data.country }}</option>
+									{% for v in countries_filtered_data %}
+										<option value="{{ v.name }}">{{ v.name }}</option>
+									{% endfor %}
 								</select>
 							</div>
 						</div>
@@ -448,8 +451,11 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="pickup_country" class="col-sm-3 col-form-label">Country*</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="pickup_country">
+								<select name="pickup_country" class="form-control" id="pickup_country">
 									<option value="{{ pickup_address_data.country }}">{{ pickup_address_data.country }}</option>
+									{% for v in countries_filtered_data %}
+										<option value="{{ v.name }}">{{ v.name }}</option>
+									{% endfor %}
 								</select>
 							</div>
 						</div>
@@ -458,7 +464,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="pickup_region_state" class="col-sm-3 col-form-label">Region / State*</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="pickup_region_state">
+								<select name="pickup_region_state" class="form-control" id="pickup_region_state">
 									<option value="{{ pickup_address_data.region_state }}">{{ pickup_address_data.region_state }}</option>
 								</select>
 							</div>
@@ -468,7 +474,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="pickup_city" class="col-sm-3 col-form-label">City*</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="pickup_city">
+								<select name="pickup_city" class="form-control" id="pickup_city">
 									<option value="{{ pickup_address_data.city }}">{{ pickup_address_data.city }}</option>
 								</select>
 							</div>
@@ -533,8 +539,11 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="return_country" class="col-sm-3 col-form-label">Country*</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="return_country">
+								<select name="return_country" class="form-control" id="return_country">
 									<option value="{{ return_address_data.country }}">{{ return_address_data.country }}</option>
+									{% for v in countries_filtered_data %}
+										<option value="{{ v.name }}">{{ v.name }}</option>
+									{% endfor %}
 								</select>
 							</div>
 						</div>
@@ -543,7 +552,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="return_region_state" class="col-sm-3 col-form-label">Region / State*</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="return_region_state">
+								<select name="return_region_state" class="form-control" id="return_region_state">
 									<option value="{{ return_address_data.region_state }}">{{ return_address_data.region_state }}</option>
 								</select>
 							</div>
@@ -553,7 +562,7 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="return_city" class="col-sm-3 col-form-label">City*</label>
 							<div class="col-sm-9">
-								<select class="form-control" id="return_city">
+								<select name="return_city" class="form-control" id="return_city">
 									<option value="{{ return_address_data.city }}">{{ return_address_data.city }}</option>
 								</select>
 							</div>
