@@ -173,18 +173,18 @@ def product_import(request, selected_category):
         product_description = request.POST.get('product-description'),
         product_brand = request.POST.get('product-brand'),
         # this may be empty strings so we replace it with None if empty string
-        product_price = request.POST.get('product-price') if request.POST.get('product-price') else None, #this is evaluates as tertiary operator
+        product_price = request.POST.get('product-price') if request.POST.get('product-price') else 0, #this is evaluates as tertiary operator
         # product_sale_price = request.POST.get('product-sale-price') if request.POST.get('product-sale-price') else None,
         # product_sale_date_start = request.POST.get('product-sale-date-start') if request.POST.get('product-sale-date-start') else None,
         # product_sale_date_end = request.POST.get('product-sale-date-end') if request.POST.get('product-sale-date-end') else None,
         # product_sale_time_start = request.POST.get('product-sale-time-start') if request.POST.get('product-sale-time-start') else None,
         # product_sale_time_end = request.POST.get('product-sale-time-end') if request.POST.get('product-sale-time-end') else None,
 
-        stock_sum = request.POST.get('product-stock') if request.POST.get('product-stock') else None,
-        product_length = request.POST.get('product-length') if request.POST.get('product-length') else None,
-        product_width = request.POST.get('product-width') if request.POST.get('product-width') else None,
-        product_height = request.POST.get('product-height') if request.POST.get('product-height') else None,
-        product_weight = request.POST.get('product-weight') if request.POST.get('product-weight') else None,
+        stock_sum = request.POST.get('product-stock') if request.POST.get('product-stock') else 0,
+        product_length = request.POST.get('product-length') if request.POST.get('product-length') else 0,
+        product_width = request.POST.get('product-width') if request.POST.get('product-width') else 0,
+        product_height = request.POST.get('product-height') if request.POST.get('product-height') else 0,
+        product_weight = request.POST.get('product-weight') if request.POST.get('product-weight') else 0,
 
         # product_condition = request.POST.get('product-condition'),
         parent_sku_reference_no = request.POST.get('product-parent-sku'),
@@ -487,7 +487,7 @@ def product_edit(request, category_id, product_id):
         product_description=request.POST.get('product-description'),
         product_brand=request.POST.get('product-brand') if request.POST.get('product-brand') else None,
         # this may be empty strings so we replace it with None if empty string
-        product_price=request.POST.get('product-price') if request.POST.get('product-price') else None,
+        product_price=request.POST.get('product-price') if request.POST.get('product-price') else 0,
         product_status=ProductStatus.UNLISTED.value,
         # stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
         # product_sale_price = request.POST.get('product-sale-price') if request.POST.get('product-sale-price') else None,
@@ -497,11 +497,11 @@ def product_edit(request, category_id, product_id):
         # product_sale_time_end = request.POST.get('product-sale-time-end') if request.POST.get('product-sale-date-start') else None,
 
         # this is evaluates as tertiary operator
-        stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
-        product_length=request.POST.get('product-length') if request.POST.get('product-length') else None,
-        product_width=request.POST.get('product-width') if request.POST.get('product-width') else None,
-        product_height=request.POST.get('product-height') if request.POST.get('product-height') else None,
-        product_weight=request.POST.get('product-weight') if request.POST.get('product-weight') else None,
+        stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else 0,
+        product_length=request.POST.get('product-length') if request.POST.get('product-length') else 0,
+        product_width=request.POST.get('product-width') if request.POST.get('product-width') else 0,
+        product_height=request.POST.get('product-height') if request.POST.get('product-height') else 0,
+        product_weight=request.POST.get('product-weight') if request.POST.get('product-weight') else 0,
 
         # product_condition=request.POST.get('product-condition'),
         parent_sku_reference_no=request.POST.get('product-parent-sku'),
@@ -541,7 +541,7 @@ def product_edit(request, category_id, product_id):
         t.image5=p.image5
 
       # this means that product has no variation so we delete any existing variation
-      if request.POST.get('product-price'):
+      if int(request.POST.get('product-price')) > 0:
         Variations.objects.filter(product_id=product_id).delete()
         # s=Sale.objects.filter(product_id=product_id)[0]
         # s.product_sale_price=product['product_sale_price'] if 'product_sale_price' in product else s.product_sale_price
@@ -560,7 +560,7 @@ def product_edit(request, category_id, product_id):
         # s.save()
       else:
         stock_sum = 0
-        variations = Variations.objects.filter(product_id=product_id).order_by('-id')
+        variations = Variations.objects.filter(product_id=product_id).order_by('id')
         for i in range(0, 8):
           if (request.POST.get('product-variation-' + str(i) + '-sku')):
             variationStock = 0
@@ -700,7 +700,7 @@ def product_edit(request, category_id, product_id):
     # product['product_sale_time_start']=s.product_sale_time_start
     # product['product_sale_time_end']=s.product_sale_time_end
 
-    product['variations'] = Variations.objects.filter(product_id=product_id).order_by('-id')
+    product['variations'] = Variations.objects.filter(product_id=product_id).order_by('id')
 
     variations = [{}]*7
     for index, v in enumerate(product['variations']):
