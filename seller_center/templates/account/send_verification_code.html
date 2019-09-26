@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% block branding_favicon %}
+	<link rel="shortcut icon" href="{% static 'images/logo.ico' %}"/>
+{% endblock %}
+{% block extra_css  %}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,400i,700,700i,900&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/account/main.css' %}">
+{% endblock %}
+{% block content %}
+	<div>
+        <div class="row no-gutters justify-content-center">
+            <div class="col-10 col-md-8 col-lg-6 d-flex align-items-center  mb-5">
+                <div class="container mt-5 px-5">
+                    <div class="d-flex align-items-center justify-content-center">
+
+                    <img src="{% static 'images/lyka_logo.png' %}" style="height: 100px; width: 100px;"/>
+                    </div>
+                    <h3 class="text-center mb-3 text-uppercase text-primary-2 font-weight-bold">Seller Center</h3>
+
+                    <p class="text-black-50 text-center">Forgot Password</p>
+                    <div class="rounded bg-white shadow pt-1" style="border-top: 5px solid #016fa7">
+                        <div class="alert alert-info mt-3 ml-3 mr-3">
+                                After sending email forget password request, please check your spam / junk email folder. Please note on uppercase and lowercase fonts, and make sure there are no spaces in email address.
+                        </div>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="tab-email" role="tabpanel" aria-labelledby="tab-nav-email">
+                                <div class="pt-2 pb-4 pl-4 pr-4">
+                                    <form action="/account/send_verification_code" method="post" id="email-form">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="email-login">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    Email
+                                                </div>
+                                            </label>
+                                            <input name="username" type="email" class="form-control" id="email-login" aria-describedby="emailHelp" placeholder="Email">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary-2 w-100 mt-3 disabled" id="verify_user_btn" disabled>Send Verification Request</button>
+                                    </form>
+                                    <p class="small mt-3 text-center">Remembered your account? Click<a class="ml-1" href="/_util/login">here</a> to Sign In!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="{% static 'js/account/main.js' %}"></script>
+{% endblock %}

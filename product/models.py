@@ -12,97 +12,167 @@ from modelcluster.models import ClusterableModel
 from wagtail.core.models import Orderable
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
+from datetime import datetime
+
 
 from users.models import Profile
+from users.models import Address
 
-@register_snippet
-class Order(models.Model):
-  total = models.CharField(null=True, blank=True, max_length=500)
-  status = models.CharField(null=True, blank=True, max_length=500)
-  countdown = models.CharField(null=True, blank=True, max_length=500)
-  shipping_channel = models.CharField(null=True, blank=True, max_length=500)
-  creation_date = models.CharField(null=True, blank=True, max_length=500)
-  paid_date = models.CharField(null=True, blank=True, max_length=500)
+from enum import Enum
 
-  panels = [
-    FieldPanel('status'),
-    FieldPanel('countdown'),
-    FieldPanel('shipping_channel'),
-    FieldPanel('creation_date'),
-  ]
+class ProductStatus(Enum):   # A subclass of Enum
+    UNPUBLISHED = "UNPUBLISHED"
+    LIVE_APPROVAL = 'LIVE_APPROVAL'
+    LIVE_APPROVED = 'LIVE_APPROVED'
+    UNLISTED = 'UNLISTED'
+    SUSPENDED = 'SUSPENDED'
+
+
+class OrderStatus(Enum):   # A subclass of Enum
+    UNPAID = 'UNPAID'
+    TO_SHIP = 'TO_SHIP'
+    SHIPPING = 'SHIPPING'
+    COMPLETED = 'COMPLETED'
+    CANCELLATION = 'CANCELLATION'
+    RETURN_REFUND = 'RETURN_REFUND'
+
 
 class Category(models.Model):
-  unique_id = models.IntegerField(null=True, blank=True)
+  unique_id = models.IntegerField(null=False, blank=False, primary_key=True)
   parent_id = models.IntegerField(null=True, blank=True)
   level = models.IntegerField(null=True, blank=True)
   name = models.CharField(null=True, blank=True, max_length=500)
+  image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='images must have a white background')
+
+class Image(models.Model):
+  product = models.ForeignKey(Profile, models.CASCADE, blank=True, null=True)
+  url = models.CharField(null=True, blank=True, max_length=2000, help_text='images must have a white background')
+
 
 @register_snippet
 class Product(ClusterableModel):
-  CONDITION_CHOICES = [
-    ('N', 'New'),
-    ('U', 'Used'),
-  ]
+
   product_code = models.CharField(null=True, blank=True, max_length=500)
+  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
+  category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
   product_name = models.CharField(null=True, blank=True, max_length=500)
   product_description = models.TextField(null=True, blank=True)
-  product_weight = models.CharField(null=True, blank=True, max_length=500)
-  product_condition = models.CharField(null=True, blank=True, choices=CONDITION_CHOICES, default=CONDITION_CHOICES[0], max_length=500)
-  product_price = models.IntegerField(blank=True, null=True, default=None)
-  ship_out_in = models.CharField(null=True, blank=True, max_length=500)
   parent_sku_reference_no = models.CharField(null=True, blank=True, max_length=500)
-  other_logistics_provider_setting = models.CharField(null=True, blank=True, max_length=500)
-  other_logistics_provider_fee = models.CharField(null=True, blank=True, max_length=500)
-  order = models.ForeignKey(Order, models.DO_NOTHING, blank=True, null=True)
-  profile = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
-  category = models.IntegerField(blank=True, null=True)
-  product_stock = models.IntegerField(blank=True, null=True, default=None)
-  product_length = models.IntegerField(blank=True, null=True, default=None)
-  product_width = models.IntegerField(blank=True, null=True, default=None)
-  product_height = models.IntegerField(blank=True, null=True, default=None)
-  stock_sum = models.IntegerField(blank=True, null=True, default=None)
-  live = models.BooleanField(default=False)
-  suspended = models.BooleanField(default=False)
-  unlisted = models.BooleanField(default=False)
-  unpublished = models.BooleanField(default=False)
 
-  panels = [
-    FieldPanel('product_code'),
-    FieldPanel('product_name'),
-    FieldPanel('product_description'),
-    FieldPanel('product_weight'),
-    FieldPanel('product_condition'),
-    FieldPanel('ship_out_in'),
-    FieldPanel('parent_sku_reference_no'),
-    FieldPanel('other_logistics_provider_setting'),
-    FieldPanel('other_logistics_provider_fee'),
-    InlinePanel('variations', label='Variations'),
-    FieldPanel('live'),
-    FieldPanel('suspended'),
-    FieldPanel('unlisted'),
-  ]
+  product_status = models.CharField(null=True, blank=True, max_length=500, default=ProductStatus.UNPUBLISHED.value)
+  status_changed_on = models.DateTimeField(default=datetime.now)
+  cover_image_url= models.TextField(null=True, blank=True)
+  cover_image=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image1_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image1=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image2_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image2=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image3_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image3=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image4_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image4=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  image5_url=models.CharField(null=True, blank=True, max_length=2000, help_text='Photo must have a white background')
+  image5=models.ImageField(
+    upload_to='original_images',
+    null=True,
+    blank=True,
+    help_text='Optional: If you want to upload a new image. This will replace the image in the URL provided when bulk upload is performed.'
+  )
+  stock_sum = models.IntegerField(blank=True, null=True, default=None)
+  product_weight = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
+  product_length = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
+  product_width = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
+  product_height = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, max_length=500)
+  product_price = models.DecimalField(max_digits=100, decimal_places=2, null=True, blank=True, max_length=500)
+  ship_out_in = models.IntegerField(null=True, blank=True)
+
+  product_brand = models.CharField(null=True, blank=True, max_length=500)
+
+  last_updated = models.DateTimeField(null=True, blank=True)
+  date_created = models.DateTimeField(default=datetime.now)
+
+  # product_condition = models.CharField(null=True, blank=True, choices=CONDITION_CHOICES, default=CONDITION_CHOICES[0], max_length=500)
+
+  # product_brand = models.CharField(null=True, blank=True, max_length=500)
+  # product_sale_price = models.IntegerField(blank=True, null=True, default=None)
+  # product_sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
+  # product_sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
+  # product_sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
+  # product_sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)
+  # live = models.BooleanField(default=False)
+  # suspended = models.BooleanField(default=False)
+  # unlisted = models.BooleanField(default=False)
+  # unpublished = models.BooleanField(default=False)
+  # last_updated = models.DateTimeField(null=True, blank=True)
+  # date_created = models.DateTimeField(default=datetime.now)
+
 
   def save_model(self, request, obj, form, change):
     obj.user_id = request.user.id
     super().save_model(request, obj, form, change)
 
   def save(self, *args, **kwargs):
-    if(self.product_name):
-      Errors.objects.filter(product_id=self.id).filter(name='Product name is required').delete()
-      if(len(self.product_name)>=16):
-        Errors.objects.filter(product_id=self.id).filter(name='Product name should have at least 16 characters').delete()
-    if(self.product_code):
-      Errors.objects.filter(product_id=self.id).filter(name='Product code is required').delete()
-      if(len(str(self.product_code))<=100):
-        Errors.objects.filter(product_id=self.id).filter(name='Product code exceeds maximum lenght of 100').delete()
-    if(self.product_description):
-      Errors.objects.filter(product_id=self.id).filter(name='Product description is required').delete()
-      if(len(self.product_description)>=100):
-        Errors.objects.filter(product_id=self.id).filter(name='Product description should have at least 100 characters').delete()
-    if(Errors.objects.filter(product_id=self.id).count() == 0):
-      Product.objects.filter(id=self.id).update(unlisted=True)
-      Product.objects.filter(id=self.id).update(unpublished=False)
     super(Product, self).save(*args, **kwargs)
+    self.last_updated = datetime.now()
+
+    # Remove product code errors
+    if(self.product_code):
+      Errors.objects.filter(product_id=self.id).filter(name='Product Code is required').delete()
+      if(len(str(self.product_code))<=100):
+        Errors.objects.filter(product_id=self.id).filter(name='Product Code exceeds maximum lenght of 100').delete()
+
+    # Remove product category errors
+    if(self.category):
+      Errors.objects.filter(product_id=self.id).filter(name='Product Category is required').delete()
+
+    # Remove product name errors
+    if(self.product_name):
+      Errors.objects.filter(product_id=self.id).filter(name='Product Name is required').delete()
+      if(len(self.product_name)>=3):
+        Errors.objects.filter(product_id=self.id).filter(name='Product Name should have at least 3 characters').delete()
+
+    # Remove Product description errors
+    if(self.product_description):
+      Errors.objects.filter(product_id=self.id).filter(name='Product Description is required').delete()
+      if(len(self.product_description)>=100):
+        Errors.objects.filter(product_id=self.id).filter(name='Product Description should have at least 100 characters').delete()
+
+    # Remove product price errors
+    if(self.product_price):
+      Errors.objects.filter(product_id=self.id).filter(name='Missing Product Price').delete()
+
+    # Remove product stock errors
+    if(self.stock_sum):
+      Errors.objects.filter(product_id=self.id).filter(name='Missing Product Stock').delete()
+
+    # Remove product status errors
+    if(Errors.objects.filter(product_id=self.id).count() == 0):
+      Product.objects.filter(id=self.id).update(product_status=ProductStatus.UNLISTED.value)
     return HttpResponseRedirect("/products/#all")
 
 
@@ -116,6 +186,11 @@ class Variations(Orderable, models.Model):
   sku = models.CharField(null=True, blank=True, max_length=500)
   price = models.CharField(null=True, blank=True, max_length=500)
   stock = models.IntegerField(null=True, blank=True)
+  sale_price = models.IntegerField(blank=True, null=True, default=None)
+  sale_date_start = models.DateField(default=datetime.now, blank=True, null=True)
+  sale_date_end = models.DateField(default=datetime.now, blank=True, null=True)
+  sale_time_start = models.TimeField(default=datetime.now, blank=True, null=True)
+  sale_time_end = models.TimeField(default=datetime.now, blank=True, null=True)
   image_url = models.CharField(null=True, blank=True, max_length=2000, help_text='Optional: If your image is already hosted')
   image_upload = models.ImageField(
     upload_to='original_images',
@@ -137,13 +212,44 @@ class Variations(Orderable, models.Model):
   ]
 
   def save(self, *args, **kwargs):
+    super(Variations, self).save(*args, **kwargs)
+    
+    # Remove variation image error
     if(self.image_upload):
       Errors.objects.filter(product_id=self.product_id).filter(name='Product image is required').delete()
     if(Errors.objects.filter(product_id=self.product_id).count() == 0):
-      Product.objects.filter(id=self.product_id).update(unpublished=False)
-    super(Variations, self).save(*args, **kwargs)
+      Product.objects.filter(id=self.product_id).update(product_status=ProductStatus.UNLISTED.value)
     return redirect('/products/#all')
 
+
+
+@register_snippet
+class Order(models.Model):
+  order_reference_number = models.CharField(blank=True, max_length=500)
+  total = models.CharField(null=True, blank=True, max_length=500)
+  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
+  status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
+  countdown = models.CharField(null=True, blank=True, max_length=500)
+  shipping_channel = models.CharField(null=True, blank=True, max_length=500)
+  creation_date = models.CharField(null=True, blank=True, max_length=500)
+  paid_date = models.CharField(null=True, blank=True, max_length=500)
+  products = models.ManyToManyField(Product, through='OrderedProduct')
+  shipping_address = models.TextField(null=True, blank=True)
+  pickup_address = models.TextField(null=True, blank=True)
+  user_id = models.CharField(null=True, blank=True, max_length=500)
+  username = models.CharField(null=True, blank=True, max_length=500)
+  additional_info = models.TextField(null=True, blank=True)
+
+  class Meta:
+      indexes = [
+          models.Index(fields=['order_reference_number'])
+      ]
+
+class OrderedProduct(models.Model):
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  variation = models.ForeignKey(Variations, on_delete=models.CASCADE, null=True)
+  order = models.ForeignKey(Order, on_delete=models.CASCADE)
+  quantity = models.IntegerField(null=True, blank=True)
 
 class Errors(ClusterableModel):  
   name = models.CharField(null=True, blank=True, max_length=500)
@@ -162,12 +268,12 @@ class ProductsPage(BasePage):
   
   def get_context(self, request):
     context = super().get_context(request)
-    allProducts = Product.objects.filter(profile_id=request.user.id, unpublished=False)
-    liveProducts = Product.objects.filter(profile_id=request.user.id, live=True)
-    soldOutProducts = Product.objects.filter(profile_id=request.user.id, stock_sum=0)
-    suspendedProducts = Product.objects.filter(profile_id=request.user.id, suspended=True)
-    unlistedProducts = Product.objects.filter(profile_id=request.user.id, unlisted=True)
-    unpublishedProducts = Product.objects.filter(profile_id=request.user.id, unpublished=True)
+    allProducts = Product.objects.filter(profile_id=request.user.id).exclude(product_status=ProductStatus.UNPUBLISHED.value)
+    liveProducts = Product.objects.filter(profile_id=request.user.id, product_status=ProductStatus.LIVE_APPROVED.value)
+    soldOutProducts = Product.objects.filter(profile_id=request.user.id, stock_sum=0).exclude(product_status=ProductStatus.UNPUBLISHED.value)
+    suspendedProducts = Product.objects.filter(profile_id=request.user.id, product_status=ProductStatus.SUSPENDED.value)
+    unlistedProducts = Product.objects.filter(profile_id=request.user.id, product_status=ProductStatus.UNLISTED.value)
+    unpublishedProducts = Product.objects.filter(profile_id=request.user.id, product_status=ProductStatus.UNPUBLISHED.value)
 
     aPageNumber = request.GET.get('apage')
     lPageNumber = request.GET.get('lpage')
@@ -249,6 +355,11 @@ class ProductsPage(BasePage):
     context['unpublished'] = unpublished
     context['unpublishedList'] = unpublishedList
     
+    context['nAll'] = len(allProducts)
+    context['nLive'] = len(liveProducts)
+    context['nSoldOut'] = len(soldOutProducts)
+    context['nUnlisted'] = len(unlistedProducts)
+    context['nSuspended'] = len(suspendedProducts)
     context['nUnpublished'] = len(unpublishedProducts)
     context['subPages'] = subPages
     return context
@@ -260,3 +371,12 @@ class ProductImportPage(BasePage):
 
 class ProductsImportPage(BasePage):
   body = StreamField(GeneralStreamBlock, blank=True)
+
+class Sale(models.Model):
+  product=models.ForeignKey(Product, models.DO_NOTHING, blank=True, null=True)
+  variation=models.ForeignKey(Variations, models.DO_NOTHING, blank=True, null=True)
+  product_sale_price=models.DecimalField(max_digits=100, decimal_places=2, blank=True, null=True)
+  product_sale_date_start=models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_date_end=models.DateField(default=datetime.now, blank=True, null=True)
+  product_sale_time_start=models.TimeField(default=datetime.now, blank=True, null=True)
+  product_sale_time_end=models.TimeField(default=datetime.now, blank=True, null=True)

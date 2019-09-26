@@ -1,0 +1,128 @@
+{% load static %}
+
+{% if allToShipUsersOrders %}
+<div class="tab-pane" id="toship" role="tabpanel" aria-labelledby="toship-tab">
+  <div class="body-content table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Product(s)</th>
+          <th scope="col"></th>
+          <th scope="col">Variation(s)</th>
+          <th scope="col">Order Total</th>
+          <th scope="col">Date Ordered</th>
+          <th scope="col">Status</th>
+          <th scope="col">Countdown</th>
+          <th scope="col">
+            <a class="dropdown-toggle" id="all_channels" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All Channels</a>
+            <ul class="dropdown-menu">
+              <li class="dropdown-item">Sample</li>
+              <li class="dropdown-item">List</li>
+              <li class="dropdown-item">Items</li>
+              <li class="dropdown-item">Value</li>
+              <li class="dropdown-item">Hi!</li>
+            </ul>
+          </th>
+          <th scope="col">Delivery Address</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="orders">
+        {% for user, order in allToShipUsersOrders %}
+          <tr class="tr-top">
+            <td colspan="10">
+              Order ID: {{order.id}}
+            </td>
+          </tr>
+          <tr class="tr-middle">
+            <td colspan="10">
+              User: {{user}}
+            </td>
+          </tr>
+          {% for product in order.products.all %}
+          <tr class="tr-middle">
+              <td scope="row">
+                  <a href="/products/edit/{{product.category}}/{{product.id}}/">
+                      {% if product.variations.all.0.image_url %}
+                          <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
+                      {% elif product.variations.all.0.image_upload %}
+                          <img src="{{product.variations.all.0.image_url_from_upload}}" alt="" width="80"/>
+                      {% elif product.variations.all.0.image_url_from_sku %}
+                          <img src="{{product.variations.all.0.image_url_from_sku}}" alt="" width="80"/>
+                      {% else %}
+                          <img src="{% static 'images/download.svg' %}" alt="" width="80"/>
+                      {% endif %}
+                  </a>
+              </td>
+              <td class="text-center">
+                {% if product.product_name %}
+                {{product.product_name}}
+                {% else %} -
+                {% endif %}
+              </td>
+              <td class="text-center">
+                {% if product.variations.all %}
+                {% for variation in product.variations.all%}
+                  {{ variation.name }}
+                  <br>
+                {% endfor %}
+                {% else %} -
+                {% endif %}
+              </td>
+              {% if forloop.counter0 == 0 %}
+                <td class="text-center">
+                  {% if order.total %}
+                  {{order.total}}
+                  {% else %} -
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if order.creation_date %}
+                    {{order.creation_date}}
+                    {% else %} -
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if order.status %}
+                    {{order.status}}
+                    {% else %} -
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if order.countdown %}
+                    {{order.countdown}}
+                    {% else %} -
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if order.shipping_channel %}
+                    {{order.shipping_channel}}
+                    {% else %} -
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if order.delivery_address %}
+                    {{order.delivery_address}}
+                    {% else %} -
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                  <div class="dropdown show">
+                    <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">▼</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <a class="dropdown-item" href="/orders/set_status/{{order.id}}/SHIPPING/">Arrange Pickup</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.id}}/CANCELLATION/">Deny order</a>
+                    </div>
+                  </div>
+                </td>
+              {% else %}
+                <td colspan="8"></td>
+              {% endif %}
+          </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>    
+</div>
+{% endif %}

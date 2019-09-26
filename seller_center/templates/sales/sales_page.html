@@ -1,9 +1,77 @@
-{% extends "base.html" %}
-
+{% extends "index.html" %}
+{% load static %}
 {% load wagtailcore_tags wagtailimages_tags %}
+{% block extra_css %}
 
+{% endblock %}
 {% block body_class %}template-salespage{% endblock %}
 
 {% block content %}
+	{% if errors %}
+	<div class="alert alert-danger" role="alert">
+		{% for e in errors %}
+			{{e}}
+		{% endfor %}
+	</div>
+	{% endif %}
+	<div class="form-wrap">
+		<div class="d-sm-flex align-items-center justify-content-between mb-4">
+			<h1 class="h3 mr-auto mb-0 text-gray-800">Orders</h1>
+			<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"><i class="fas fa-shipping-fast"></i> Ship My Orders</a>
+		</div>
+		<div class="row">
+			<div class="card container-fluid mb-3">
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab">All ({{nAll}})</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="unpaid-tab" data-toggle="tab" href="#unpaid" role="tab">Unpaid ({{nUnpaid}})</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="to-ship-tab" data-toggle="tab" href="#toship" role="tab">To Ship ({{nToShip}})</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="shipping-tab" data-toggle="tab" href="#shipping" role="tab">Shipping<var>({{nShipping}})</var></a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="completed-tab" data-toggle="tab" href="#completed" role="tab">Completed ({{nCompleted}})</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="cancellation-tab" data-toggle="tab" href="#cancellation" role="tab">Cancellation ({{nCancellation}})</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="return-refund-tab" data-toggle="tab" href="#return" role="tab">Return / Refund ({{nReturn}})</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row" id="process" style="display: none;">
+			<ul class="nav" role="tablist">
+				<li class="nav-item ml-2 p-1">
+					<a class="btn btn-sm btn-outline-primary active" id="all2" data-toggle="tab" href="#" role="tab">All</a>
+				</li>
+				<li class="nav-item ml-2 p-1">
+					<a class="btn btn-sm btn-outline-primary" id="to_process" data-toggle="tab" href="#" role="tab">To Process</a>
+				</li>
+				<li class="nav-item ml-2 p-1">
+					<a class="btn btn-sm btn-outline-primary" id="processed" data-toggle="tab" href="#" role="tab">Processed</a>
+				</li>
+			</ul>
+		</div>
+		<div class="row">
+			<div class="container-fluid tab-content">
+				{% include "sales/includes/all_orders.html" with allUsersOrders=allUsersOrders %}
+				{% include "sales/includes/unpaid_orders.html" with allUnpaidUsersOrders=allUnpaidUsersOrders %}
+				{% include "sales/includes/to_ship_orders.html" with allToShipUsersOrders=allToShipUsersOrders %}
+				{% include "sales/includes/shipping_orders.html" with allShippingUsersOrders=allShippingUsersOrders %}
+				{% include "sales/includes/completed_orders.html" with allCompletedUsersOrders=allCompletedUsersOrders %}
+				{% include "sales/includes/cancellation_orders.html" with allCancellationUsersOrders=allCancellationUsersOrders %}	
+				{% include "sales/includes/return_orders.html" with allReturnUsersOrders=allReturnUsersOrders %}	
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block extra_js %}
 
 {% endblock %}

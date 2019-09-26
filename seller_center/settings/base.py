@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'users',
     'sign_up',
     'search',
-
+    'account',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
@@ -159,9 +159,12 @@ WAGTAIL_SITE_NAME = "seller_center"
 BASE_URL = 'http://example.com'
 
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'wagtailadmin/login.html'
+
+# AWS_AUTH_URL = os.environ.get('AWS_AUTH_URL')
+AWS_AUTH_URL = 'https://9mzqmu4r3g.execute-api.ap-southeast-1.amazonaws.com/staging/api/v1'
+
 AUTHENTICATION_BACKENDS = [
                             'django.contrib.auth.backends.ModelBackend',
-                            'base.aws_backend.AwsBackend'
                             ]
 
 MESSAGE_TAGS = {
@@ -178,8 +181,9 @@ CSV_COLUMNS = [
     'product_weight',
     'ship_out_in',
     'parent_sku_reference_no',
-    'other_logistics_provider_setting',
-    'other_logistics_provider_fee',
+    # 'other_logistics_provider_setting',
+    # 'other_logistics_provider_fee',
+
     'product_description',
     'variation1_id',
     'variation2_id',

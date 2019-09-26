@@ -54,13 +54,9 @@
                 {% for product in soldOutProducts %}
                 <tr>
                     <td scope="row">
-                        <a href="/admin/product/product/edit/{{product.category}}/{{product.id}}/">
-                            {% if product.variations.all.0.image_url %}
-                                <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
-                            {% elif product.variations.all.0.image_upload %}
-                                <img src="{{product.variations.all.0.image_url_from_upload}}" alt="" width="80"/>
-                            {% elif product.variations.all.0.image_url_from_sku %}
-                                <img src="{{product.variations.all.0.image_url_from_sku}}" alt="" width="80"/>
+                        <a href="{% url 'product_edit' category_id=product.category.unique_id product_id=product.id %}">
+                            {% if product.cover_image_url %}
+                                <img src="{{ product.cover_image_url }}" alt="" width="80"/>
                             {% else %}
                                 <img src="{% static 'images/download.svg' %}" alt="" width="80"/>
                             {% endif %}
@@ -87,20 +83,28 @@
                     {% endfor %}
                     </td>
                     <td class="text-center">
-                    {% for v in product.variations.all %}
-                        {% if v.price %}₱ {{v.price}}
-                        {% else %} -
-                        {% endif %}
-                        <br>
-                    {% endfor %}
+                    {% if product.product_price %}   
+                        {{ product.product_price }}
+                    {% else %}
+                        {% for v in product.variations.all %}
+                            {% if v.price %}₱ {{v.price}}
+                            {% else %} -
+                            {% endif %}
+                            <br>
+                        {% endfor %}
+                    {% endif %}
                     </td>
                     <td class="text-center">
-                    {% for v in product.variations.all %}
-                        {% if v.stock %} {{v.stock}}
-                        {% else %} -
-                        {% endif %}
-                        <br>
-                    {% endfor %}
+                    {% if product.stock_sum %}   
+                        {{ product.stock_sum }}
+                    {% else %}
+                        {% for v in product.variations.all %}
+                            {% if v.stock %} {{v.stock}}
+                            {% else %} -
+                            {% endif %}
+                            <br>
+                        {% endfor %}
+                    {% endif %}
                     </td>
                     <td class="text-center">
                     {% for v in product.variations.all %}
@@ -113,7 +117,7 @@
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                              <a class="dropdown-item" href="/admin/product/product/edit/{{product.category}}/{{product.id}}/">Edit</a>
+                              <a class="dropdown-item" href="{% url 'product_edit' category_id=product.category.unique_id product_id=product.id %}">Edit</a>
                               <a class="dropdown-item" href="/products/live/{{product.id}}/">Make Live</a>
                               <a class="dropdown-item" href="/products/unlist/{{product.id}}/">Unlist</a>
                               <a class="dropdown-item" href="/products/suspend/{{product.id}}/">Suspend</a>

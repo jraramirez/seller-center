@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["pages/_products-import-new.scss"],"names":[],"mappings":"AAEI;EACE;EACA;EACA;;AAEF;EACA;EACE;EACA;EACA;EACA;EACA;EACA;;AAEH;EACC","file":"seller_center_new.css"}
+{"version":3,"sourceRoot":"","sources":["pages/_products-import-new.scss","pages/_sales-new.scss"],"names":[],"mappings":"AAEI;EACE;EACA;EACA;;AAEF;EACA;EACE;EACA;EACA;EACA;EACA;EACA;;AAEH;EACC;;;ACfA;EACE;;AAIF;EACE;;AAIF;EACE","file":"seller_center_new.css"}
