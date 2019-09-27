@@ -208,6 +208,10 @@ $('.number_n_spec_char_only').keypress(function(e){
   validate_input(e, 2);
 });
 
+$('.alpha_n_number_only').keypress(function(e){
+  validate_input(e, 3);
+});
+
 function validate_input(e, type){
   var theEvent=e||window.event;
   if(theEvent.type === 'paste'){
@@ -221,6 +225,8 @@ function validate_input(e, type){
     regex=/[0-9]/;
   } else if(type == 2){
     regex=/[0-9]|\W|_/;
+  } else if(type == 3){
+    regex=/^[a-z0-9]+$/i;
   }
   if(!regex.test(key)){
     theEvent.returnValue=false;
