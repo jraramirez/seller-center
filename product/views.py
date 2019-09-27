@@ -497,7 +497,7 @@ def product_edit(request, category_id, product_id):
         # product_sale_time_end = request.POST.get('product-sale-time-end') if request.POST.get('product-sale-date-start') else None,
 
         # this is evaluates as tertiary operator
-        stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else 0,
+        stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') != None else 0,
         product_length=request.POST.get('product-length') if request.POST.get('product-length') else 0,
         product_width=request.POST.get('product-width') if request.POST.get('product-width') else 0,
         product_height=request.POST.get('product-height') if request.POST.get('product-height') else 0,
@@ -643,7 +643,6 @@ def product_edit(request, category_id, product_id):
     product = {}
     selectedProduct = Product.objects.filter(id=product_id)[0]
     product['product_code'] = selectedProduct.product_code
-    product['stock_sum'] = selectedProduct.stock_sum
     category = selectedProduct.category
     if(category != category):
       product['category'] = "None"
@@ -676,7 +675,7 @@ def product_edit(request, category_id, product_id):
     # product['product_sale_date_end'] = selectedProduct.product_sale_date_end
     # product['product_sale_time_start'] = selectedProduct.product_sale_time_start
     # product['product_sale_time_end'] = selectedProduct.product_sale_time_end
-    product['stock_sum'] = selectedProduct.stock_sum
+    product['stock_sum']=selectedProduct.stock_sum if selectedProduct.stock_sum != None else ''
 
     product['product_length'] = selectedProduct.product_length if selectedProduct.product_length is not None else ''
     product['product_width'] = selectedProduct.product_width if selectedProduct.product_width is not None else ''
