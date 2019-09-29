@@ -256,6 +256,12 @@ class OrderedProduct(models.Model):
   variation = models.ForeignKey(Variations, on_delete=models.CASCADE, null=True)
   order = models.ForeignKey(Order, on_delete=models.CASCADE)
   quantity = models.IntegerField(null=True, blank=True)
+  product_price = models.DecimalField(max_digits=100, decimal_places=2, null=True, blank=True, max_length=500)
+  product_name = models.CharField(null=True, blank=True, max_length=500)
+  product_description = models.TextField(null=True, blank=True)
+  cover_image_url= models.TextField(null=True, blank=True)
+  variation_name = models.CharField(null=True, blank=True, max_length=500)
+  variation_image_url = models.TextField(null=True, blank=True)
 
 class Errors(ClusterableModel):  
   name = models.CharField(null=True, blank=True, max_length=500)
