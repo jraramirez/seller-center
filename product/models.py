@@ -245,6 +245,12 @@ class Order(models.Model):
           models.Index(fields=['order_reference_number'])
       ]
 
+class OrderStatus(models.Model):
+  order = models.ForeignKey(Order, on_delete=models.CASCADE)
+  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
+  status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
+  additional_info = models.TextField(null=True, blank=True)
+
 class OrderedProduct(models.Model):
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
   variation = models.ForeignKey(Variations, on_delete=models.CASCADE, null=True)
