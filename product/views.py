@@ -128,6 +128,9 @@ def product_import(request, selected_category):
       errors.append('Product Category is required.')
     if(not product['product_name']):
       errors.append('Product Name is required.')
+    else:
+      if(len(product['product_name']) < 3):
+        errors.append('Product Name should have at least 3 characters.')
     if(not product['product_description']):
       errors.append('Product Description is required.')
     if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
@@ -435,6 +438,9 @@ def product_edit(request, category_id, product_id):
       errors.append('Product Category is required.')
     if (not product['product_name']):
       errors.append('Product Name is required.')
+    else:
+      if(len(product['product_name']) < 3):
+        errors.append('Product Name should have at least 3 characters.')
     if (not product['product_description']):
       errors.append('Product Description is required.')
     if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
@@ -1117,7 +1123,7 @@ def product_suspend(request, product_id):
 
 
 def product_live(request, product_id):
-  Product.objects.filter(id=product_id).update(live=True)
+  Product.objects.filter(id=product_id).update(product_status=ProductStatus.LIVE_APPROVAL.value)
   return HttpResponseRedirect("/products/#all")
 
 

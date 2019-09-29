@@ -44,7 +44,23 @@ $(function(){
 
     $('.img_file').change(function(){
         if($('#'+$(this).attr('id'))[0].files[0].size < 2000000){
-            update_img($('#'+$(this).attr('id')), '#'+$(this).attr('imgdisplay'), '#'+$(this).attr('img_rmv'));
+            var filename=$(this).val();
+            var extension=filename.replace(/^.*\./, '');
+            if (extension == filename){
+                extension='';
+            } else{
+                extension=extension.toLowerCase();
+            }
+            switch(extension){
+                case 'jpg':
+                case 'png':
+                    update_img($('#'+$(this).attr('id')), '#'+$(this).attr('imgdisplay'), '#'+$(this).attr('img_rmv'));
+                    break;
+                default:
+                    img=$('#'+$(this).attr('imgdisplay'))[0];
+                    img.src='';
+                    alert('Invalid file type.');
+            }
         } else{
             $(this).val('');
             remove_img('#'+$(this).attr('img_rmv'), '#'+$(this).attr('imgdisplay'));
@@ -113,10 +129,26 @@ $(function(){
         }
         var img_input=$(this).find(found_img);
         if(e.originalEvent.dataTransfer.files[0].size < 2000000){
-            $(found_img).prop('files', e.originalEvent.dataTransfer.files);
-            var image=e.originalEvent.dataTransfer;
-            var imgdisplay=$('#'+img_input.attr('imgdisplay'));
-            read_img_file(image, imgdisplay);
+            var filename=e.originalEvent.dataTransfer.files[0].name;
+            var extension=filename.replace(/^.*\./, '');
+            if (extension == filename){
+                extension='';
+            } else{
+                extension=extension.toLowerCase();
+            }
+            switch(extension){
+                case 'jpg':
+                case 'png':
+                    $(found_img).prop('files', e.originalEvent.dataTransfer.files);
+                    var image=e.originalEvent.dataTransfer;
+                    var imgdisplay=$('#'+img_input.attr('imgdisplay'));
+                    read_img_file(image, imgdisplay);
+                    break;
+                default:
+                    img=$('#'+$(found_img).attr('imgdisplay'))[0];
+                    img.src='';
+                    alert('Invalid file type.');
+            }
         } else{
             img_input.val('');
             remove_img('#'+img_input.attr('img_rmv'), '#'+img_input.attr('imgdisplay'));
