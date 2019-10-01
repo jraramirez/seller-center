@@ -133,6 +133,8 @@ def product_import(request, selected_category):
         errors.append('Product Name should have at least 3 characters.')
     if(not product['product_description']):
       errors.append('Product Description is required.')
+    if(len(product['product_brand']) > 500):
+        errors.append('Product Brand exceeds character limit (500).')
     if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
       errors.append('Product Price is required.')
     # else:
@@ -443,6 +445,8 @@ def product_edit(request, category_id, product_id):
         errors.append('Product Name should have at least 3 characters.')
     if (not product['product_description']):
       errors.append('Product Description is required.')
+    if(len(product['product_brand']) > 500):
+        errors.append('Product Brand exceeds character limit (500).')
     if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
       errors.append('Product Price is required.')
     # else:
