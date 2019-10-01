@@ -201,11 +201,15 @@ $(function(){
 });
 
 $('.number_only').keypress(function(e){
-  validate_input(e, 1);
+  validate_input(e, 'number_only');
 });
 
 $('.number_n_spec_char_only').keypress(function(e){
-  validate_input(e, 2);
+  validate_input(e, 'number_n_spec_char_only');
+});
+
+$('.alpha_n_number_only').keypress(function(e){
+  validate_input(e, 'alpha_n_number_only');
 });
 
 function validate_input(e, type){
@@ -217,10 +221,12 @@ function validate_input(e, type){
       key=String.fromCharCode(key);
   }
   var regex=/[*]/;
-  if(type == 1){
+  if(type == 'number_only'){
     regex=/[0-9]/;
-  } else if(type == 2){
+  } else if(type == 'number_n_spec_char_only'){
     regex=/[0-9]|\W|_/;
+  } else if(type == 'alpha_n_number_only'){
+    regex=/^[a-z0-9]+$/i;
   }
   if(!regex.test(key)){
     theEvent.returnValue=false;

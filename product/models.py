@@ -225,7 +225,8 @@ class Variations(Orderable, models.Model):
 
 @register_snippet
 class Order(models.Model):
-  order_reference_number = models.CharField(blank=True, max_length=500)
+  order_reference_number = models.TextField(blank=True, primary_key=True)
+  products = models.ManyToManyField(Product, through='OrderedProduct')
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
   status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
@@ -233,17 +234,11 @@ class Order(models.Model):
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
-  products = models.ManyToManyField(Product, through='OrderedProduct')
   shipping_address = models.TextField(null=True, blank=True)
   pickup_address = models.TextField(null=True, blank=True)
   user_id = models.CharField(null=True, blank=True, max_length=500)
   username = models.CharField(null=True, blank=True, max_length=500)
   additional_info = models.TextField(null=True, blank=True)
-
-  class Meta:
-      indexes = [
-          models.Index(fields=['order_reference_number'])
-      ]
 
 class OrderStatus(models.Model):
   order = models.ForeignKey(Order, on_delete=models.CASCADE)
