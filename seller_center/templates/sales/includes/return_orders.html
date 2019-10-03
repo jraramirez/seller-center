@@ -1,7 +1,7 @@
 {% load static %}
 
-{% if allReturnUsersOrders %}
-<div class="tab-pane fade" id="return" role="tabpanel" aria-labelledby="return-tab">
+{% if allReturnOrders %}
+<div class="tab-pane fade" id="return" role="tabpanel" aria-labelledby="all-tab">
   <div class="body-content table-responsive">
     <table class="table">
       <thead>
@@ -28,27 +28,23 @@
         </tr>
       </thead>
       <tbody id="orders">
-        {% for user, order in allReturnUsersOrders %}
+        {% for order in allReturnOrders %}
           <tr class="tr-top">
             <td colspan="10">
-              Order ID: {{order.id}}
+              Order ID: {{order.order_reference_number}}
             </td>
           </tr>
           <tr class="tr-middle">
             <td colspan="10">
-              User: {{user}}
+              User: {{order.username}}
             </td>
           </tr>
           {% for product in order.products.all %}
           <tr class="tr-middle">
               <td scope="row">
-                  <a href="/products/edit/{{product.category}}/{{product.id}}/">
-                      {% if product.variations.all.0.image_url %}
-                          <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
-                      {% elif product.variations.all.0.image_upload %}
-                          <img src="{{product.variations.all.0.image_url_from_upload}}" alt="" width="80"/>
-                      {% elif product.variations.all.0.image_url_from_sku %}
-                          <img src="{{product.variations.all.0.image_url_from_sku}}" alt="" width="80"/>
+                  <a href="#">
+                      {% if product.cover_image_url %}
+                          <img src="{{product.cover_image_url}}" alt="" width="80"/>
                       {% else %}
                           <img src="{% static 'images/download.svg' %}" alt="" width="80"/>
                       {% endif %}
@@ -110,8 +106,8 @@
                   <div class="dropdown show">
                     <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">▼</a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item" href="/orders/set_status/{{order.id}}/SHIPPING/">Arrange Pickup</a>
-                      <a class="dropdown-item" href="/orders/set_status/{{order.id}}/CANCELLATION/">Deny order</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/SHIPPING/">Arrange Pickup</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/CANCELLATION/">Deny order</a>
                     </div>
                   </div>
                 </td>
