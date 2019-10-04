@@ -37,6 +37,11 @@ class OrderStatus(Enum):   # A subclass of Enum
     RETURN_REFUND = 'RETURN_REFUND'
 
 
+class OrderCourier(Enum):   # A subclass of Enum
+    LOGISTIKUS = 'LOGISTIKUS'
+    LOGISTIKUS2 = 'LOGISTIKUS2'
+
+
 class Category(models.Model):
   unique_id = models.IntegerField(null=False, blank=False, primary_key=True)
   parent_id = models.IntegerField(null=True, blank=True)
@@ -231,6 +236,7 @@ class Order(models.Model):
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
   status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
   countdown = models.CharField(null=True, blank=True, max_length=500)
+  courier = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
