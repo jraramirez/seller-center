@@ -12,17 +12,7 @@
           <th scope="col">Order Total</th>
           <th scope="col">Date Ordered</th>
           <th scope="col">Status</th>
-          <th scope="col">Countdown</th>
-          <th scope="col">
-            <a class="dropdown-toggle" id="all_channels" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All Channels</a>
-            <ul class="dropdown-menu">
-              <li class="dropdown-item">Sample</li>
-              <li class="dropdown-item">List</li>
-              <li class="dropdown-item">Items</li>
-              <li class="dropdown-item">Value</li>
-              <li class="dropdown-item">Hi!</li>
-            </ul>
-          </th>
+          <th scope="col">Selected Courier</th>
           <th scope="col">Delivery Address</th>
           <th scope="col">Actions</th>
         </tr>
@@ -30,12 +20,12 @@
       <tbody id="orders">
         {% for order in allToShipOrders %}
           <tr class="tr-top">
-            <td colspan="10">
+            <td colspan="9">
               Order ID: {{order.order_reference_number}}
             </td>
           </tr>
           <tr class="tr-middle">
-            <td colspan="10">
+            <td colspan="9">
               User: {{order.username}}
             </td>
           </tr>
@@ -85,14 +75,8 @@
                     {% endif %}
                 </td>
                 <td class="text-center">
-                    {% if order.countdown %}
-                    {{order.countdown}}
-                    {% else %} -
-                    {% endif %}
-                </td>
-                <td class="text-center">
-                    {% if order.shipping_channel %}
-                    {{order.shipping_channel}}
+                    {% if order.courier %}
+                    {{order.courier}}
                     {% else %} -
                     {% endif %}
                 </td>
