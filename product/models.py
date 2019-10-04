@@ -236,7 +236,7 @@ class Order(models.Model):
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
   status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
   countdown = models.CharField(null=True, blank=True, max_length=500)
-  courier = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
+  courier = models.CharField(null=True, blank=True, max_length=500, default=OrderCourier.LOGISTIKUS.value)
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
