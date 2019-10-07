@@ -70,9 +70,9 @@ def add_order(request):
 
 def set_status(request, order_reference_number, status):
   orderStatus = Order.objects.filter(order_reference_number=order_reference_number)[0].status
-  if((orderStatus != 'SHIPPING' or orderStatus != 'COMPLETED') and status != 'CANCELLATION'):
+  if((orderStatus == 'TO_SHIP') and status != 'CANCELLATION'):
     Order.objects.filter(order_reference_number=order_reference_number).update(status=status)
     return HttpResponseRedirect("/orders/#all")
   else:
-    messages.error(request, 'Completed/Shipping orders cannot be cancelled.')
+    messages.error(request, 'Only "To Ship" orders can be cancelled.')
     return HttpResponseRedirect("/orders/#all")
