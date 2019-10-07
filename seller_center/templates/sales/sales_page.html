@@ -32,7 +32,10 @@
 						<a class="nav-link" id="to-ship-tab" data-toggle="tab" href="#toship" role="tab">To Ship ({{nToShip}})</a>
 					</li>
 					<li class="nav-item ml-2 p-1">
-						<a class="nav-link" id="shipping-tab" data-toggle="tab" href="#shipping" role="tab">Shipping<var>({{nShipping}})</var></a>
+						<a class="nav-link" id="shipping-tab" data-toggle="tab" href="#shipping" role="tab">Shipping <var>({{nShipping}})</var></a>
+					</li>
+					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="delivered-tab" data-toggle="tab" href="#delivered" role="tab">Delivered ({{nDelivered}})</a>
 					</li>
 					<li class="nav-item ml-2 p-1">
 						<a class="nav-link" id="completed-tab" data-toggle="tab" href="#completed" role="tab">Completed ({{nCompleted}})</a>
@@ -61,13 +64,14 @@
 		</div> -->
 		<div class="row">
 			<div class="container-fluid tab-content">
-				{% include "sales/includes/all_orders.html" with allUsersOrders=allUsersOrders %}
-				{% include "sales/includes/unpaid_orders.html" with allUnpaidUsersOrders=allUnpaidUsersOrders %}
-				{% include "sales/includes/to_ship_orders.html" with allToShipUsersOrders=allToShipUsersOrders %}
-				{% include "sales/includes/shipping_orders.html" with allShippingUsersOrders=allShippingUsersOrders %}
-				{% include "sales/includes/completed_orders.html" with allCompletedUsersOrders=allCompletedUsersOrders %}
-				{% include "sales/includes/cancellation_orders.html" with allCancellationUsersOrders=allCancellationUsersOrders %}	
-				{% include "sales/includes/return_orders.html" with allReturnUsersOrders=allReturnUsersOrders %}	
+				{% include "sales/includes/all_orders.html" with allOrders=allOrders %}
+				{% include "sales/includes/unpaid_orders.html" with allUnpaidOrders=allUnpaidOrders %}
+				{% include "sales/includes/to_ship_orders.html" with allToShipOrders=allToShipOrders %}
+				{% include "sales/includes/shipping_orders.html" with allShippingOrders=allShippingOrders %}
+				{% include "sales/includes/delivered_orders.html" with allDeliveredOrders=allDeliveredOrders %}
+				{% include "sales/includes/completed_orders.html" with allCompletedOrders=allCompletedOrders %}
+				{% include "sales/includes/cancellation_orders.html" with allCancellationOrders=allCancellationOrders %}	
+				{% include "sales/includes/return_orders.html" with allReturnOrders=allReturnOrders %}	
 			</div>
 		</div>
 	</div>

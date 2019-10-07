@@ -32,6 +32,7 @@ class OrderStatus(Enum):   # A subclass of Enum
     UNPAID = 'UNPAID'
     TO_SHIP = 'TO_SHIP'
     SHIPPING = 'SHIPPING'
+    DELIVERED = 'DELIVERED'
     COMPLETED = 'COMPLETED'
     CANCELLATION = 'CANCELLATION'
     RETURN_REFUND = 'RETURN_REFUND'

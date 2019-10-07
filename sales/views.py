@@ -23,6 +23,7 @@ def orders(request):
 	allUnpaidOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='UNPAID')
 	allToShipOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='TO_SHIP')
 	allShippingOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='SHIPPING')
+	allDeliveredOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='DELIVERED')
 	allCompletedOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='COMPLETED')
 	allCancellationOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='CANCELLATION')
 	allReturnOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='RETURN_REFUND')
@@ -31,6 +32,7 @@ def orders(request):
 		'allUnpaidOrders': allUnpaidOrders,
 		'allToShipOrders': allToShipOrders,
 		'allShippingOrders': allShippingOrders,
+		'allDeliveredOrders': allDeliveredOrders,
 		'allCompletedOrders': allCompletedOrders,
 		'allCancellationOrders': allCancellationOrders,
 		'allReturnOrders': allReturnOrders,
@@ -38,6 +40,7 @@ def orders(request):
 		'nUnpaid': len(allUnpaidOrders),
 		'nToShip': len(allToShipOrders),
 		'nShipping': len(allShippingOrders),
+		'nDelivered': len(allDeliveredOrders),
 		'nCompleted': len(allCompletedOrders),
 		'nCancellation': len(allCancellationOrders),
 		'nReturn': len(allReturnOrders),
