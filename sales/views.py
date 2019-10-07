@@ -19,12 +19,12 @@ STATUS_CHOICES = [
 
 def orders(request):
 	allOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id).distinct()
-	allUnpaidOrders = Order.objects.filter(status='UNPAID')
-	allToShipOrders = Order.objects.filter(status='TO_SHIP')
-	allShippingOrders = Order.objects.filter(status='SHIPPING')
-	allCompletedOrders = Order.objects.filter(status='COMPLETED')
-	allCancellationOrders = Order.objects.filter(status='CANCELLATION')
-	allReturnOrders = Order.objects.filter(status='RETURN_REFUND')
+	allUnpaidOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='UNPAID')
+	allToShipOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='TO_SHIP')
+	allShippingOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='SHIPPING')
+	allCompletedOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='COMPLETED')
+	allCancellationOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='CANCELLATION')
+	allReturnOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='RETURN_REFUND')
 	return render(request, 'sales/sales_page.html', {
 		'allOrders': allOrders,
 		'allUnpaidOrders': allUnpaidOrders,

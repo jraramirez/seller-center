@@ -233,7 +233,7 @@ class Order(models.Model):
   order_reference_number = models.TextField(blank=True, primary_key=True)
   products = models.ManyToManyField(Product, through='OrderedProduct')
   total = models.CharField(null=True, blank=True, max_length=500)
-  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
+  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.TO_SHIP.value)
   status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
   countdown = models.CharField(null=True, blank=True, max_length=500)
   courier = models.CharField(null=True, blank=True, max_length=500, default=OrderCourier.LOGISTIKUS.value)

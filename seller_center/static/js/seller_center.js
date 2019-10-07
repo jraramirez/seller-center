@@ -161,15 +161,15 @@ $(function(){
     this.style.height = (this.scrollHeight) + 'px';
   });
 
-    $('.nav-link').click(function(){
-        if($(this).attr('id') == 'to-ship-tab' || $(this).attr('id') == 'return-refund-tab'){
-            $('.btn-outline-primary').removeClass('active');
-            $('#all2').addClass('active');
-            $('#process').show();
-        } else{
-            $('#process').hide();
-        }
-    });
+    // $('.nav-link').click(function(){
+    //     if($(this).attr('id') == 'to-ship-tab' || $(this).attr('id') == 'return-refund-tab'){
+    //         $('.btn-outline-primary').removeClass('active');
+    //         $('#all2').addClass('active');
+    //         $('#process').show();
+    //     } else{
+    //         $('#process').hide();
+    //     }
+    // });
 
     $('.custom-file-input').change(function(){
       $('#'+$(this).attr('file_lbl')).text($(this)[0].files[0].name);

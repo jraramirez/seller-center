@@ -1,7 +1,7 @@
 {% load static %}
 
-{% if allOrders %}
 <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+  {% if allOrders %}
   <div class="body-content table-responsive">
     <table class="table">
       <thead>
@@ -26,7 +26,12 @@
           </tr>
           <tr class="tr-middle">
             <td colspan="9">
-              User: {{order.username}}
+              User: 
+              {% if order.username %}
+              {{order.username}}
+              {% else %} 
+              {{order.user_id}}
+              {% endif %}
             </td>
           </tr>
           {% for product in order.products.all %}
@@ -81,8 +86,8 @@
                     {% endif %}
                 </td>
                 <td class="text-center">
-                    {% if order.delivery_address %}
-                    {{order.delivery_address}}
+                    {% if order.shipping_address %}
+                    {{order.shipping_address}}
                     {% else %} -
                     {% endif %}
                 </td>
@@ -91,7 +96,7 @@
                     <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">▼</a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                       <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/SHIPPING/">Arrange Pickup</a>
-                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/CANCELLATION/">Deny order</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/CANCELLATION/">Cancel order</a>
                     </div>
                   </div>
                 </td>
@@ -104,5 +109,5 @@
       </tbody>
     </table>
   </div>    
+  {% endif %}
 </div>
-{% endif %}
