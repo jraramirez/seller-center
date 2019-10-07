@@ -4,6 +4,7 @@ import random
 import datetime
 
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.db.models import Sum, Count
 from product.models import Product, OrderedProduct
 from product.models import Order
@@ -68,5 +69,10 @@ def add_order(request):
 
 
 def set_status(request, order_reference_number, status):
-  Order.objects.filter(order_reference_number=order_reference_number).update(status=status)
-  return HttpResponseRedirect("/orders/#all")
+  orderStatus = Order.objects.filter(order_reference_number=order_reference_number)[0].status
+  if((orderStatus != 'SHIPPING' or orderStatus != 'COMPLETED') and status != 'CANCELLATION'):
+    Order.objects.filter(order_reference_number=order_reference_number).update(status=status)
+    return HttpResponseRedirect("/orders/#all")
+  else:
+    messages.error(request, 'Completed/Shipping orders cannot be cancelled.')
+    return HttpResponseRedirect("/orders/#all")
