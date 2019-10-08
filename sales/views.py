@@ -12,7 +12,6 @@ from product.models import Product, OrderedProduct
 from product.models import Order
 
 STATUS_CHOICES = [
-	('U', 'Unpaid'),
 	('S', 'To Ship'),
 	('H', 'Shipping'),
 	('C', 'Completed'),
@@ -22,7 +21,6 @@ STATUS_CHOICES = [
 
 def orders(request):
 	allOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id).distinct()
-	allUnpaidOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='UNPAID')
 	allToShipOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='TO_SHIP')
 	allShippingOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='SHIPPING')
 	allDeliveredOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='DELIVERED')
@@ -31,7 +29,6 @@ def orders(request):
 	allReturnOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='RETURN_REFUND')
 	return render(request, 'sales/sales_page.html', {
 		'allOrders': allOrders,
-		'allUnpaidOrders': allUnpaidOrders,
 		'allToShipOrders': allToShipOrders,
 		'allShippingOrders': allShippingOrders,
 		'allDeliveredOrders': allDeliveredOrders,
@@ -39,7 +36,6 @@ def orders(request):
 		'allCancellationOrders': allCancellationOrders,
 		'allReturnOrders': allReturnOrders,
 		'nAll': len(allOrders),
-		'nUnpaid': len(allUnpaidOrders),
 		'nToShip': len(allToShipOrders),
 		'nShipping': len(allShippingOrders),
 		'nDelivered': len(allDeliveredOrders),

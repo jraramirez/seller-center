@@ -29,7 +29,6 @@ class ProductStatus(Enum):   # A subclass of Enum
 
 
 class OrderStatus(Enum):   # A subclass of Enum
-    UNPAID = 'UNPAID'
     TO_SHIP = 'TO_SHIP'
     SHIPPING = 'SHIPPING'
     DELIVERED = 'DELIVERED'
@@ -249,7 +248,7 @@ class Order(models.Model):
 
 class OrderStatus(models.Model):
   order = models.ForeignKey(Order, on_delete=models.CASCADE)
-  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.UNPAID.value)
+  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.TO_SHIP.value)
   status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
   additional_info = models.TextField(null=True, blank=True)
 
