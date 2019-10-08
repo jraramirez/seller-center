@@ -6,6 +6,8 @@ import datetime
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models import Sum, Count
+from django.db.models import F
+
 from product.models import Product, OrderedProduct
 from product.models import Order
 
@@ -73,8 +75,13 @@ def add_order(request):
 
 def set_status(request, order_reference_number, status):
   orderStatus = Order.objects.filter(order_reference_number=order_reference_number)[0].status
-  if((orderStatus == 'TO_SHIP') and status != 'CANCELLATION'):
+  if(orderStatus == 'TO_SHIP' and status != 'CANCELLATION'):
     Order.objects.filter(order_reference_number=order_reference_number).update(status=status)
+    if(status == 'SHIPPING'):
+      orderProducts = Order.objects.filter(order_reference_number=order_reference_number)[0].products.through.objects.all()
+      for product in orderProducts:
+        Product.objects.filter(id=product.id).update(stock_sum=F('stock_sum') - product.quantity)
+
     return HttpResponseRedirect("/orders/#all")
   else:
     messages.error(request, 'Only "To Ship" orders can be cancelled.')
