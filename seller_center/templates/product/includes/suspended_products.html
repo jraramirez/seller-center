@@ -85,10 +85,10 @@
                     </td>
                     <td class="text-center">
                     {% if product.product_price %}   
-                        {{ product.product_price }}
+                        {{ product.product_price|intcomma }}
                     {% else %}
                         {% for v in product.variations.all %}
-                            {% if v.price %}₱ {{v.price}}
+                            {% if v.price %}₱ {{ v.price|intcomma }}
                             {% else %} -
                             {% endif %}
                             <br>
