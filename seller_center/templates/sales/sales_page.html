@@ -26,9 +26,6 @@
 						<a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab">All ({{nAll}})</a>
 					</li>
 					<li class="nav-item ml-2 p-1">
-						<a class="nav-link" id="unpaid-tab" data-toggle="tab" href="#unpaid" role="tab">Unpaid ({{nUnpaid}})</a>
-					</li>
-					<li class="nav-item ml-2 p-1">
 						<a class="nav-link" id="to-ship-tab" data-toggle="tab" href="#toship" role="tab">To Ship ({{nToShip}})</a>
 					</li>
 					<li class="nav-item ml-2 p-1">
@@ -65,7 +62,6 @@
 		<div class="row">
 			<div class="container-fluid tab-content">
 				{% include "sales/includes/all_orders.html" with allOrders=allOrders %}
-				{% include "sales/includes/unpaid_orders.html" with allUnpaidOrders=allUnpaidOrders %}
 				{% include "sales/includes/to_ship_orders.html" with allToShipOrders=allToShipOrders %}
 				{% include "sales/includes/shipping_orders.html" with allShippingOrders=allShippingOrders %}
 				{% include "sales/includes/delivered_orders.html" with allDeliveredOrders=allDeliveredOrders %}
