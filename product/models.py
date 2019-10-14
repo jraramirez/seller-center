@@ -39,7 +39,13 @@ class OrderStatus(Enum):   # A subclass of Enum
 
 class OrderCourier(Enum):   # A subclass of Enum
     LOGISTIKUS = 'LOGISTIKUS'
-    LOGISTIKUS2 = 'LOGISTIKUS2'
+    QUADX = 'QUADX'
+    MRSPEEDY = 'MRSPEEDY'
+    XDE = 'XDE'
+    ELTM = 'ELTM'
+    ABEST = 'ABEST'
+    ZOOM = 'ZOOM'
+    NINJAVAN = 'NINJAVAN'
 
 
 class Category(models.Model):
@@ -245,6 +251,8 @@ class Order(models.Model):
   user_id = models.CharField(null=True, blank=True, max_length=500)
   username = models.CharField(null=True, blank=True, max_length=500)
   additional_info = models.TextField(null=True, blank=True)
+  order_date = models.DateField(default=datetime.now, blank=True, null=True)
+  order_remark = models.TextField(null=True, blank=True)
 
 class OrderStatus(models.Model):
   order = models.ForeignKey(Order, on_delete=models.CASCADE)
