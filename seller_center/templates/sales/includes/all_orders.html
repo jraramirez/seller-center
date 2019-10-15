@@ -100,8 +100,8 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                       <!-- <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/SHIPPING/">Arrange Pickup</a> -->
                       {% if order.status == 'TO_SHIP' %}
-                      <a class="dropdown-item" data-toggle="modal" href="#order-modal-{{ order.order_reference_number }}">Arrange Pickup</a>
-                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/CANCELLATION/">Cancel order</a>
+                      <a class="dropdown-item" data-toggle="modal" href="#all-order-modal-{{ order.order_reference_number }}">Arrange Pickup</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/CANCELLATION/">Cancel Order</a>
                       {% endif%}
                     </div>
                   </div>
