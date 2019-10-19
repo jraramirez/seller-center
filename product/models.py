@@ -28,7 +28,7 @@ class ProductStatus(Enum):   # A subclass of Enum
     SUSPENDED = 'SUSPENDED'
 
 
-class OrderStatus(Enum):   # A subclass of Enum
+class OrderStatusEnum(Enum):   # A subclass of Enum
     TO_SHIP = 'TO_SHIP'
     SHIPPING = 'SHIPPING'
     DELIVERED = 'DELIVERED'
@@ -37,7 +37,7 @@ class OrderStatus(Enum):   # A subclass of Enum
     RETURN_REFUND = 'RETURN_REFUND'
 
 
-class OrderCourier(Enum):   # A subclass of Enum
+class OrderCourierEnum(Enum):   # A subclass of Enum
     LOGISTIKUS = 'LOGISTIKUS'
     QUADX = 'QUADX'
     MRSPEEDY = 'MRSPEEDY'
@@ -187,7 +187,6 @@ class Product(ClusterableModel):
     return HttpResponseRedirect("/products/#all")
 
 
-
   def __unicode__(self):
     return self.product_name
 
@@ -233,16 +232,27 @@ class Variations(Orderable, models.Model):
     return redirect('/products/#all')
 
 
+class Courier(models.Model):
+  courier_name = models.CharField(null=True, blank=True, max_length=500)
+  
+
+class OrderCourier(models.Model):
+  order_courier = ParentalKey('Order', related_name='ordercourier', null=True, blank=True)
+  courier = models.ForeignKey(Courier, on_delete=models.CASCADE)
+  status = models.CharField(null=True, blank=True, max_length=500)
+  status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
+  status_info = models.CharField(null=True, blank=True, max_length=500)
+
 
 @register_snippet
-class Order(models.Model):
+class Order(ClusterableModel):
   order_reference_number = models.TextField(blank=True, primary_key=True)
   products = models.ManyToManyField(Product, through='OrderedProduct')
   total = models.CharField(null=True, blank=True, max_length=500)
-  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.TO_SHIP.value)
+  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatusEnum.TO_SHIP.value)
   status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
   countdown = models.CharField(null=True, blank=True, max_length=500)
-  courier = models.CharField(null=True, blank=True, max_length=500, default=OrderCourier.LOGISTIKUS.value)
+  courier = models.ForeignKey(OrderCourier, null=True, blank=True, max_length=500, on_delete=models.CASCADE)
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
   creation_date = models.CharField(null=True, blank=True, max_length=500)
   paid_date = models.CharField(null=True, blank=True, max_length=500)
@@ -254,11 +264,13 @@ class Order(models.Model):
   order_date = models.DateField(default=datetime.now, blank=True, null=True)
   order_remark = models.TextField(null=True, blank=True)
 
+
 class OrderStatus(models.Model):
   order = models.ForeignKey(Order, on_delete=models.CASCADE)
-  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatus.TO_SHIP.value)
+  status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatusEnum.TO_SHIP.value)
   status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
   additional_info = models.TextField(null=True, blank=True)
+
 
 class OrderedProduct(models.Model):
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
