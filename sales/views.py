@@ -10,7 +10,7 @@ from django.db.models import Sum, Count
 from django.db.models import F
 
 from product.models import Product, OrderedProduct
-from product.models import Order
+from product.models import Order, OrderCourier, Courier
 
 STATUS_CHOICES = [
 	('S', 'To Ship'),
@@ -103,6 +103,15 @@ def set_status(request, order_reference_number, status):
       orderProducts = Order.objects.filter(order_reference_number=order_reference_number)[0].products.through.objects.all()
       for product in orderProducts:
         Product.objects.filter(id=product.id).update(stock_sum=F('stock_sum') - product.quantity)
+      
+      # Create logistics instance once order status is changed to SHIPPING
+      if(len(Courier.objects.all())):
+        oc = OrderCourier(
+          courier_id= Courier.objects.filter(courier_name=shippingOption),
+          status='default status',
+          status_info='default status info',
+        )
+        oc.save()
 
     return HttpResponseRedirect("/orders/#all")
   else:
