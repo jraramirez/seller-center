@@ -36,35 +36,49 @@ def orders(request):
 	allOrderIds = OrderedProduct.objects.filter(product_id__in=allUserProductsIds).distinct().values_list('order_id', flat=True)
 
 	allProductsByOrder = []
+	allToShipProductsByOrder = []
+	allShippingProductsByOrder = []
+	allDeliveredProductsByOrder = []
+	allCompletedProductsByOrder = []
+	allCancellationProductsByOrder = []
+	allReturnProductsByOrder = []
 	for orderId in allOrderIds:
 		allOrderedProductsIds = OrderedProduct.objects.filter(product_id__in=allUserProductsIds, order_id=orderId).distinct().values_list('id', flat=True)
-		allProductsByOrder.append({
+		order = {
 			'username': Order.objects.filter(order_reference_number=orderId)[0].username,
 			'order_reference_number': orderId,
 			'products': Product.objects.filter(id__in=allOrderedProductsIds).distinct()
-		})
+		}
+		orderStatus = Order.objects.filter(order_reference_number=orderId)[0].status
+		if(orderStatus == 'TO_SHIP'):
+			allToShipProductsByOrder.append(order)
+		if(orderStatus == 'SHIPPING'):
+			allShippingProductsByOrder.append(order)
+		if(orderStatus == 'DELIVERED'):
+			allDeliveredProductsByOrder.append(order)
+		if(orderStatus == 'COMPLETED'):
+			allCompletedProductsByOrder.append(order)
+		if(orderStatus == 'CANCELLATION'):
+			allCancellationProductsByOrder.append(order)
+		if(orderStatus == 'RETURN_REFUND'):
+			allReturnProductsByOrder.append(order)
+		allProductsByOrder.append(order)
 
-	# allToShipOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='TO_SHIP').distinct()
-	# allShippingOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='SHIPPING').distinct()
-	# allDeliveredOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='DELIVERED').distinct()
-	# allCompletedOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='COMPLETED').distinct()
-	# allCancellationOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='CANCELLATION').distinct()
-	# allReturnOrders = Order.objects.filter(orderedproduct__product__profile_id=request.user.id, status='RETURN_REFUND').distinct()
 	return render(request, 'sales/sales_page.html', {
 		'allProductsByOrder': allProductsByOrder,
-		# 'allToShipOrders': allToShipOrders,
-		# 'allShippingOrders': allShippingOrders,
-		# 'allDeliveredOrders': allDeliveredOrders,
-		# 'allCompletedOrders': allCompletedOrders,
-		# 'allCancellationOrders': allCancellationOrders,
-		# 'allReturnOrders': allReturnOrders,
+		'allToShipProductsByOrder': allToShipProductsByOrder,
+		'allShippingProductsByOrder': allShippingProductsByOrder,
+		'allDeliveredProductsByOrder': allDeliveredProductsByOrder,
+		'allCompletedProductsByOrder': allCompletedProductsByOrder,
+		'allCancellationProductsByOrder': allCancellationProductsByOrder,
+		'allReturnProductsByOrder': allReturnProductsByOrder,
 		'nAll': len(allProductsByOrder),
-		# 'nToShip': len(allToShipOrders),
-		# 'nShipping': len(allShippingOrders),
-		# 'nDelivered': len(allDeliveredOrders),
-		# 'nCompleted': len(allCompletedOrders),
-		# 'nCancellation': len(allCancellationOrders),
-		# 'nReturn': len(allReturnOrders),
+		'nToShip': len(allToShipProductsByOrder),
+		'nShipping': len(allShippingProductsByOrder),
+		'nDelivered': len(allDeliveredProductsByOrder),
+		'nCompleted': len(allCompletedProductsByOrder),
+		'nCancellation': len(allCancellationProductsByOrder),
+		'nReturn': len(allReturnProductsByOrder),
 		'min_date' : datetime.datetime.now() + timedelta(days=1),
 		'LOGISTICS_CHOICES': LOGISTICS_CHOICES
 	})
