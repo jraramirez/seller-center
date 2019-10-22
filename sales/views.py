@@ -44,12 +44,14 @@ def orders(request):
 	allReturnProductsByOrder = []
 	for orderId in allOrderIds:
 		allOrderedProductsIds = OrderedProduct.objects.filter(product_id__in=allUserProductsIds, order_id=orderId).distinct().values_list('id', flat=True)
+		status = orderStatus = Order.objects.filter(order_reference_number=orderId)[0].status
+		username = Order.objects.filter(order_reference_number=orderId)[0].username
 		order = {
-			'username': Order.objects.filter(order_reference_number=orderId)[0].username,
+			'username': username,
+			'status': status,
 			'order_reference_number': orderId,
 			'products': Product.objects.filter(id__in=allOrderedProductsIds).distinct()
 		}
-		orderStatus = Order.objects.filter(order_reference_number=orderId)[0].status
 		if(orderStatus == 'TO_SHIP'):
 			allToShipProductsByOrder.append(order)
 		if(orderStatus == 'SHIPPING'):
@@ -115,7 +117,7 @@ def set_status(request, order_reference_number, status):
   orderRemark = request.POST.get('order-remark')
   orderStatus = Order.objects.filter(order_reference_number=order_reference_number)[0].status
 
-  if(orderStatus == 'TO_SHIP' and status != 'CANCELLATION'):
+  if(orderStatus == 'TO_SHIP' and status == 'SHIPPING'):
     Order.objects.filter(order_reference_number=order_reference_number).update(status=status)
 
 		# Update quantity if status is changed to SHIPPING
@@ -138,7 +140,10 @@ def set_status(request, order_reference_number, status):
         )
         oc.save()
 
-    return HttpResponseRedirect("/orders/#all")
+  elif(orderStatus == 'SHIPPING' and status == 'COMPLETED'):
+    Order.objects.filter(order_reference_number=order_reference_number).update(status=status)
+
   else:
     messages.error(request, 'Only "To Ship" orders can be cancelled.')
-    return HttpResponseRedirect("/orders/#all")
+
+  return HttpResponseRedirect("/orders/#all")

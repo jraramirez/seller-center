@@ -102,6 +102,8 @@
                       {% if order.status == 'TO_SHIP' %}
                       <a class="dropdown-item" data-toggle="modal" href="#all-order-modal-{{ order.order_reference_number }}">Arrange Pickup</a>
                       <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/CANCELLATION/">Cancel Order</a>
+                      {% elif order.status == 'SHIPPING' %}
+                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/COMPLETED/">Complete Order</a>
                       {% endif%}
                     </div>
                   </div>
