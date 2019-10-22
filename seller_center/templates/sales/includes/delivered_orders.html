@@ -8,6 +8,7 @@
         <tr>
           <th scope="col">Product(s)</th>
           <th scope="col"></th>
+          <th scope="col"></th>
           <th scope="col">Variation(s)</th>
           <th scope="col">Order Total</th>
           <th scope="col">Date Ordered</th>
@@ -20,12 +21,12 @@
       <tbody id="orders">
         {% for order in allDeliveredProductsByOrder %}
           <tr class="tr-top">
-            <td colspan="9">
+            <td colspan="10">
               Order ID: {{order.order_reference_number}}
             </td>
           </tr>
           <tr class="tr-middle">
-            <td colspan="9">
+            <td colspan="10">
               User: 
               {% if order.username %}
               {{order.username}}
@@ -44,6 +45,12 @@
                           <img src="{% static 'images/download.svg' %}" alt="" width="80"/>
                       {% endif %}
                   </a>
+              </td>
+              <td class="text-center">
+                {% if product.product_code %}
+                {{product.product_code}}
+                {% else %} -
+                {% endif %}
               </td>
               <td class="text-center">
                 {% if product.product_name %}

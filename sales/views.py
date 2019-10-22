@@ -144,6 +144,6 @@ def set_status(request, order_reference_number, status):
     Order.objects.filter(order_reference_number=order_reference_number).update(status=status)
 
   else:
-    messages.error(request, 'Only "To Ship" orders can be cancelled.')
+    messages.error(request, 'Cannot perform this action.')
 
   return HttpResponseRedirect("/orders/#all")
