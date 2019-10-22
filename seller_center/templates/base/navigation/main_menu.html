@@ -1,82 +1,96 @@
 {% load static menu_tags wagtailimages_tags %}
 
- <ul class="nav-main navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="nav-main navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-            <div class="sidebar-brand-icon">
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+        <div class="sidebar-brand-icon">
             <img src="{% static 'images/logo_white_transparent_bg.svg'%}" alt="Seller Center" width="42">
-            </div>
-
-        </a>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
-
-        <!-- Nav Item - Dashboard -->
-        <li class="menu-item nav-item dashboard">
-            <a class="nav-link" href="/">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Nav Item - Profile Menu -->
-        <li class="menu-item nav-item profile">
-            <a class="nav-link" href="/profile">
-                <i class="fas fa-fw fa-user" aria-hidden="true"></i>
-                <span>Profile</span>
-            </a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Nav Item - Products Collapse Menu -->
-        <li class="menu-item nav-item products">
-            <a class="nav-link collapsed" href="/products/" data-toggle="collapse" data-target="#collapseTwo"
-               aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-boxes" aria-hidden="true" ></i>
-                <span>Products</span>
-            </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">View Product</h6>
-                    <a class="collapse-item" href="/products/">All</a>
-                    <a class="collapse-item" href="/products/#live" onClick="window.location.href='/products/#live'">Live</a>
-                    <a class="collapse-item" href="/products/#sold" onClick="window.location.href='/products/#sold'">Soldout</a>
-                    <a class="collapse-item" href="/products/#unlisted" onClick="window.location.href='/products/#unlisted'">Unlisted</a>
-                    <a class="collapse-item" href="/products/#suspended" onClick="window.location.href='/products/#suspended'">Suspended</a>
-                    <h6 class="collapse-header">New Product</h6>
-                    <a class="collapse-item" href="/products/add-single-product/0">Add Single</a>
-                    <a class="collapse-item" href="/products/add-new-products/">Add Multiple</a>
-                </div>
-            </div>
-        </li>
-
-        <!-- Nav Item - Orders Menu -->
-        <li class="menu-item nav-item">
-            <a class="nav-link" href="/orders/">
-                <i class="fas fa-fw fa-truck-loading" aria-hidden="true"></i>
-                <span>Orders</span>
-            </a>
-        </li>
-
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-        <!-- Nav Item - Image Manager Menu -->
-        <li class="menu-item nav-item image-manager">
-            <a class="nav-link" href="/admin/images/">
-                <i class="fas fa-fw fa-images" aria-hidden="true"></i>
-                <span>Image Manager</span></a>
-        </li>
-
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
 
-    </ul>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="menu-item nav-item dashboard">
+        <a class="nav-link" href="/">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Nav Item - Profile Menu -->
+    <li class="menu-item nav-item profile">
+        <a class="nav-link" href="/profile">
+            <i class="fas fa-fw fa-user" aria-hidden="true"></i>
+            <span>Profile</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Nav Item - Products Collapse Menu -->
+    <li class="menu-item nav-item products">
+        <a class="nav-link collapsed" href="/products/" data-toggle="collapse" data-target="#collapseTwo"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-boxes" aria-hidden="true"></i>
+            <span>Products</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">View Product</h6>
+                <a class="collapse-item" href="/products/">All</a>
+                <a class="collapse-item" href="/products/#live"
+                    onClick="window.location.href='/products/#live'">Live</a>
+                <a class="collapse-item" href="/products/#sold"
+                    onClick="window.location.href='/products/#sold'">Soldout</a>
+                <a class="collapse-item" href="/products/#unlisted"
+                    onClick="window.location.href='/products/#unlisted'">Unlisted</a>
+                <a class="collapse-item" href="/products/#suspended"
+                    onClick="window.location.href='/products/#suspended'">Suspended</a>
+                <h6 class="collapse-header">New Product</h6>
+                <a class="collapse-item" href="/products/add-single-product/0">Add Single</a>
+                <a class="collapse-item" href="/products/add-new-products/">Add Multiple</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Orders Menu -->
+    <li class="menu-item nav-item">
+        <a class="nav-link" href="/orders/">
+            <i class="fas fa-fw fa-truck-loading" aria-hidden="true"></i>
+            <span>Orders</span>
+        </a>
+    </li>
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Nav Item - Image Manager Menu -->
+    <li class="menu-item nav-item image-manager">
+        <a class="nav-link" href="/admin/images/">
+            <i class="fas fa-fw fa-images" aria-hidden="true"></i>
+            <span>Image Manager</span></a>
+    </li>
+
+    {% if user.is_authenticated and user.is_superuser %}
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Nav Item - Image Manager Menu -->
+    <li class="menu-item nav-item image-manager">
+        <a class="nav-link" href="/seller_admin/users/">
+            <i class="fas fa-fw fa-users-cog" aria-hidden="true"></i>
+            <span>Users</span></a>
+    </li>
+    {% endif %}
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
