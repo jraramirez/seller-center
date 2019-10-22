@@ -16,7 +16,8 @@ STATUS_CHOICES = [
 	('S', 'To Ship'),
 	('H', 'Shipping'),
 	('C', 'Completed'),
-	('L', 'Cancellation'),
+	('D', 'Delivered'),
+	('L', 'SellerCanceled'),
 	('R', 'Return/Refund'),
 ]
 
@@ -40,7 +41,7 @@ def orders(request):
 	allShippingProductsByOrder = []
 	allDeliveredProductsByOrder = []
 	allCompletedProductsByOrder = []
-	allCancellationProductsByOrder = []
+	allSellerCanceledProductsByOrder = []
 	allReturnProductsByOrder = []
 	for orderId in allOrderIds:
 		allOrderedProductsIds = OrderedProduct.objects.filter(product_id__in=allUserProductsIds, order_id=orderId).distinct().values_list('id', flat=True)
@@ -52,7 +53,7 @@ def orders(request):
 			'order_reference_number': orderId,
 			'products': Product.objects.filter(id__in=allOrderedProductsIds).distinct()
 		}
-		if(orderStatus == 'TO_SHIP'):
+		if(orderStatus == 'FOR_SHIPPING'):
 			allToShipProductsByOrder.append(order)
 		if(orderStatus == 'SHIPPING'):
 			allShippingProductsByOrder.append(order)
@@ -60,8 +61,8 @@ def orders(request):
 			allDeliveredProductsByOrder.append(order)
 		if(orderStatus == 'COMPLETED'):
 			allCompletedProductsByOrder.append(order)
-		if(orderStatus == 'CANCELLATION'):
-			allCancellationProductsByOrder.append(order)
+		if(orderStatus == 'SELLER_CANCELED'):
+			allSellerCanceledProductsByOrder.append(order)
 		if(orderStatus == 'RETURN_REFUND'):
 			allReturnProductsByOrder.append(order)
 		allProductsByOrder.append(order)
@@ -72,14 +73,14 @@ def orders(request):
 		'allShippingProductsByOrder': allShippingProductsByOrder,
 		'allDeliveredProductsByOrder': allDeliveredProductsByOrder,
 		'allCompletedProductsByOrder': allCompletedProductsByOrder,
-		'allCancellationProductsByOrder': allCancellationProductsByOrder,
+		'allSellerCanceledProductsByOrder': allSellerCanceledProductsByOrder,
 		'allReturnProductsByOrder': allReturnProductsByOrder,
 		'nAll': len(allProductsByOrder),
 		'nToShip': len(allToShipProductsByOrder),
 		'nShipping': len(allShippingProductsByOrder),
 		'nDelivered': len(allDeliveredProductsByOrder),
 		'nCompleted': len(allCompletedProductsByOrder),
-		'nCancellation': len(allCancellationProductsByOrder),
+		'nSellerCanceled': len(allSellerCanceledProductsByOrder),
 		'nReturn': len(allReturnProductsByOrder),
 		'min_date' : datetime.datetime.now() + timedelta(days=1),
 		'LOGISTICS_CHOICES': LOGISTICS_CHOICES
@@ -90,7 +91,7 @@ def add_order(request):
 	orderedProducts = random.sample(liveProducts, k=20)
 	o = Order(
 		order_reference_number=1,
-		status='TO_SHIP',
+		status='FOR_SHIPPING',
 		user_id=request.user.id,
 		username=request.user.username,
 		creation_date=datetime.datetime.now
@@ -117,7 +118,7 @@ def set_status(request, order_reference_number, status):
   orderRemark = request.POST.get('order-remark')
   orderStatus = Order.objects.filter(order_reference_number=order_reference_number)[0].status
 
-  if(orderStatus == 'TO_SHIP' and status == 'SHIPPING'):
+  if(orderStatus == 'FOR_SHIPPING' and status == 'SHIPPING'):
     Order.objects.filter(order_reference_number=order_reference_number).update(status=status)
 
 		# Update quantity if status is changed to SHIPPING
@@ -140,7 +141,7 @@ def set_status(request, order_reference_number, status):
         )
         oc.save()
 
-  elif(orderStatus == 'SHIPPING' and status == 'COMPLETED'):
+  elif(orderStatus == 'SHIPPING' and status == 'DELIVERED'):
     Order.objects.filter(order_reference_number=order_reference_number).update(status=status)
 
   else:

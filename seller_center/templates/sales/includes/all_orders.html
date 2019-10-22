@@ -102,16 +102,16 @@
                     {% endif %}
                 </td>
                 <td class="text-center">
-                  {% if order.status != 'SHIPPING' %}
+                  {% if order.status != 'COMPLETED' %}
                   <div class="dropdown show">
                     <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">▼</a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                       <!-- <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/SHIPPING/">Arrange Pickup</a> -->
-                      {% if order.status == 'TO_SHIP' %}
+                      {% if order.status == 'FOR_SHIPPING' %}
                       <a class="dropdown-item" data-toggle="modal" href="#all-order-modal-{{ order.order_reference_number }}">Arrange Pickup</a>
-                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/CANCELLATION/">Cancel Order</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/SELLER_CANCELED/">Cancel Order</a>
                       {% elif order.status == 'SHIPPING' %}
-                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/COMPLETED/">Complete Order</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/DELIVERED/">Set As Delivered</a>
                       {% endif%}
                     </div>
                   </div>

@@ -1,7 +1,7 @@
 {% load static %}
 
 <div class="tab-pane fade" id="cancellation" role="tabpanel" aria-labelledby="all-tab">
-  {% if allCancellationProductsByOrder %}
+  {% if allSellerCanceledProductsByOrder %}
   <div class="body-content table-responsive">
     <table class="table">
       <thead>
@@ -19,7 +19,7 @@
         </tr>
       </thead>
       <tbody id="orders">
-        {% for order in allCancellationProductsByOrder %}
+        {% for order in allSellerCanceledProductsByOrder %}
           <tr class="tr-top">
             <td colspan="10">
               Order ID: {{order.order_reference_number}}
