@@ -35,6 +35,9 @@
 						<a class="nav-link" id="delivered-tab" data-toggle="tab" href="#delivered" role="tab">Delivered ({{nDelivered}})</a>
 					</li>
 					<li class="nav-item ml-2 p-1">
+						<a class="nav-link" id="received-tab" data-toggle="tab" href="#received" role="tab">Received ({{nReceived}})</a>
+					</li>
+					<li class="nav-item ml-2 p-1">
 						<a class="nav-link" id="completed-tab" data-toggle="tab" href="#completed" role="tab">Completed ({{nCompleted}})</a>
 					</li>
 					<li class="nav-item ml-2 p-1">
@@ -65,6 +68,7 @@
 				{% include "sales/includes/to_ship_orders.html" %}
 				{% include "sales/includes/shipping_orders.html" %}
 				{% include "sales/includes/delivered_orders.html" %}
+				{% include "sales/includes/received_orders.html" %}
 				{% include "sales/includes/completed_orders.html" %}
 				{% include "sales/includes/cancellation_orders.html" %}	
 				{% include "sales/includes/return_orders.html" %}	

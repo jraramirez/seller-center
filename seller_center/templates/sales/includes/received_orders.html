@@ -1,10 +1,7 @@
 {% load static %}
-{% load humanize %}
 
-{% include 'messages.html' %}
-
-<div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
-  {% if allProductsByOrder %}
+<div class="tab-pane fade" id="received" role="tabpanel" aria-labelledby="all-tab">
+  {% if allReceivedProductsByOrder %}
   <div class="body-content table-responsive">
     <table class="table">
       <thead>
@@ -22,7 +19,7 @@
         </tr>
       </thead>
       <tbody id="orders">
-        {% for order in allProductsByOrder %}
+        {% for order in allReceivedProductsByOrder %}
           <tr class="tr-top">
             <td colspan="10">
               Order ID: {{order.order_reference_number}}
@@ -73,7 +70,7 @@
               {% if forloop.counter0 == 0 %}
                 <td class="text-center">
                   {% if order.total %}
-                  {{order.total|intcomma}}
+                  {{order.total}}
                   {% else %} -
                   {% endif %}
                 </td>
@@ -96,73 +93,24 @@
                     {% endif %}
                 </td>
                 <td class="text-center">
-                    {% if order.shipping_address %}
-                    {{order.shipping_address}}
+                    {% if order.delivery_address %}
+                    {{order.delivery_address}}
                     {% else %} -
                     {% endif %}
                 </td>
                 <td class="text-center">
-                  {% if order.status != '' %}
                   <div class="dropdown show">
                     <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">▼</a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <!-- <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/SHIPPING/">Arrange Pickup</a> -->
-                      {% if order.status == 'FOR_SHIPPING' %}
-                      <a class="dropdown-item" data-toggle="modal" href="#all-order-modal-{{ order.order_reference_number }}">Arrange Pickup</a>
-                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/SELLER_CANCELED/">Cancel Order</a>
-                      {% elif order.status == 'SHIPPING' %}
-                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/DELIVERED/">Set As Delivered</a>
-                      {% elif order.status == 'RECEIVED' %}
                       <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/COMPLETED/">Complete Order</a>
-                      {% endif%}
                     </div>
                   </div>
-                  {% endif%}
                 </td>
               {% else %}
                 <td colspan="9"></td>
               {% endif %}
           </tr>
           {% endfor %}
-          <div class="modal order-modal" id="all-order-modal-{{ order.order_reference_number }}">
-            <div class="modal-dialog modal-lg">
-              <div class="modal-content">
-                <div class="modal-body">
-                  <form action="/orders/set_status/{{ order.order_reference_number }}/SHIPPING/" enctype="multipart/form-data" method="POST">
-                    {% csrf_token %}
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="id-shipping-option" class="col-sm-3 col-form-label">Shipping Option</label>
-                        <div class="col-sm-9">
-                          <select name="shipping-option" class="form-control" id="id-shipping-option" required>
-                            {% for logistic in LOGISTICS_CHOICES %}
-                            {% if logistic  == order.courier %}
-                            <option value="{{ logistic }}" selected="selected">{{ logistic }}</option>
-                            {% else %}
-                            <option>{{ logistic }}</option>
-                            {% endif %}
-                            {% endfor %}
-                          </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="id-order-date" class="col-sm-3 col-form-label">Date</label>
-                        <div class="col-sm-9">
-                          <input id="id-order-date" type="date" name="order-date" class="form-control" onkeydown="return false" required min="{{min_date|date:'Y-m-d'}}" value="{{min_date|date:'Y-m-d'}}">
-                        </div>
-                    </div>
-                    <div class="form-group row mt-3 mb-4">
-                        <label for="id-order-remark" class="col-sm-3 col-form-label">Remark</label>
-                        <div class="col-sm-9">
-                          <textarea name="order-remark" class="form-control" id="id-order-remark" required style="height: 60px !important"></textarea>
-                        </div>
-                    </div>
-                    <button type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2">Arrange Pickup</button>
-                    <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2" data-dismiss="modal">Cancel</button>    
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
         {% endfor %}
       </tbody>
     </table>

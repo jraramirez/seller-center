@@ -33,6 +33,7 @@ class OrderStatusEnum(Enum):   # A subclass of Enum
     SHIPPING = 'SHIPPING'
     SELLER_CANCELED = 'SELLER_CANCELED'
     DELIVERED = 'DELIVERED'
+    RECEIVED = 'RECEIVED'
     COMPLETED = 'COMPLETED'
     RETURN_REFUND = 'RETURN_REFUND'
 
@@ -250,7 +251,7 @@ class Order(ClusterableModel):
   products = models.ManyToManyField(Product, through='OrderedProduct')
   total = models.CharField(null=True, blank=True, max_length=500)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatusEnum.FOR_SHIPPING.value)
-  status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
+  status_changed_on=models.DateTimeField(default=datetime.now, blank=True, null=True)
   countdown = models.CharField(null=True, blank=True, max_length=500)
   courier = models.ForeignKey(OrderCourier, null=True, blank=True, max_length=500, on_delete=models.CASCADE)
   shipping_channel = models.CharField(null=True, blank=True, max_length=500)
