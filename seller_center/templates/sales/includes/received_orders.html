@@ -1,7 +1,7 @@
 {% load static %}
 
-<div class="tab-pane fade" id="return" role="tabpanel" aria-labelledby="all-tab">
-  {% if allReturnProductsByOrder %}
+<div class="tab-pane fade" id="received" role="tabpanel" aria-labelledby="all-tab">
+  {% if allReceivedProductsByOrder %}
   <div class="body-content table-responsive">
     <table class="table">
       <thead>
@@ -19,7 +19,7 @@
         </tr>
       </thead>
       <tbody id="orders">
-        {% for order in allReturnProductsByOrder %}
+        {% for order in allReceivedProductsByOrder %}
           <tr class="tr-top">
             <td colspan="10">
               Order ID: {{order.order_reference_number}}
@@ -99,12 +99,12 @@
                     {% endif %}
                 </td>
                 <td class="text-center">
-                  <!-- <div class="dropdown show">
+                  <div class="dropdown show">
                     <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">▼</a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/SHIPPING/">Arrange Pickup</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/COMPLETED/">Complete Order</a>
                     </div>
-                  </div> -->
+                  </div>
                 </td>
               {% else %}
                 <td colspan="9"></td>
