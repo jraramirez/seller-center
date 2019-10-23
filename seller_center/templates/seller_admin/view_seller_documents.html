@@ -9,38 +9,32 @@
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-  <h1 class="h3 mr-auto mb-0 text-gray-800">Sellers</h1>
+  <h1 class="h3 mr-auto mb-0 text-gray-800">Viewing documents of {{username}}</h1>
 </div>
 
 {% include 'messages.html' %}
-{% include 'pagination.html' with objects=users query_selector="page" %}
 
 <div class="body-content">
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">Username</th>
-        <th scope="col">Email</th>
+        <th scope="col">Type</th>
         <th scope="col">Actions</th>
       </tr>
     </thead>
     <tbody>
-      {% for u in users %}
+      {% for doc in documents %}
       <tr>
         <td scope="row">
-          {{u.username}}
+          {{doc.document_type}}
         </td>
-        <td scope="row">
-          {{u.email}}
-        </td>
-
-        <td class="text-center">
+        <td class="text-left">
           <div class="dropdown show">
             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="/seller_admin/users/{{u.id}}/documents">View Documents</a>
+              <a class="dropdown-item" href="{{doc.document_url|default:'#'}}">View</a>
             </div>
           </div>
         </td>
