@@ -195,7 +195,7 @@ def set_user_profile_data(user_id):
 	region_state=business_address_data.region_state + ' ' if business_address_data.region_state != None else ''
 	country=business_address_data.country + ' ' if business_address_data.country != None else ''
 	postal_code=str(business_address_data.postal_code) + ' ' if business_address_data.postal_code != None else ''
-	business_address=street_bldg + barangay + city + region_state + country + postal_code
+	business_address=street_bldg + barangay + city + region_state + postal_code + country
 
 	if business_address == '':
 		business_address=None
@@ -255,7 +255,7 @@ def set_user_profile_data(user_id):
 	region_state=pickup_address_data.region_state + ' ' if pickup_address_data.region_state != None else ''
 	country=pickup_address_data.country + ' ' if pickup_address_data.country != None else ''
 	postal_code=str(pickup_address_data.postal_code) + ' ' if pickup_address_data.postal_code != None else ''
-	pickup_address=street_bldg + barangay + city + region_state + country + postal_code
+	pickup_address=street_bldg + barangay + city + region_state + postal_code + country
 
 	if pickup_address == '':
 		pickup_address=None
@@ -271,6 +271,16 @@ def set_user_profile_data(user_id):
 	else:
 		return_address_data=profileData.return_address
 	return_contact_data=return_address_data.contact_details
+	street_bldg=return_address_data.street_bldg + ' ' if return_address_data.street_bldg != None else ''
+	barangay=return_address_data.barangay + ' ' if return_address_data.barangay != None else ''
+	city=return_address_data.city + ' ' if return_address_data.city != None else ''
+	region_state=return_address_data.region_state + ' ' if return_address_data.region_state != None else ''
+	country=return_address_data.country + ' ' if return_address_data.country != None else ''
+	postal_code=str(return_address_data.postal_code) + ' ' if return_address_data.postal_code != None else ''
+	return_address=street_bldg + barangay + city + region_state + postal_code + country
+
+	if return_address == '':
+		return_address=None
 
 	ctr=0
 	enable_fields=True
@@ -341,6 +351,7 @@ def set_user_profile_data(user_id):
 		'pickup_address': pickup_address,
 		'return_address_data': return_address_data,
 		'return_contact_data': return_contact_data,
+		'return_address': return_address,
 		'enable_fields': enable_fields,
 		'countries_filtered_data': countries_filtered_data
 	}
