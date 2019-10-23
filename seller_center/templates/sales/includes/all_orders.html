@@ -4,7 +4,7 @@
 {% include 'messages.html' %}
 
 <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
-  {% if allOrders %}
+  {% if allProductsByOrder %}
   <div class="body-content table-responsive">
     <table class="table">
       <thead>
@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody id="orders">
-        {% for order in allOrders %}
+        {% for order in allProductsByOrder %}
           <tr class="tr-top">
             <td colspan="9">
               Order ID: {{order.order_reference_number}}
