@@ -259,42 +259,17 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="business_street_bldg" class="col-sm-3 col-form-label">Address Street, Building</label>
+							<label for="autocomplete" class="col-sm-3 col-form-label">Business Address</label>
 							<div class="col-sm-9">
-								<input type="text" name="business_street_bldg" class="form-control" value="{{ business_address_data.street_bldg }}" id="business_street_bldg">
+								<input id="autocomplete" placeholder="Type Your Business Address" onFocus="geolocate()" type="text" class="form-control" value="{{ business_address }}">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="business_country" class="col-sm-3 col-form-label">Country</label>
+							<label for="business_street_bldg" class="col-sm-3 col-form-label">Address Street/Building</label>
 							<div class="col-sm-9">
-								<select name="business_country" class="form-control" id="business_country">
-									<option value="{{ business_address_data.country }}">{{ business_address_data.country }}</option>
-									{% for v in countries_filtered_data %}
-										<option value="{{ v.name }}">{{ v.name }}</option>
-									{% endfor %}
-								</select>
-							</div>
-						</div>
-					</div>
-					<div class="card-body mx-5">
-						<div class="form-group row mt-3 mb-4">
-							<label for="business_region_state" class="col-sm-3 col-form-label">Region / State</label>
-							<div class="col-sm-9">
-								<select name="business_region_state" class="form-control" id="business_region_state">
-									<option value="{{ business_address_data.region_state }}">{{ business_address_data.region_state }}</option>
-								</select>
-							</div>
-						</div>
-					</div>
-					<div class="card-body mx-5">
-						<div class="form-group row mt-3 mb-4">
-							<label for="business_city" class="col-sm-3 col-form-label">City</label>
-							<div class="col-sm-9">
-								<select name="business_city" class="form-control" id="business_city">
-									<option value="{{ business_address_data.city }}">{{ business_address_data.city }}</option>
-								</select>
+								<input type="text" name="business_street_bldg" class="form-control field" value="{{ business_address_data.street_bldg }}" id="street_number" placeholder="Type Your Business Street/Building">
 							</div>
 						</div>
 					</div>
@@ -302,9 +277,23 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="business_brgy" class="col-sm-3 col-form-label">Barangay</label>
 							<div class="col-sm-9">
-								<select name="business_brgy" class="form-control" id="business_brgy">
-									<option value="{{ business_address_data.barangay }}">{{ business_address_data.barangay }}</option>
-								</select>
+								<input type="text" name="business_brgy" class="form-control field" value="{{ business_address_data.barangay }}" id="route" placeholder="Type Your Business Barangay">
+							</div>
+						</div>
+					</div>
+					<div class="card-body mx-5">
+						<div class="form-group row mt-3 mb-4">
+							<label for="business_city" class="col-sm-3 col-form-label">City</label>
+							<div class="col-sm-9">
+								<input type="text" name="business_city" class="form-control field" value="{{ business_address_data.city }}" id="locality" placeholder="Type Your Business City">
+							</div>
+						</div>
+					</div>
+					<div class="card-body mx-5">
+						<div class="form-group row mt-3 mb-4">
+							<label for="business_region_state" class="col-sm-3 col-form-label">Region/State</label>
+							<div class="col-sm-9">
+								<input type="text" name="business_region_state" class="form-control field" value="{{ business_address_data.region_state }}" id="administrative_area_level_1" placeholder="Type Your Business Region/State">
 							</div>
 						</div>
 					</div>
@@ -312,7 +301,15 @@
 						<div class="form-group row mt-3 mb-4">
 							<label for="business_postal_code" class="col-sm-3 col-form-label">Postal Code</label>
 							<div class="col-sm-9">
-								<input type="number" name="business_postal_code" class="form-control" value="{{ business_address_data.postal_code }}" id="business_postal_code">
+								<input type="number" name="business_postal_code" class="form-control field" value="{{ business_address_data.postal_code }}" id="postal_code" placeholder="Type Your Business Postal Code">
+							</div>
+						</div>
+					</div>
+					<div class="card-body mx-5">
+						<div class="form-group row mt-3 mb-4">
+							<label for="business_country" class="col-sm-3 col-form-label">Country</label>
+							<div class="col-sm-9">
+								<input type="text" name="business_country" class="form-control field" value="{{ business_address_data.country }}" id="country" placeholder="Type Your Business Country">
 							</div>
 						</div>
 					</div>
@@ -441,60 +438,57 @@
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="pickup_street_bldg" class="col-sm-3 col-form-label">Address Street, Building*</label>
+							<label for="autocomplete1" class="col-sm-3 col-form-label">Pickup Address</label>
 							<div class="col-sm-9">
-								<input type="text" name="pickup_street_bldg" class="form-control" value="{{ pickup_address_data.street_bldg }}" id="pickup_street_bldg">
+								<input id="autocomplete1" placeholder="Type Your Pickup Address" onFocus="geolocate()" type="text" class="form-control" value="{{ pickup_address }}">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="pickup_country" class="col-sm-3 col-form-label">Country*</label>
+							<label for="pickup_street_bldg" class="col-sm-3 col-form-label">Address Street/Building</label>
 							<div class="col-sm-9">
-								<select name="pickup_country" class="form-control" id="pickup_country">
-									<option value="{{ pickup_address_data.country }}">{{ pickup_address_data.country }}</option>
-									{% for v in countries_filtered_data %}
-										<option value="{{ v.name }}">{{ v.name }}</option>
-									{% endfor %}
-								</select>
+								<input type="text" name="pickup_street_bldg" class="form-control field" value="{{ pickup_address_data.street_bldg }}" id="street_number_1" placeholder="Type Your Pickup Street/Building">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="pickup_region_state" class="col-sm-3 col-form-label">Region / State*</label>
+							<label for="pickup_brgy" class="col-sm-3 col-form-label">Barangay</label>
 							<div class="col-sm-9">
-								<select name="pickup_region_state" class="form-control" id="pickup_region_state">
-									<option value="{{ pickup_address_data.region_state }}">{{ pickup_address_data.region_state }}</option>
-								</select>
+								<input type="text" name="pickup_brgy" class="form-control field" value="{{ pickup_address_data.barangay }}" id="route_1" placeholder="Type Your Pickup Barangay">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="pickup_city" class="col-sm-3 col-form-label">City*</label>
+							<label for="pickup_city" class="col-sm-3 col-form-label">City</label>
 							<div class="col-sm-9">
-								<select name="pickup_city" class="form-control" id="pickup_city">
-									<option value="{{ pickup_address_data.city }}">{{ pickup_address_data.city }}</option>
-								</select>
+								<input type="text" name="pickup_city" class="form-control field" value="{{ pickup_address_data.city }}" id="locality_1" placeholder="Type Your Pickup City">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="pickup_brgy" class="col-sm-3 col-form-label">Barangay*</label>
+							<label for="pickup_region_state" class="col-sm-3 col-form-label">Region/State</label>
 							<div class="col-sm-9">
-								<select name="pickup_brgy" class="form-control" id="pickup_brgy">
-									<option value="{{ pickup_address_data.barangay }}">{{ pickup_address_data.barangay }}</option>
-								</select>
+								<input type="text" name="pickup_region_state" class="form-control field" value="{{ pickup_address_data.region_state }}" id="administrative_area_level_1_1" placeholder="Type Your Pickup Region/State">
 							</div>
 						</div>
 					</div>
 					<div class="card-body mx-5">
 						<div class="form-group row mt-3 mb-4">
-							<label for="pickup_postal_code" class="col-sm-3 col-form-label">Postal Code*</label>
+							<label for="pickup_postal_code" class="col-sm-3 col-form-label">Postal Code</label>
 							<div class="col-sm-9">
-								<input type="text" name="pickup_postal_code" class="form-control" value="{{ pickup_address_data.postal_code }}" id="pickup_postal_code">
+								<input type="number" name="pickup_postal_code" class="form-control field" value="{{ pickup_address_data.postal_code }}" id="postal_code_1" placeholder="Type Your Pickup Postal Code">
+							</div>
+						</div>
+					</div>
+					<div class="card-body mx-5">
+						<div class="form-group row mt-3 mb-4">
+							<label for="pickup_country" class="col-sm-3 col-form-label">Country</label>
+							<div class="col-sm-9">
+								<input type="text" name="pickup_country" class="form-control field" value="{{ pickup_address_data.country }}" id="country_1" placeholder="Type Your Pickup Country">
 							</div>
 						</div>
 					</div>
