@@ -241,7 +241,7 @@ class OrderCourier(models.Model):
   order_courier = ParentalKey('Order', related_name='ordercourier', null=True, blank=True)
   courier = models.ForeignKey(Courier, on_delete=models.CASCADE)
   status = models.CharField(null=True, blank=True, max_length=500)
-  status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
+  status_changed_on=models.DateTimeField(default=datetime.now, blank=True, null=True)
   status_info = models.CharField(null=True, blank=True, max_length=500)
 
 
@@ -269,7 +269,7 @@ class Order(ClusterableModel):
 class OrderStatus(models.Model):
   order = models.ForeignKey(Order, on_delete=models.CASCADE)
   status = models.CharField(null=True, blank=True, max_length=500, default=OrderStatusEnum.FOR_SHIPPING.value)
-  status_changed_on=models.DateField(default=datetime.now, blank=True, null=True)
+  status_changed_on=models.DateTimeField(default=datetime.now, blank=True, null=True)
   additional_info = models.TextField(null=True, blank=True)
 
 
