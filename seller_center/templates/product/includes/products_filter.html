@@ -1,8 +1,8 @@
 <div class="card container-fluid mb-3">
     <ul class="nav nav-pills nav-fill">
-        {% for category in categories %}
+        {% for status in statuses %}
         <li class="nav-item ml-2 p-1">
-            <a class="nav-link {% if category.code == active_category %}active{% endif %}" id="{{category.code}}-tab" href="#{{category.code}}" onclick="window.location.href='?category={{category.code}}#{{category.code}}'" role="tab">{{category.humanized}} ({{category.count}})</a>
+            <a class="nav-link {% if status.code == active_status %}active{% endif %}" id="{{status.code}}-tab" href="?status={{status.code}}" role="tab">{{status.humanized}} ({{status.count}})</a>
         </li>
         {% endfor %}
     </ul>

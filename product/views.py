@@ -12,7 +12,6 @@ import json
 from datetime import datetime
 
 from product.models import ProductsImportPage, Product, Category, Variations, Errors, ProductStatus
-# , Sale
 
 from seller_center.settings.dev import MEDIA_URL
 from seller_center.settings.base import CSV_COLUMNS
@@ -235,7 +234,7 @@ def product_import(request, selected_category):
               )
         Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
       messages.success(request, 'Product added successfully.')
-      return HttpResponseRedirect("/products/?category=all#all")
+      return HttpResponseRedirect("/products/?status=all")
     else:
       product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
       categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
@@ -602,7 +601,7 @@ def product_edit(request, category_id, product_id):
               )
         Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
       messages.success(request, 'Product edited successfully.')
-      return HttpResponseRedirect("/products/?category=unlisted#unlisted")
+      return HttpResponseRedirect("/products/?status=unlisted")
     else:
       showVariations = ""
       showWithoutVariation = "active show"
@@ -1094,10 +1093,10 @@ def products_import(request):
       return HttpResponseRedirect("/products/add-new-products/")
     elif(Errors.objects.all().count()):
       messages.warning(request, 'Products added. Some products have data errors. Check out the unpublished tab to correct them.')
-      return HttpResponseRedirect("/products/?category=unpublished#unpublished")
+      return HttpResponseRedirect("/products/?status=unpublished")
     else:
       messages.success(request, 'Products added successfully.')
-      return HttpResponseRedirect("/products/?category=all#all")
+      return HttpResponseRedirect("/products/?status=all")
   else:
     form = UploadFileForm()
 
@@ -1111,22 +1110,22 @@ def products_import(request):
 
 def product_delete(request, product_id):
   Product.objects.filter(id=product_id).delete()
-  return HttpResponseRedirect("/products/?category=unpublished#unpublished")
+  return HttpResponseRedirect("/products/?status=unpublished")
 
 
 def product_unlist(request, product_id):
   Product.objects.filter(id=product_id).update(unlisted=True)
-  return HttpResponseRedirect("/products/?category=all#all")
+  return HttpResponseRedirect("/products/?status=all")
 
 
 def product_suspend(request, product_id):
   Product.objects.filter(id=product_id).update(suspended=True)
-  return HttpResponseRedirect("/products/?category=all#all")
+  return HttpResponseRedirect("/products/?status=all")
 
 
 def product_live(request, product_id):
   Product.objects.filter(id=product_id).update(product_status=ProductStatus.LIVE_APPROVAL.value)
-  return HttpResponseRedirect("/products/?category=all#all")
+  return HttpResponseRedirect("/products/?status=all")
 
 
 # function for downloading sample file as Excel file
@@ -1158,4 +1157,4 @@ def download_categories(request):
 def delete_all_products(request):
   Product.objects.all().delete()
   Variations.objects.all().delete()
-  return HttpResponseRedirect("/products/?category=all#all")
+  return HttpResponseRedirect("/products/?status=all")

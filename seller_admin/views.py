@@ -42,7 +42,7 @@ def view_seller_products(request, user_id):
     context.update(
         Product.get_view_all_product_context(
             user_id=user_id,
-            category=request.GET.get("category", "all"),
+            status=request.GET.get("status", "all"),
             page_number=request.GET.get("page", 1),
         )
     )

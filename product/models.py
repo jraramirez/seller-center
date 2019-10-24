@@ -259,16 +259,16 @@ class Product(ClusterableModel):
             Product.objects.filter(id=self.id).update(
                 product_status=ProductStatus.UNLISTED.value
             )
-        return HttpResponseRedirect("/products/?category=all#all")
+        return HttpResponseRedirect("/products/?status=all")
 
     def __unicode__(self):
         return self.product_name
 
     @staticmethod
-    def get_view_all_product_context(user_id, category="all", page_number=1):
+    def get_view_all_product_context(user_id, status="all", page_number=1):
         context = {}
 
-        query_by_category = {
+        query_by_status = {
             "all": Product.objects.filter(profile__user_id=user_id).exclude(
                 product_status=ProductStatus.UNPUBLISHED.value
             ),
@@ -290,46 +290,46 @@ class Product(ClusterableModel):
             ),
         }
 
-        products = query_by_category.get(category, query_by_category["all"])
+        products = query_by_status.get(status, query_by_status["all"])
 
         paginator = Paginator(products, 12)
         paged_products = paginator.page(page_number)
 
         context["products"] = paged_products
         context["products_user_id"] = user_id
-        context["categories"] = [
+        context["statuses"] = [
             {
                 "code": "all",
                 "humanized": "All",
-                "count": query_by_category["all"].count(),
+                "count": query_by_status["all"].count(),
             },
             {
                 "code": "live",
                 "humanized": "Live",
-                "count": query_by_category["live"].count(),
+                "count": query_by_status["live"].count(),
             },
             {
                 "code": "soldout",
                 "humanized": "Sold Out",
-                "count": query_by_category["soldout"].count(),
+                "count": query_by_status["soldout"].count(),
             },
             {
                 "code": "suspended",
                 "humanized": "Suspended",
-                "count": query_by_category["suspended"].count(),
+                "count": query_by_status["suspended"].count(),
             },
             {
                 "code": "unlisted",
                 "humanized": "Unlisted",
-                "count": query_by_category["unlisted"].count(),
+                "count": query_by_status["unlisted"].count(),
             },
             {
                 "code": "unpublished",
                 "humanized": "Unpublished",
-                "count": query_by_category["unpublished"].count(),
+                "count": query_by_status["unpublished"].count(),
             },
         ]
-        context["active_category"] = category
+        context["active_status"] = status
         return context
 
 
@@ -380,7 +380,7 @@ class Variations(Orderable, models.Model):
             Product.objects.filter(id=self.product_id).update(
                 product_status=ProductStatus.UNLISTED.value
             )
-        return redirect("/products/?category=all#all")
+        return redirect("/products/?status=all")
 
 
 class Courier(models.Model):
@@ -475,12 +475,12 @@ class ProductsPage(BasePage):
         context["subPages"] = self.get_children().live()
 
         user_id = request.user.id
-        category = request.GET.get("category", "all")
+        status = request.GET.get("status", "all")
         page_number = request.GET.get("page", 1)
 
         context.update(
             Product.get_view_all_product_context(
-                user_id=user_id, category=category, page_number=page_number
+                user_id=user_id, status=status, page_number=page_number
             )
         )
 

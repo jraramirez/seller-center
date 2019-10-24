@@ -9,8 +9,7 @@
         <ul class="pagination custom-pagination">
             {% if products.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="?page=1&category={{active_category}}#{{active_category}}"
-                    aria-label="Previous">
+                <a class="page-link" href="?page=1&status={{active_status}}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                     <span class="sr-only">begin</span>
                 </a>
@@ -22,15 +21,13 @@
                 <span class="page-link">{{ n }}<span class="sr-only">(current)</span></span>
             </li>
             {% elif n > products.number|add:'-6' and n < products.number|add:'6' %}
-            <li class="page-item"><a class="page-link"
-                    href="?page={{ n }}&category={{active_category}}#{{active_category}}">{{ n }}</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ n }}&status={{active_status}}">{{ n }}</a></li>
             {% endif %}
             {% endfor %}
 
             {% if products.has_next %}
             <li class="page-item">
-                <a class="page-link"
-                    href="?page={{ products.paginator.num_pages }}&category={{active_category}}#{{active_category}}"
+                <a class="page-link" href="?page={{ products.paginator.num_pages }}&status={{active_status}}"
                     aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     <span class="sr-only">end</span>
@@ -52,20 +49,30 @@
                     <th scope="col">Stock</th>
                     <th scope="col">Sales</th>
                     <th scope="col">Modified</th>
+                    {% if not read_only %}
                     <th scope="col">Actions</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
                 {% for product in products %}
                 <tr>
                     <td scope="row">
+                        {% if not read_only %}
                         <a href="{% url 'product_edit' category_id=product.category.unique_id product_id=product.id %}">
-                            {% if product.cover_image_url %}
-                            <img src="{{ product.cover_image_url }}" alt="" width="80" />
+                            {% if product.cover_image_url.strip %}
+                            <img src="{{ product.cover_image_url.strip }}" alt="" width="80" />
                             {% else %}
                             <img src="{% static 'images/download.svg' %}" alt="" width="80" />
                             {% endif %}
                         </a>
+                        {% else %}
+                            {% if product.cover_image_url.strip %}
+                            <img src="{{ product.cover_image_url.strip }}" alt="" width="80" />
+                            {% else %}
+                            <img src="{% static 'images/download.svg' %}" alt="" width="80" />
+                            {% endif %}
+                        {% endif %}
                     </td>
                     <td class="text-center">
                         {% if product.product_name %}
@@ -122,6 +129,7 @@
                         <br>
                         {{product.last_updated|date:'h:i A'}}
                     </td>
+                    {% if not read_only %}
                     <td class="text-center">
                         <div class="dropdown show">
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -130,32 +138,20 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <a class="dropdown-item"
                                     href="{% url 'product_edit' category_id=product.category.unique_id product_id=product.id %}">Edit</a>
-                                {% if active_category != 'live' %}
+                                {% if active_status != 'live' %}
                                 <a class="dropdown-item" href="/products/live/{{product.id}}/">Make Live</a>
                                 {% endif %}
-                                {% if active_category != 'unlisted' %}
+                                {% if active_status != 'unlisted' %}
                                 <a class="dropdown-item" href="/products/unlist/{{product.id}}/">Unlist</a>
                                 {% endif %}
-                                {% if active_category != 'suspended' %}
+                                {% if active_status != 'suspended' %}
                                 <a class="dropdown-item" href="/products/suspend/{{product.id}}/">Suspend</a>
                                 {% endif %}
                                 <a class="dropdown-item" href="/products/delete/{{product.id}}/">Delete</a>
                             </div>
                         </div>
                     </td>
-                    <!-- <td class="text-center">
-                        <div class="dropdown show">
-                            <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                              <a class="dropdown-item" href="/products/edit/{{product.category}}/{{product.id}}/">Edit</a>
-                              <a class="dropdown-item" href="/products/live/{{product.id}}/">Make Live</a>
-                              <a class="dropdown-item" href="/products/unlist/{{product.id}}/">Unlist</a>
-                              <a class="dropdown-item" href="/products/suspend/{{product.id}}/">Suspend</a>
-                              <a class="dropdown-item" href="/products/delete/{{product.id}}/">Delete</a>
-                            </div>
-                        </div>
-                    </td> -->
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

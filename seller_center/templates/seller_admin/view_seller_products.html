@@ -20,7 +20,7 @@
     {# Tab Content #}
 
     <div class="container-fluid tab-content products-tab" id="productsTabContent">
-        {% include "product/includes/products_table.html" %}
+        {% include "product/includes/products_table.html" with read_only=True %}
     </div>
 </div>
 
