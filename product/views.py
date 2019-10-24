@@ -5,8 +5,7 @@ from django.db import transaction
 from django.contrib import messages
 from wagtail.images.models import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
-import pandas as pd
-import numpy as np
+from product.utils import get_wholenumber
 import os
 import requests
 import json
@@ -236,7 +235,7 @@ def product_import(request, selected_category):
               )
         Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
       messages.success(request, 'Product added successfully.')
-      return HttpResponseRedirect("/products/#all")
+      return HttpResponseRedirect("/products/?category=all#all")
     else:
       product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
       categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
@@ -603,7 +602,7 @@ def product_edit(request, category_id, product_id):
               )
         Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
       messages.success(request, 'Product edited successfully.')
-      return HttpResponseRedirect("/products/#unlisted")
+      return HttpResponseRedirect("/products/?category=unlisted#unlisted")
     else:
       showVariations = ""
       showWithoutVariation = "active show"
@@ -1095,10 +1094,10 @@ def products_import(request):
       return HttpResponseRedirect("/products/add-new-products/")
     elif(Errors.objects.all().count()):
       messages.warning(request, 'Products added. Some products have data errors. Check out the unpublished tab to correct them.')
-      return HttpResponseRedirect("/products/#unpublished")
+      return HttpResponseRedirect("/products/?category=unpublished#unpublished")
     else:
       messages.success(request, 'Products added successfully.')
-      return HttpResponseRedirect("/products/#all")
+      return HttpResponseRedirect("/products/?category=all#all")
   else:
     form = UploadFileForm()
 
@@ -1112,22 +1111,22 @@ def products_import(request):
 
 def product_delete(request, product_id):
   Product.objects.filter(id=product_id).delete()
-  return HttpResponseRedirect("/products/#unpublished")
+  return HttpResponseRedirect("/products/?category=unpublished#unpublished")
 
 
 def product_unlist(request, product_id):
   Product.objects.filter(id=product_id).update(unlisted=True)
-  return HttpResponseRedirect("/products/#all")
+  return HttpResponseRedirect("/products/?category=all#all")
 
 
 def product_suspend(request, product_id):
   Product.objects.filter(id=product_id).update(suspended=True)
-  return HttpResponseRedirect("/products/#all")
+  return HttpResponseRedirect("/products/?category=all#all")
 
 
 def product_live(request, product_id):
   Product.objects.filter(id=product_id).update(product_status=ProductStatus.LIVE_APPROVAL.value)
-  return HttpResponseRedirect("/products/#all")
+  return HttpResponseRedirect("/products/?category=all#all")
 
 
 # function for downloading sample file as Excel file
@@ -1159,66 +1158,4 @@ def download_categories(request):
 def delete_all_products(request):
   Product.objects.all().delete()
   Variations.objects.all().delete()
-  return HttpResponseRedirect("/products/#all")
-
-def uploadJSONCategoriesToDB():
-  with open('ShopeeTempCategory.json', 'r') as f:
-    categoriesJSON = json.load(f)
-    for i in categoriesJSON['data']['list']:
-      c = Category(
-        unqiue_id = i['id'] + 1891,
-        parent_id = i['parent_id'] + 1891,
-        name = i['name'],
-      )
-      c.save()
-
-def queryCategories():
-    l1Categories = Category.objects.filter(parent_id=1891)
-    categories = [{} for _ in range(len(l1Categories))]
-    for i, c in zip(range(len(l1Categories)), l1Categories):
-      categories[i]['name'] = c.name
-      categories[i]['unique_id'] = c.unique_id
-      categories[i]['level'] = 1
-      categories[i]['top'] = str(-39*(i))+'px'
-      l2Categories = Category.objects.filter(parent_id=c.unique_id)
-      categories[i]['children'] = [{} for _ in range(len(l2Categories))]
-      for j, c2 in zip(range(len(l2Categories)), l2Categories):
-        categories[i]['children'][j]['name'] = c2.name
-        categories[i]['children'][j]['unique_id'] = c2.unique_id
-        categories[i]['children'][j]['level'] = c2.level
-        categories[i]['children'][j]['top'] = str(-39*(j))+'px'
-        l3Categories = Category.objects.filter(parent_id=c2.unique_id)
-        categories[i]['children'][j]['children'] = [{} for _ in range(len(l3Categories))]
-        for k, c3 in zip(range(len(l3Categories)), l3Categories):
-          categories[i]['children'][j]['children'][k]['name'] = c3.name
-          categories[i]['children'][j]['children'][k]['unique_id'] = c3.unique_id
-          categories[i]['children'][j]['children'][k]['level'] = c3.level
-
-def generateCategoriesList():
-    categories = {}
-    with open('seller_center/static/documents/categories-full.json', 'r') as f:
-      categories = json.load(f)
-  
-    df = pd.DataFrame()
-    primaryCategories = []
-    secondaryCategories = []
-    level3Categories = []
-    categoryIDs = []
-    for c1 in categories:
-      for c2 in c1['children']:
-        for c3 in c2['children']:
-          primaryCategories.append(c1['name'])
-          secondaryCategories.append(c2['name'])
-          level3Categories.append(c3['name'])
-          categoryIDs.append(c3['unique_id'])
-    df['Primary Category'] = primaryCategories
-    df['Secondary Category'] = secondaryCategories
-    df['Level 3 Category'] = level3Categories
-    df['Category ID'] = categoryIDs
-    df.reset_index().to_csv('seller_center/static/documents/lyka-categories-v1.csv')
-    
-    return 
-
-def get_wholenumber(number):
-  number=number[:number.rfind('.')]
-  return number
+  return HttpResponseRedirect("/products/?category=all#all")

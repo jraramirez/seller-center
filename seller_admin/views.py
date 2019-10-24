@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from users.models import Documents
+from product.models import Product
 
 # Create your views here.
 
@@ -33,4 +34,17 @@ def view_seller_documents(request, user_id):
         "seller_admin/view_seller_documents.html",
         {"documents": docs, "username": username},
     )
+
+
+def view_seller_products(request, user_id):
+    context = {}
+    context["username"] = User.objects.only("username").get(id=user_id)
+    context.update(
+        Product.get_view_all_product_context(
+            user_id=user_id,
+            category=request.GET.get("category", "all"),
+            page_number=request.GET.get("page", 1),
+        )
+    )
+    return render(request, "seller_admin/view_seller_products.html", context)
 

@@ -1,24 +1,9 @@
 <div class="card container-fluid mb-3">
-    <ul class="nav nav-pills nav-fill" role="tablist">
+    <ul class="nav nav-pills nav-fill">
+        {% for category in categories %}
         <li class="nav-item ml-2 p-1">
-            <a class="nav-link topic-filter-item active" id="all-tab" data-toggle="tab" href="#all" role="tab">All ({{nAll}})</a>
+            <a class="nav-link {% if category.code == active_category %}active{% endif %}" id="{{category.code}}-tab" href="#{{category.code}}" onclick="window.location.href='?category={{category.code}}#{{category.code}}'" role="tab">{{category.humanized}} ({{category.count}})</a>
         </li>
-        <li class="nav-item ml-2 p-1 ">
-            <a class="nav-link topic-filter-item" id="live-tab" data-toggle="tab" href="#live" role="tab">Live ({{nLive}})</a>
-        </li>
-        <li class="nav-item ml-2 p-1 ">
-            <a class="nav-link topic-filter-item" id="sold-tab" data-toggle="tab" href="#sold" role="tab">Sold Out ({{nSoldOut}})</a>
-        </li>
-        <li class="nav-item ml-2 p-1 ">
-            <a class="nav-link topic-filter-item" id="unlisted-tab" data-toggle="tab" href="#unlisted" role="tab">Unlisted ({{nUnlisted}})</a>
-        </li>
-        <li class="nav-item ml-2 p-1 ">
-            <a class="nav-link topic-filter-item" id="suspended-tab" data-toggle="tab" href="#suspended" role="tab">Suspended ({{nSuspended}})</a>
-        </li>
-        {% if nUnpublished %}
-        <li class="nav-item ml-2 p-1 ">
-            <a class="nav-link topic-filter-item" id="unpublished-tab" data-toggle="tab" href="#unpublished" role="tab">Unpublished ({{nUnpublished}})</a>
-        </li>
-        {% endif %}
+        {% endfor %}
     </ul>
 </div>

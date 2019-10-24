@@ -1,0 +1,165 @@
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags wagtailimages_tags %}
+{% load humanize %}
+<div class="tab-pane show active" id="{{category}}">
+
+    {% if products %}
+    {% if products.has_other_pages %}
+    <div>
+        <ul class="pagination custom-pagination">
+            {% if products.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1&category={{active_category}}#{{active_category}}"
+                    aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">begin</span>
+                </a>
+            </li>
+            {% endif %}
+            {% for n in products.paginator.page_range %}
+            {% if products.number == n %}
+            <li class="page-item active">
+                <span class="page-link">{{ n }}<span class="sr-only">(current)</span></span>
+            </li>
+            {% elif n > products.number|add:'-6' and n < products.number|add:'6' %}
+            <li class="page-item"><a class="page-link"
+                    href="?page={{ n }}&category={{active_category}}#{{active_category}}">{{ n }}</a></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if products.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page={{ products.paginator.num_pages }}&category={{active_category}}#{{active_category}}"
+                    aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">end</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+    <div class="body-content">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Parent SKU</th>
+                    <th scope="col">Variations</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Sales</th>
+                    <th scope="col">Modified</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td scope="row">
+                        <a href="{% url 'product_edit' category_id=product.category.unique_id product_id=product.id %}">
+                            {% if product.cover_image_url %}
+                            <img src="{{ product.cover_image_url }}" alt="" width="80" />
+                            {% else %}
+                            <img src="{% static 'images/download.svg' %}" alt="" width="80" />
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        {% if product.product_name %}
+                        {{product.product_name}}
+                        {% else %} -
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if product.parent_sku_reference_no %}
+                        {{product.parent_sku_reference_no}}
+                        {% else %} -
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% for v in product.variations.all %}
+                        {% if v.name %} {{v.name}}
+                        {% else %} -
+                        {% endif %}
+                        <br>
+                        {% endfor %}
+                    </td>
+                    <td class="text-center">
+                        {% if product.product_price %}
+                        {{ product.product_price|intcomma }}
+                        {% else %}
+                        {% for v in product.variations.all %}
+                        {% if v.price %}₱ {{ v.price|intcomma }}
+                        {% else %} -
+                        {% endif %}
+                        <br>
+                        {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if product.stock_sum %}
+                        {{ product.stock_sum }}
+                        {% else %}
+                        {% for v in product.variations.all %}
+                        {% if v.stock %} {{v.stock}}
+                        {% else %} -
+                        {% endif %}
+                        <br>
+                        {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% for v in product.variations.all %}
+                        0
+                        <br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{product.last_updated|date:'Y-m-d'}}
+                        <br>
+                        {{product.last_updated|date:'h:i A'}}
+                    </td>
+                    <td class="text-center">
+                        <div class="dropdown show">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item"
+                                    href="{% url 'product_edit' category_id=product.category.unique_id product_id=product.id %}">Edit</a>
+                                {% if active_category != 'live' %}
+                                <a class="dropdown-item" href="/products/live/{{product.id}}/">Make Live</a>
+                                {% endif %}
+                                {% if active_category != 'unlisted' %}
+                                <a class="dropdown-item" href="/products/unlist/{{product.id}}/">Unlist</a>
+                                {% endif %}
+                                {% if active_category != 'suspended' %}
+                                <a class="dropdown-item" href="/products/suspend/{{product.id}}/">Suspend</a>
+                                {% endif %}
+                                <a class="dropdown-item" href="/products/delete/{{product.id}}/">Delete</a>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- <td class="text-center">
+                        <div class="dropdown show">
+                            <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                              <a class="dropdown-item" href="/products/edit/{{product.category}}/{{product.id}}/">Edit</a>
+                              <a class="dropdown-item" href="/products/live/{{product.id}}/">Make Live</a>
+                              <a class="dropdown-item" href="/products/unlist/{{product.id}}/">Unlist</a>
+                              <a class="dropdown-item" href="/products/suspend/{{product.id}}/">Suspend</a>
+                              <a class="dropdown-item" href="/products/delete/{{product.id}}/">Delete</a>
+                            </div>
+                        </div>
+                    </td> -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
