@@ -20,9 +20,14 @@ urlpatterns = [
     url(r"^admin/", include(wagtailadmin_urls)),
     url(r"^documents/", include(wagtaildocs_urls)),
     url(
-        r"^seller_admin/users/(?P<user_id>.*)/documents",
+        r"^seller_admin/users/(?P<user_id>.*)/documents/$",
         seller_admin_views.view_seller_documents,
         name="view_seller_document",
+    ),
+    url(
+        r"^seller_admin/users/(?P<user_id>.*)/products/$",
+        seller_admin_views.view_seller_products,
+        name="view_seller_products",
     ),
     url(
         r"^seller_admin/users",
