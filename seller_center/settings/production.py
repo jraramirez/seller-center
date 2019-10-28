@@ -2,7 +2,7 @@ from .base import *
 
 DEBUG = False
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = ['seller-center.ap-southeast-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['seller-center.ap-southeast-1.elasticbeanstalk.com', 'sellercenter.mylyka.com', 'sellercenter.lyka.app']
 
 
 # Database
