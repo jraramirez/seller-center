@@ -1,58 +1,56 @@
 {% load static %}
 
-{% if allToShipUsersOrders %}
-<div class="tab-pane" id="toship" role="tabpanel" aria-labelledby="toship-tab">
+<div class="tab-pane fade" id="toship" role="tabpanel" aria-labelledby="all-tab">
+  {% if allToShipProductsByOrder %}
   <div class="body-content table-responsive">
     <table class="table">
       <thead>
         <tr>
           <th scope="col">Product(s)</th>
           <th scope="col"></th>
+          <th scope="col"></th>
           <th scope="col">Variation(s)</th>
           <th scope="col">Order Total</th>
           <th scope="col">Date Ordered</th>
           <th scope="col">Status</th>
-          <th scope="col">Countdown</th>
-          <th scope="col">
-            <a class="dropdown-toggle" id="all_channels" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All Channels</a>
-            <ul class="dropdown-menu">
-              <li class="dropdown-item">Sample</li>
-              <li class="dropdown-item">List</li>
-              <li class="dropdown-item">Items</li>
-              <li class="dropdown-item">Value</li>
-              <li class="dropdown-item">Hi!</li>
-            </ul>
-          </th>
+          <th scope="col">Selected Courier</th>
           <th scope="col">Delivery Address</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody id="orders">
-        {% for user, order in allToShipUsersOrders %}
+        {% for order in allToShipProductsByOrder %}
           <tr class="tr-top">
             <td colspan="10">
-              Order ID: {{order.id}}
+              Order ID: {{order.order_reference_number}}
             </td>
           </tr>
           <tr class="tr-middle">
             <td colspan="10">
-              User: {{user}}
+              User: 
+              {% if order.username %}
+              {{order.username}}
+              {% else %} 
+              {{order.user_id}}
+              {% endif %}
             </td>
           </tr>
           {% for product in order.products.all %}
           <tr class="tr-middle">
               <td scope="row">
-                  <a href="/products/edit/{{product.category}}/{{product.id}}/">
-                      {% if product.variations.all.0.image_url %}
-                          <img src="{{product.variations.all.0.image_url}}" alt="" width="80"/>
-                      {% elif product.variations.all.0.image_upload %}
-                          <img src="{{product.variations.all.0.image_url_from_upload}}" alt="" width="80"/>
-                      {% elif product.variations.all.0.image_url_from_sku %}
-                          <img src="{{product.variations.all.0.image_url_from_sku}}" alt="" width="80"/>
+                  <a href="#">
+                      {% if product.cover_image_url %}
+                          <img src="{{product.cover_image_url}}" alt="" width="80"/>
                       {% else %}
                           <img src="{% static 'images/download.svg' %}" alt="" width="80"/>
                       {% endif %}
                   </a>
+              </td>
+              <td class="text-center">
+                {% if product.product_code %}
+                {{product.product_code}}
+                {% else %} -
+                {% endif %}
               </td>
               <td class="text-center">
                 {% if product.product_name %}
@@ -89,14 +87,8 @@
                     {% endif %}
                 </td>
                 <td class="text-center">
-                    {% if order.countdown %}
-                    {{order.countdown}}
-                    {% else %} -
-                    {% endif %}
-                </td>
-                <td class="text-center">
-                    {% if order.shipping_channel %}
-                    {{order.shipping_channel}}
+                    {% if order.courier %}
+                    {{order.courier}}
                     {% else %} -
                     {% endif %}
                 </td>
@@ -110,19 +102,58 @@
                   <div class="dropdown show">
                     <a class="dropdown-toggle-xl" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">▼</a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item" href="/orders/set_status/{{order.id}}/SHIPPING/">Arrange Pickup</a>
-                      <a class="dropdown-item" href="/orders/set_status/{{order.id}}/CANCELLATION/">Deny order</a>
+                      <a class="dropdown-item" data-toggle="modal" href="#to-ship-order-modal-{{ order.order_reference_number }}">Arrange Pickup</a>
+                      <a class="dropdown-item" href="/orders/set_status/{{order.order_reference_number}}/SELLER_CANCELED/">Cancel Order</a>  
                     </div>
                   </div>
                 </td>
               {% else %}
-                <td colspan="8"></td>
+                <td colspan="9"></td>
               {% endif %}
           </tr>
           {% endfor %}
+          <div class="modal order-modal" id="to-ship-order-modal-{{ order.order_reference_number }}">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <form action="/orders/set_status/{{ order.order_reference_number }}/SHIPPING/" enctype="multipart/form-data" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="id-shipping-option" class="col-sm-3 col-form-label">Shipping Option</label>
+                        <div class="col-sm-9">
+                          <select name="shipping-option" class="form-control" id="id-shipping-option" required>
+                            {% for logistic in LOGISTICS_CHOICES %}
+                            {% if logistic  == order.courier %}
+                            <option value="{{ logistic }}" selected="selected">{{ logistic }}</option>
+                            {% else %}
+                            <option>{{ logistic }}</option>
+                            {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="id-order-date" class="col-sm-3 col-form-label">Date</label>
+                        <div class="col-sm-9">
+                          <input id="id-order-date" type="date" name="order-date" class="form-control" onkeydown="return false" required min="{{min_date|date:'Y-m-d'}}" value="{{min_date|date:'Y-m-d'}}">
+                        </div>
+                    </div>
+                    <div class="form-group row mt-3 mb-4">
+                        <label for="id-order-remark" class="col-sm-3 col-form-label">Remark</label>
+                        <div class="col-sm-9">
+                          <textarea name="order-remark" class="form-control" id="id-order-remark" required style="height: 60px !important"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2">Arrange Pickup</button>
+                    <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2" data-dismiss="modal">Cancel</button>    
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         {% endfor %}
       </tbody>
     </table>
   </div>    
-</div>
 {% endif %}
+</div>

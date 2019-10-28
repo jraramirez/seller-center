@@ -2,7 +2,7 @@ from .base import *
 
 DEBUG = False
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = ['seller-center.ap-southeast-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['seller-center.ap-southeast-1.elasticbeanstalk.com', 'sellercenter.mylyka.com', 'sellercenter.lyka.app']
 
 
 # Database
@@ -60,13 +60,6 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_PASSWORD = 'f0rtune$1'
-# EMAIL_HOST_USER = 'mirr@digiters.co'
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 try:

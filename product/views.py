@@ -5,14 +5,13 @@ from django.db import transaction
 from django.contrib import messages
 from wagtail.images.models import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
-import pandas as pd
-import numpy as np
+from product.utils import get_wholenumber
 import os
 import requests
 import json
 from datetime import datetime
 
-from product.models import ProductsImportPage, Product, Category, Variations, Errors, ProductStatus, Sale
+from product.models import ProductsImportPage, Product, Category, Variations, Errors, ProductStatus
 
 from seller_center.settings.dev import MEDIA_URL
 from seller_center.settings.base import CSV_COLUMNS
@@ -67,11 +66,11 @@ def product_import(request, selected_category):
 
     request.session['product-price'] = request.POST.get('product-price')
     request.session['product-stock'] = request.POST.get('product-stock')
-    request.session['product-sale-price'] = request.POST.get('product-sale-price')
-    request.session['product-sale-date-start'] = request.POST.get('product-sale-date-start')
-    request.session['product-sale-time-start'] = request.POST.get('product-sale-time-start')
-    request.session['product-sale-date-end'] = request.POST.get('product-sale-date-end')
-    request.session['product-sale-time-end'] = request.POST.get('product-sale-time-end')
+    # request.session['product-sale-price'] = request.POST.get('product-sale-price')
+    # request.session['product-sale-date-start'] = request.POST.get('product-sale-date-start')
+    # request.session['product-sale-time-start'] = request.POST.get('product-sale-time-start')
+    # request.session['product-sale-date-end'] = request.POST.get('product-sale-date-end')
+    # request.session['product-sale-time-end'] = request.POST.get('product-sale-time-end')
 
     request.session['product-condition'] = request.POST.get('product-condition')
     request.session['product-parent-sku'] = request.POST.get('product-parent-sku')
@@ -80,11 +79,11 @@ def product_import(request, selected_category):
       request.session['product-variation-'+str(i)+'-stock'] =  request.POST.get('product-variation-'+str(i)+'-stock')
       request.session['product-variation-'+str(i)+'-price'] = request.POST.get('product-variation-'+str(i)+'-price')
       request.session['product-variation-'+str(i)+'-name'] = request.POST.get('product-variation-'+str(i)+'-name')
-      request.session['product-variation-'+str(i)+'-sale-price'] = request.POST.get('product-variation-'+str(i)+'-sale-price')
-      request.session['product-variation-'+str(i)+'-sale-date-start'] = request.POST.get('product-variation-'+str(i)+'-sale-date-start')
-      request.session['product-variation-'+str(i)+'-sale-time-start'] = request.POST.get('product-variation-'+str(i)+'-sale-time-start')
-      request.session['product-variation-'+str(i)+'-sale-date-end'] = request.POST.get('product-variation-'+str(i)+'-sale-date-end')
-      request.session['product-variation-'+str(i)+'-sale-time-end'] = request.POST.get('product-variation-'+str(i)+'-sale-time-end')
+      # request.session['product-variation-'+str(i)+'-sale-price'] = request.POST.get('product-variation-'+str(i)+'-sale-price')
+      # request.session['product-variation-'+str(i)+'-sale-date-start'] = request.POST.get('product-variation-'+str(i)+'-sale-date-start')
+      # request.session['product-variation-'+str(i)+'-sale-time-start'] = request.POST.get('product-variation-'+str(i)+'-sale-time-start')
+      # request.session['product-variation-'+str(i)+'-sale-date-end'] = request.POST.get('product-variation-'+str(i)+'-sale-date-end')
+      # request.session['product-variation-'+str(i)+'-sale-time-end'] = request.POST.get('product-variation-'+str(i)+'-sale-time-end')
       if(request.FILES):
         request.session['product-variation-'+str(i)+'-image'] = request.FILES['product-variation-'+str(i)+'-image']
     return render(request, 'product/product_import_page.html', {
@@ -112,11 +111,11 @@ def product_import(request, selected_category):
 
     product['product_price'] = request.POST.get('product-price')
     product['stock_sum'] = request.POST.get('product-stock')
-    product['product_sale_price'] = request.POST.get('product-sale-price')
-    product['product_sale_date_start'] = request.POST.get('product-sale-date-start')
-    product['product_sale_time_start'] = request.POST.get('product-sale-time-start')
-    product['product_sale_date_end'] = request.POST.get('product-sale-date-end')
-    product['product_sale_time_end'] = request.POST.get('product-sale-time-end')
+    # product['product_sale_price'] = request.POST.get('product-sale-price')
+    # product['product_sale_date_start'] = request.POST.get('product-sale-date-start')
+    # product['product_sale_time_start'] = request.POST.get('product-sale-time-start')
+    # product['product_sale_date_end'] = request.POST.get('product-sale-date-end')
+    # product['product_sale_time_end'] = request.POST.get('product-sale-time-end')
 
     # product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
@@ -127,20 +126,25 @@ def product_import(request, selected_category):
       errors.append('Product Category is required.')
     if(not product['product_name']):
       errors.append('Product Name is required.')
+    else:
+      if(len(product['product_name']) < 3):
+        errors.append('Product Name should have at least 3 characters.')
     if(not product['product_description']):
       errors.append('Product Description is required.')
+    if(len(product['product_brand']) > 500):
+        errors.append('Product Brand exceeds character limit (500).')
     if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
       errors.append('Product Price is required.')
-    else:
-      if(product['product_sale_price']):
-        if(not product['product_sale_date_start']):
-          errors.append('Product Sale Start Date is required.')
-        if(not product['product_sale_time_start']):
-          errors.append('Product Sale Start Time is required.')
-        if(not product['product_sale_date_end']):
-          errors.append('Product Sale End Date is required.')
-        if(not product['product_sale_time_end']):
-          errors.append('Product Sale End Time is required.')      
+    # else:
+    #   if(product['product_sale_price']):
+    #     if(not product['product_sale_date_start']):
+    #       errors.append('Product Sale Start Date is required.')
+    #     if(not product['product_sale_time_start']):
+    #       errors.append('Product Sale Start Time is required.')
+    #     if(not product['product_sale_date_end']):
+    #       errors.append('Product Sale End Date is required.')
+    #     if(not product['product_sale_time_end']):
+    #       errors.append('Product Sale End Time is required.')      
     if(request.POST.get('product-variation-0-sku') == '' and not product['stock_sum']):
       errors.append('Product Stock is required.')
     for i in range(0,7):
@@ -151,15 +155,15 @@ def product_import(request, selected_category):
           errors.append('Variation ' + str(i+1) +': stock is required.')
         if(not request.POST.get('product-variation-'+str(i)+'-price')):
           errors.append('Variation ' + str(i+1) +': price is required.')
-        if(request.POST.get('product-variation-'+str(i)+'-sale-price')):
-          if(not request.POST.get('product-variation-'+str(i)+'-sale-date-start')):
-            errors.append('Variation ' + str(i+1) + ' Sale Start Date is required.')
-          if(not request.POST.get('product-variation-'+str(i)+'-sale-date-end')):
-            errors.append('Variation ' + str(i+1) + ' Sale End Date is required.')
-          if(not request.POST.get('product-variation-'+str(i)+'-sale-time-start')):
-            errors.append('Variation ' + str(i+1) + ' Sale Start Time is required.')
-          if(not request.POST.get('product-variation-'+str(i)+'-sale-time-end')):
-            errors.append('Variation ' + str(i+1) + ' Sale End Time is required.')
+        # if(request.POST.get('product-variation-'+str(i)+'-sale-price')):
+        #   if(not request.POST.get('product-variation-'+str(i)+'-sale-date-start')):
+        #     errors.append('Variation ' + str(i+1) + ' Sale Start Date is required.')
+        #   if(not request.POST.get('product-variation-'+str(i)+'-sale-date-end')):
+        #     errors.append('Variation ' + str(i+1) + ' Sale End Date is required.')
+        #   if(not request.POST.get('product-variation-'+str(i)+'-sale-time-start')):
+        #     errors.append('Variation ' + str(i+1) + ' Sale Start Time is required.')
+        #   if(not request.POST.get('product-variation-'+str(i)+'-sale-time-end')):
+        #     errors.append('Variation ' + str(i+1) + ' Sale End Time is required.')
     if(not errors):
       t = Product(
         product_code = request.POST.get('product-code'),
@@ -169,18 +173,18 @@ def product_import(request, selected_category):
         product_description = request.POST.get('product-description'),
         product_brand = request.POST.get('product-brand'),
         # this may be empty strings so we replace it with None if empty string
-        product_price = request.POST.get('product-price') if request.POST.get('product-price') else None, #this is evaluates as tertiary operator
+        product_price = request.POST.get('product-price') if request.POST.get('product-price') else 0, #this is evaluates as tertiary operator
         # product_sale_price = request.POST.get('product-sale-price') if request.POST.get('product-sale-price') else None,
         # product_sale_date_start = request.POST.get('product-sale-date-start') if request.POST.get('product-sale-date-start') else None,
         # product_sale_date_end = request.POST.get('product-sale-date-end') if request.POST.get('product-sale-date-end') else None,
         # product_sale_time_start = request.POST.get('product-sale-time-start') if request.POST.get('product-sale-time-start') else None,
         # product_sale_time_end = request.POST.get('product-sale-time-end') if request.POST.get('product-sale-time-end') else None,
 
-        stock_sum = request.POST.get('product-stock') if request.POST.get('product-stock') else None,
-        product_length = request.POST.get('product-length') if request.POST.get('product-length') else None,
-        product_width = request.POST.get('product-width') if request.POST.get('product-width') else None,
-        product_height = request.POST.get('product-height') if request.POST.get('product-height') else None,
-        product_weight = request.POST.get('product-weight') if request.POST.get('product-weight') else None,
+        stock_sum = request.POST.get('product-stock') if request.POST.get('product-stock') else 0,
+        product_length = request.POST.get('product-length') if request.POST.get('product-length') else 0,
+        product_width = request.POST.get('product-width') if request.POST.get('product-width') else 0,
+        product_height = request.POST.get('product-height') if request.POST.get('product-height') else 0,
+        product_weight = request.POST.get('product-weight') if request.POST.get('product-weight') else 0,
 
         # product_condition = request.POST.get('product-condition'),
         parent_sku_reference_no = request.POST.get('product-parent-sku'),
@@ -188,15 +192,16 @@ def product_import(request, selected_category):
       t.save()
 
       if request.POST.get('product-price'):
-        s=Sale(
-            product_sale_price=product['product_sale_price'] if product['product_sale_price'] != '' else 0,
-            product_sale_date_start=product['product_sale_date_start'] if product['product_sale_date_start'] != '' else None,
-            product_sale_date_end=product['product_sale_date_end'] if product['product_sale_date_end'] != '' else None,
-            product_sale_time_start=product['product_sale_time_start'] if product['product_sale_time_start'] != '' else None,
-            product_sale_time_end=product['product_sale_time_end'] if product['product_sale_time_end'] != '' else None,
-            product_id=t.id
-          )
-        s.save()
+        # s=Sale(
+        #     product_sale_price=product['product_sale_price'] if product['product_sale_price'] != '' else 0,
+        #     product_sale_date_start=product['product_sale_date_start'] if product['product_sale_date_start'] != '' else None,
+        #     product_sale_date_end=product['product_sale_date_end'] if product['product_sale_date_end'] != '' else None,
+        #     product_sale_time_start=product['product_sale_time_start'] if product['product_sale_time_start'] != '' else None,
+        #     product_sale_time_end=product['product_sale_time_end'] if product['product_sale_time_end'] != '' else None,
+        #     product_id=t.id
+        #   )
+        # s.save()
+        print('justy')
       else:
         stock_sum = 0
         for i in range(0,8):
@@ -210,11 +215,11 @@ def product_import(request, selected_category):
               product_id = t.id,
               image_url = None,
               price =request.POST.get('product-variation-'+str(i)+'-price'),
-              sale_price =request.POST.get('product-variation-'+str(i)+'-sale-price'),
-              sale_date_start =request.POST.get('product-variation-'+str(i)+'-sale-date-start'),
-              sale_date_end =request.POST.get('product-variation-'+str(i)+'-sale-date-end'),
-              sale_time_start =request.POST.get('product-variation-'+str(i)+'-sale-time-start'),
-              sale_time_end =request.POST.get('product-variation-'+str(i)+'-sale-time-end'),
+              # sale_price =request.POST.get('product-variation-'+str(i)+'-sale-price'),
+              # sale_date_start =request.POST.get('product-variation-'+str(i)+'-sale-date-start'),
+              # sale_date_end =request.POST.get('product-variation-'+str(i)+'-sale-date-end'),
+              # sale_time_start =request.POST.get('product-variation-'+str(i)+'-sale-time-start'),
+              # sale_time_end =request.POST.get('product-variation-'+str(i)+'-sale-time-end'),
               sku = request.POST.get('product-variation-'+str(i)+'-sku'),
               stock = variationStock,
               name = request.POST.get('product-variation-'+str(i)+'-name'),
@@ -229,7 +234,7 @@ def product_import(request, selected_category):
               )
         Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
       messages.success(request, 'Product added successfully.')
-      return HttpResponseRedirect("/products/#all")
+      return HttpResponseRedirect("/products/?status=all")
     else:
       product['category'] = Category.objects.filter(unique_id=selected_category)[0].name
       categoryParentId = Category.objects.filter(unique_id=selected_category)[0].parent_id
@@ -246,11 +251,11 @@ def product_import(request, selected_category):
           tmp ={
             'variation_sku': request.POST.get('product-variation-'+str(i)+'-sku'),
             'variation_price': request.POST.get('product-variation-'+str(i)+'-price'),
-            'variation_sale_price': request.POST.get('product-variation-'+str(i)+'-sale-price'),
-            'variation_sale_date_start': request.POST.get('product-variation-'+str(i)+'-sale-date-start'),
-            'variation_sale_date_end': request.POST.get('product-variation-'+str(i)+'-sale-date-end'),
-            'variation_sale_time_start': request.POST.get('product-variation-'+str(i)+'-sale-time-start'),
-            'variation_sale_time_end': request.POST.get('product-variation-'+str(i)+'-sale-time-end'),
+            # 'variation_sale_price': request.POST.get('product-variation-'+str(i)+'-sale-price'),
+            # 'variation_sale_date_start': request.POST.get('product-variation-'+str(i)+'-sale-date-start'),
+            # 'variation_sale_date_end': request.POST.get('product-variation-'+str(i)+'-sale-date-end'),
+            # 'variation_sale_time_start': request.POST.get('product-variation-'+str(i)+'-sale-time-start'),
+            # 'variation_sale_time_end': request.POST.get('product-variation-'+str(i)+'-sale-time-end'),
             'variation_stock': variationStock,
             'variation_name': request.POST.get('product-variation-'+str(i)+'-name')
           }
@@ -299,21 +304,21 @@ def product_import(request, selected_category):
     if('product-price' in request.session.keys()):
       product['product_price'] = request.session['product-price']
       del request.session['product-price']
-    if('product-sale-price' in request.session.keys()):
-      product['product_sale_price'] = request.session['product-sale-price']
-      del request.session['product-sale-price']
-    if('product-sale-date-start' in request.session.keys()):
-      product['product_sale_date_start'] = request.session['product-sale-date-start']
-      del request.session['product-sale-date-start']
-    if('product-sale-date-end' in request.session.keys()):
-      product['product_sale_date_end'] = request.session['product-sale-date-end']
-      del request.session['product-sale-date-end']
-    if('product-sale-time-start' in request.session.keys()):
-      product['product_sale_time_start'] = request.session['product-sale-time-start']
-      del request.session['product-sale-time-start']
-    if('product-sale-time-end' in request.session.keys()):
-      product['product_sale_time_end'] = request.session['product-sale-time-end']
-      del request.session['product-sale-time-end']
+    # if('product-sale-price' in request.session.keys()):
+    #   product['product_sale_price'] = request.session['product-sale-price']
+    #   del request.session['product-sale-price']
+    # if('product-sale-date-start' in request.session.keys()):
+    #   product['product_sale_date_start'] = request.session['product-sale-date-start']
+    #   del request.session['product-sale-date-start']
+    # if('product-sale-date-end' in request.session.keys()):
+    #   product['product_sale_date_end'] = request.session['product-sale-date-end']
+    #   del request.session['product-sale-date-end']
+    # if('product-sale-time-start' in request.session.keys()):
+    #   product['product_sale_time_start'] = request.session['product-sale-time-start']
+    #   del request.session['product-sale-time-start']
+    # if('product-sale-time-end' in request.session.keys()):
+    #   product['product_sale_time_end'] = request.session['product-sale-time-end']
+    #   del request.session['product-sale-time-end']
     # if('product-condition' in request.session.keys()):
     #   product['product_condition'] = request.session['product-condition']
       del request.session['product-condition']
@@ -323,34 +328,34 @@ def product_import(request, selected_category):
 
     for i in range(0,7):
       variation_sku = variation_price = variation_stock = variation_name = variation_url = ''
-      variation_sale_price = variation_sale_date_start = variation_sale_date_end = variation_sale_time_start = variation_sale_time_end = ''
+      # variation_sale_price = variation_sale_date_start = variation_sale_date_end = variation_sale_time_start = variation_sale_time_end = ''
       if('product-variation-'+str(i)+'-sku' in request.session.keys()):
         variation_sku = request.session['product-variation-'+str(i)+'-sku']
       if('product-variation-'+str(i)+'-stock' in request.session.keys()):
         variation_stock = request.session['product-variation-'+str(i)+'-stock']
       if('product-variation-'+str(i)+'-price' in request.session.keys()):
         variation_price = request.session['product-variation-'+str(i)+'-price']
-      if('product-variation-'+str(i)+'-sale-price' in request.session.keys()):
-        variation_sale_price = request.session['product-variation-'+str(i)+'-sale-price']
-      if('product-variation-'+str(i)+'-sale-date-start' in request.session.keys()):
-        variation_sale_date_start = request.session['product-variation-'+str(i)+'-sale-date-start']
-      if('product-variation-'+str(i)+'-sale-date-end' in request.session.keys()):
-        variation_sale_date_end = request.session['product-variation-'+str(i)+'-sale-date-end']
-      if('product-variation-'+str(i)+'-sale-time-start' in request.session.keys()):
-        variation_sale_time_start = request.session['product-variation-'+str(i)+'-sale-time-start']
-      if('product-variation-'+str(i)+'-sale-time-end' in request.session.keys()):
-        variation_sale_time_end = request.session['product-variation-'+str(i)+'-sale-time-end']
+      # if('product-variation-'+str(i)+'-sale-price' in request.session.keys()):
+      #   variation_sale_price = request.session['product-variation-'+str(i)+'-sale-price']
+      # if('product-variation-'+str(i)+'-sale-date-start' in request.session.keys()):
+      #   variation_sale_date_start = request.session['product-variation-'+str(i)+'-sale-date-start']
+      # if('product-variation-'+str(i)+'-sale-date-end' in request.session.keys()):
+      #   variation_sale_date_end = request.session['product-variation-'+str(i)+'-sale-date-end']
+      # if('product-variation-'+str(i)+'-sale-time-start' in request.session.keys()):
+      #   variation_sale_time_start = request.session['product-variation-'+str(i)+'-sale-time-start']
+      # if('product-variation-'+str(i)+'-sale-time-end' in request.session.keys()):
+      #   variation_sale_time_end = request.session['product-variation-'+str(i)+'-sale-time-end']
       if('product-variation-'+str(i)+'-name' in request.session.keys()):
         variation_name = request.session['product-variation-'+str(i)+'-name']
       tmp = {
         'variation_sku': variation_sku,
         'variation_price': variation_price,
         'variation_stock': variation_stock,
-        'variation_sale_price': variation_sale_price,
-        'variation_sale_date_start': variation_sale_date_start,
-        'variation_sale_date_end': variation_sale_date_end,
-        'variation_sale_time_start': variation_sale_time_start,
-        'variation_sale_time_end': variation_sale_time_end,
+        # 'variation_sale_price': variation_sale_price,
+        # 'variation_sale_date_start': variation_sale_date_start,
+        # 'variation_sale_date_end': variation_sale_date_end,
+        # 'variation_sale_time_start': variation_sale_time_start,
+        # 'variation_sale_time_end': variation_sale_time_end,
         'variation_url': variation_url
       }
       variations[i] = tmp
@@ -405,11 +410,11 @@ def product_edit(request, category_id, product_id):
 
     product['product_price'] = request.POST.get('product-price')
     product['stock_sum'] = request.POST.get('product-stock')
-    product['product_sale_price'] = request.POST.get('product-sale-price')
-    product['product_sale_date_start'] = request.POST.get('product-sale-date-start')
-    product['product_sale_time_start'] = request.POST.get('product-sale-time-start')
-    product['product_sale_date_end'] = request.POST.get('product-sale-date-end')
-    product['product_sale_time_end'] = request.POST.get('product-sale-time-end')
+    # product['product_sale_price'] = request.POST.get('product-sale-price')
+    # product['product_sale_date_start'] = request.POST.get('product-sale-date-start')
+    # product['product_sale_time_start'] = request.POST.get('product-sale-time-start')
+    # product['product_sale_date_end'] = request.POST.get('product-sale-date-end')
+    # product['product_sale_time_end'] = request.POST.get('product-sale-time-end')
     # product['product_condition'] = request.POST.get('product-condition')
     product['parent_sku_reference_no'] = request.POST.get('product-parent-sku')
 
@@ -433,20 +438,29 @@ def product_edit(request, category_id, product_id):
       errors.append('Product Category is required.')
     if (not product['product_name']):
       errors.append('Product Name is required.')
+    else:
+      if(len(product['product_name']) < 3):
+        errors.append('Product Name should have at least 3 characters.')
     if (not product['product_description']):
       errors.append('Product Description is required.')
+    if(len(product['product_brand']) > 500):
+        errors.append('Product Brand exceeds character limit (500).')
     if(request.POST.get('product-variation-0-sku') == '' and not product['product_price']):
       errors.append('Product Price is required.')
-    else:
-      if product['product_sale_price'] and int(product['product_sale_price']) > 0:
-        if(not product['product_sale_date_start']):
-          errors.append('Product Sale Start Date is required.')
-        if(not product['product_sale_time_start']):
-          errors.append('Product Sale Start Time is required.')
-        if(not product['product_sale_date_end']):
-          errors.append('Product Sale End Date is required.')
-        if(not product['product_sale_time_end']):
-          errors.append('Product Sale End Time is required.')
+    # else:
+    #   if product['product_sale_price'] and int(product['product_sale_price']) > 0:
+    #     price=product['product_price']
+    #     price=price[:price.rfind('.')]
+    #     if int(product['product_sale_price']) > int(price):
+    #       errors.append('Product Sale Price can\'t be greater than Product Price.')
+    #     if(not product['product_sale_date_start']):
+    #       errors.append('Product Sale Start Date is required.')
+    #     if(not product['product_sale_time_start']):
+    #       errors.append('Product Sale Start Time is required.')
+    #     if(not product['product_sale_date_end']):
+    #       errors.append('Product Sale End Date is required.')
+    #     if(not product['product_sale_time_end']):
+    #       errors.append('Product Sale End Time is required.')
     for i in range(0, 7):
       if (request.POST.get('product-variation-' + str(i) + '-sku')):
         if (not request.POST.get('product-variation-' + str(i) + '-name')):
@@ -455,15 +469,15 @@ def product_edit(request, category_id, product_id):
           errors.append('Variation ' + str(i + 1) + ': stock is required.')
         if (not request.POST.get('product-variation-' + str(i) + '-price')):
           errors.append('Variation ' + str(i + 1) + ': price is required.')
-        if(request.POST.get('product-variation-'+str(i)+'-sale-price')):
-          if(not request.POST.get('product-variation-'+str(i)+'-sale-date-start')):
-            errors.append('Variation ' + str(i+1) + ' Sale Start Date is required.')
-          if(not request.POST.get('product-variation-'+str(i)+'-sale-date-end')):
-            errors.append('Variation ' + str(i+1) + ' Sale End Date is required.')
-          if(not request.POST.get('product-variation-'+str(i)+'-sale-time-start')):
-            errors.append('Variation ' + str(i+1) + ' Sale Start Time is required.')
-          if(not request.POST.get('product-variation-'+str(i)+'-sale-time-end')):
-            errors.append('Variation ' + str(i+1) + ' Sale End Time is required.')
+        # if(request.POST.get('product-variation-'+str(i)+'-sale-price')):
+        #   if(not request.POST.get('product-variation-'+str(i)+'-sale-date-start')):
+        #     errors.append('Variation ' + str(i+1) + ' Sale Start Date is required.')
+        #   if(not request.POST.get('product-variation-'+str(i)+'-sale-date-end')):
+        #     errors.append('Variation ' + str(i+1) + ' Sale End Date is required.')
+        #   if(not request.POST.get('product-variation-'+str(i)+'-sale-time-start')):
+        #     errors.append('Variation ' + str(i+1) + ' Sale Start Time is required.')
+        #   if(not request.POST.get('product-variation-'+str(i)+'-sale-time-end')):
+        #     errors.append('Variation ' + str(i+1) + ' Sale End Time is required.')
     if (not errors):
       p=Product.objects.filter(id=product_id)[0]
       category = Category.objects.filter(unique_id=int(product['product-category-id']))[0]
@@ -475,7 +489,7 @@ def product_edit(request, category_id, product_id):
         product_description=request.POST.get('product-description'),
         product_brand=request.POST.get('product-brand') if request.POST.get('product-brand') else None,
         # this may be empty strings so we replace it with None if empty string
-        product_price=request.POST.get('product-price') if request.POST.get('product-price') else None,
+        product_price=request.POST.get('product-price') if request.POST.get('product-price') else 0,
         product_status=ProductStatus.UNLISTED.value,
         # stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
         # product_sale_price = request.POST.get('product-sale-price') if request.POST.get('product-sale-price') else None,
@@ -485,11 +499,11 @@ def product_edit(request, category_id, product_id):
         # product_sale_time_end = request.POST.get('product-sale-time-end') if request.POST.get('product-sale-date-start') else None,
 
         # this is evaluates as tertiary operator
-        stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') else None,
-        product_length=request.POST.get('product-length') if request.POST.get('product-length') else None,
-        product_width=request.POST.get('product-width') if request.POST.get('product-width') else None,
-        product_height=request.POST.get('product-height') if request.POST.get('product-height') else None,
-        product_weight=request.POST.get('product-weight') if request.POST.get('product-weight') else None,
+        stock_sum=request.POST.get('product-stock') if request.POST.get('product-stock') != None else 0,
+        product_length=request.POST.get('product-length') if request.POST.get('product-length') else 0,
+        product_width=request.POST.get('product-width') if request.POST.get('product-width') else 0,
+        product_height=request.POST.get('product-height') if request.POST.get('product-height') else 0,
+        product_weight=request.POST.get('product-weight') if request.POST.get('product-weight') else 0,
 
         # product_condition=request.POST.get('product-condition'),
         parent_sku_reference_no=request.POST.get('product-parent-sku'),
@@ -529,26 +543,26 @@ def product_edit(request, category_id, product_id):
         t.image5=p.image5
 
       # this means that product has no variation so we delete any existing variation
-      if request.POST.get('product-price'):
+      if int(request.POST.get('product-price')) > 0:
         Variations.objects.filter(product_id=product_id).delete()
-        s=Sale.objects.filter(product_id=product_id)[0]
-        s.product_sale_price=product['product_sale_price'] if 'product_sale_price' in product else s.product_sale_price
-        s.product_sale_date_start=product['product_sale_date_start'] if 'product_sale_date_start' in product else s.product_sale_date_start
-        if not s.product_sale_date_start:
-          s.product_sale_date_start=None
-        s.product_sale_date_end=product['product_sale_date_end'] if 'product_sale_date_end' in product else s.product_sale_date_end
-        if not s.product_sale_date_end:
-          s.product_sale_date_end=None
-        s.product_sale_time_start=product['product_sale_time_start'] if 'product_sale_time_start' in product else s.product_sale_time_start
-        if not s.product_sale_time_start:
-          s.product_sale_time_start=None
-        s.product_sale_time_end=product['product_sale_time_end'] if 'product_sale_time_end' in product else s.product_sale_time_end
-        if not s.product_sale_time_end:
-          s.product_sale_time_end=None
-        s.save()
+        # s=Sale.objects.filter(product_id=product_id)[0]
+        # s.product_sale_price=product['product_sale_price'] if 'product_sale_price' in product else s.product_sale_price
+        # s.product_sale_date_start=product['product_sale_date_start'] if 'product_sale_date_start' in product else s.product_sale_date_start
+        # if not s.product_sale_date_start:
+        #   s.product_sale_date_start=None
+        # s.product_sale_date_end=product['product_sale_date_end'] if 'product_sale_date_end' in product else s.product_sale_date_end
+        # if not s.product_sale_date_end:
+        #   s.product_sale_date_end=None
+        # s.product_sale_time_start=product['product_sale_time_start'] if 'product_sale_time_start' in product else s.product_sale_time_start
+        # if not s.product_sale_time_start:
+        #   s.product_sale_time_start=None
+        # s.product_sale_time_end=product['product_sale_time_end'] if 'product_sale_time_end' in product else s.product_sale_time_end
+        # if not s.product_sale_time_end:
+        #   s.product_sale_time_end=None
+        # s.save()
       else:
         stock_sum = 0
-        variations = Variations.objects.filter(product_id=product_id).order_by('-id')
+        variations = Variations.objects.filter(product_id=product_id).order_by('id')
         for i in range(0, 8):
           if (request.POST.get('product-variation-' + str(i) + '-sku')):
             variationStock = 0
@@ -587,7 +601,7 @@ def product_edit(request, category_id, product_id):
               )
         Product.objects.filter(id=t.id).update(stock_sum=stock_sum)
       messages.success(request, 'Product edited successfully.')
-      return HttpResponseRedirect("/products/#unlisted")
+      return HttpResponseRedirect("/products/?status=unlisted")
     else:
       showVariations = ""
       showWithoutVariation = "active show"
@@ -599,11 +613,11 @@ def product_edit(request, category_id, product_id):
           tmp = {
             'variation_sku': request.POST.get('product-variation-' + str(i) + '-sku'),
             'variation_price': request.POST.get('product-variation-' + str(i) + '-price'),
-            'variation_sale_price': request.POST.get('product-variation-'+str(i)+'-sale-price'),
-            'variation_sale_date_start': request.POST.get('product-variation-'+str(i)+'-sale-date-start'),
-            'variation_sale_date_end': request.POST.get('product-variation-'+str(i)+'-sale-date-end'),
-            'variation_sale_time_start': request.POST.get('product-variation-'+str(i)+'-sale-time-start'),
-            'variation_sale_time_end': request.POST.get('product-variation-'+str(i)+'-sale-time-end'),
+            # 'variation_sale_price': request.POST.get('product-variation-'+str(i)+'-sale-price'),
+            # 'variation_sale_date_start': request.POST.get('product-variation-'+str(i)+'-sale-date-start'),
+            # 'variation_sale_date_end': request.POST.get('product-variation-'+str(i)+'-sale-date-end'),
+            # 'variation_sale_time_start': request.POST.get('product-variation-'+str(i)+'-sale-time-start'),
+            # 'variation_sale_time_end': request.POST.get('product-variation-'+str(i)+'-sale-time-end'),
             'variation_stock': variationStock,
             'variation_name': request.POST.get('product-variation-' + str(i) + '-name')
           }
@@ -631,7 +645,6 @@ def product_edit(request, category_id, product_id):
     product = {}
     selectedProduct = Product.objects.filter(id=product_id)[0]
     product['product_code'] = selectedProduct.product_code
-    product['stock_sum'] = selectedProduct.stock_sum
     category = selectedProduct.category
     if(category != category):
       product['category'] = "None"
@@ -658,13 +671,13 @@ def product_edit(request, category_id, product_id):
     if selectedProduct.product_brand is not None:
       product['product_brand'] = selectedProduct.product_brand
 
-    product['product_price'] = selectedProduct.product_price
+    product['product_price'] = get_wholenumber(str(selectedProduct.product_price))
     # product['product_sale_price'] = selectedProduct.product_sale_price
     # product['product_sale_date_start'] = selectedProduct.product_sale_date_start
     # product['product_sale_date_end'] = selectedProduct.product_sale_date_end
     # product['product_sale_time_start'] = selectedProduct.product_sale_time_start
     # product['product_sale_time_end'] = selectedProduct.product_sale_time_end
-    product['stock_sum'] = selectedProduct.stock_sum
+    product['stock_sum']=selectedProduct.stock_sum if selectedProduct.stock_sum != None else ''
 
     product['product_length'] = selectedProduct.product_length if selectedProduct.product_length is not None else ''
     product['product_width'] = selectedProduct.product_width if selectedProduct.product_width is not None else ''
@@ -681,25 +694,25 @@ def product_edit(request, category_id, product_id):
     product['image4_url']=selectedProduct.image4_url
     product['image5_url']=selectedProduct.image5_url
 
-    s=Sale.objects.filter(product_id=product_id)[0]
-    product['product_sale_price']=s.product_sale_price
-    product['product_sale_date_start']=s.product_sale_date_start
-    product['product_sale_date_end']=s.product_sale_date_end
-    product['product_sale_time_start']=s.product_sale_time_start
-    product['product_sale_time_end']=s.product_sale_time_end
+    # s=Sale.objects.filter(product_id=product_id)[0]
+    # product['product_sale_price']=get_wholenumber(str(s.product_sale_price))
+    # product['product_sale_date_start']=s.product_sale_date_start
+    # product['product_sale_date_end']=s.product_sale_date_end
+    # product['product_sale_time_start']=s.product_sale_time_start
+    # product['product_sale_time_end']=s.product_sale_time_end
 
-    product['variations'] = Variations.objects.filter(product_id=product_id).order_by('-id')
+    product['variations'] = Variations.objects.filter(product_id=product_id).order_by('id')
 
     variations = [{}]*7
     for index, v in enumerate(product['variations']):
       tmp = {
         'variation_sku': v.sku,
         'variation_price': v.price,
-        'variation_sale_price': v.sale_price,
-        'variation_sale_date_start': v.sale_date_start,
-        'variation_sale_date_end': v.sale_date_end,
-        'variation_sale_time_start': v.sale_time_start,
-        'variation_sale_time_end': v.sale_time_end,
+        # 'variation_sale_price': v.sale_price,
+        # 'variation_sale_date_start': v.sale_date_start,
+        # 'variation_sale_date_end': v.sale_date_end,
+        # 'variation_sale_time_start': v.sale_time_start,
+        # 'variation_sale_time_end': v.sale_time_end,
         'variation_stock': v.stock,
         'variation_name': v.name,
         'variation_image_url_from_upload': v.image_url_from_upload if v.image_url_from_upload is not None else ''
@@ -787,6 +800,7 @@ def products_import(request):
                     product_weight = row['product_weight'] if row['product_weight'] == row['product_weight'] else None,
                     ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
                     parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,
+                    cover_image_url = row['cover_image_url'] if row['cover_image_url'] else None
                     # other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
                     # other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] == row['other_logistics_provider_fee'] else None,
                     # live = False,
@@ -796,13 +810,13 @@ def products_import(request):
                   )
                   productID = product[0].id
 
-                  s=Sale.objects.filter(product_id=productID)[0]
-                  s.product_sale_price=product['product_sale_price'] if row['product_sale_price'] == row['product_sale_price'] else s.product_sale_price
-                  s.product_sale_date_start=product['product_sale_date_start'] if row['product_sale_date_start'] == row['product_sale_date_start'] else s.product_sale_date_start
-                  s.product_sale_date_end=product['product_sale_date_end'] if row['product_sale_date_end'] == row['product_sale_date_end'] else s.product_sale_date_end
-                  s.product_sale_time_start=product['product_sale_time_start'] if row['product_sale_time_start'] == row['product_sale_time_start'] else s.product_sale_time_start
-                  s.product_sale_time_end=product['product_sale_time_end'] if row['product_sale_time_end'] == row['product_sale_time_end'] else s.product_sale_time_end
-                  s.save()
+                  # s=Sale.objects.filter(product_id=productID)[0]
+                  # s.product_sale_price=product['product_sale_price'] if row['product_sale_price'] == row['product_sale_price'] else s.product_sale_price
+                  # s.product_sale_date_start=product['product_sale_date_start'] if row['product_sale_date_start'] == row['product_sale_date_start'] else s.product_sale_date_start
+                  # s.product_sale_date_end=product['product_sale_date_end'] if row['product_sale_date_end'] == row['product_sale_date_end'] else s.product_sale_date_end
+                  # s.product_sale_time_start=product['product_sale_time_start'] if row['product_sale_time_start'] == row['product_sale_time_start'] else s.product_sale_time_start
+                  # s.product_sale_time_end=product['product_sale_time_end'] if row['product_sale_time_end'] == row['product_sale_time_end'] else s.product_sale_time_end
+                  # s.save()
 
                   Errors.objects.filter(product_id=productID).delete()
             else:
@@ -834,6 +848,7 @@ def products_import(request):
                     product_weight = row['product_weight'] if row['product_weight'] == row['product_weight'] else None,
                     ship_out_in = row['ship_out_in'] if row['ship_out_in'] == row['ship_out_in'] else None,
                     parent_sku_reference_no = row['parent_sku_reference_no'] if row['parent_sku_reference_no'] == row['parent_sku_reference_no'] else None,
+                    cover_image_url = row['cover_image_url'] if row['cover_image_url'] else None
                     # other_logistics_provider_setting = row['other_logistics_provider_setting'] if row['other_logistics_provider_setting'] == row['other_logistics_provider_setting'] else None,
                     # other_logistics_provider_fee = row['other_logistics_provider_fee'] if row['other_logistics_provider_fee'] == row['other_logistics_provider_fee'] else None,
                     # live = False,
@@ -844,15 +859,15 @@ def products_import(request):
                   t.save()
                   productID = t.id
 
-                  s=Sale(
-                      product_sale_price=row['product_sale_price'] if row['product_sale_price'] == row['product_sale_price'] else 0,
-                      product_sale_date_start=row['product_sale_date_start'] if row['product_sale_date_start'] == row['product_sale_date_start'] else None,
-                      product_sale_date_end=row['product_sale_date_end'] if row['product_sale_date_end'] == row['product_sale_date_end'] else None,
-                      product_sale_time_start=row['product_sale_time_start'] if row['product_sale_time_start'] == row['product_sale_time_start'] else None,
-                      product_sale_time_end=row['product_sale_time_end'] if row['product_sale_time_end'] == row['product_sale_time_end'] else None,
-                      product_id=productID
-                    )
-                  s.save()
+                  # s=Sale(
+                  #     product_sale_price=row['product_sale_price'] if row['product_sale_price'] == row['product_sale_price'] else 0,
+                  #     product_sale_date_start=row['product_sale_date_start'] if row['product_sale_date_start'] == row['product_sale_date_start'] else None,
+                  #     product_sale_date_end=row['product_sale_date_end'] if row['product_sale_date_end'] == row['product_sale_date_end'] else None,
+                  #     product_sale_time_start=row['product_sale_time_start'] if row['product_sale_time_start'] == row['product_sale_time_start'] else None,
+                  #     product_sale_time_end=row['product_sale_time_end'] if row['product_sale_time_end'] == row['product_sale_time_end'] else None,
+                  #     product_id=productID
+                  #   )
+                  # s.save()
 
                   Errors.objects.filter(product_id = productID).delete()
 
@@ -1078,10 +1093,10 @@ def products_import(request):
       return HttpResponseRedirect("/products/add-new-products/")
     elif(Errors.objects.all().count()):
       messages.warning(request, 'Products added. Some products have data errors. Check out the unpublished tab to correct them.')
-      return HttpResponseRedirect("/products/#unpublished")
+      return HttpResponseRedirect("/products/?status=unpublished")
     else:
       messages.success(request, 'Products added successfully.')
-      return HttpResponseRedirect("/products/#all")
+      return HttpResponseRedirect("/products/?status=all")
   else:
     form = UploadFileForm()
 
@@ -1095,22 +1110,22 @@ def products_import(request):
 
 def product_delete(request, product_id):
   Product.objects.filter(id=product_id).delete()
-  return HttpResponseRedirect("/products/#unpublished")
+  return HttpResponseRedirect("/products/?status=unpublished")
 
 
 def product_unlist(request, product_id):
   Product.objects.filter(id=product_id).update(unlisted=True)
-  return HttpResponseRedirect("/products/#all")
+  return HttpResponseRedirect("/products/?status=all")
 
 
 def product_suspend(request, product_id):
   Product.objects.filter(id=product_id).update(suspended=True)
-  return HttpResponseRedirect("/products/#all")
+  return HttpResponseRedirect("/products/?status=all")
 
 
 def product_live(request, product_id):
-  Product.objects.filter(id=product_id).update(live=True)
-  return HttpResponseRedirect("/products/#all")
+  Product.objects.filter(id=product_id).update(product_status=ProductStatus.LIVE_APPROVAL.value)
+  return HttpResponseRedirect("/products/?status=all")
 
 
 # function for downloading sample file as Excel file
@@ -1142,62 +1157,4 @@ def download_categories(request):
 def delete_all_products(request):
   Product.objects.all().delete()
   Variations.objects.all().delete()
-  return HttpResponseRedirect("/products/#all")
-
-def uploadJSONCategoriesToDB():
-  with open('ShopeeTempCategory.json', 'r') as f:
-    categoriesJSON = json.load(f)
-    for i in categoriesJSON['data']['list']:
-      c = Category(
-        unqiue_id = i['id'] + 1891,
-        parent_id = i['parent_id'] + 1891,
-        name = i['name'],
-      )
-      c.save()
-
-def queryCategories():
-    l1Categories = Category.objects.filter(parent_id=1891)
-    categories = [{} for _ in range(len(l1Categories))]
-    for i, c in zip(range(len(l1Categories)), l1Categories):
-      categories[i]['name'] = c.name
-      categories[i]['unique_id'] = c.unique_id
-      categories[i]['level'] = 1
-      categories[i]['top'] = str(-39*(i))+'px'
-      l2Categories = Category.objects.filter(parent_id=c.unique_id)
-      categories[i]['children'] = [{} for _ in range(len(l2Categories))]
-      for j, c2 in zip(range(len(l2Categories)), l2Categories):
-        categories[i]['children'][j]['name'] = c2.name
-        categories[i]['children'][j]['unique_id'] = c2.unique_id
-        categories[i]['children'][j]['level'] = c2.level
-        categories[i]['children'][j]['top'] = str(-39*(j))+'px'
-        l3Categories = Category.objects.filter(parent_id=c2.unique_id)
-        categories[i]['children'][j]['children'] = [{} for _ in range(len(l3Categories))]
-        for k, c3 in zip(range(len(l3Categories)), l3Categories):
-          categories[i]['children'][j]['children'][k]['name'] = c3.name
-          categories[i]['children'][j]['children'][k]['unique_id'] = c3.unique_id
-          categories[i]['children'][j]['children'][k]['level'] = c3.level
-
-def generateCategoriesList():
-    categories = {}
-    with open('seller_center/static/documents/categories-full.json', 'r') as f:
-      categories = json.load(f)
-  
-    df = pd.DataFrame()
-    primaryCategories = []
-    secondaryCategories = []
-    level3Categories = []
-    categoryIDs = []
-    for c1 in categories:
-      for c2 in c1['children']:
-        for c3 in c2['children']:
-          primaryCategories.append(c1['name'])
-          secondaryCategories.append(c2['name'])
-          level3Categories.append(c3['name'])
-          categoryIDs.append(c3['unique_id'])
-    df['Primary Category'] = primaryCategories
-    df['Secondary Category'] = secondaryCategories
-    df['Level 3 Category'] = level3Categories
-    df['Category ID'] = categoryIDs
-    df.reset_index().to_csv('seller_center/static/documents/lyka-categories-v1.csv')
-    
-    return 
+  return HttpResponseRedirect("/products/?status=all")

@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from users.models import Profile, SellerDetails, ShopDetails, BusinessDetails, Documents, Address, AddressContactDetails
 from seller_center.settings.dev import MEDIA_URL
+import requests
 
 def profile(request):
 	return render(request, 'users/profile_page.html', set_user_profile_data(request.user.id))
@@ -188,7 +189,14 @@ def set_user_profile_data(user_id):
 	else:
 		business_details_data=profileData.business_details
 	business_address_data=business_details_data.business_address
-	business_address=business_address_data.street_bldg if business_address_data.street_bldg else '' + ' ' + business_address_data.barangay if business_address_data.barangay else '' + ' ' + business_address_data.city if business_address_data.city else '' + ' ' + business_address_data.region_state if business_address_data.region_state else '' + ' ' + business_address_data.country if business_address_data.country else '' + ' ' + str(business_address_data.postal_code) if business_address_data.postal_code else ''
+	street_bldg=business_address_data.street_bldg + ' ' if business_address_data.street_bldg != None else ''
+	barangay=business_address_data.barangay + ' ' if business_address_data.barangay != None else ''
+	city=business_address_data.city + ' ' if business_address_data.city != None else ''
+	region_state=business_address_data.region_state + ' ' if business_address_data.region_state != None else ''
+	country=business_address_data.country + ' ' if business_address_data.country != None else ''
+	postal_code=str(business_address_data.postal_code) + ' ' if business_address_data.postal_code != None else ''
+	business_address=street_bldg + barangay + city + region_state + postal_code + country
+
 	if business_address == '':
 		business_address=None
 
@@ -241,6 +249,16 @@ def set_user_profile_data(user_id):
 	else:
 		pickup_address_data=profileData.pickup_address
 	pickup_contact_data=pickup_address_data.contact_details
+	street_bldg=pickup_address_data.street_bldg + ' ' if pickup_address_data.street_bldg != None else ''
+	barangay=pickup_address_data.barangay + ' ' if pickup_address_data.barangay != None else ''
+	city=pickup_address_data.city + ' ' if pickup_address_data.city != None else ''
+	region_state=pickup_address_data.region_state + ' ' if pickup_address_data.region_state != None else ''
+	country=pickup_address_data.country + ' ' if pickup_address_data.country != None else ''
+	postal_code=str(pickup_address_data.postal_code) + ' ' if pickup_address_data.postal_code != None else ''
+	pickup_address=street_bldg + barangay + city + region_state + postal_code + country
+
+	if pickup_address == '':
+		pickup_address=None
 
 	if profileData.return_address is None:
 		return_contact_data=AddressContactDetails()
@@ -253,6 +271,16 @@ def set_user_profile_data(user_id):
 	else:
 		return_address_data=profileData.return_address
 	return_contact_data=return_address_data.contact_details
+	street_bldg=return_address_data.street_bldg + ' ' if return_address_data.street_bldg != None else ''
+	barangay=return_address_data.barangay + ' ' if return_address_data.barangay != None else ''
+	city=return_address_data.city + ' ' if return_address_data.city != None else ''
+	region_state=return_address_data.region_state + ' ' if return_address_data.region_state != None else ''
+	country=return_address_data.country + ' ' if return_address_data.country != None else ''
+	postal_code=str(return_address_data.postal_code) + ' ' if return_address_data.postal_code != None else ''
+	return_address=street_bldg + barangay + city + region_state + postal_code + country
+
+	if return_address == '':
+		return_address=None
 
 	ctr=0
 	enable_fields=True
@@ -295,6 +323,11 @@ def set_user_profile_data(user_id):
 	if seller_details_data.seller_status == 'Pending for Review' and ctr == 18:
 		enable_fields=False
 
+	countries_data=get_countries()
+	countries_filtered_data=[]
+	for v in countries_data:
+		countries_filtered_data.append({'name': v['name']})
+
 	return {
 		'profileData': profileData,
 		'userData': userData,
@@ -315,9 +348,12 @@ def set_user_profile_data(user_id):
 		'permit': permit,
 		'pickup_address_data': pickup_address_data,
 		'pickup_contact_data': pickup_contact_data,
+		'pickup_address': pickup_address,
 		'return_address_data': return_address_data,
 		'return_contact_data': return_contact_data,
-		'enable_fields': enable_fields
+		'return_address': return_address,
+		'enable_fields': enable_fields,
+		'countries_filtered_data': countries_filtered_data
 	}
 
 def trim_file_upload(file):
@@ -325,3 +361,9 @@ def trim_file_upload(file):
 	file=file.replace('(', '')
 	file=file.replace(')', '')
 	return file
+
+def get_countries():
+	url='https://restcountries.eu/rest/v2/all'
+	response=requests.get(url)
+	data=response.json()
+	return data

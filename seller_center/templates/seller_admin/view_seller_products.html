@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block body_class %}template-productspage page-products{% endblock %}
+
+{% block content %}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mr-auto mb-0 text-gray-800">Viewing products of {{username}}</h1>
+</div>
+
+{% include 'messages.html' %}
+<div class="row">
+    {% include 'product/includes/products_filter.html' %}
+</div>
+
+
+<div class="row">
+    {# Tab Content #}
+
+    <div class="container-fluid tab-content products-tab" id="productsTabContent">
+        {% include "product/includes/products_table.html" with read_only=True %}
+    </div>
+</div>
+
+{% endblock %}
