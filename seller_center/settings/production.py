@@ -1,6 +1,6 @@
 from .base import *
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG')
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 ALLOWED_HOSTS = ['seller-center.ap-southeast-1.elasticbeanstalk.com', 'sellercenter.mylyka.com', 'sellercenter.lyka.app']
 
@@ -58,6 +58,8 @@ MEDIA_URL = os.environ.get('MEDIA_URL')
 MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+# SSL
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT')
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
